@@ -35,6 +35,7 @@
 
 // you have to require the utils module and call adapter function
 var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
+var net = require('net'); // import net
 
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
@@ -45,6 +46,8 @@ var adapter = new utils.Adapter('denon');
 adapter.on('unload', function (callback) {
     try {
         adapter.log.info('Stopping Denon AVR adapter...');
+	client.destroy(); // kill connection
+        client.unref();	// kill connection
         callback();
     } catch (e) {
         callback();
@@ -84,17 +87,47 @@ adapter.on('message', function (obj) {
 // is called when databases are connected and adapter received configuration.
 // start here!
 adapter.on('ready', function () {
-    main();
+	main();
 });
 
 function main() {
+
+    // Constants & Variables
+    var client = new net.Socket();
+    const host = adapter.config.ip;
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
     adapter.log.info('Connecting to AVR with following attributes:');
     adapter.log.info('IP-Address: '    + adapter.config.ip);
     adapter.log.info('AVR-Name: '    + adapter.config.avrName);
+    // Connect
+    client.connect({port: 23, host: host}, function() {
+		log("adapter connecting to DENON-AVR: " + host + ":" + "23");
+    });
 
+    // Connection handling
+    client.on('error',function(error) {
+        adapter.log.error(error);
+        client.destroy();
+        client.unref();
+        adapter.log.info('Connection closed!');
+    });
+
+    client.on('end', function () { // Denon has closed the connection
+        adapter.log.warn('Denon AVR has cancelled the connection');
+        client.destroy();
+        client.unref();
+        adapter.log.info('Connection closed!');
+    });
+
+    client.on('connect', function () { // Successfull connected
+        adapter.log.info('Connected to Denon AVR!');
+    });
+
+    client.on('data', function (data) {
+        adapter.log.info('Incoming data: ' + data.toString()); // Logging incoming data
+     });
 
     /**
      *
@@ -128,14 +161,14 @@ function main() {
      */
 
     // the variable testVariable is set to true as command (ack=false)
-    adapter.setState('testVariable', true);
+    // adapter.setState('testVariable', true);
 
     // same thing, but the value is flagged "ack"
     // ack should be always set to true if the value is received from or acknowledged from the target system
-    adapter.setState('testVariable', {val: true, ack: true});
+    // adapter.setState('testVariable', {val: true, ack: true});
 
     // same thing, but the state is deleted after 30s (getState will return null afterwards)
-    adapter.setState('testVariable', {val: true, ack: true, expire: 30});
+    // adapter.setState('testVariable', {val: true, ack: true, expire: 30});
 
 
 
