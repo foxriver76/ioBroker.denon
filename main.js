@@ -44,7 +44,7 @@ var adapter = new utils.Adapter('denon');
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
     try {
-        adapter.log.info('cleaned everything up...');
+        adapter.log.info('Stopping Denon AVR adapter...');
         callback();
     } catch (e) {
         callback();
@@ -91,9 +91,9 @@ function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
-    adapter.log.info('config test1: '    + adapter.config.test1);
-    adapter.log.info('config test1: '    + adapter.config.test2);
-    adapter.log.info('config mySelect: ' + adapter.config.mySelect);
+    adapter.log.info('Connecting to AVR with following attributes:');
+    adapter.log.info('IP-Address: '    + adapter.config.ip);
+    adapter.log.info('AVR-Name: '    + adapter.config.avrName);
 
 
     /**

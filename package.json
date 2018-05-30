@@ -1,6 +1,6 @@
 {
   "name": "iobroker.denon",
-  "version": "0.6.0",
+  "version": "0.0.1",
   "description": "ioBroker denon Adapter",
   "author": {
     "name": "Moritz Heusinger",
@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ioBroker/ioBroker.denon"
+    "url": "https://github.com/foxriver76/ioBroker.denon"
   },
   "dependencies": {},
   "devDependencies": {
@@ -35,7 +35,7 @@
     "test": "node node_modules/mocha/bin/mocha --exit"
   },
   "bugs": {
-    "url": "https://github.com/ioBroker/ioBroker.denon/issues"
+    "url": "https://github.com/foxriver76/ioBroker.denon/issues"
   },
   "readmeFilename": "README.md"
 }
