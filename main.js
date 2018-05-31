@@ -131,9 +131,9 @@ function main() {
      adapter.on('stateChange', function (id, state) {
     	if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
         return;
-	}
+	} // endIf
 	// TODO: Handle state changes
-     } // endOnStateChange
+     }); // endOnStateChange
 
     /**
      * Internals
