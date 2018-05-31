@@ -91,6 +91,29 @@ adapter.on('ready', function () {
 });
 
 function main() {
+    // Creating states
+    adapter.setObject('powerState', {
+	type: 'state',
+	common: {
+		name: 'powerState',
+		role: 'Power State',
+		type: 'boolean',
+		write: true,
+		read: true
+	},
+	native: {}
+    });
+    adapter.setObject('currentVolume', {
+	type: 'state',
+	common: {
+		name: 'currentVolume',
+		role: 'Current Volume',
+		type: 'number',
+		read: true,
+		write: true
+	},
+	native: {}
+    });
 
     // Constants & Variables
     var client = new net.Socket();
@@ -101,9 +124,10 @@ function main() {
     adapter.log.info('Connecting to AVR with following attributes:');
     adapter.log.info('IP-Address: '    + adapter.config.ip);
     adapter.log.info('AVR-Name: '    + adapter.config.avrName);
+
     // Connect
     client.connect({port: 23, host: host}, function() {
-		log("adapter connecting to DENON-AVR: " + host + ":" + "23");
+		adapter.log.info("adapter connecting to DENON-AVR: " + host + ":" + "23");
     });
 
     // Connection handling
@@ -127,7 +151,28 @@ function main() {
 
     client.on('data', function (data) {
         adapter.log.info('Incoming data: ' + data.toString()); // Logging incoming data
+	handleResponse(data);
      });
+
+    function handleResponse(data) {
+	// get command out of String
+	var command = data.toString().replace(/\s+|\d+/g,'');
+	adapter.log.info('Command to handle is ' + command);
+	switch(command) {
+		case 'PWON':
+			adapter.setState('powerState', true, true);
+			break;
+		case 'PWSTANDBY':
+			adapter.setState('powerState', false, true);
+			break;
+		case 'MV':
+			data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
+			adapter.setState('currentVolume', parseFloat(data), true);
+			break;
+		case 'MVMAX':
+			break;
+	} // endSwitch
+    } // endHandleResponse
 
     /**
      *
@@ -138,7 +183,7 @@ function main() {
      *      Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
      *
      */
-
+    /*
     adapter.setObject('testVariable', {
         type: 'state',
         common: {
@@ -148,6 +193,7 @@ function main() {
         },
         native: {}
     });
+    */
 
     // in this denon all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');

@@ -59,9 +59,8 @@
         "restartAdapters": ["vis"]
     },
     "native": {
-        "test1": true,
-        "test2": 42,
-        "mySelect": "auto"
+        "currentVolume": 0,
+        "powerState": false
     },
     "objects": [
 
