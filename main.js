@@ -76,6 +76,7 @@ function main() {
 	},
 	native: {}
     });
+
     adapter.setObject('mainVolume', {
 	type: 'state',
 	common: {
@@ -87,6 +88,31 @@ function main() {
 	},
 	native: {}
     });
+
+    adapter.setObject('volumeUp', {
+	type: 'state',
+	common: {
+		name: 'volumeUp',
+		role: 'button',
+		type: 'number',
+		write: true,
+		read: true
+	},
+	native: {}
+    });
+
+    adapter.setObject('volumeDown', {
+    	type: 'state',
+        common: {
+                name: 'volumeDown',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
 
     // Constants & Variables
     var client = new net.Socket();
@@ -130,14 +156,41 @@ function main() {
      // Handle state changes
      adapter.on('stateChange', function (id, state) {
     	if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
-        return;
+        	return;
 	} // endIf
+	id = id.split('.')[2]; // remove instance name and id
+	state = state.val;	// only get state value
+	adapter.log.info('State Change - ID: ' + id + '; State: ' + state);
 	// TODO: Handle state changes
+	switch(id) {
+		case 'mainVolume':
+			sendRequest('MV' + state);
+			adapter.log.info('Changed mainVolume to ' + state);
+			break;
+		case 'powerState':
+			if(state === true) {
+				sendRequest('PWON')
+			} else {
+				sendRequest('PWSTANDBY')
+			} // endElseIf
+			break;
+		case 'volumeUp':
+			sendRequest('MVUP');
+			break;
+		case 'volumeDown':
+			sendRequest('MVDOWN');
+			break;
+	} // endSwitch
      }); // endOnStateChange
 
     /**
      * Internals
     */
+    function sendRequest(req) {
+	client.write(req + '\r');
+	adapter.log.info('Message sent: ' + req);
+    } // endSendRequest
+
     function handleResponse(data) {
 	// get command out of String
 	var command = data.toString().replace(/\s+|\d+/g,'');
