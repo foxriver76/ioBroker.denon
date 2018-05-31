@@ -1,32 +1,5 @@
 /**
- *
  * denon adapter
- *
- *
- *  file io-package.json comments:
- *
- *  {
- *      "common": {
- *          "name":         "denon",                  // name has to be set and has to be equal to adapters folder name and main file name excluding extension
- *          "version":      "0.0.0",                    // use "Semantic Versioning"! see http://semver.org/
- *          "title":        "Node.js denon Adapter",  // Adapter title shown in User Interfaces
- *          "authors":  [                               // Array of authord
- *              "name <mail@denon.com>"
- *          ]
- *          "desc":         "denon adapter",          // Adapter description shown in User Interfaces. Can be a language object {de:"...",ru:"..."} or a string
- *          "platform":     "Javascript/Node.js",       // possible values "javascript", "javascript/Node.js" - more coming
- *          "mode":         "daemon",                   // possible values "daemon", "schedule", "subscribe"
- *          "materialize":  true,                       // support of admin3
- *          "schedule":     "0 0 * * *"                 // cron-style schedule. Only needed if mode=schedule
- *          "loglevel":     "info"                      // Adapters Log Level
- *      },
- *      "native": {                                     // the native object is available via adapter.config in your adapters code - use it for configuration
- *          "test1": true,
- *          "test2": 42,
- *          "mySelect": "auto"
- *      }
- *  }
- *
  */
 
 /* jshint -W097 */// jshint strict:false
@@ -103,11 +76,11 @@ function main() {
 	},
 	native: {}
     });
-    adapter.setObject('currentVolume', {
+    adapter.setObject('mainVolume', {
 	type: 'state',
 	common: {
-		name: 'currentVolume',
-		role: 'Current Volume',
+		name: 'mainVolume',
+		role: 'Main Volume',
 		type: 'number',
 		read: true,
 		write: true
@@ -154,8 +127,15 @@ function main() {
 	handleResponse(data);
      });
 
+     // Handle state changes
+     adapter.on('stateChange', function (id, state) {
+    	if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
+        return;
+	}
+	// TODO: Handle state changes
+     } // endOnStateChange
 
-    /*
+    /**
      * Internals
     */
     function handleResponse(data) {
@@ -171,7 +151,7 @@ function main() {
 			break;
 		case 'MV':
 			data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
-			adapter.setState('currentVolume', parseFloat(data), true);
+			adapter.setState('mainVolume', parseFloat(data), true);
 			break;
 		case 'MVMAX':
 			break;
