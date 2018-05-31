@@ -1,4 +1,5 @@
-![Logo](admin/denon.png)
+![Logo](admin/denon.png =192x)
+
 # ioBroker.denon [![Build Status](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)
 =================
 ## Setup
