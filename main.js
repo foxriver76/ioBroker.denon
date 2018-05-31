@@ -1,5 +1,5 @@
 /**
- * denon adapter
+ * DENON AVR adapter
  */
 
 /* jshint -W097 */// jshint strict:false
@@ -113,6 +113,33 @@ function main() {
         native: {}
     });
 
+    adapter.setObject('muteIndicator', {
+        type: 'state',
+        common: {
+                name: 'muteIndicator',
+                role: 'Mute Indicator',
+                type: 'boolean',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObject('surroundMode', {
+        type: 'state',
+        common: {
+                name: 'surroundMode',
+                role: 'Surround Mode',
+                type: 'number',
+                write: true,
+                read: true,
+		states: '0:STEREO;1:VIRTUAL;2:VIDEO GAME;3:MCH STEREO;4:NEURAL:X;5:DOLBY SURROUND'
+        },
+        native: {}
+    });
+
+
+
 
     // Constants & Variables
     var client = new net.Socket();
@@ -173,6 +200,13 @@ function main() {
 		case 'volumeDown':
 			sendRequest('MVDOWN');
 			break;
+		case 'muteIndicator':
+			if(state === true) {
+				sendRequest('MUON')
+			} else {
+				sendRequest('MUOFF')
+			} // endElseIf
+			break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -218,6 +252,30 @@ function main() {
 			adapter.setState('mainVolume', parseFloat(data), true);
 			break;
 		case 'MVMAX':
+			break;
+		case 'MUON':
+			adapter.setState('muteIndicator', true, true);
+			break;
+		case 'MUOFF':
+			adapter.setState('muteIndicator', false, true);
+			break;
+		case 'MSSTEREO':
+			adapter.setState('surroundMode', 0, true);
+			break;
+		case 'MSVIRTUAL':
+			adapter.setState('surroundMode', 1, true);
+			break;
+		case 'MSVIDEOGAME':
+			adapter.setState('surroundMode', 2, true);
+			break;
+		case 'MSMCHSTEREO':
+			adapter.setState('surroundMode', 3, true);
+			break;
+		case 'MSNEURAL:X':
+			adapter.setState('surroundMode', 4, true);
+			break;
+		case 'MSDOLBYSURROUND':
+			adapter.setState('surroundMode', 5, true);
 			break;
 	} // endSwitch
     } // endHandleResponse
