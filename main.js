@@ -113,6 +113,19 @@ function main() {
         native: {}
     });
 
+    adapter.setObject('maximumVolume', {
+        type: 'state',
+        common: {
+                name: 'maximumVolume',
+                role: 'Maximum Volume',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+
     adapter.setObject('muteIndicator', {
         type: 'state',
         common: {
@@ -146,14 +159,17 @@ function main() {
     const host = adapter.config.ip;
 
     // Connect
-    connect();
+    connect(); // Connect on start
 
     // Connection handling
-    client.on('error',function(error) {
+    client.on('error', function(error) {
         adapter.log.error(error);
         client.destroy();
         client.unref();
         adapter.log.info('Connection closed!');
+        setTimeout(function() {
+                connect(); // Connect again
+        }, 10000);
     });
 
     client.on('end', function () { // Denon has closed the connection
@@ -161,10 +177,13 @@ function main() {
         client.destroy();
         client.unref();
         adapter.log.info('Connection closed!');
+	setTimeout(function() {
+		connect(); // Connect again
+	}, 10000);
     });
 
     client.on('connect', function () { // Successfull connected
-        adapter.log.info('Connected to Denon AVR!');
+        adapter.log.debug("Connected --> updating states on start");
 	updateStates(); // Update states when connected
     });
 
@@ -217,8 +236,9 @@ function main() {
      * Internals
     */
     function connect() {
+	adapter.log.info("Trying to connect to " + host + ":23");
         client.connect({port: 23, host: host}, function() {
-                adapter.log.info("Adapter connecting to DENON-AVR: " + host + ":" + "23");
+                adapter.log.info("Adapter connected to DENON-AVR: " + host + ":23");
         });
     } // endConnect
 
