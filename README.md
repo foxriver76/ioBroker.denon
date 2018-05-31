@@ -1,6 +1,11 @@
 ![Logo](admin/denon.png)
 # ioBroker.denon [![Build Status](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)
 =================
+## Setup
+After adding an instance of these adapter, you have to fill out the IP address of your DENON AVR in the admin panel.
+
+## Usage
+TODO 
  
 ## Changelog
 
