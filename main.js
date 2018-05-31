@@ -36,11 +36,11 @@ adapter.on('objectChange', function (id, obj) {
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
     // Warning, state can be null if it was deleted
-    adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
+    adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
 
     // you can use the ack flag to detect if it is status (true) or command (false)
     if (state && !state.ack) {
-        adapter.log.info('ack is not set!');
+        adapter.log.debug('ack is not set!');
     }
 });
 
@@ -118,16 +118,8 @@ function main() {
     var client = new net.Socket();
     const host = adapter.config.ip;
 
-    // The adapters config (in the instance object everything under the attribute "native") is accessible via
-    // adapter.config:
-    adapter.log.info('Connecting to AVR with following attributes:');
-    adapter.log.info('IP-Address: '    + adapter.config.ip);
-    adapter.log.info('AVR-Name: '    + adapter.config.avrName);
-
     // Connect
-    client.connect({port: 23, host: host}, function() {
-		adapter.log.info("adapter connecting to DENON-AVR: " + host + ":" + "23");
-    });
+    connect();
 
     // Connection handling
     client.on('error',function(error) {
@@ -146,10 +138,11 @@ function main() {
 
     client.on('connect', function () { // Successfull connected
         adapter.log.info('Connected to Denon AVR!');
+	updateStates(); // Update states when connected
     });
 
     client.on('data', function (data) {
-        adapter.log.info('Incoming data: ' + data.toString()); // Logging incoming data
+        adapter.log.debug('Incoming data: ' + data.toString()); // Logging incoming data
 	handleResponse(data);
      });
 
@@ -183,18 +176,36 @@ function main() {
 	} // endSwitch
      }); // endOnStateChange
 
+    // all states changes inside the adapters namespace are subscribed
+    adapter.subscribeStates('*');
+
     /**
      * Internals
     */
+    function connect() {
+        client.connect({port: 23, host: host}, function() {
+                adapter.log.info("Adapter connecting to DENON-AVR: " + host + ":" + "23");
+        });
+    } // endConnect
+
+    function updateStates() {
+    	var updateCommands = ['NSET1 ?','NSFRN ?','ZM?','MU?','PW?','SI?','SV?','MS?','MV?','Z2?','Z2MU?','Z3?','Z3MU?','NSE','VSSC ?','VSASP ?','VSMONI ?','TR?','DIM ?'];
+   	var i;
+	for(i = 0; i < updateCommands.length; i++) {
+		sendRequest(updateCommands[i]);
+		adapter.log.debug('Update State for ' + updateCommands[i]);
+	} // endFor
+    } // endUpdateStates
+
     function sendRequest(req) {
 	client.write(req + '\r');
-	adapter.log.info('Message sent: ' + req);
+	adapter.log.debug('Message sent: ' + req);
     } // endSendRequest
 
     function handleResponse(data) {
 	// get command out of String
 	var command = data.toString().replace(/\s+|\d+/g,'');
-	adapter.log.info('Command to handle is ' + command);
+	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {
 		case 'PWON':
 			adapter.setState('powerState', true, true);
@@ -211,9 +222,6 @@ function main() {
 	} // endSwitch
     } // endHandleResponse
 
-    // all states changes inside the adapters namespace are subscribed
-    adapter.subscribeStates('*');
-
     // examples for the checkPassword/checkGroup functions
     adapter.checkPassword('admin', 'iobroker', function (res) {
         console.log('check user admin pw ioboker: ' + res);
@@ -223,6 +231,4 @@ function main() {
         console.log('check group user admin group admin: ' + res);
     });
 
-
-
-}
+} // endMain

@@ -14,17 +14,17 @@
         },
 		"title": "DENON AVR",
         "titleLang": {
-            "en": "Javascript/Node.js based denon adapter",
-            "de": "Javascript / Node.js basierte Vorlagenadapter",
-            "ru": "Адаптер шаблонов на основе Javascript / Node.js",
-            "pt": "Adaptador de modelo baseado em Javascript / Node.js",
-            "nl": "Javascript / Node.js gebaseerde sjabloonadapter",
-            "fr": "Javascript / Node.js basé adaptateur de modèle",
-            "it": "Adattatore modello basato su Javascript / Node.js",
-            "es": "Adaptador de plantilla basado en JavaScript / Node.js"
+            "en": "DENON AVR",
+            "de": "DENON AVR",
+            "ru": "DENON AVR",
+            "pt": "DENON AVR",
+            "nl": "DENON AVR",
+            "fr": "DENON AVR",
+            "it": "DENON AVR",
+            "es": "DENON AVR"
         },
         "desc": {
-            "en": "ioBroker denon Adapter",
+            "en": "ioBroker Denon Adapter",
             "de": "ioBroker Denon Adapter",
             "ru": "ioBroker Denon драйвер как образец",
             "pt": "Modelo de adaptador para o ioBroker",
@@ -52,11 +52,10 @@
         "materialize": true,
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.denon/master/admin/denon.png",
-        "keywords": ["denon", "AVR"],
+        "keywords": ["denon", "avr", "harmony", "audio"],
         "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
         "loglevel": "info",
-        "type": "general",
-        "restartAdapters": ["vis"]
+        "type": "general"
     },
     "native": {
         "currentVolume": 0,
