@@ -82,7 +82,7 @@ Following states will be created by the adapter:
    
 * selectInput
 
-   *The string value contains the current input source. You can also set the input source with the following encoding:*
+   *The number value contains the current input source. You can also set the input source with the following encoding:*
    
    *0:PHONO*
    
@@ -135,9 +135,62 @@ Following states will be created by the adapter:
    ```javascript
     setState('denon.0.selectInput', 5);
     ```
+* surroundMode
+
+   *The number value contains the current Surround mode. You can also change the source with the following encoding:*
    
+   *0:STEREO*
    
- 
+   *1:VIRTUAL*
+   
+   *2:VIDEO GAME*
+   
+   *3:MCH STEREO*
+   
+   *4:DTS SURROUND*
+   
+   *5:DOLBY DIGITAL*
+   
+   *6:MOVIE*
+   
+   *7:MUSIC*
+   
+   *8:DIRECT*
+   
+   *9:PURE DIRECT*
+   
+   *10:AUTO*
+   
+   *11:GAME*
+   
+   *12:AURO3D*
+   
+   *13:AURO2DSURR*
+   
+   *14:WIDE SCREEN*
+   
+   *15:SUPER STADIUM*
+   
+   *16:ROCK ARENA*
+   
+   *17:JAZZ CLUB*
+   
+   *18:CLASSIC CONCERT*
+   
+   *19:MONO MOVIE*
+   
+   *20:MATRIX*
+   
+   *Please note, that not every Surround mode is available on every AVR model.*
+   
+   *Example:*
+   
+   ```javascript
+   setState('denon.0.surroundMode', 3);
+   ```
+## Missing functions & bugs
+If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues). 
+   
 ## Changelog
 
 ### 0.0.1
