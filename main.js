@@ -17,6 +17,7 @@ var adapter = new utils.Adapter('denon');
 adapter.on('unload', function (callback) {
     try {
         adapter.log.info('Stopping Denon AVR adapter...');
+	adapter.setState('connected', false, true);
 	client.destroy(); // kill connection
         client.unref();	// kill connection
         callback();
@@ -64,6 +65,18 @@ adapter.on('ready', function () {
 
 function main() {
     // Creating states
+    adapter.setObject('connected', {
+        type: 'state',
+        common: {
+                name: 'connected',
+                role: 'Connected',
+                type: 'boolean',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
     adapter.setObject('powerState', {
 	type: 'state',
 	common: {
@@ -148,15 +161,15 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('currentSource', {
+    adapter.setObject('selectInput', {
         type: 'state',
         common: {
-                name: 'currentSource',
-                role: 'Current Source',
+                name: 'selectInput',
+                role: 'Select Input',
                 type: 'number',
                 write: true,
                 read: true,
-		states: '0:DVD;1:BD;2:TV;3:SAT/CBL;4:MPLAY;5:GAME;6:AUX1;7:AUX2;8:CD;9:PHONO;10:TUNER;11:SPOTIFY'
+		states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPATIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVOTITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
         },
         native: {}
     });
@@ -190,10 +203,9 @@ function main() {
         common: {
                 name: 'surroundMode',
                 role: 'Surround Mode',
-                type: 'number',
-                write: true,
-                read: true,
-		states: '0:STEREO;1:VIRTUAL;2:VIDEO GAME;3:MCH STEREO;4:DTS SURROUND;5:DOLBY SURROUND;6:MOVIE;7:MUSIC;8:DIRECT;9:PURE DIRECT;10:AUTO;11:GAME;12:AURO3D;13:AURO2DSURR;14:WIDE SCREEN;15:SUPER STADIUM;16:ROCK ARENA;17:JAZZ CLUB;18:CLASSIC CONCERT;19:MONO MOVIE;20:MATRIX'
+                type: 'string',
+                write: false,
+                read: true
         },
         native: {}
     });
@@ -207,6 +219,7 @@ function main() {
 
     // Connection handling
     client.on('error', function(error) {
+	adapter.setState('connected', false, true);
         adapter.log.error(error);
         client.destroy();
         client.unref();
@@ -218,6 +231,7 @@ function main() {
 
     client.on('end', function () { // Denon has closed the connection
         adapter.log.warn('Denon AVR has cancelled the connection');
+	adapter.setState('connected', false, true);
         client.destroy();
         client.unref();
         adapter.log.info('Connection closed!');
@@ -227,7 +241,8 @@ function main() {
     });
 
     client.on('connect', function () { // Successfull connected
-        adapter.log.debug("Connected --> updating states on start");
+        adapter.setState('connected', true, true);
+	adapter.log.debug("Connected --> updating states on start");
 	updateStates(); // Update states when connected
     });
 
@@ -247,7 +262,12 @@ function main() {
 	// TODO: Handle state changes
 	switch(id) {
 		case 'mainVolume':
-			sendRequest('MV' + state);
+			var leadingZero;
+			if (state < 10) {
+				leadingZero = "0";
+			} else leadingZero = "";
+			state = state.toString().replace('.', '') // remove points
+			sendRequest('MV' + leadingZero + state);
 			adapter.log.info('Changed mainVolume to ' + state);
 			break;
 		case 'powerState':
@@ -270,73 +290,6 @@ function main() {
 				sendRequest('MUOFF')
 			} // endElseIf
 			break;
-		case 'surroundMode':
-			switch(state) {
-				case 0:
-					sendRequest('MSSTEREO');
-					break;
-				case 1:
-					sendRequest('MSVIRTUAL');
-					break;
-				case 2:
-					sendRequest('MSVIDEO GAME');
-					break;
-				case 3:
-					sendRequest('MSMCH STEREO');
-					break;
-				case 4:
-					sendRequest('MSDTS SURROUND');
-					break;
-				case 5:
-					sendRequest('MSDOLBY DIGITAL');
-					break;
-				case 6:
-					sendRequest('MSMOVIE');
-					break;
-				case 7:
-					sendRequest('MSMUSIC');
-					break;
-				case 8:
-					sendRequest('MSDIRECT');
-					break;
-				case 9:
-					sendRequest('MSPURE DIRECT');
-					break;
-				case 10:
-					sendRequest('MSAUTO')
-					break;
-				case 11:
-					sendRequest('MSGAME')
-					break;
-				case 12:
-					sendRequest('MSAURO3D')
-					break;
-				case 13:
-					sendRequest('MSAURO2DSURR')
-					break;
-				case 14:
-					sendRequest('MSWIDE SCREEN');
-					break;
-				case 15:
-					sendRequest('MSSUPER STADIUM');
-					break;
-				case 16:
-					sendRequest('MSROCK ARENA');
-					break;
-				case 17:
-					sendRequest('MSJAZZ CLUB');
-					break;
-				case 18:
-					sendRequest('MSCLASSIC CONCERT');
-					break;
-				case 19:
-					sendRequest('MSMONO MOVIE');
-					break;
-				case 20:
-					sendRequest('MSMATRIX')
-					break;
-			} // endSwitch
-			break;
 		case 'playPauseButton':
 			sendRequest('NS94');
 			break;
@@ -347,15 +300,9 @@ function main() {
 			sendRequest('NS9D');
 			break;
 		// Current Source
-		case 'currentSource':
-			switch(state) {
-				case 0:
-					sendRequest('SIDVD');
-					break;
-				case 1:
-					sendRequest('SIBD');
-					break;
-			} // endSwitch
+		case 'selectInput':
+			sendRequest('SI' + state);
+			break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -403,7 +350,6 @@ function main() {
 			break;
 		case 'MVMAX':
 			data = data.slice(6, 8) + '.' + data.slice(8, 9);
-			adapter.log.debug(data);
 			adapter.setState('maximumVolume', parseFloat(data), true);
 			break;
 		case 'MUON':
@@ -413,72 +359,20 @@ function main() {
 			adapter.setState('muteIndicator', false, true);
 			break;
 		// Surround modes
-		case 'MSSTEREO':
-			adapter.setState('surroundMode', 0, true);
-			break;
-		case 'MSVIRTUAL':
-			adapter.setState('surroundMode', 1, true);
-			break;
-		case 'MSVIDEOGAME':
-			adapter.setState('surroundMode', 2, true);
-			break;
-		case 'MSMCHSTEREO':
-			adapter.setState('surroundMode', 3, true);
-			break;
-		case 'MSNEURAL:X':
-			adapter.setState('surroundMode', 4, true);
-			break;
-		case 'MSDOLBYSURROUND':
-			adapter.setState('surroundMode', 5, true);
-			break;
-		case 'MSMOVIE':
-			adapter.setState('surroundMode', 6, true);
-			break;
-		case 'MSMUSIC':
-			adapter.SetState('surroundMode', 7, true);
-			break;
-		case 'MSDIRECT':
-			adapter.setState('surroundMode', 8, true);
-			break;
-		case 'MSPURE DIRECT':
-			adapter.setState('surroundMode', 9, true);
-			break;
-		case 'MSAUTO':
-			adapter.setState('surroundMode', 10, true);
-			break;
-		case 'MSGAME':
-			adapter.setState('surroundMode', 11, true);
-			break;
-		case 'MSAUROD':
-                        adapter.setState('surroundMode', 12, true);
-                        break;
-		case 'MSAURODSURR':
-                        adapter.setState('surroundMode', 13, true);
-                        break;
-		case 'MSWIDESCREEN':
-                        adapter.setState('surroundMode', 14, true);
-                        break;
-		case 'MSSUPERSTADIUM':
-                        adapter.setState('surroundMode', 15, true);
-                        break;
-		case 'MSROCKARENA':
-                        adapter.setState('surroundMode', 16, true);
-                        break;
-		case 'MSJAZZCLUB':
-                        adapter.setState('surroundMode', 17, true);
-                        break;
-		case 'MSCLASSICCONCERT':
-                        adapter.setState('surroundMode', 18, true);
-                        break;
-		case 'MSMONOMOVIE':
-                        adapter.setState('surroundMode', 19, true);
-                        break;
-		case 'MSMATRIX':
-                        adapter.setState('surroundMode', 20, true);
-                        break;
+
 
 	} // endSwitch
     } // endHandleResponse
+
+    function stateTextToArray (StateNames) { // encoding for e. g. selectInput 
+  	var stateName = StateNames.split(';');
+   	var stateArr=[];
+    	for(var i = 0; i < stateName.length; i++) {
+       		var element = stateName[i].split(':');
+            	stateArr[element[0]] = element[1];
+        } // endFor
+	return stateArray;
+    } // endStateTextToArray
 
     // examples for the checkPassword/checkGroup functions
     adapter.checkPassword('admin', 'iobroker', function (res) {
