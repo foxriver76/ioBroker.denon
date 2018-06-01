@@ -17,7 +17,7 @@ var adapter = new utils.Adapter('denon');
 adapter.on('unload', function (callback) {
     try {
         adapter.log.info('Stopping Denon AVR adapter...');
-	adapter.setState('connected', false, true);
+	adapter.setState('info.connection', false, true);
 	client.destroy(); // kill connection
         client.unref();	// kill connection
         callback();
@@ -56,18 +56,6 @@ adapter.on('ready', function () {
 
 function main() {
     // Creating states
-    adapter.setObjectNotExists('info.connection', {
-        type: 'state',
-        common: {
-                name: 'connection',
-                role: 'Conection',
-                type: 'boolean',
-                write: false,
-                read: true
-        },
-        native: {}
-    });
-
     adapter.setObjectNotExists('powerState', {
 	type: 'state',
 	common: {
