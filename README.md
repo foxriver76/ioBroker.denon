@@ -6,10 +6,10 @@
 ### Browser-based
 1. Open your ioBroker interface in a browser (eg: 192.168.1:8081)
 2. Click on Tab "Adapters" --> Install from Custom URL.
-TODO: import image
+![Custom URL](/documentation/installFromCustomURL.png)
 3. Click on "Custom" and paste following URL:
 https://github.com/foxriver76/ioBroker.denon/tarball/master
-TODO: import image
+![Paste URL](/documentation/urlInInputField.png)
 4. Click on Install
 
 ### On-machine
@@ -26,9 +26,9 @@ iobroker upload denon
 1. Open your ioBroker interface in a browser (eg: 192.168.1:8081)
 2. Navigate to Tab "Adapters"
 3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
-TODO: import image
+![Add Adapter](/documentation/plusAddAdapter.png)
 4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR
-TODO import image
+![Adapter Configuration](/documentation/fillInIp.png)
 5. Click on Save & Close
 
 ## Usage
