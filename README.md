@@ -2,8 +2,34 @@
 
 # ioBroker.denon [![Build Status](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)
 =================
+## Installation
+### Browser-based
+1. Open your ioBroker interface in a browser (eg: 192.168.1:8081)
+2. Click on Tab "Adapters" --> Install from Custom URL.
+TODO: import image
+3. Click on "Custom" and paste following URL:
+https://github.com/foxriver76/ioBroker.denon/tarball/master
+TODO: import image
+4. Click on Install
+
+### On-machine
+1. Navigate in your iobroker execute following command: 
+```bash
+npm install https://github.com/foxriver76/ioBroker.denon/tarball/master
+```
+2. afterwards execute:
+```bash
+iobroker upload denon
+```
+
 ## Setup
-After adding an instance of these adapter, you have to fill out the IP address of your DENON AVR in the admin panel.
+1. Open your ioBroker interface in a browser (eg: 192.168.1:8081)
+2. Navigate to Tab "Adapters"
+3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
+TODO: import image
+4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR
+TODO import image
+5. Click on Save & Close
 
 ## Usage
 TODO 
