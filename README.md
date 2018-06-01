@@ -3,10 +3,10 @@
 # ioBroker.denon [![Build Status](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)
 =================
 ## Installation
-You can either install the adapter via the ioBroker web interface or on the machine.
+You can either install the adapter via the ioBroker web interface or on your local machine.
 
 ### Browser-based
-1. Open your ioBroker web interface in a browser (eg: 192.168.30:8081)
+1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
 2. Click on Tab "Adapters" --> Install from Custom URL.
 ![Custom URL](/documentation/installFromCustomURL.png)
 3. Click on "Custom" and paste following URL:
@@ -14,7 +14,7 @@ https://github.com/foxriver76/ioBroker.denon/tarball/master
 ![Paste URL](/documentation/urlInInputField.png)
 4. Click on Install
 
-### On-machine
+### Local machine
 1. Navigate into your iobroker folder and execute the following command: 
 ```bash
 npm install https://github.com/foxriver76/ioBroker.denon/tarball/master
@@ -25,7 +25,7 @@ iobroker upload denon
 ```
 
 ## Setup
-1. Open your ioBroker interface in a browser (eg: 192.168.1:8081)
+1. Open your ioBroker interface in a browser (eg: 192.168.1.33:8081)
 2. Navigate to Tab "Adapters"
 3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
 ![Add Adapter](/documentation/plusAddAdapter.png)
