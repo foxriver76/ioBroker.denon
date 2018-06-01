@@ -1,6 +1,6 @@
 ![Logo](admin/denon.png)
 
-# ioBroker.denon [![Build Status](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)
+# ioBroker.denon [![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon) [![Build status AppVeyor](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon)
 =================
 ## Installation
 You can either install the adapter via the ioBroker web interface or on your local machine.
@@ -61,7 +61,7 @@ The adapter creates the following buttons:
 
 ### States
 Following states will be created by the adapter:
-* connected
+* info.connection
 
    *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false.*
    
