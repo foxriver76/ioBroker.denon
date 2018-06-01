@@ -23,7 +23,7 @@ adapter.on('unload', function (callback) {
         callback();
     } catch (e) {
         callback();
-    }
+    } // endTryCatch
 });
 
 // is called if a subscribed object changes
@@ -40,7 +40,7 @@ adapter.on('stateChange', function (id, state) {
     // you can use the ack flag to detect if it is status (true) or command (false)
     if (state && !state.ack) {
         adapter.log.debug('ack is not set!');
-    }
+    } // endIf
 });
 
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
@@ -52,15 +52,17 @@ adapter.on('message', function (obj) {
 
             // Send response in callback if required
             if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
-        }
-    }
+        } // endIf
+    } // endIf
 });
 
 // is called when databases are connected and adapter received configuration.
 // start here!
 adapter.on('ready', function () {
-    adapter.log.info('Starting DENON AVR adapter');
-    main();
+    if(adapter.config.ip) {
+    	adapter.log.info('Starting DENON AVR adapter');
+    	main();
+    } else adapter.log.warn('No IP-address set');
 });
 
 function main() {

@@ -58,8 +58,6 @@
         "type": "general"
     },
     "native": {
-        "currentVolume": 0,
-        "powerState": false
     },
     "objects": [
 
