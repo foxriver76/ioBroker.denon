@@ -37,8 +37,28 @@ iobroker upload denon
 Here you can find a description of the states and how to use them.
 
 ### Buttons
+The adapter creates the following buttons:
+* playPauseButton
+
+   *Play and pause music from Bluetooth, Online, USB/iPod sources*
+* skipMinus
+
+   *Skip to previous title*
+* skipPlus
+
+   *Skip to next title*
+* volumeDown
+   
+   *Decrease volume*
+* volumeUp
+
+   *Increase volume*
 
 ### States
+Following states will be created by the adapter:
+* connected
+
+   *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false* 
  
 ## Changelog
 
