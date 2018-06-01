@@ -166,7 +166,7 @@ function main() {
         common: {
                 name: 'selectInput',
                 role: 'Select Input',
-                type: 'number',
+                type: 'string',
                 write: true,
                 read: true,
 		states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVOTITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
@@ -204,8 +204,9 @@ function main() {
                 name: 'surroundMode',
                 role: 'Surround Mode',
                 type: 'string',
-                write: false,
-                read: true
+                write: true,
+                read: true,
+		states: '0:STEREO;1:VIRTUAL;2:VIDEO GAME;3:MCH STEREO;4:DTS SURROUND;5:DOLBY DIGITAL;6:MOVIE;7:MUSIC;8:DIRECT;9:PURE DIRECT;10:AUTO;11:GAME;12:AURO3D;13:AURO2DSURR;14:WIDE SCREEN;15:SUPER STADIUM;16:ROCK ARENA;17:JAZZ CLUB;18:CLASSIC CONCERT;19:MONO MOVIE;20:MATRIX'
         },
         native: {}
     });
@@ -303,6 +304,12 @@ function main() {
 		case 'selectInput':
 			adapter.getObject('selectInput', function(err, obj) {
 				sendRequest('SI' + stateTextToArray(obj.common.states)[state].toUpperCase());
+			});
+			break;
+		case 'surroundMode':
+			adapter.getObject('surroundMode', function(err, obj) {
+				adapter.log.debug('state: ' + state + ' & states: ' + obj.common.states);
+				sendRequest('MS' + stateTextToArray(obj.common.states)[state].toUpperCase());
 			});
 			break;
 	} // endSwitch
