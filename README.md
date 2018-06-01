@@ -34,6 +34,7 @@ iobroker upload denon
 5. Click on Save & Close
 
 ## Usage
+Take note, that the AVRs can only manage a single telnet connection. If you are having an active telnet connection e. g. with the javascript adapter, the AVR will refuse the connection of this adapter.
 Here you can find a description of the states and how to use them.
 
 ### Buttons
@@ -189,7 +190,9 @@ Following states will be created by the adapter:
    setState('denon.0.surroundMode', 3);
    ```
 ## Missing functions & bugs
-If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues). 
+If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
+
+The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
