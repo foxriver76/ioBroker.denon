@@ -169,7 +169,7 @@ function main() {
                 type: 'number',
                 write: true,
                 read: true,
-		states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPATIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVOTITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
+		states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVOTITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
         },
         native: {}
     });
@@ -301,7 +301,9 @@ function main() {
 			break;
 		// Current Source
 		case 'selectInput':
-			sendRequest('SI' + state);
+			adapter.getObject('selectInput', function(err, obj) {
+				sendRequest('SI' + stateTextToArray(obj.common.states)[state].toUpperCase());
+			});
 			break;
 	} // endSwitch
      }); // endOnStateChange
@@ -324,7 +326,7 @@ function main() {
    	var i;
 	for(i = 0; i < updateCommands.length; i++) {
 		sendRequest(updateCommands[i]);
-		adapter.log.debug('Update State for ' + updateCommands[i]);
+		adapter.log.debug('Update state for ' + updateCommands[i]);
 	} // endFor
     } // endUpdateStates
 
@@ -336,6 +338,14 @@ function main() {
     function handleResponse(data) {
 	// get command out of String
 	var command = data.toString().replace(/\s+|\d+/g,'');
+	if(command.startsWith("SI")) {
+		var siCommand = command.slice(2, command.length);
+		command = "SI";
+	} // endIf
+	if(command.startsWith("MS")) {
+		var msCommand = command.slice(2, command.length);
+		command = "MS";
+	} // endIf
 	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {
 		case 'PWON':
@@ -358,18 +368,24 @@ function main() {
 		case 'MUOFF':
 			adapter.setState('muteIndicator', false, true);
 			break;
+		case 'SI':
+			adapter.setState('selectInput', siCommand, true);
+			break;
+		case 'MS':
+			adapter.setState('surroundMode', msCommand, true);
+			break;
 		// Surround modes
 
 
 	} // endSwitch
     } // endHandleResponse
 
-    function stateTextToArray (StateNames) { // encoding for e. g. selectInput 
-  	var stateName = StateNames.split(';');
-   	var stateArr=[];
+    function stateTextToArray(stateNames) { // encoding for e. g. selectInput 
+  	var stateName = stateNames.split(';');
+   	var stateArray=[];
     	for(var i = 0; i < stateName.length; i++) {
        		var element = stateName[i].split(':');
-            	stateArr[element[0]] = element[1];
+            	stateArray[element[0]] = element[1];
         } // endFor
 	return stateArray;
     } // endStateTextToArray
