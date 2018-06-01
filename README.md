@@ -15,7 +15,7 @@ https://github.com/foxriver76/ioBroker.denon/tarball/master
 4. Click on Install
 
 ### On-machine
-1. Navigate in your iobroker execute following command: 
+1. Navigate into your iobroker folder and execute the following command: 
 ```bash
 npm install https://github.com/foxriver76/ioBroker.denon/tarball/master
 ```
@@ -40,25 +40,103 @@ Here you can find a description of the states and how to use them.
 The adapter creates the following buttons:
 * playPauseButton
 
-   *Play and pause music from Bluetooth, Online, USB/iPod sources*
+   *Play and pause music from Bluetooth, Online, USB/iPod sources.*
+   
 * skipMinus
 
-   *Skip to previous title*
+   *Skip to previous title.*
+   
 * skipPlus
 
-   *Skip to next title*
+   *Skip to next title.*
+   
 * volumeDown
    
-   *Decrease volume*
+   *Decrease volume.*
+   
 * volumeUp
 
-   *Increase volume*
+   *Increase volume.*
 
 ### States
 Following states will be created by the adapter:
 * connected
 
-   *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false* 
+   *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false.*
+   
+* mainVolume
+
+   *Number value which represents the current main volume of your AVR. You can also set the volume.*
+   
+* maximumVolume
+
+   *Read-only number which represents the maximum possible volume.*
+   
+* muteIndicator
+
+   *Boolean value, which is true if the AVR is muted, otherwise false. You can mute your AVR with this state.*
+   
+* powerState
+
+   *Boolean value, which is true if the AVR is turned on, otherwise false. You can turn your AVR on and off with this state.*
+   
+* selectInput
+
+   *The string value contains the current input source. You can also set the input source with the following encoding:*
+   
+   *0:PHONO*
+   
+   *1:CD*
+   
+   *2:TUNER*
+   
+   *3:DVD*
+   
+   *4:BD*
+   
+   *5:TV*
+   
+   *6:SAT/CBL*
+   
+   *7:MPLAY*
+   
+   *8:GAME*
+   
+   *9:NET*
+   
+   *10:SPOTIFY*
+   
+   *11:LASTFM*
+   
+   *12:IRADIO*
+   
+   *13:SERVER*
+   
+   *14:FAVOTITES*
+   
+   *15:AUX1*
+   
+   *16:AUX2*
+   
+   *17:AUX3*
+   
+   *18:AUX4*
+   
+   *19:AUX5*
+   
+   *20:AUX6*
+   
+   *21:AUX7*
+   
+   *Please note, that not every input source is available on every AVR model.*
+   
+   *Example:*
+   
+   ```javascript
+    setState('denon.0.selectInput', 5);
+    ```
+   
+   
  
 ## Changelog
 
