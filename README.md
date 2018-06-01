@@ -3,8 +3,10 @@
 # ioBroker.denon [![Build Status](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)
 =================
 ## Installation
+You can either install the adapter via the ioBroker web interface or on the machine.
+
 ### Browser-based
-1. Open your ioBroker interface in a browser (eg: 192.168.1:8081)
+1. Open your ioBroker web interface in a browser (eg: 192.168.30:8081)
 2. Click on Tab "Adapters" --> Install from Custom URL.
 ![Custom URL](/documentation/installFromCustomURL.png)
 3. Click on "Custom" and paste following URL:
@@ -32,7 +34,11 @@ iobroker upload denon
 5. Click on Save & Close
 
 ## Usage
-TODO 
+Here you can find a description of the states and how to use them.
+
+### Buttons
+
+### States
  
 ## Changelog
 
