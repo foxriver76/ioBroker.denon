@@ -67,11 +67,11 @@ adapter.on('ready', function () {
 
 function main() {
     // Creating states
-    adapter.setObject('connected', {
+    adapter.setObject('info.connection', {
         type: 'state',
         common: {
-                name: 'connected',
-                role: 'Connected',
+                name: 'connection',
+                role: 'Conection',
                 type: 'boolean',
                 write: false,
                 read: true
@@ -222,7 +222,7 @@ function main() {
 
     // Connection handling
     client.on('error', function(error) {
-	adapter.setState('connected', false, true);
+	adapter.setState('info.connection', false, true);
         adapter.log.error(error);
         client.destroy();
         client.unref();
@@ -234,7 +234,7 @@ function main() {
 
     client.on('end', function () { // Denon has closed the connection
         adapter.log.warn('Denon AVR has cancelled the connection');
-	adapter.setState('connected', false, true);
+	adapter.setState('info.connection', false, true);
         client.destroy();
         client.unref();
         adapter.log.info('Connection closed!');
@@ -244,7 +244,7 @@ function main() {
     });
 
     client.on('connect', function () { // Successfull connected
-        adapter.setState('connected', true, true);
+        adapter.setState('info.connection', true, true);
 	adapter.log.debug("Connected --> updating states on start");
 	updateStates(); // Update states when connected
     });

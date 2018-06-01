@@ -55,9 +55,10 @@
         "keywords": ["denon", "avr", "harmony", "audio"],
         "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
         "loglevel": "info",
-        "type": "general"
+        "type": "multimedia"
     },
     "native": {
+	"ip" : "192.168.178.31"
     },
     "objects": [
 
