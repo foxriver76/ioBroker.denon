@@ -32,17 +32,6 @@ adapter.on('objectChange', function (id, obj) {
     adapter.log.info('objectChange ' + id + ' ' + JSON.stringify(obj));
 });
 
-// is called if a subscribed state changes
-adapter.on('stateChange', function (id, state) {
-    // Warning, state can be null if it was deleted
-    adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
-
-    // you can use the ack flag to detect if it is status (true) or command (false)
-    if (state && !state.ack) {
-        adapter.log.debug('ack is not set!');
-    } // endIf
-});
-
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
 adapter.on('message', function (obj) {
     if (typeof obj === 'object' && obj.message) {
@@ -67,7 +56,7 @@ adapter.on('ready', function () {
 
 function main() {
     // Creating states
-    adapter.setObject('info.connection', {
+    adapter.setObjectNotExists('info.connection', {
         type: 'state',
         common: {
                 name: 'connection',
@@ -79,7 +68,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('powerState', {
+    adapter.setObjectNotExists('powerState', {
 	type: 'state',
 	common: {
 		name: 'powerState',
@@ -91,7 +80,7 @@ function main() {
 	native: {}
     });
 
-    adapter.setObject('mainVolume', {
+    adapter.setObjectNotExists('mainVolume', {
 	type: 'state',
 	common: {
 		name: 'mainVolume',
@@ -103,7 +92,7 @@ function main() {
 	native: {}
     });
 
-    adapter.setObject('volumeUp', {
+    adapter.setObjectNotExists('volumeUp', {
 	type: 'state',
 	common: {
 		name: 'volumeUp',
@@ -115,7 +104,7 @@ function main() {
 	native: {}
     });
 
-    adapter.setObject('volumeDown', {
+    adapter.setObjectNotExists('volumeDown', {
     	type: 'state',
         common: {
                 name: 'volumeDown',
@@ -127,7 +116,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('playPauseButton', {
+    adapter.setObjectNotExists('playPauseButton', {
         type: 'state',
         common: {
                 name: 'playPauseButton',
@@ -139,7 +128,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('skipPlus', {
+    adapter.setObjectNotExists('skipPlus', {
         type: 'state',
         common: {
                 name: 'skipPlus',
@@ -151,7 +140,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('skipMinus', {
+    adapter.setObjectNotExists('skipMinus', {
         type: 'state',
         common: {
                 name: 'skipMinus',
@@ -163,7 +152,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('selectInput', {
+    adapter.setObjectNotExists('selectInput', {
         type: 'state',
         common: {
                 name: 'selectInput',
@@ -176,7 +165,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('maximumVolume', {
+    adapter.setObjectNotExists('maximumVolume', {
         type: 'state',
         common: {
                 name: 'maximumVolume',
@@ -188,7 +177,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('muteIndicator', {
+    adapter.setObjectNotExists('muteIndicator', {
         type: 'state',
         common: {
                 name: 'muteIndicator',
@@ -200,7 +189,7 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('surroundMode', {
+    adapter.setObjectNotExists('surroundMode', {
         type: 'state',
         common: {
                 name: 'surroundMode',
@@ -398,14 +387,5 @@ function main() {
         } // endFor
 	return stateArray;
     } // endStateTextToArray
-
-    // examples for the checkPassword/checkGroup functions
-    adapter.checkPassword('admin', 'iobroker', function (res) {
-        console.log('check user admin pw ioboker: ' + res);
-    });
-
-    adapter.checkGroup('admin', 'admin', function (res) {
-        console.log('check group user admin group admin: ' + res);
-    });
 
 } // endMain
