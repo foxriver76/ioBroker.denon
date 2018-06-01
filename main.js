@@ -71,7 +71,7 @@ function main() {
                 name: 'connected',
                 role: 'Connected',
                 type: 'boolean',
-                write: true,
+                write: false,
                 read: true
         },
         native: {}
