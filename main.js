@@ -10,8 +10,6 @@
 var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
 var net = require('net'); // import net
 
-// you have to call the adapter function and pass a options object
-// name has to be set and has to be equal to adapters folder name and main file name excluding extension
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.denon.0
 var adapter = new utils.Adapter('denon');
 
@@ -60,7 +58,8 @@ adapter.on('message', function (obj) {
 // is called when databases are connected and adapter received configuration.
 // start here!
 adapter.on('ready', function () {
-	main();
+    adapter.log.info('Starting DENON AVR adapter');
+    main();
 });
 
 function main() {
@@ -113,11 +112,11 @@ function main() {
         native: {}
     });
 
-    adapter.setObject('maximumVolume', {
+    adapter.setObject('playPauseButton', {
         type: 'state',
         common: {
-                name: 'maximumVolume',
-                role: 'Maximum Volume',
+                name: 'playPauseButton',
+                role: 'button',
                 type: 'number',
                 write: true,
                 read: true
@@ -125,6 +124,54 @@ function main() {
         native: {}
     });
 
+    adapter.setObject('skipPlus', {
+        type: 'state',
+        common: {
+                name: 'skipPlus',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObject('skipMinus', {
+        type: 'state',
+        common: {
+                name: 'skipMinus',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObject('currentSource', {
+        type: 'state',
+        common: {
+                name: 'currentSource',
+                role: 'Current Source',
+                type: 'number',
+                write: true,
+                read: true,
+		states: '0:DVD;1:BD;2:TV;3:SAT/CBL;4:MPLAY;5:GAME;6:AUX1;7:AUX2;8:CD;9:PHONO;10:TUNER;11:SPOTIFY'
+        },
+        native: {}
+    });
+
+    adapter.setObject('maximumVolume', {
+        type: 'state',
+        common: {
+                name: 'maximumVolume',
+                role: 'Maximum Volume',
+                type: 'number',
+                write: false,
+                read: true
+        },
+        native: {}
+    });
 
     adapter.setObject('muteIndicator', {
         type: 'state',
@@ -146,13 +193,10 @@ function main() {
                 type: 'number',
                 write: true,
                 read: true,
-		states: '0:STEREO;1:VIRTUAL;2:VIDEO GAME;3:MCH STEREO;4:NEURAL:X;5:DOLBY SURROUND'
+		states: '0:STEREO;1:VIRTUAL;2:VIDEO GAME;3:MCH STEREO;4:DTS SURROUND;5:DOLBY SURROUND;6:MOVIE;7:MUSIC;8:DIRECT;9:PURE DIRECT;10:AUTO;11:GAME;12:AURO3D;13:AURO2DSURR;14:WIDE SCREEN;15:SUPER STADIUM;16:ROCK ARENA;17:JAZZ CLUB;18:CLASSIC CONCERT;19:MONO MOVIE;20:MATRIX'
         },
         native: {}
     });
-
-
-
 
     // Constants & Variables
     var client = new net.Socket();
@@ -226,6 +270,92 @@ function main() {
 				sendRequest('MUOFF')
 			} // endElseIf
 			break;
+		case 'surroundMode':
+			switch(state) {
+				case 0:
+					sendRequest('MSSTEREO');
+					break;
+				case 1:
+					sendRequest('MSVIRTUAL');
+					break;
+				case 2:
+					sendRequest('MSVIDEO GAME');
+					break;
+				case 3:
+					sendRequest('MSMCH STEREO');
+					break;
+				case 4:
+					sendRequest('MSDTS SURROUND');
+					break;
+				case 5:
+					sendRequest('MSDOLBY DIGITAL');
+					break;
+				case 6:
+					sendRequest('MSMOVIE');
+					break;
+				case 7:
+					sendRequest('MSMUSIC');
+					break;
+				case 8:
+					sendRequest('MSDIRECT');
+					break;
+				case 9:
+					sendRequest('MSPURE DIRECT');
+					break;
+				case 10:
+					sendRequest('MSAUTO')
+					break;
+				case 11:
+					sendRequest('MSGAME')
+					break;
+				case 12:
+					sendRequest('MSAURO3D')
+					break;
+				case 13:
+					sendRequest('MSAURO2DSURR')
+					break;
+				case 14:
+					sendRequest('MSWIDE SCREEN');
+					break;
+				case 15:
+					sendRequest('MSSUPER STADIUM');
+					break;
+				case 16:
+					sendRequest('MSROCK ARENA');
+					break;
+				case 17:
+					sendRequest('MSJAZZ CLUB');
+					break;
+				case 18:
+					sendRequest('MSCLASSIC CONCERT');
+					break;
+				case 19:
+					sendRequest('MSMONO MOVIE');
+					break;
+				case 20:
+					sendRequest('MSMATRIX')
+					break;
+			} // endSwitch
+			break;
+		case 'playPauseButton':
+			sendRequest('NS94');
+			break;
+		case 'skipMinus':
+			sendRequest('NS9E');
+			break;
+		case 'skipPlus':
+			sendRequest('NS9D');
+			break;
+		// Current Source
+		case 'currentSource':
+			switch(state) {
+				case 0:
+					sendRequest('SIDVD');
+					break;
+				case 1:
+					sendRequest('SIBD');
+					break;
+			} // endSwitch
 	} // endSwitch
      }); // endOnStateChange
 
@@ -272,6 +402,9 @@ function main() {
 			adapter.setState('mainVolume', parseFloat(data), true);
 			break;
 		case 'MVMAX':
+			data = data.slice(6, 8) + '.' + data.slice(8, 9);
+			adapter.log.debug(data);
+			adapter.setState('maximumVolume', parseFloat(data), true);
 			break;
 		case 'MUON':
 			adapter.setState('muteIndicator', true, true);
@@ -279,6 +412,7 @@ function main() {
 		case 'MUOFF':
 			adapter.setState('muteIndicator', false, true);
 			break;
+		// Surround modes
 		case 'MSSTEREO':
 			adapter.setState('surroundMode', 0, true);
 			break;
@@ -297,6 +431,52 @@ function main() {
 		case 'MSDOLBYSURROUND':
 			adapter.setState('surroundMode', 5, true);
 			break;
+		case 'MSMOVIE':
+			adapter.setState('surroundMode', 6, true);
+			break;
+		case 'MSMUSIC':
+			adapter.SetState('surroundMode', 7, true);
+			break;
+		case 'MSDIRECT':
+			adapter.setState('surroundMode', 8, true);
+			break;
+		case 'MSPURE DIRECT':
+			adapter.setState('surroundMode', 9, true);
+			break;
+		case 'MSAUTO':
+			adapter.setState('surroundMode', 10, true);
+			break;
+		case 'MSGAME':
+			adapter.setState('surroundMode', 11, true);
+			break;
+		case 'MSAUROD':
+                        adapter.setState('surroundMode', 12, true);
+                        break;
+		case 'MSAURODSURR':
+                        adapter.setState('surroundMode', 13, true);
+                        break;
+		case 'MSWIDESCREEN':
+                        adapter.setState('surroundMode', 14, true);
+                        break;
+		case 'MSSUPERSTADIUM':
+                        adapter.setState('surroundMode', 15, true);
+                        break;
+		case 'MSROCKARENA':
+                        adapter.setState('surroundMode', 16, true);
+                        break;
+		case 'MSJAZZCLUB':
+                        adapter.setState('surroundMode', 17, true);
+                        break;
+		case 'MSCLASSICCONCERT':
+                        adapter.setState('surroundMode', 18, true);
+                        break;
+		case 'MSMONOMOVIE':
+                        adapter.setState('surroundMode', 19, true);
+                        break;
+		case 'MSMATRIX':
+                        adapter.setState('surroundMode', 20, true);
+                        break;
+
 	} // endSwitch
     } // endHandleResponse
 
