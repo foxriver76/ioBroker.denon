@@ -1,4 +1,4 @@
-/**
+ /**
  * DENON AVR adapter
  */
 
@@ -239,9 +239,9 @@ function main() {
         	return;
 	} // endIf
 	id = id.split('.')[2]; // remove instance name and id
-	state = state.val;	// only get state value
-	adapter.log.info('State Change - ID: ' + id + '; State: ' + state);
-	// TODO: Handle state changes
+	state = state.val; // only get state value
+	adapter.log.debug('State Change - ID: ' + id + '; State: ' + state);
+
 	switch(id) {
 		case 'mainVolume':
 			var leadingZero;
@@ -251,7 +251,7 @@ function main() {
 			} else leadingZero = "";
 			state = state.toString().replace('.', '') // remove points
 			sendRequest('MV' + leadingZero + state);
-			adapter.log.info('Changed mainVolume to ' + state);
+			adapter.log.debug('Changed mainVolume to ' + state);
 			break;
 		case 'powerState':
 			if(state === true) {
