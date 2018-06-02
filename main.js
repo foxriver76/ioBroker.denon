@@ -192,6 +192,68 @@ function main() {
         native: {}
     });
 
+    adapter.setObjectNotExists('quickSelect1', {
+        type: 'state',
+        common: {
+                name: 'quickSelect1',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('quickSelect2', {
+        type: 'state',
+        common: {
+                name: 'quickSelect2',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('quickSelect3', {
+        type: 'state',
+        common: {
+                name: 'quickSelect3',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('quickSelect4', {
+        type: 'state',
+        common: {
+                name: 'quickSelect4',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('quickSelect5', {
+        type: 'state',
+        common: {
+                name: 'quickSelect5',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+
+
     // Constants & Variables
     var client = new net.Socket();
     const host = adapter.config.ip;
@@ -240,7 +302,6 @@ function main() {
     	if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
         	return;
 	} // endIf
-
 	var j;
 	var fullId = id;
 	for(j = 2; j < fullId.split('.').length; j++) { // remove instance name and id
@@ -249,7 +310,13 @@ function main() {
 	} // endFor
 	state = state.val; // only get state value
 	adapter.log.debug('State Change - ID: ' + id + '; State: ' + state);
-
+	if(id.startsWith("quickSelect")) {
+		var quickNr = id.slice(id.length-1, id.length);
+		id = "quickSelect";
+	} else if (id.startsWith('zone2.quickSelect')) {
+		var quickNr = id.slice(id.length-1, id.length);
+                id = "zone2.quickSelect";
+	} // endElseIf
 	switch(id) {
 		case 'mainVolume':
 			var leadingZero;
@@ -336,7 +403,12 @@ function main() {
                                 sendRequest('Z2' + stateTextToArray(obj.common.states)[state].toUpperCase());
                         });
                         break;
-
+		case 'quickSelect':
+			sendRequest('MSQUICK' + quickNr);
+			break;
+		case 'zone2.quickSelect':
+			sendRequest('Z2QUICK' + quickNr);
+			break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -546,6 +618,66 @@ function main() {
         	},
         	native: {}
     	});
+
+        adapter.setObjectNotExists('zone2.quickSelect1', {
+                type: 'state',
+                common: {
+                        name: 'zone2.quickSelect1',
+                        role: 'button',
+                        type: 'number',
+                        write: true,
+                        read: true
+                },
+                native: {}
+        });
+
+	adapter.setObjectNotExists('zone2.quickSelect2', {
+        	type: 'state',
+        	common: {
+                	name: 'zone2.quickSelect2',
+                	role: 'button',
+                	type: 'number',
+                	write: true,
+                	read: true
+        	},
+        	native: {}
+    	});
+
+    	adapter.setObjectNotExists('zone2.quickSelect3', {
+        	type: 'state',
+        	common: {
+                	name: 'zone2.quickSelect3',
+                	role: 'button',
+                	type: 'number',
+                	write: true,
+                	read: true
+        	},
+        	native: {}
+    	});
+
+    adapter.setObjectNotExists('zone2.quickSelect4', {
+        type: 'state',
+        common: {
+                name: 'zone2.quickSelect4',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('zone2.quickSelect5', {
+        type: 'state',
+        common: {
+                name: 'zone2.quickSelect5',
+                role: 'button',
+                type: 'number',
+                write: true,
+                read: true
+        },
+        native: {}
+    });
 
 	zoneTwo = true;
 	adapter.log.debug('Zone 2 detected');
