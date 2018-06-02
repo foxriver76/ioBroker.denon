@@ -7,7 +7,7 @@
 'use strict';
 
 // you have to require the utils module and call adapter function
-var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
+var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
 var net = require('net'); // import net
 
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.denon.0
@@ -195,6 +195,8 @@ function main() {
     // Constants & Variables
     var client = new net.Socket();
     const host = adapter.config.ip;
+    var zoneTwo = false;
+    var zoneThree = false;
 
     // Connect
     connect(); // Connect on start
@@ -238,7 +240,13 @@ function main() {
     	if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
         	return;
 	} // endIf
-	id = id.split('.')[2]; // remove instance name and id
+
+	var j;
+	var fullId = id;
+	for(j = 2; j < fullId.split('.').length; j++) { // remove instance name and id
+		if(j == 2) id = fullId.split('.')[j];
+		if(j > 2) id = id + '.' + fullId.split('.')[j];
+	} // endFor
 	state = state.val; // only get state value
 	adapter.log.debug('State Change - ID: ' + id + '; State: ' + state);
 
@@ -294,6 +302,41 @@ function main() {
 				sendRequest('MS' + stateTextToArray(obj.common.states)[state].toUpperCase());
 			});
 			break;
+		case 'zone2.powerState':
+			if(state === true) {
+				sendRequest('Z2ON');
+			} else {
+				sendRequest('Z2OFF');
+			} // endElseIf
+			break;
+		case 'zone2.muteIndicator':
+			if(state === true) {
+				sendRequest('Z2MUON')
+			} else {
+				sendRequest('Z2MUOFF');
+			} // endElseIf
+			break;
+		case 'zone2.volumeUp':
+			sendRequest('Z2UP');
+			break;
+		case 'zone2.volumeDown':
+			sendRequest('Z2DOWN');
+			break;
+		case 'zone2.volume':
+			var leadingZero;
+                        if (state < 0) state = 0;
+                        if (state < 10) {
+                                leadingZero = "0";
+                        } else leadingZero = "";
+                        state = state.toString().replace('.', '') // remove points
+			sendRequest('Z2' + leadingZero + state);
+			break;
+                case 'zone2.selectInput':
+                        adapter.getObject('zone2.selectInput', function(err, obj) {
+                                sendRequest('Z2' + stateTextToArray(obj.common.states)[state].toUpperCase());
+                        });
+                        break;
+
 	} // endSwitch
      }); // endOnStateChange
 
@@ -315,7 +358,6 @@ function main() {
    	var i;
 	for(i = 0; i < updateCommands.length; i++) {
 		sendRequest(updateCommands[i]);
-		adapter.log.debug('Update state for ' + updateCommands[i]);
 	} // endFor
     } // endUpdateStates
 
@@ -326,7 +368,33 @@ function main() {
 
     function handleResponse(data) {
 	// get command out of String
-	var command = data.toString().replace(/\s+|\d+/g,'');
+	var command
+	if(data.toString().startsWith("Z2")) { // Transformation for Zone2 commands
+		// Handle Zone2 states
+		command = data.toString().replace(/\s+|\d+/g,'');
+		if(command == 'Z') { // if everything is removed except Z --> Volume
+			command = "Z2VOL";
+			var vol = data.toString().slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
+			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
+			adapter.log.info('VOL: ' + vol); // ---------------------
+		} else {
+			command = "Z2" + command.slice(1, command.length);
+		} // endElseIf
+		if(command.startsWith("Z2")) { // Encode Input Source
+                	adapter.getObject('zone2.selectInput', function(err, obj) {
+				var j;
+				var zTwoSi = command.slice(2, command.length);
+				for(j = 0; j < 21; j++) { // check if command contains one of the possible Select Inputs
+                      			if(stateTextToArray(obj.common.states)[j] == zTwoSi) adapter.setState('zone2.selectInput', zTwoSi, true);
+				} // endFor
+                     	});
+		} // endIf
+	} else if(data.toString().startsWith("Z3")) { // Transformation for Zone3 commands
+                command = data.toString().replace(/\s+|\d+/g,'');
+                command = "Z3" + command.slice(1, command.length);
+ 	} else {// Transformations for normal commands
+		command = data.toString().replace(/\s+|\d+/g,'');
+	} // endElseIf
 	if(command.startsWith("SI")) {
 		var siCommand = command.slice(2, command.length);
 		command = "SI";
@@ -363,6 +431,23 @@ function main() {
 		case 'MS':
 			adapter.setState('surroundMode', msCommand, true);
 			break;
+		case 'Z2ON':
+			if(!zoneTwo) createZoneTwo();
+			adapter.setState('zone2.powerState', true, true);
+			break;
+		case 'Z2OFF':
+			if(!zoneTwo) createZoneTwo();
+			adapter.setState('zone2.powerState', false, true);
+			break;
+		case 'Z2MUON':
+			adapter.setState('zone2.muteIndicator', true, true);
+			break;
+		case 'Z2MUOFF':
+			adapter.setState('zone2.muteIndicator', false, true);
+			break;
+		case 'Z2VOL':
+			adapter.setState('zone2.volume', parseFloat(vol), true);
+			break;
 	} // endSwitch
     } // endHandleResponse
 
@@ -375,5 +460,93 @@ function main() {
         } // endFor
 	return stateArray;
     } // endStateTextToArray
+
+   function createZoneTwo() {
+	adapter.setObjectNotExists('zone2', {
+            type: "channel",
+            common: {
+                name: "Zone2"
+            },
+            native: {}
+        });
+
+	adapter.setObjectNotExists('zone2.powerState', {
+        	type: 'state',
+        	common: {
+                	name: 'zon2.powerState',
+                	role: 'Zone2 Power State',
+                	type: 'boolean',
+                	write: true,
+                	read: true
+        	},
+        	native: {}
+    	});
+
+    	adapter.setObjectNotExists('zone2.volume', {
+        	type: 'state',
+        	common: {
+                	name: 'zone2.volume',
+                	role: 'Volume',
+                	type: 'number',
+                	read: true,
+                	write: true,
+                	min: 0,
+                	max: 100
+        	},
+        	native: {}
+    	});
+
+    	adapter.setObjectNotExists('zone2.volumeUp', {
+        	type: 'state',
+        	common: {
+                	name: 'zone2.volumeUp',
+                	role: 'button',
+                	type: 'number',
+                	write: true,
+                	read: true
+        	},
+        	native: {}
+    	});
+
+    	adapter.setObjectNotExists('zone2.volumeDown', {
+        	type: 'state',
+        	common: {
+                	name: 'zone2.volumeDown',
+                	role: 'button',
+                	type: 'number',
+                	write: true,
+                	read: true
+        	},
+        	native: {}
+    	});
+
+	adapter.setObjectNotExists('zone2.selectInput', {
+        	type: 'state',
+        	common: {
+                	name: 'zone2.selectInput',
+                	role: 'Select Input',
+                	type: 'number',
+                	write: true,
+                	read: true,
+                	states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVOTITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
+        	},
+        	native: {}
+    	});
+
+	adapter.setObjectNotExists('zone2.muteIndicator', {
+        	type: 'state',
+        	common: {
+                	name: 'zone2.muteIndicator',
+                	role: 'Mute Indicator',
+                	type: 'boolean',
+                	write: true,
+                	read: true
+        	},
+        	native: {}
+    	});
+
+	zoneTwo = true;
+	adapter.log.debug('Zone 2 detected');
+   } // endCreateZoneTwo
 
 } // endMain
