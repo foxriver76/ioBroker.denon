@@ -376,12 +376,11 @@ function main() {
 			command = "Z2VOL";
 			var vol = data.toString().slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
-			adapter.log.info('VOL: ' + vol); // ---------------------
 		} else {
 			command = "Z2" + command.slice(1, command.length);
 		} // endElseIf
 		if(command.startsWith("Z2")) { // Encode Input Source
-                	adapter.getObject('zone2.selectInput', function(err, obj) {
+                	adapter.getObject('selectInput', function(err, obj) {
 				var j;
 				var zTwoSi = command.slice(2, command.length);
 				for(j = 0; j < 21; j++) { // check if command contains one of the possible Select Inputs
@@ -440,12 +439,15 @@ function main() {
 			adapter.setState('zone2.powerState', false, true);
 			break;
 		case 'Z2MUON':
+			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.muteIndicator', true, true);
 			break;
 		case 'Z2MUOFF':
+			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.muteIndicator', false, true);
 			break;
 		case 'Z2VOL':
+			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.volume', parseFloat(vol), true);
 			break;
 	} // endSwitch
