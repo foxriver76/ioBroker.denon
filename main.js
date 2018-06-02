@@ -29,7 +29,7 @@ adapter.on('unload', function (callback) {
 // is called if a subscribed object changes
 adapter.on('objectChange', function (id, obj) {
     // Warning, obj can be null if it was deleted
-    adapter.log.info('objectChange ' + id + ' ' + JSON.stringify(obj));
+    adapter.log.debug('objectChange ' + id + ' ' + JSON.stringify(obj));
 });
 
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
@@ -75,7 +75,9 @@ function main() {
 		role: 'Main Volume',
 		type: 'number',
 		read: true,
-		write: true
+		write: true,
+		min: 0,
+		max: 100
 	},
 	native: {}
     });
@@ -243,6 +245,7 @@ function main() {
 	switch(id) {
 		case 'mainVolume':
 			var leadingZero;
+			if (state < 0) state = 0;
 			if (state < 10) {
 				leadingZero = "0";
 			} else leadingZero = "";
@@ -360,13 +363,10 @@ function main() {
 		case 'MS':
 			adapter.setState('surroundMode', msCommand, true);
 			break;
-		// Surround modes
-
-
 	} // endSwitch
     } // endHandleResponse
 
-    function stateTextToArray(stateNames) { // encoding for e. g. selectInput 
+    function stateTextToArray(stateNames) { // encoding for e. g. selectInput
   	var stateName = stateNames.split(';');
    	var stateArray=[];
     	for(var i = 0; i < stateName.length; i++) {
