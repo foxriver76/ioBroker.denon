@@ -254,7 +254,7 @@
                 "read": true
         },
         "native": {}
-    	},
+    },
 	{
 	"_id": "quickSelect4",
         "type": "state",
@@ -266,8 +266,8 @@
                 "read": true
         },
         "native": {}
-    	},
-    	{
+    },
+    {
 	"_id": "quickSelect5",
         "type": "state",
         "common": {
@@ -275,6 +275,122 @@
                 "role": "button",
                 "type": "number",
                 "write": true,
+                "read": true
+        },
+        "native": {}
+    },
+    {
+    	"_id": "display",
+        "type": "channel",
+            "common": {
+                "name": "Display Information"
+            },
+            "native": {}
+        },
+        {
+        "_id": "display.displayContent0",
+        "type": "state",
+        "common": {
+                "name": "displayContent0",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+        {
+        "_id": "display.displayContent1",
+        "type": "state",
+        "common": {
+                "name": "displayContent1",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+    	{
+        "_id": "display.displayContent2",
+        "type": "state",
+        "common": {
+                "name": "displayContent2",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+    	{
+        "_id": "display.displayContent3",
+        "type": "state",
+        "common": {
+                "name": "displayContent3",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+    	        {
+        "_id": "display.displayContent4",
+        "type": "state",
+        "common": {
+                "name": "displayContent4",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+    	{
+        "_id": "display.displayContent5",
+        "type": "state",
+        "common": {
+                "name": "displayContent5",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+    	{
+        "_id": "display.displayContent6",
+        "type": "state",
+        "common": {
+                "name": "displayContent6",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+        {
+        "_id": "display.displayContent7",
+        "type": "state",
+        "common": {
+                "name": "displayContent7",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
+                "read": true
+        },
+        "native": {}
+    	},
+    	{
+        "_id": "display.displayContent8",
+        "type": "state",
+        "common": {
+                "name": "displayContent8",
+                "role": "Display Content",
+                "type": "string",
+                "write": false,
                 "read": true
         },
         "native": {}

@@ -276,6 +276,11 @@ function main() {
 		var msCommand = command.slice(2, command.length);
 		command = "MS";
 	} // endIf
+	if(command.startsWith("NSE")) { // Handle display content
+		var displayCont = data.toString().slice(4, data.toString().length);
+		var dispContNr = data.toString().slice(3, 4);
+		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
+	}
 	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {
 		case 'PWON':
