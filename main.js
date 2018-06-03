@@ -58,16 +58,20 @@ function main() {
 
     // Constants & Variables
     var client = new net.Socket();
+    client.setEncoding('utf8');
     const host = adapter.config.ip;
     var zoneTwo = false;
     var zoneThree = false;
+    var pollingVar = false;
 
     // Connect
     connect(); // Connect on start
+    pollStates(); // Poll states every 10 seconds
 
     // Connection handling
     client.on('error', function(error) {
-	adapter.setState('info.connection', false, true);
+    	pollingVar = false;
+    	adapter.setState('info.connection', false, true);
         adapter.log.error(error);
         client.destroy();
         client.unref();
@@ -79,25 +83,32 @@ function main() {
 
     client.on('end', function () { // Denon has closed the connection
         adapter.log.warn('Denon AVR has cancelled the connection');
-	adapter.setState('info.connection', false, true);
+        pollingVar = false;
+        adapter.setState('info.connection', false, true);
         client.destroy();
         client.unref();
         adapter.log.info('Connection closed!');
-	setTimeout(function() {
-		connect(); // Connect again
-	}, 10000);
+        setTimeout(function() {
+        	connect(); // Connect again
+        }, 10000);
     });
 
     client.on('connect', function () { // Successfull connected
         adapter.setState('info.connection', true, true);
-	adapter.log.debug("Connected --> updating states on start");
-	updateStates(); // Update states when connected
+        adapter.log.debug("Connected --> updating states on start");
+        updateStates(); // Update states when connected
+        setTimeout(function() {pollingVar=true;});
     });
 
     client.on('data', function (data) {
-        adapter.log.debug('Incoming data: ' + data.toString()); // Logging incoming data
-	handleResponse(data);
-     });
+    	// split data by <cr>
+    	var dataArr = data.toString().split(/[\r\n]+/);
+    	var i;
+    	for(i=0; i < dataArr.length; i++) {
+    		handleResponse(dataArr[i]);
+    		adapter.log.debug('Incoming data: ' + dataArr[i]);
+    	} // endFor
+    });
 
      // Handle state changes
      adapter.on('stateChange', function (id, state) {
@@ -117,7 +128,7 @@ function main() {
 		id = "quickSelect";
 	} else if (id.startsWith('zone2.quickSelect')) {
 		var quickNr = id.slice(id.length-1, id.length);
-                id = "zone2.quickSelect";
+        id = "zone2.quickSelect";
 	} // endElseIf
 	switch(id) {
 		case 'mainVolume':
@@ -230,12 +241,24 @@ function main() {
     function updateStates() {
     	var updateCommands = ['NSET1 ?','NSFRN ?','ZM?','MU?','PW?','SI?','SV?','MS?','MV?','Z2?','Z2MU?','Z3?','Z3MU?','NSE','VSSC ?','VSASP ?','VSMONI ?','TR?','DIM ?'];
     	var i = 0;
-    	var intervall = setInterval(function() {
+    	var intervalVar = setInterval(function() {
 			sendRequest(updateCommands[i]);
 			i++;
-			if(i == updateCommands.length) clearInterval(intervall);
+			if(i == updateCommands.length) clearInterval(intervalVar);
 		}, 100);
     } // endUpdateStates
+    
+    function pollStates() { // Polls requested states every 10 seconds
+    	var updateCommands = ['NSE']; // Request Display State
+    	var i = 0;
+    	var intervalVar = setInterval(function() {
+    		if(pollingVar) {
+    			sendRequest(updateCommands[i]);
+    			i++;
+    			if(i == updateCommands.length) i = 0;
+    		} // endIf
+    	}, 10000);
+    } // endPollingStates
 
     function sendRequest(req) {
 	client.write(req + '\r');
@@ -245,12 +268,12 @@ function main() {
     function handleResponse(data) {
 	// get command out of String
 	var command;
-	if(data.toString().startsWith("Z2")) { // Transformation for Zone2 commands
+	if(data.startsWith("Z2")) { // Transformation for Zone2 commands
 		// Handle Zone2 states
-		command = data.toString().replace(/\s+|\d+/g,'');
+		command = data.replace(/\s+|\d+/g,'');
 		if(command == 'Z') { // if everything is removed except Z --> Volume
 			command = "Z2VOL";
-			var vol = data.toString().slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
+			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
 		} else {
 			command = "Z2" + command.slice(1, command.length);
@@ -258,21 +281,21 @@ function main() {
 		if(command.startsWith("Z2")) { // Encode Input Source
 			adapter.getObject('selectInput', function(err, obj) {
 				var j;
-				var zTwoSi = data.toString().slice(2, data.length);
+				var zTwoSi = data.slice(2, data.length);
 				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
 				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
                       			if(stateTextToArray(obj.common.states)[j] == zTwoSi) adapter.setState('zone2.selectInput', zTwoSi, true);
 				} // endFor
 			});
 		} // endIf
-	} else if(data.toString().startsWith("Z3")) { // Transformation for Zone3 commands
-                command = data.toString().replace(/\s+|\d+/g,'');
+	} else if(data.startsWith("Z3")) { // Transformation for Zone3 commands
+                command = data.replace(/\s+|\d+/g,'');
                 command = "Z3" + command.slice(1, command.length);
  	} else {// Transformations for normal commands
-		command = data.toString().replace(/\s+|\d+/g,'');
+		command = data.replace(/\s+|\d+/g,'');
 	} // endElseIf
 	if(command.startsWith("SI")) {
-		var siCommand = data.toString().slice(2, data.length); // Get only source name
+		var siCommand = data.slice(2, data.length); // Get only source name
 		siCommand = siCommand.replace(' ', ''); // Remove blanks
 		adapter.log.debug("SI-Command: " + siCommand);
 		command = "SI";
@@ -282,8 +305,11 @@ function main() {
 		command = "MS";
 	} // endIf
 	if(command.startsWith("NSE")) { // Handle display content
-		var displayCont = data.toString().slice(4, data.toString().length);
-		var dispContNr = data.toString().slice(3, 4);
+		// var escape = false;
+		var displayCont = data.slice(4, data.length);
+		//if(displayCont.includes("NSE")) escape = true; // Error handling for double response
+		var dispContNr = data.slice(3, 4);
+		//if(!escape) 
 		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
 	}
 	adapter.log.debug('Command to handle is ' + command);
