@@ -205,6 +205,9 @@ Following states will be created by the adapter:
    ```javascript
    setState('denon.0.surroundMode', 3); // Sets Multi Channel Stereo as surround mode
    ```
+* display.displayContent
+   
+   *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*
    
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).

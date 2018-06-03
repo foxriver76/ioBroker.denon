@@ -105,8 +105,10 @@ function main() {
     	var dataArr = data.toString().split(/[\r\n]+/);
     	var i;
     	for(i=0; i < dataArr.length; i++) {
-    		handleResponse(dataArr[i]);
-    		adapter.log.debug('Incoming data: ' + dataArr[i]);
+    		if(dataArr[i] != "") {
+    			handleResponse(dataArr[i]);
+        		adapter.log.debug('Incoming data: ' + dataArr[i]);
+    		} // endIf
     	} // endFor
     });
 
@@ -114,7 +116,7 @@ function main() {
      adapter.on('stateChange', function (id, state) {
     	if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
         	return;
-	} // endIf
+    	} // endIf
 	var j;
 	var fullId = id;
 	for(j = 2; j < fullId.split('.').length; j++) { // remove instance name and id
@@ -291,7 +293,7 @@ function main() {
 	} else if(data.startsWith("Z3")) { // Transformation for Zone3 commands
                 command = data.replace(/\s+|\d+/g,'');
                 command = "Z3" + command.slice(1, command.length);
- 	} else {// Transformations for normal commands
+ 	} else { // Transformations for normal commands
 		command = data.replace(/\s+|\d+/g,'');
 	} // endElseIf
 	if(command.startsWith("SI")) {
@@ -305,13 +307,10 @@ function main() {
 		command = "MS";
 	} // endIf
 	if(command.startsWith("NSE")) { // Handle display content
-		// var escape = false;
 		var displayCont = data.slice(4, data.length);
-		//if(displayCont.includes("NSE")) escape = true; // Error handling for double response
-		var dispContNr = data.slice(3, 4);
-		//if(!escape) 
+		var dispContNr = data.slice(3, 4); 
 		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
-	}
+	} // endIf
 	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {
 		case 'PWON':
