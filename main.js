@@ -229,10 +229,12 @@ function main() {
 
     function updateStates() {
     	var updateCommands = ['NSET1 ?','NSFRN ?','ZM?','MU?','PW?','SI?','SV?','MS?','MV?','Z2?','Z2MU?','Z3?','Z3MU?','NSE','VSSC ?','VSASP ?','VSMONI ?','TR?','DIM ?'];
-   	var i;
-	for(i = 0; i < updateCommands.length; i++) {
-		sendRequest(updateCommands[i]);
-	} // endFor
+    	var i = 0;
+    	var intervall = setInterval(function() {
+			sendRequest(updateCommands[i]);
+			i++;
+			if(i == updateCommands.length) clearInterval(intervall);
+		}, 100);
     } // endUpdateStates
 
     function sendRequest(req) {
@@ -242,7 +244,7 @@ function main() {
 
     function handleResponse(data) {
 	// get command out of String
-	var command
+	var command;
 	if(data.toString().startsWith("Z2")) { // Transformation for Zone2 commands
 		// Handle Zone2 states
 		command = data.toString().replace(/\s+|\d+/g,'');
@@ -254,13 +256,14 @@ function main() {
 			command = "Z2" + command.slice(1, command.length);
 		} // endElseIf
 		if(command.startsWith("Z2")) { // Encode Input Source
-                	adapter.getObject('selectInput', function(err, obj) {
+			adapter.getObject('selectInput', function(err, obj) {
 				var j;
-				var zTwoSi = command.slice(2, command.length);
-				for(j = 0; j < 21; j++) { // check if command contains one of the possible Select Inputs
+				var zTwoSi = data.toString().slice(2, data.length);
+				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
+				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
                       			if(stateTextToArray(obj.common.states)[j] == zTwoSi) adapter.setState('zone2.selectInput', zTwoSi, true);
 				} // endFor
-                     	});
+			});
 		} // endIf
 	} else if(data.toString().startsWith("Z3")) { // Transformation for Zone3 commands
                 command = data.toString().replace(/\s+|\d+/g,'');
@@ -269,7 +272,9 @@ function main() {
 		command = data.toString().replace(/\s+|\d+/g,'');
 	} // endElseIf
 	if(command.startsWith("SI")) {
-		var siCommand = command.slice(2, command.length);
+		var siCommand = data.toString().slice(2, data.length); // Get only source name
+		siCommand = siCommand.replace(' ', ''); // Remove blanks
+		adapter.log.debug("SI-Command: " + siCommand);
 		command = "SI";
 	} // endIf
 	if(command.startsWith("MS")) {
@@ -409,7 +414,7 @@ function main() {
                 	type: 'number',
                 	write: true,
                 	read: true,
-                	states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVOTITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
+                	states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVORITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
         	},
         	native: {}
     	});
