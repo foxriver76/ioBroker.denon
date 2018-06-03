@@ -10,14 +10,14 @@ You can either install the adapter via the ioBroker web interface or on your loc
 2. Click on Tab "Adapters" --> Install from Custom URL.
 ![Custom URL](/documentation/installFromCustomURL.png)
 3. Click on "Custom" and paste following URL:
-https://github.com/foxriver76/ioBroker.denon/tarball/master
+https://github.com/foxriver76/ioBroker.denon
 ![Paste URL](/documentation/urlInInputField.png)
 4. Click on Install
 
 ### Local machine
 1. Navigate into your iobroker folder and execute the following command: 
 ```bash
-npm install https://github.com/foxriver76/ioBroker.denon/tarball/master
+npm install https://github.com/foxriver76/ioBroker.denon
 ```
 2. afterwards execute:
 ```bash
@@ -39,6 +39,7 @@ Here you can find a description of the states and how to use them.
 
 ### Buttons
 The adapter creates the following buttons:
+
 * playPauseButton
 
    *Play and pause music from Bluetooth, Online, USB/iPod sources.*
@@ -51,37 +52,52 @@ The adapter creates the following buttons:
 
    *Skip to next title.*
    
-* volumeDown
+* volumeDown / zone2.volumeDown
    
-   *Decrease volume.*
+   *Decrease volume of Main Zone / Zone2.*
    
-* volumeUp
+* volumeUp / zone2.volumeUp
 
-   *Increase volume.*
-
+   *Increase volume of Main Zone / Zone2.*
+   
+* quickSelect1 / zone2.quickSelect1
+   
+   *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone 2.*
 ### States
 Following states will be created by the adapter:
+
 * info.connection
 
    *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false.*
    
-* mainVolume
+* mainVolume / zone2.volume
 
-   *Number value which represents the current main volume of your AVR. You can also set the volume.*
+   *Number value which represents the current Main Zone / Zone2 volume of your AVR. You can also set the volume here.*
+   
+   *Example:*
+    ```javascript
+    setState('denon.0.mainVolume', 45.5); // Sets volume of Main Zone to 45.5
+    ```
    
 * maximumVolume
 
    *Read-only number which represents the maximum possible volume.*
    
-* muteIndicator
+* muteIndicator / zone2.muteIndicator
 
-   *Boolean value, which is true if the AVR is muted, otherwise false. You can mute your AVR with this state.*
+   *Boolean value, which is true if the Main Zone / Zone2 is muted, otherwise false. You can mute your AVR with this state.*
    
-* powerState
+   *Example:*
+   
+    ```javascript
+    setState('denon.0.muteIndicator', true); // Mutes the Main Zone of your AVR
+    ```
+   
+* powerState / zone2.powerState
 
    *Boolean value, which is true if the AVR is turned on, otherwise false. You can turn your AVR on and off with this state.*
    
-* selectInput
+* selectInput / zone2.selectInput
 
    *The number value contains the current input source. You can also set the input source with the following encoding:*
    
@@ -134,7 +150,7 @@ Following states will be created by the adapter:
    *Example:*
    
    ```javascript
-    setState('denon.0.selectInput', 5);
+    setState('denon.0.selectInput', 5); // Selects TV as input for Main Zone
     ```
 * surroundMode
 
@@ -187,8 +203,9 @@ Following states will be created by the adapter:
    *Example:*
    
    ```javascript
-   setState('denon.0.surroundMode', 3);
+   setState('denon.0.surroundMode', 3); // Sets Multi Channel Stereo as surround mode
    ```
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 
