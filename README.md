@@ -70,6 +70,10 @@ Following states will be created by the adapter:
 
    *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false.*
    
+* info.friendlyName
+
+   *Read only string. Contains the friendly name of the connected AVR.*
+   
 * mainVolume / zone2.volume
 
    *Number value which represents the current Main Zone / Zone2 volume of your AVR. You can also set the volume here.*
