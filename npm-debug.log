@@ -1,0 +1,104 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'publish' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/home/moritz/git/ioBroker.denon',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /home/moritz/.npm/iobroker.denon/0.1.0/package.tgz not in flight; packing
+9 info lifecycle iobroker.denon@0.1.0~prepublish: iobroker.denon@0.1.0
+10 silly lifecycle iobroker.denon@0.1.0~prepublish: no script for prepublish, continuing
+11 verbose tar pack [ '/home/moritz/.npm/iobroker.denon/0.1.0/package.tgz',
+11 verbose tar pack   '/home/moritz/git/ioBroker.denon' ]
+12 verbose tarball /home/moritz/.npm/iobroker.denon/0.1.0/package.tgz
+13 verbose folder /home/moritz/git/ioBroker.denon
+14 verbose addLocalTarball adding from inside cache /home/moritz/.npm/iobroker.denon/0.1.0/package.tgz
+15 silly cache afterAdd iobroker.denon@0.1.0
+16 verbose afterAdd /home/moritz/.npm/iobroker.denon/0.1.0/package/package.json not in flight; writing
+17 verbose afterAdd /home/moritz/.npm/iobroker.denon/0.1.0/package/package.json written
+18 silly publish { name: 'iobroker.denon',
+18 silly publish   version: '0.1.0',
+18 silly publish   description: 'ioBroker denon Adapter',
+18 silly publish   author:
+18 silly publish    { name: 'Moritz Heusinger',
+18 silly publish      email: 'moritz.heusinger@gmail.com' },
+18 silly publish   contributors:
+18 silly publish    [ { name: 'Moritz Heusinger',
+18 silly publish        email: 'moritz.heusinger@gmail.com' } ],
+18 silly publish   homepage: 'https://github.com/foxriver76/ioBroker.denon',
+18 silly publish   license: 'MIT',
+18 silly publish   keywords:
+18 silly publish    [ 'ioBroker',
+18 silly publish      'denon',
+18 silly publish      'marantz',
+18 silly publish      'avr',
+18 silly publish      'Smart Home',
+18 silly publish      'home automation' ],
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/foxriver76/ioBroker.denon.git' },
+18 silly publish   dependencies: {},
+18 silly publish   devDependencies: { gulp: '^3.9.1', mocha: '^4.1.0', chai: '^4.1.2' },
+18 silly publish   main: 'main.js',
+18 silly publish   scripts: { test: 'node node_modules/mocha/bin/mocha --exit' },
+18 silly publish   bugs: { url: 'https://github.com/foxriver76/ioBroker.denon/issues' },
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   readme: '![Logo](admin/denon.png)\n\n# ioBroker.denon [![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)[![Build status AppVeyor](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon)\n[![NPM version](http://img.shields.io/npm/v/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)\n[![Downloads](https://img.shields.io/npm/dm/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)\n\n[![NPM](https://nodei.co/npm/iobroker.denon.png?downloads=true)](https://nodei.co/npm/iobroker.denon/)\n=================\n## Installation\nYou can either install the adapter via the ioBroker web interface or on your local machine via npm.\n\n### Browser-based\n1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)\n2. Click on Tab "Adapters" --> Install from Custom URL.\n![Custom URL](/documentation/installFromCustomURL.png)\n3. Click on "Custom" and paste following URL:\nhttps://github.com/foxriver76/ioBroker.denon\n![Paste URL](/documentation/urlInInputField.png)\n4. Click on Install\n\n### Local machine\n1. Navigate into your iobroker folder and execute the following command: \n```bash\nnpm i iobroker.denon\n```\n2. afterwards execute:\n```bash\niobroker upload denon\n```\n\n## Setup\n1. Open your ioBroker interface in a browser (eg: 192.168.1.33:8081)\n2. Navigate to Tab "Adapters"\n3. Click on the three points and then on the "+" symbol of the DENON AVR adapter\n![Add Adapter](/documentation/plusAddAdapter.png)\n4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR\n![Adapter Configuration](/documentation/fillInIp.png)\n5. Click on Save & Close\n\n## Usage\nTake note, that the AVRs can only manage a single telnet connection. If you are having an active telnet connection e. g. with the javascript adapter, the AVR will refuse the connection of this adapter.\nHere you can find a description of the states and how to use them.\n\n### Buttons\nThe adapter creates the following buttons:\n\n* playPauseButton\n\n   *Play and pause music from Bluetooth, Online, USB/iPod sources.*\n   \n* skipMinus\n\n   *Skip to previous title.*\n   \n* skipPlus\n\n   *Skip to next title.*\n   \n* volumeDown / zone2.volumeDown\n   \n   *Decrease volume of Main Zone / Zone2.*\n   \n* volumeUp / zone2.volumeUp\n\n   *Increase volume of Main Zone / Zone2.*\n   \n* quickSelect1 / zone2.quickSelect1\n   \n   *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone 2.*\n### States\nFollowing states will be created by the adapter:\n\n* info.connection\n\n   *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false.*\n   \n* info.friendlyName\n\n   *Read only string. Contains the friendly name of the connected AVR.*\n   \n* mainVolume / zone2.volume\n\n   *Number value which represents the current Main Zone / Zone2 volume of your AVR. You can also set the volume here.*\n   \n   *Example:*\n    ```javascript\n    setState(\'denon.0.mainVolume\', 45.5); // Sets volume of Main Zone to 45.5\n    ```\n   \n* maximumVolume\n\n   *Read-only number which represents the maximum possible volume.*\n   \n* muteIndicator / zone2.muteIndicator\n\n   *Boolean value, which is true if the Main Zone / Zone2 is muted, otherwise false. You can mute your AVR with this state.*\n   \n   *Example:*\n   \n    ```javascript\n    setState(\'denon.0.muteIndicator\', true); // Mutes the Main Zone of your AVR\n    ```\n   \n* powerState / zone2.powerState\n\n   *Boolean value, which is true if the AVR is turned on, otherwise false. You can turn your AVR on and off with this state.*\n   \n* selectInput / zone2.selectInput\n\n   *The number value contains the current input source. You can also set the input source with the following encoding:*\n   \n   *0:PHONO*\n   \n   *1:CD*\n   \n   *2:TUNER*\n   \n   *3:DVD*\n   \n   *4:BD*\n   \n   *5:TV*\n   \n   *6:SAT/CBL*\n   \n   *7:MPLAY*\n   \n   *8:GAME*\n   \n   *9:NET*\n   \n   *10:SPOTIFY*\n   \n   *11:LASTFM*\n   \n   *12:IRADIO*\n   \n   *13:SERVER*\n   \n   *14:FAVOTITES*\n   \n   *15:AUX1*\n   \n   *16:AUX2*\n   \n   *17:AUX3*\n   \n   *18:AUX4*\n   \n   *19:AUX5*\n   \n   *20:AUX6*\n   \n   *21:AUX7*\n   \n   *Please note, that not every input source is available on every AVR model.*\n   \n   *Example:*\n   \n   ```javascript\n    setState(\'denon.0.selectInput\', 5); // Selects TV as input for Main Zone\n    ```\n* surroundMode\n\n   *The number value contains the current Surround mode. You can also change the source with the following encoding:*\n   \n   *0:STEREO*\n   \n   *1:VIRTUAL*\n   \n   *2:VIDEO GAME*\n   \n   *3:MCH STEREO*\n   \n   *4:DTS SURROUND*\n   \n   *5:DOLBY DIGITAL*\n   \n   *6:MOVIE*\n   \n   *7:MUSIC*\n   \n   *8:DIRECT*\n   \n   *9:PURE DIRECT*\n   \n   *10:AUTO*\n   \n   *11:GAME*\n   \n   *12:AURO3D*\n   \n   *13:AURO2DSURR*\n   \n   *14:WIDE SCREEN*\n   \n   *15:SUPER STADIUM*\n   \n   *16:ROCK ARENA*\n   \n   *17:JAZZ CLUB*\n   \n   *18:CLASSIC CONCERT*\n   \n   *19:MONO MOVIE*\n   \n   *20:MATRIX*\n   \n   *Please note, that not every Surround mode is available on every AVR model.*\n   \n   *Example:*\n   \n   ```javascript\n   setState(\'denon.0.surroundMode\', 3); // Sets Multi Channel Stereo as surround mode\n   ```\n* display.displayContent\n   \n   *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*\n   \n* display.brightness\n\n   *Number value which represents the display brightness. The value can also set the display brightness by the following encoding:*\n   \n   *0: OFF --> turns display off*\n   \n   *1: DAR --> turns display dark*\n   \n   *2: DIM --> turns display dimmed*\n   \n   *3: BRI --> turns display bright*\n   \n## Missing functions & bugs\nIf you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).\n\nThe adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.\n   \n## Changelog\n### 0.1.0\n* (foxriver76) handling up to three zones\n* (foxriver76) handling display content\n* (foxriver76) setting display brightness\n\n### 0.0.1\n* (foxriver76) initial release\n\n## License\nThe MIT License (MIT)\n\nCopyright (c) 2018 Moritz Heusinger <moritz.heusinger@gmail.com>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n',
+18 silly publish   gitHead: '10b42b8dcbe1d37017b0086fd82b66431b9af942',
+18 silly publish   _id: 'iobroker.denon@0.1.0',
+18 silly publish   _shasum: 'd0b0b035860afd279050589a50354064bd1d8f86',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name iobroker.denon
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/iobroker.denon
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /home/moritz/.npm/iobroker.denon/0.1.0/package.tgz
+26 verbose request uri https://registry.npmjs.org/iobroker.denon
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 01:07:52
+29 verbose request using bearer token for auth
+30 verbose request id cd05ce4e720def0d
+31 http request PUT https://registry.npmjs.org/iobroker.denon
+32 http 403 https://registry.npmjs.org/iobroker.denon
+33 verbose headers { date: 'Mon, 04 Jun 2018 23:07:54 GMT',
+33 verbose headers   'content-type': 'application/json',
+33 verbose headers   'transfer-encoding': 'chunked',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'set-cookie': [ '__cfduid=da067292733dcb7e9bc63c7d74890cabc1528153672; expires=Tue, 04-Jun-19 23:07:52 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+33 verbose headers   'cf-ray': '425e0ee5483a6499-FRA',
+33 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+33 verbose headers   server: 'cloudflare',
+33 verbose headers   'content-encoding': 'gzip' }
+34 verbose request invalidating /home/moritz/.npm/registry.npmjs.org/iobroker.denon on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: You cannot publish over the previously published versions: 0.1.0. : iobroker.denon
+36 verbose stack     at makeError (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+36 verbose stack     at /usr/share/npm/node_modules/npm-registry-client/lib/request.js:178:7
+36 verbose stack     at Gunzip.onEnd (zlib.js:227:5)
+36 verbose stack     at emitNone (events.js:72:20)
+36 verbose stack     at Gunzip.emit (events.js:166:7)
+36 verbose stack     at endReadableNT (_stream_readable.js:905:12)
+36 verbose stack     at nextTickCallbackWith2Args (node.js:441:9)
+36 verbose stack     at process._tickCallback (node.js:355:17)
+37 verbose statusCode 403
+38 verbose pkgid iobroker.denon
+39 verbose cwd /home/moritz/git/ioBroker.denon
+40 error Linux 4.13.0-43-generic
+41 error argv "/usr/bin/nodejs" "/usr/bin/npm" "publish"
+42 error node v4.2.6
+43 error npm  v3.5.2
+44 error code E403
+45 error You cannot publish over the previously published versions: 0.1.0. : iobroker.denon
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]

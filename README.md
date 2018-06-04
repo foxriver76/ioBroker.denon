@@ -19,13 +19,9 @@ https://github.com/foxriver76/ioBroker.denon
 4. Click on Install
 
 ### Local machine
-1. Navigate into your iobroker folder and execute the following command: 
+Navigate into your iobroker folder and execute the following command: 
 ```bash
 npm i iobroker.denon
-```
-2. afterwards execute:
-```bash
-iobroker upload denon
 ```
 
 ## Setup
@@ -235,6 +231,9 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.1.1
+* (foxriver76) new readme for npm
+
 ### 0.1.0
 * (foxriver76) handling up to three zones
 * (foxriver76) handling display content

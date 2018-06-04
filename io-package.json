@@ -3,6 +3,10 @@
         "name": "denon",
         "version": "0.0.1",
         "news": {
+       		"0.1.1": {
+            	"en": "New README.md for npm",
+            	"de": "Neue README.md angepasst an npm"
+            },
        		"0.1.0": {
             	"en": "Beta Version: Handling all 3 Zones, getting display content & brightness",
             	"de": "Beta Version: Bedienung von bis zu drei Zonen, Displayinhalt auslesen sowie Helligkeit einstellen"
