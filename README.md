@@ -21,7 +21,7 @@ https://github.com/foxriver76/ioBroker.denon
 ### Local machine
 1. Navigate into your iobroker folder and execute the following command: 
 ```bash
-npm i ioroker.denon
+npm i iobroker.denon
 ```
 2. afterwards execute:
 ```bash
