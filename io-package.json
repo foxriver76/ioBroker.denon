@@ -79,7 +79,20 @@
                 "type": "boolean",
                 "read": true,
                 "write": false,
-		"def": false
+				"def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.friendlyName",
+            "type": "state",
+            "common": {
+                "role": "Friendly Name",
+                "name": "Friendy Name",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+				"def": false
             },
             "native": {}
         },

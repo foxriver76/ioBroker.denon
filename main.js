@@ -58,16 +58,25 @@ function main() {
 
     // Constants & Variables
     var client = new net.Socket();
-    client.setEncoding('utf8');
-    client.setKeepAlive(true);
     const host = adapter.config.ip;
     var zoneTwo = false;
     var zoneThree = false;
-    var pollingVar = false;
+    var pollingVar = null;
 
     // Connect
     connect(); // Connect on start
-    pollStates(); // Poll states every 10 seconds
+    
+    client.on('timeout', function() {
+    	pollingVar = false;
+    	adapter.log.error('AVR timed out');
+    	adapter.setState('info.connection', false, true);
+        client.destroy();
+        client.unref();
+        adapter.log.info('Connection closed!');
+        setTimeout(function() {
+                connect(); // Connect again in 20 seconds
+        }, 20000);
+    });
 
     // Connection handling
     client.on('error', function(error) {
@@ -78,8 +87,8 @@ function main() {
         client.unref();
         adapter.log.info('Connection closed!');
         setTimeout(function() {
-                connect(); // Connect again
-        }, 10000);
+                connect(); // Connect again in 20 seconds
+        }, 20000);
     });
 
     client.on('end', function () { // Denon has closed the connection
@@ -90,15 +99,15 @@ function main() {
         client.unref();
         adapter.log.info('Connection closed!');
         setTimeout(function() {
-        	connect(); // Connect again
-        }, 10000);
+        	connect(); // Connect again in 20 seconds
+        }, 20000);
     });
 
     client.on('connect', function () { // Successfull connected
         adapter.setState('info.connection', true, true);
         adapter.log.debug("Connected --> updating states on start");
         updateStates(); // Update states when connected
-        setTimeout(function() {pollingVar=true;}, 15000);
+        // setTimeout(function() {pollingVar=true;}, 15000);
     });
 
     client.on('data', function (data) {
@@ -235,7 +244,9 @@ function main() {
      * Internals
     */
     function connect() {
-	adapter.log.info("Trying to connect to " + host + ":23");
+        client.setEncoding('utf8');
+        client.setTimeout(35000);
+        adapter.log.info("Trying to connect to " + host + ":23");
         client.connect({port: 23, host: host}, function() {
                 adapter.log.info("Adapter connected to DENON-AVR: " + host + ":23");
         });
@@ -251,16 +262,19 @@ function main() {
 		}, 100);
     } // endUpdateStates
     
-    function pollStates() { // Polls requested states every 10 seconds
+    function pollStates() { // Polls states
     	var updateCommands = ['NSE']; // Request Display State
     	var i = 0;
     	var intervalVar = setInterval(function() {
     		if(pollingVar) {
     			sendRequest(updateCommands[i]);
     			i++;
-    			if(i == updateCommands.length) i = 0;
+    			if(i == updateCommands.length) {
+    				clearInterval(intervalVar);
+    				pollingVar = false;
+    			} // endIf
     		} // endIf
-    	}, 10000);
+    	}, 100);
     } // endPollingStates
 
     function sendRequest(req) {
@@ -311,7 +325,17 @@ function main() {
 		var displayCont = data.slice(4, data.length);
 		var dispContNr = data.slice(3, 4); 
 		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
+		if(!pollingVar) {
+			pollingVar = true;
+			setTimeout(function() {
+				pollStates(); // Poll states about every 10 seconds
+			}, 10500);
+		} // endIf
 	} // endIf
+	if(command.startsWith("NSFRN")) { // Handle friendly name
+		adapter.setState('info.friendlyName', data.slice(6, data.length), true);
+	} // endIf
+	
 	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {
 		case 'PWON':
