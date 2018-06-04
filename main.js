@@ -139,8 +139,12 @@ function main() {
 		id = "quickSelect";
 	} else if (id.startsWith('zone2.quickSelect')) {
 		var quickNr = id.slice(id.length-1, id.length);
-        id = "zone2.quickSelect";
+		id = "zone2.quickSelect";
+	} else if (id.startsWith('zone3.quickSelect')) {
+		var quickNr = id.slice(id.length-1, id.length);
+	        id = "zone3.quickSelect";
 	} // endElseIf
+	
 	switch(id) {
 		case 'mainVolume':
 			var leadingZero;
@@ -189,7 +193,6 @@ function main() {
 			break;
 		case 'surroundMode':
 			adapter.getObject('surroundMode', function(err, obj) {
-				adapter.log.debug('state: ' + state + ' & states: ' + obj.common.states);
 				sendRequest('MS' + stateTextToArray(obj.common.states)[state].toUpperCase());
 			});
 			break;
@@ -233,6 +236,43 @@ function main() {
 		case 'zone2.quickSelect':
 			sendRequest('Z2QUICK' + quickNr);
 			break;
+		case 'zone3.powerState':
+			if(state === true) {
+				sendRequest('Z3ON');
+			} else {
+				sendRequest('Z3OFF');
+			} // endElseIf
+			break;
+		case 'zone3.muteIndicator':
+			if(state === true) {
+				sendRequest('Z3MUON')
+			} else {
+				sendRequest('Z3MUOFF');
+			} // endElseIf
+			break;
+		case 'zone3.volumeUp':
+			sendRequest('Z3UP');
+			break;
+		case 'zone3.volumeDown':
+			sendRequest('Z3DOWN');
+			break;
+		case 'zone3.volume':
+			var leadingZero;
+                    if (state < 0) state = 0;
+                    if (state < 10) {
+                            leadingZero = "0";
+                    } else leadingZero = "";
+                    state = state.toString().replace('.', '') // remove points
+			sendRequest('Z3' + leadingZero + state);
+			break;
+		case 'zone3.selectInput':
+                    adapter.getObject('zone3.selectInput', function(err, obj) {
+                            sendRequest('Z3' + stateTextToArray(obj.common.states)[state].toUpperCase());
+                    });
+                    break;
+		case 'zone3.quickSelect':
+		    sendRequest('Z3QUICK' + quickNr);
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -304,12 +344,29 @@ function main() {
 				} // endFor
 			});
 		} // endIf
-	} else if(data.startsWith("Z3")) { // Transformation for Zone3 commands
-                command = data.replace(/\s+|\d+/g,'');
-                command = "Z3" + command.slice(1, command.length);
- 	} else { // Transformations for normal commands
+	} else if(data.startsWith("Z3")) { // Transformation for Zone2 commands
+		// Handle Zone2 states
 		command = data.replace(/\s+|\d+/g,'');
-	} // endElseIf
+		if(command == 'Z') { // if everything is removed except Z --> Volume
+			command = "Z3VOL";
+			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
+			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
+		} else {
+			command = "Z3" + command.slice(1, command.length);
+		} // endElseIf
+		if(command.startsWith("Z3")) { // Encode Input Source
+			adapter.getObject('selectInput', function(err, obj) {
+				var j;
+				var zThreeSi = data.slice(2, data.length);
+				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
+				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+                  			if(stateTextToArray(obj.common.states)[j] == zTwoSi) adapter.setState('zone3.selectInput', zThreeSi, true);
+				} // endFor
+			});
+		} // endIf 
+	} else { // Transformations for normal commands
+		command = data.replace(/\s+|\d+/g,'');
+	} // endElse
 	if(command.startsWith("SI")) {
 		var siCommand = data.slice(2, data.length); // Get only source name
 		siCommand = siCommand.replace(' ', ''); // Remove blanks
@@ -383,6 +440,26 @@ function main() {
 			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.volume', parseFloat(vol), true);
 			break;
+		case 'Z3ON':
+			if(!zoneThree) createZoneThree();
+			adapter.setState('zone3.powerState', true, true);
+			break;
+		case 'Z3OFF':
+			if(!zoneThree) createZoneThree();
+			adapter.setState('zone3.powerState', false, true);
+			break;
+		case 'Z3MUON':
+			if(!zoneThree) createZoneThree();
+			adapter.setState('zone3.muteIndicator', true, true);
+			break;
+		case 'Z3MUOFF':
+			if(!zoneThree) createZoneThree();
+			adapter.setState('zone3.muteIndicator', false, true);
+			break;
+		case 'Z3VOL':
+			if(!zoneThree) createZoneThree();
+			adapter.setState('zone3.volume', parseFloat(vol), true);
+			break;
 	} // endSwitch
     } // endHandleResponse
 
@@ -408,7 +485,7 @@ function main() {
 	adapter.setObjectNotExists('zone2.powerState', {
         	type: 'state',
         	common: {
-                	name: 'zon2.powerState',
+                	name: 'zone2.powerState',
                 	role: 'Zone2 Power State',
                 	type: 'boolean',
                 	write: true,
@@ -543,5 +620,153 @@ function main() {
 	zoneTwo = true;
 	adapter.log.debug('Zone 2 detected');
    } // endCreateZoneTwo
+   
+   function createZoneThree() {
+		adapter.setObjectNotExists('zone3', {
+	            type: "channel",
+	            common: {
+	                name: "Zone3"
+	            },
+	            native: {}
+	        });
+
+		adapter.setObjectNotExists('zone3.powerState', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.powerState',
+	                	role: 'Zone3 Power State',
+	                	type: 'boolean',
+	                	write: true,
+	                	read: true
+	        	},
+	        	native: {}
+	    	});
+
+	    	adapter.setObjectNotExists('zone3.volume', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.volume',
+	                	role: 'Volume',
+	                	type: 'number',
+	                	read: true,
+	                	write: true,
+	                	min: 0,
+	                	max: 100
+	        	},
+	        	native: {}
+	    	});
+
+	    	adapter.setObjectNotExists('zone3.volumeUp', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.volumeUp',
+	                	role: 'button',
+	                	type: 'number',
+	                	write: true,
+	                	read: true
+	        	},
+	        	native: {}
+	    	});
+
+	    	adapter.setObjectNotExists('zone3.volumeDown', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.volumeDown',
+	                	role: 'button',
+	                	type: 'number',
+	                	write: true,
+	                	read: true
+	        	},
+	        	native: {}
+	    	});
+
+		adapter.setObjectNotExists('zone3.selectInput', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.selectInput',
+	                	role: 'Select Input',
+	                	type: 'number',
+	                	write: true,
+	                	read: true,
+	                	states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVORITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
+	        	},
+	        	native: {}
+	    	});
+
+		adapter.setObjectNotExists('zone3.muteIndicator', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.muteIndicator',
+	                	role: 'Mute Indicator',
+	                	type: 'boolean',
+	                	write: true,
+	                	read: true
+	        	},
+	        	native: {}
+	    	});
+
+	        adapter.setObjectNotExists('zone3.quickSelect1', {
+	                type: 'state',
+	                common: {
+	                        name: 'zone3.quickSelect1',
+	                        role: 'button',
+	                        type: 'number',
+	                        write: true,
+	                        read: true
+	                },
+	                native: {}
+	        });
+
+		adapter.setObjectNotExists('zone3.quickSelect2', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.quickSelect2',
+	                	role: 'button',
+	                	type: 'number',
+	                	write: true,
+	                	read: true
+	        	},
+	        	native: {}
+	    	});
+
+	    	adapter.setObjectNotExists('zone3.quickSelect3', {
+	        	type: 'state',
+	        	common: {
+	                	name: 'zone3.quickSelect3',
+	                	role: 'button',
+	                	type: 'number',
+	                	write: true,
+	                	read: true
+	        	},
+	        	native: {}
+	    	});
+
+	    adapter.setObjectNotExists('zone3.quickSelect4', {
+	        type: 'state',
+	        common: {
+	                name: 'zone3.quickSelect4',
+	                role: 'button',
+	                type: 'number',
+	                write: true,
+	                read: true
+	        },
+	        native: {}
+	    });
+
+	    adapter.setObjectNotExists('zone3.quickSelect5', {
+	        type: 'state',
+	        common: {
+	                name: 'zone3.quickSelect5',
+	                role: 'button',
+	                type: 'number',
+	                write: true,
+	                read: true
+	        },
+	        native: {}
+	    });
+
+		zoneThree = true;
+		adapter.log.debug('Zone 3 detected');
+	   } // endCreateZoneThree
 
 } // endMain
