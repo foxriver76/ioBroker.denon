@@ -52,7 +52,7 @@
         "materialize": true,
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.denon/master/admin/denon.png",
-        "keywords": ["denon", "avr", "harmony", "audio"],
+        "keywords": ["denon", "marantz", "avr", "harmony", "audio"],
         "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
         "loglevel": "info",
         "type": "multimedia"

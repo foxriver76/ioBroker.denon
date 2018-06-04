@@ -107,12 +107,11 @@ function main() {
         adapter.setState('info.connection', true, true);
         adapter.log.debug("Connected --> updating states on start");
         updateStates(); // Update states when connected
-        // setTimeout(function() {pollingVar=true;}, 15000);
     });
 
     client.on('data', function (data) {
     	// split data by <cr>
-    	var dataArr = data.toString().split(/[\r\n]+/);
+    	var dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
     	var i;
     	for(i=0; i < dataArr.length; i++) {
     		if(dataArr[i] != "") {
@@ -322,7 +321,7 @@ function main() {
 		command = "MS";
 	} // endIf
 	if(command.startsWith("NSE")) { // Handle display content
-		var displayCont = data.slice(4, data.length);
+		var displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
 		var dispContNr = data.slice(3, 4); 
 		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
 		if(!pollingVar) {
