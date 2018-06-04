@@ -1,9 +1,13 @@
 ![Logo](admin/denon.png)
 
-# ioBroker.denon [![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon) [![Build status AppVeyor](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon)
+# ioBroker.denon [![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)[![Build status AppVeyor](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon)
+[![NPM version](http://img.shields.io/npm/v/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
+
+[![NPM](https://nodei.co/npm/iobroker.denon.png?downloads=true)](https://nodei.co/npm/iobroker.denon/)
 =================
 ## Installation
-You can either install the adapter via the ioBroker web interface or on your local machine.
+You can either install the adapter via the ioBroker web interface or on your local machine via npm.
 
 ### Browser-based
 1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
@@ -17,7 +21,7 @@ https://github.com/foxriver76/ioBroker.denon
 ### Local machine
 1. Navigate into your iobroker folder and execute the following command: 
 ```bash
-npm install https://github.com/foxriver76/ioBroker.denon
+npm i ioroker.denon
 ```
 2. afterwards execute:
 ```bash
@@ -231,6 +235,10 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.1.0
+* (foxriver76) handling up to three zones
+* (foxriver76) handling display content
+* (foxriver76) setting display brightness
 
 ### 0.0.1
 * (foxriver76) initial release

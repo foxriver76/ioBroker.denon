@@ -1,6 +1,6 @@
 {
   "name": "iobroker.denon",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "ioBroker denon Adapter",
   "author": {
     "name": "Moritz Heusinger",
@@ -17,6 +17,8 @@
   "keywords": [
     "ioBroker",
     "denon",
+    "marantz",
+    "avr",
     "Smart Home",
     "home automation"
   ],
