@@ -59,6 +59,7 @@ function main() {
     // Constants & Variables
     var client = new net.Socket();
     client.setEncoding('utf8');
+    client.setKeepAlive(true);
     const host = adapter.config.ip;
     var zoneTwo = false;
     var zoneThree = false;
@@ -97,7 +98,7 @@ function main() {
         adapter.setState('info.connection', true, true);
         adapter.log.debug("Connected --> updating states on start");
         updateStates(); // Update states when connected
-        setTimeout(function() {pollingVar=true;});
+        setTimeout(function() {pollingVar=true;}, 15000);
     });
 
     client.on('data', function (data) {
