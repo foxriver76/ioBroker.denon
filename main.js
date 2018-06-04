@@ -273,6 +273,11 @@ function main() {
 		case 'zone3.quickSelect':
 		    sendRequest('Z3QUICK' + quickNr);
 		    break;
+		case 'display.brightness':
+		    adapter.getObject('display.brightness', function(err, obj) {
+			sendRequest('DIM ' + stateTextToArray(obj.common.states)[state].toUpperCase());
+		    });
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -367,6 +372,16 @@ function main() {
 	} else { // Transformations for normal commands
 		command = data.replace(/\s+|\d+/g,'');
 	} // endElse
+	if(command.startsWith("DIM")) {
+	    adapter.getObject('display.brightness', function(err, obj) {
+		var j;
+		var bright = data.slice(4, data.length);
+		bright = bright.replace(' ', ''); // Remove blanks
+		for(j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
+  			if(stateTextToArray(obj.common.states)[j] == bright) adapter.setState('display.brightness', bright, true);
+		} // endFor
+	    });
+	} // endIf
 	if(command.startsWith("SI")) {
 		var siCommand = data.slice(2, data.length); // Get only source name
 		siCommand = siCommand.replace(' ', ''); // Remove blanks

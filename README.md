@@ -213,6 +213,18 @@ Following states will be created by the adapter:
    
    *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*
    
+* display.brightness
+
+   *Number value which represents the display brightness. The value can also set the display brightness by the following encoding:*
+   
+   *0: OFF --> turns display off*
+   
+   *1: DAR --> turns display dark*
+   
+   *2: DIM --> turns display dimmed*
+   
+   *3: BRI --> turns display bright*
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 

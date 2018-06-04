@@ -407,6 +407,19 @@
                 "read": true
         },
         "native": {}
+    	},
+    	{
+    		"_id": "display.brightness",
+    		"type": "state",
+    		"common": {
+    			"name": "displayBrightness",
+    			"role": "Display Brightness",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"states": "0:OFF;1:DAR;2:DIM;3:BRI"
+    		},
+    		"native": {}
     	}
     ]
 }
