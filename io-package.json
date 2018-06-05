@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "0.1.2",
+        "version": "0.1.3",
         "news": {
+            "0.1.3": {
+            	"en": "Added Main Zone Power, Bug Fixes for Zone3",
+            	"de": "Main Zone kann nun unabhängig von Power geschaltet werden, Fehlerbehbungen bezüglich Zone3"
+            },
        		"0.1.2": {
             	"en": "Performance optimization and faster display update",
             	"de": "Code optimiert und Displayinhalt wird schneller aktualisiert"
@@ -105,11 +109,23 @@
             "native": {}
         },
 	{
-	"_id": "powerState",
+	"_id": "powerSystem",
         "type": "state",
         "common": {
-                "name": "powerState",
-                "role": "Power State",
+                "name": "powerSystem",
+                "role": "System Power State",
+                "type": "boolean",
+                "write": true,
+                "read": true
+        },
+        "native": {}
+    	},
+    	{
+	"_id": "powerMainZone",
+        "type": "state",
+        "common": {
+                "name": "powerMainZone",
+                "role": " Main Zone Power State",
                 "type": "boolean",
                 "write": true,
                 "read": true

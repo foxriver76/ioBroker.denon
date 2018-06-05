@@ -63,6 +63,7 @@ The adapter creates the following buttons:
 * quickSelect1 / zone2.quickSelect1 / zone3.quickSelect1
    
    *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
+
 ### States
 Following states will be created by the adapter:
 
@@ -97,9 +98,13 @@ Following states will be created by the adapter:
     setState('denon.0.muteIndicator', true); // Mutes the Main Zone of your AVR
     ```
    
-* powerState / zone2.powerState / zone3.powerState
+* powerSystem
+   
+   *Boolean value which is true, if the AVR is turned on, otherwise false. You can also turn your AVR on and off with this state.*
+   
+* powerZone / zone2.powerZone / zone3.powerZone
 
-   *Boolean value, which is true if the AVR (or the related Zone) is turned on, otherwise false. You can turn your AVR / Zone on and off with this state.*
+   *Boolean value, which is true if the Zone is turned on, otherwise false. You can turn your AVR / Zone on and off with this state.*
    
 * selectInput / zone2.selectInput / zone3.selectInput
 
@@ -231,6 +236,11 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.1.3
+* (foxriver76) bug fixes for Zone3
+* (foxriver76) new state for main zone power
+* (foxriver76) minor other improvements
+
 ### 0.1.2
 * (foxriver76) Performance optimization
 * (foxriver76) Faster display update

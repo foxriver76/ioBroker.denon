@@ -156,7 +156,7 @@ function main() {
 			sendRequest('MV' + leadingZero + state);
 			adapter.log.debug('Changed mainVolume to ' + state);
 			break;
-		case 'powerState':
+		case 'powerSystem':
 			if(state === true) {
 				sendRequest('PWON')
 			} else {
@@ -196,7 +196,7 @@ function main() {
 				sendRequest('MS' + stateTextToArray(obj.common.states)[state].toUpperCase());
 			});
 			break;
-		case 'zone2.powerState':
+		case 'zone2.powerZone':
 			if(state === true) {
 				sendRequest('Z2ON');
 			} else {
@@ -236,7 +236,7 @@ function main() {
 		case 'zone2.quickSelect':
 			sendRequest('Z2QUICK' + quickNr);
 			break;
-		case 'zone3.powerState':
+		case 'zone3.powerZone':
 			if(state === true) {
 				sendRequest('Z3ON');
 			} else {
@@ -277,6 +277,11 @@ function main() {
 		    adapter.getObject('display.brightness', function(err, obj) {
 			sendRequest('DIM ' + stateTextToArray(obj.common.states)[state].toUpperCase().slice(0, 3));
 		    });
+		    break;
+		case 'powerMainZone':
+		    if(state === true) {
+			sendRequest('ZMON');
+		    } else sendRequest('ZMOFF');
 		    break;
 	} // endSwitch
      }); // endOnStateChange
@@ -423,10 +428,10 @@ function main() {
 	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {
 		case 'PWON':
-			adapter.setState('powerState', true, true);
+			adapter.setState('powerSystem', true, true);
 			break;
 		case 'PWSTANDBY':
-			adapter.setState('powerState', false, true);
+			adapter.setState('powerSystem', false, true);
 			break;
 		case 'MV':
 			data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
@@ -443,10 +448,10 @@ function main() {
 			adapter.setState('muteIndicator', false, true);
 			break;
 		case 'Z2ON':
-			adapter.setState('zone2.powerState', true, true);
+			adapter.setState('zone2.powerZone', true, true);
 			break;
 		case 'Z2OFF':
-			adapter.setState('zone2.powerState', false, true);
+			adapter.setState('zone2.powerZone', false, true);
 			break;
 		case 'Z2MUON':
 			adapter.setState('zone2.muteIndicator', true, true);
@@ -455,10 +460,10 @@ function main() {
 			adapter.setState('zone2.muteIndicator', false, true);
 			break;
 		case 'Z3ON':
-			adapter.setState('zone3.powerState', true, true);
+			adapter.setState('zone3.powerZone', true, true);
 			break;
 		case 'Z3OFF':
-			adapter.setState('zone3.powerState', false, true);
+			adapter.setState('zone3.powerZone', false, true);
 			break;
 		case 'Z3MUON':
 			adapter.setState('zone3.muteIndicator', true, true);
@@ -466,6 +471,12 @@ function main() {
 		case 'Z3MUOFF':
 			adapter.setState('zone3.muteIndicator', false, true);
 			break;
+		case 'ZMON':
+		    	adapter.setState('powerMainZone', true, true);
+		    	break;
+		case 'ZMOFF':
+			adapter.setState('powerMainZone', false, true);
+	    		break;
 	} // endSwitch
     } // endHandleResponse
 
@@ -485,10 +496,10 @@ function main() {
             native: {}
         });
 
-	adapter.setObjectNotExists('zone2.powerState', {
+	adapter.setObjectNotExists('zone2.powerZone', {
         	type: 'state',
         	common: {
-                	name: 'zone2.powerState',
+                	name: 'zone2.powerZone',
                 	role: 'Zone2 Power State',
                 	type: 'boolean',
                 	write: true,
@@ -656,10 +667,10 @@ function main() {
 	            native: {}
 	        });
 
-		adapter.setObjectNotExists('zone3.powerState', {
+		adapter.setObjectNotExists('zone3.powerZone', {
 	        	type: 'state',
 	        	common: {
-	                	name: 'zone3.powerState',
+	                	name: 'zone3.powerZone',
 	                	role: 'Zone3 Power State',
 	                	type: 'boolean',
 	                	write: true,
