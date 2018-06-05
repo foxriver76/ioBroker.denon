@@ -338,6 +338,7 @@ function main() {
 			adapter.setState('zone2.volume', parseFloat(vol), true);
 			return;
 		} else {
+		    	if(!zoneTwo) createZoneTwo();
 			command = "Z2" + command.slice(1, command.length);
 		} // endElseIf
 		if(command.startsWith("Z2")) { // Encode Input Source
@@ -362,6 +363,7 @@ function main() {
 			adapter.setState('zone3.volume', parseFloat(vol), true);
 			return;
 		} else {
+		    	if(!zoneThree) createZoneThree();
 			command = "Z3" + command.slice(1, command.length);
 		} // endElseIf
 		if(command.startsWith("Z3")) { // Encode Input Source
@@ -477,12 +479,9 @@ function main() {
     } // endHandleResponse
 
     function stateTextToArray(stateNames) { // encoding for e. g. selectInput
-  	var stateName = stateNames.split(';');
-   	var stateArray=[];
-    	for(var i = 0; i < stateName.length; i++) {
-       		var element = stateName[i].split(':');
-            	stateArray[element[0]] = element[1];
-        } // endFor
+   	var stateArray = Object.keys(stateNames).map(function(key) {
+   	    return stateNames[key];
+   	});
 	return stateArray;
     } // endStateTextToArray
 
@@ -553,7 +552,30 @@ function main() {
                 	type: 'number',
                 	write: true,
                 	read: true,
-                	states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVORITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
+                	states: {
+                    		"0": "PHONO",
+                    		"1": "CD",
+                    		"2": "TUNER",
+                    		"3": "DVD",
+                    		"4": "BD",
+                    		"5": "TV",
+                    		"6": "SAT/CBL",
+                    		"7": "MPLAY",
+                    		"8": "GAME",
+                    		"9": "NET",
+                    		"10": "SPOTIFY",
+                    		"11": "LASTFM",
+                    		"12": "IRADIO",
+                    		"13": "SERVER",
+                    		"14": "FAVORITES",
+                    		"15": "AUX1",
+                    		"16": "AUX2",
+                    		"17": "AUX3",
+                    		"18": "AUX4",
+                    		"19": "AUX5",
+                    		"20": "AUX6",
+                    		"21": "AUX7"
+            		}
         	},
         	native: {}
     	});
@@ -701,8 +723,31 @@ function main() {
 	                	type: 'number',
 	                	write: true,
 	                	read: true,
-	                	states: '0:PHONO;1:CD;2:TUNER;3:DVD;4:BD;5:TV;6:SAT/CBL;7:MPLAY;8:GAME;9:NET;10:SPOTIFY;11:LASTFM;12:IRADIO;13:SERVER;14:FAVORITES;15:AUX1;16:AUX2;17:AUX3;18:AUX4;19:AUX5;20:AUX6;21:AUX7'
-	        	},
+	                	states: {
+	                    		"0": "PHONO",
+	                    		"1": "CD",
+	                    		"2": "TUNER",
+	                    		"3": "DVD",
+	                    		"4": "BD",
+	                    		"5": "TV",
+	                    		"6": "SAT/CBL",
+	                    		"7": "MPLAY",
+	                    		"8": "GAME",
+	                    		"9": "NET",
+	                    		"10": "SPOTIFY",
+	                    		"11": "LASTFM",
+	                    		"12": "IRADIO",
+	                    		"13": "SERVER",
+	                    		"14": "FAVORITES",
+	                    		"15": "AUX1",
+	                    		"16": "AUX2",
+	                    		"17": "AUX3",
+	                    		"18": "AUX4",
+	                    		"19": "AUX5",
+	                    		"20": "AUX6",
+	                    		"21": "AUX7"
+	            		}
+		},
 	        	native: {}
 	    	});
 
@@ -777,7 +822,7 @@ function main() {
 	        },
 	        native: {}
 	    });
-
+	    
 		zoneThree = true;
 		adapter.log.debug('Zone 3 detected');
 	   } // endCreateZoneThree
