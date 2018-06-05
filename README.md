@@ -52,17 +52,17 @@ The adapter creates the following buttons:
 
    *Skip to next title.*
    
-* volumeDown / zone2.volumeDown
+* volumeDown / zone2.volumeDown / zone3.volumeDown
    
-   *Decrease volume of Main Zone / Zone2.*
+   *Decrease volume of Main Zone / Zone2 / Zone3.*
    
-* volumeUp / zone2.volumeUp
+* volumeUp / zone2.volumeUp / zone3.volumeUp
 
-   *Increase volume of Main Zone / Zone2.*
+   *Increase volume of Main Zone / Zone2 / Zone3.*
    
-* quickSelect1 / zone2.quickSelect1
+* quickSelect1 / zone2.quickSelect1 / zone3.quickSelect1
    
-   *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone 2.*
+   *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
 ### States
 Following states will be created by the adapter:
 
@@ -74,9 +74,9 @@ Following states will be created by the adapter:
 
    *Read only string. Contains the friendly name of the connected AVR.*
    
-* mainVolume / zone2.volume
+* mainVolume / zone2.volume / zone3.volume
 
-   *Number value which represents the current Main Zone / Zone2 volume of your AVR. You can also set the volume here.*
+   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here.*
    
    *Example:*
     ```javascript
@@ -87,9 +87,9 @@ Following states will be created by the adapter:
 
    *Read-only number which represents the maximum possible volume.*
    
-* muteIndicator / zone2.muteIndicator
+* muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 
-   *Boolean value, which is true if the Main Zone / Zone2 is muted, otherwise false. You can mute your AVR with this state.*
+   *Boolean value, which is true if the Main Zone / Zone2 / Zone3 is muted, otherwise false. You can mute your AVR with this state.*
    
    *Example:*
    
@@ -97,11 +97,11 @@ Following states will be created by the adapter:
     setState('denon.0.muteIndicator', true); // Mutes the Main Zone of your AVR
     ```
    
-* powerState / zone2.powerState
+* powerState / zone2.powerState / zone3.powerState
 
-   *Boolean value, which is true if the AVR is turned on, otherwise false. You can turn your AVR on and off with this state.*
+   *Boolean value, which is true if the AVR (or the related Zone) is turned on, otherwise false. You can turn your AVR / Zone on and off with this state.*
    
-* selectInput / zone2.selectInput
+* selectInput / zone2.selectInput / zone3.selectInput
 
    *The number value contains the current input source. You can also set the input source with the following encoding:*
    
