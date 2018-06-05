@@ -231,6 +231,11 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.1.2
+* (foxriver76) Performance optimization
+* (foxriver76) Faster display update
+* (foxriver76) More appropriate reconnect intervall
+
 ### 0.1.1
 * (foxriver76) new readme for npm
 

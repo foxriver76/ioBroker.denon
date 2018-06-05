@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "news": {
+       		"0.1.2": {
+            	"en": "Performance optimization and faster display update",
+            	"de": "Code optimiert und Displayinhalt wird schneller aktualisiert"
+            },
        		"0.1.1": {
             	"en": "New README.md for npm",
             	"de": "Neue README.md angepasst an npm"
