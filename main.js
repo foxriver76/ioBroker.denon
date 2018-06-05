@@ -369,9 +369,9 @@ function main() {
 			adapter.getObject('selectInput', function(err, obj) {
 				var j;
 				var zThreeSi = data.slice(2, data.length);
-				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
+				zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
 				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
-                  			if(stateTextToArray(obj.common.states)[j] == zTwoSi) {
+                  			if(stateTextToArray(obj.common.states)[j] == zThreeSi) {
                   			    adapter.setState('zone3.selectInput', zThreeSi, true);
                   			    return;
                   			} // endIf
