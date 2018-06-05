@@ -74,8 +74,8 @@ function main() {
         client.unref();
         adapter.log.info('Connection closed!');
         setTimeout(function() {
-                connect(); // Connect again in 20 seconds
-        }, 20000);
+                connect(); // Connect again in 30 seconds
+        }, 30000);
     });
 
     // Connection handling
@@ -87,8 +87,8 @@ function main() {
         client.unref();
         adapter.log.info('Connection closed!');
         setTimeout(function() {
-                connect(); // Connect again in 20 seconds
-        }, 20000);
+                connect(); // Connect again in 30 seconds
+        }, 30000);
     });
 
     client.on('end', function () { // Denon has closed the connection
@@ -99,8 +99,8 @@ function main() {
         client.unref();
         adapter.log.info('Connection closed!');
         setTimeout(function() {
-        	connect(); // Connect again in 20 seconds
-        }, 20000);
+        	connect(); // Connect again in 30 seconds
+        }, 30000);
     });
 
     client.on('connect', function () { // Successfull connected
@@ -330,12 +330,13 @@ function main() {
 	// get command out of String
 	var command;
 	if(data.startsWith("Z2")) { // Transformation for Zone2 commands
-		// Handle Zone2 states
 		command = data.replace(/\s+|\d+/g,'');
 		if(command == 'Z') { // if everything is removed except Z --> Volume
-			command = "Z2VOL";
 			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
+			if(!zoneTwo) createZoneTwo();
+			adapter.setState('zone2.volume', parseFloat(vol), true);
+			return;
 		} else {
 			command = "Z2" + command.slice(1, command.length);
 		} // endElseIf
@@ -345,17 +346,21 @@ function main() {
 				var zTwoSi = data.slice(2, data.length);
 				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
 				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
-                      			if(stateTextToArray(obj.common.states)[j] == zTwoSi) adapter.setState('zone2.selectInput', zTwoSi, true);
+                      			if(stateTextToArray(obj.common.states)[j] == zTwoSi) {
+                      			    adapter.setState('zone2.selectInput', zTwoSi, true);
+                      			    return;
+                      			} // endIf
 				} // endFor
 			});
 		} // endIf
-	} else if(data.startsWith("Z3")) { // Transformation for Zone2 commands
-		// Handle Zone2 states
+	} else if(data.startsWith("Z3")) { // Transformation for Zone3 commands
 		command = data.replace(/\s+|\d+/g,'');
 		if(command == 'Z') { // if everything is removed except Z --> Volume
-			command = "Z3VOL";
 			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
+			if(!zoneThree) createZoneThree();
+			adapter.setState('zone3.volume', parseFloat(vol), true);
+			return;
 		} else {
 			command = "Z3" + command.slice(1, command.length);
 		} // endElseIf
@@ -365,47 +370,54 @@ function main() {
 				var zThreeSi = data.slice(2, data.length);
 				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
 				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
-                  			if(stateTextToArray(obj.common.states)[j] == zTwoSi) adapter.setState('zone3.selectInput', zThreeSi, true);
+                  			if(stateTextToArray(obj.common.states)[j] == zTwoSi) {
+                  			    adapter.setState('zone3.selectInput', zThreeSi, true);
+                  			    return;
+                  			} // endIf
 				} // endFor
 			});
 		} // endIf 
 	} else { // Transformations for normal commands
 		command = data.replace(/\s+|\d+/g,'');
 	} // endElse
-	if(command.startsWith("DIM")) {
+	
+	if(command.startsWith("DIM")) { // Handle display brightness
 	    adapter.getObject('display.brightness', function(err, obj) {
 		var j;
 		var bright = data.slice(4, data.length);
 		bright = bright.replace(' ', ''); // Remove blanks
 		for(j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
-  			if(stateTextToArray(obj.common.states)[j] == bright) adapter.setState('display.brightness', bright, true);
+  			if(stateTextToArray(obj.common.states)[j] == bright) {
+  			    adapter.setState('display.brightness', bright, true);
+  			    return;
+  			} // endIf
 		} // endFor
 	    });
-	} // endIf
-	if(command.startsWith("SI")) {
+	} else if(command.startsWith("SI")) { // Handle select input
 		var siCommand = data.slice(2, data.length); // Get only source name
 		siCommand = siCommand.replace(' ', ''); // Remove blanks
 		adapter.log.debug("SI-Command: " + siCommand);
-		command = "SI";
-	} // endIf
-	if(command.startsWith("MS")) {
+		adapter.setState('selectInput', siCommand, true);
+		return;
+	} else if(command.startsWith("MS")) { // Handle Surround mode
 		var msCommand = command.slice(2, command.length);
-		command = "MS";
-	} // endIf
-	if(command.startsWith("NSE")) { // Handle display content
+		adapter.setState('surroundMode', msCommand, true);
+		return;
+	} else if(command.startsWith("NSE")) { // Handle display content
 		var displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
 		var dispContNr = data.slice(3, 4); 
 		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
 		if(!pollingVar) {
 			pollingVar = true;
 			setTimeout(function() {
-				pollStates(); // Poll states about every 10 seconds
-			}, 10500);
+				pollStates(); // Poll states every 8 seconds seconds
+			}, 8000);
 		} // endIf
-	} // endIf
-	if(command.startsWith("NSFRN")) { // Handle friendly name
+		return;
+	} else if(command.startsWith("NSFRN")) { // Handle friendly name
 		adapter.setState('info.friendlyName', data.slice(6, data.length), true);
-	} // endIf
+		return;
+	} // endElseIf
 	
 	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {
@@ -429,12 +441,6 @@ function main() {
 		case 'MUOFF':
 			adapter.setState('muteIndicator', false, true);
 			break;
-		case 'SI':
-			adapter.setState('selectInput', siCommand, true);
-			break;
-		case 'MS':
-			adapter.setState('surroundMode', msCommand, true);
-			break;
 		case 'Z2ON':
 			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.powerState', true, true);
@@ -451,10 +457,6 @@ function main() {
 			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.muteIndicator', false, true);
 			break;
-		case 'Z2VOL':
-			if(!zoneTwo) createZoneTwo();
-			adapter.setState('zone2.volume', parseFloat(vol), true);
-			break;
 		case 'Z3ON':
 			if(!zoneThree) createZoneThree();
 			adapter.setState('zone3.powerState', true, true);
@@ -470,10 +472,6 @@ function main() {
 		case 'Z3MUOFF':
 			if(!zoneThree) createZoneThree();
 			adapter.setState('zone3.muteIndicator', false, true);
-			break;
-		case 'Z3VOL':
-			if(!zoneThree) createZoneThree();
-			adapter.setState('zone3.volume', parseFloat(vol), true);
 			break;
 	} // endSwitch
     } // endHandleResponse
