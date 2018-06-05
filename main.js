@@ -330,15 +330,15 @@ function main() {
 	// get command out of String
 	var command;
 	if(data.startsWith("Z2")) { // Transformation for Zone2 commands
+		if(!zoneTwo) createZoneTwo(); // Create Zone2 states if not done yet
 		command = data.replace(/\s+|\d+/g,'');
-		if(command == 'Z') { // if everything is removed except Z --> Volume
+		
+		if(command == 'Z') { // If everything is removed except Z --> Volume
 			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
-			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.volume', parseFloat(vol), true);
 			return;
 		} else {
-		    	if(!zoneTwo) createZoneTwo();
 			command = "Z2" + command.slice(1, command.length);
 		} // endElseIf
 		if(command.startsWith("Z2")) { // Encode Input Source
@@ -355,15 +355,14 @@ function main() {
 			});
 		} // endIf
 	} else if(data.startsWith("Z3")) { // Transformation for Zone3 commands
+		if(!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
 		command = data.replace(/\s+|\d+/g,'');
 		if(command == 'Z') { // if everything is removed except Z --> Volume
 			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
-			if(!zoneThree) createZoneThree();
 			adapter.setState('zone3.volume', parseFloat(vol), true);
 			return;
 		} else {
-		    	if(!zoneThree) createZoneThree();
 			command = "Z3" + command.slice(1, command.length);
 		} // endElseIf
 		if(command.startsWith("Z3")) { // Encode Input Source
@@ -444,35 +443,27 @@ function main() {
 			adapter.setState('muteIndicator', false, true);
 			break;
 		case 'Z2ON':
-			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.powerState', true, true);
 			break;
 		case 'Z2OFF':
-			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.powerState', false, true);
 			break;
 		case 'Z2MUON':
-			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.muteIndicator', true, true);
 			break;
 		case 'Z2MUOFF':
-			if(!zoneTwo) createZoneTwo();
 			adapter.setState('zone2.muteIndicator', false, true);
 			break;
 		case 'Z3ON':
-			if(!zoneThree) createZoneThree();
 			adapter.setState('zone3.powerState', true, true);
 			break;
 		case 'Z3OFF':
-			if(!zoneThree) createZoneThree();
 			adapter.setState('zone3.powerState', false, true);
 			break;
 		case 'Z3MUON':
-			if(!zoneThree) createZoneThree();
 			adapter.setState('zone3.muteIndicator', true, true);
 			break;
 		case 'Z3MUOFF':
-			if(!zoneThree) createZoneThree();
 			adapter.setState('zone3.muteIndicator', false, true);
 			break;
 	} // endSwitch
