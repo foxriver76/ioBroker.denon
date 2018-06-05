@@ -275,7 +275,7 @@ function main() {
 		    break;
 		case 'display.brightness':
 		    adapter.getObject('display.brightness', function(err, obj) {
-			sendRequest('DIM ' + stateTextToArray(obj.common.states)[state].toUpperCase());
+			sendRequest('DIM ' + stateTextToArray(obj.common.states)[state].toUpperCase().slice(0, 3));
 		    });
 		    break;
 	} // endSwitch
@@ -388,8 +388,8 @@ function main() {
 		var bright = data.slice(4, data.length);
 		bright = bright.replace(' ', ''); // Remove blanks
 		for(j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
-  			if(stateTextToArray(obj.common.states)[j] == bright) {
-  			    adapter.setState('display.brightness', bright, true);
+  			if(stateTextToArray(obj.common.states)[j].toLowerCase().includes(bright.toLowerCase())) {
+  			    adapter.setState('display.brightness', obj.common.states[j], true);
   			    return;
   			} // endIf
 		} // endFor

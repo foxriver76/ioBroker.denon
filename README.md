@@ -217,13 +217,13 @@ Following states will be created by the adapter:
 
    *Number value which represents the display brightness. The value can also set the display brightness by the following encoding:*
    
-   *0: OFF --> turns display off*
+   *0: Off --> turns display off*
    
-   *1: DAR --> turns display dark*
+   *1: Dark --> turns display dark*
    
-   *2: DIM --> turns display dimmed*
+   *2: Dimmed --> turns display dimmed*
    
-   *3: BRI --> turns display bright*
+   *3: Bright --> turns display bright*
    
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).

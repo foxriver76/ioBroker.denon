@@ -471,10 +471,10 @@
     			"write": true,
     			"read": true,
     			"states": {
-    				"0": "OFF",
-    				"1": "DAR",
-    				"2": "DIM",
-    				"3": "BRI"
+    				"0": "Off",
+    				"1": "Dark",
+    				"2": "Dimmed",
+    				"3": "Bright"
     			}
     		},
     		"native": {}
