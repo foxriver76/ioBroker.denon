@@ -232,7 +232,9 @@ Following states will be created by the adapter:
    
 * expertCommand
    *You can send your own custom commands with this state. You can find an overview about the existing commands in the AVR-Control-Protocol.pdf*
-      *Example:*
+   
+   *Example:*
+   
     ```javascript
     setState('denon.0.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
     ```
