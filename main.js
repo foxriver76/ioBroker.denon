@@ -62,6 +62,7 @@ function main() {
     var zoneTwo = false;
     var zoneThree = false;
     var pollingVar = null;
+    var connected = false;
 
     // Connect
     connect(); // Connect on start
@@ -72,6 +73,7 @@ function main() {
     	adapter.setState('info.connection', false, true);
         client.destroy();
         client.unref();
+        connected = false;
         adapter.log.info('Connection closed!');
         setTimeout(function() {
                 connect(); // Connect again in 30 seconds
@@ -85,6 +87,7 @@ function main() {
         adapter.log.error(error);
         client.destroy();
         client.unref();
+        connected = false;
         adapter.log.info('Connection closed!');
         setTimeout(function() {
                 connect(); // Connect again in 30 seconds
@@ -97,6 +100,7 @@ function main() {
         adapter.setState('info.connection', false, true);
         client.destroy();
         client.unref();
+        connected = false;
         adapter.log.info('Connection closed!');
         setTimeout(function() {
         	connect(); // Connect again in 30 seconds
@@ -105,6 +109,7 @@ function main() {
 
     client.on('connect', function () { // Successfull connected
         adapter.setState('info.connection', true, true);
+        connected = true;
         adapter.log.debug("Connected --> updating states on start");
         updateStates(); // Update states when connected
     });
@@ -282,6 +287,10 @@ function main() {
 		    if(state === true) {
 			sendRequest('ZMON');
 		    } else sendRequest('ZMOFF');
+		    break;
+		case 'expertCommand': // Sending custom commands
+		    sendRequest(state);
+		    if(connected) adapter.setState('expertCommand', state, true);
 		    break;
 	} // endSwitch
      }); // endOnStateChange

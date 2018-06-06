@@ -230,6 +230,13 @@ Following states will be created by the adapter:
    
    *3: Bright --> turns display bright*
    
+* expertCommand
+   *You can send your own custom commands with this state. You can find an overview about the existing commands in the AVR-Control-Protocol.pdf*
+      *Example:*
+    ```javascript
+    setState('denon.0.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
+    ```
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 

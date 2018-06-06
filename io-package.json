@@ -108,6 +108,18 @@
             },
             "native": {}
         },
+        	{
+	"_id": "expertCommand",
+        "type": "state",
+        "common": {
+                "name": "expertCommand",
+                "role": "Expert Command",
+                "type": "boolean",
+                "write": true,
+                "read": true
+        },
+        "native": {}
+    	},
 	{
 	"_id": "powerSystem",
         "type": "state",
