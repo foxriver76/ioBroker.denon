@@ -218,6 +218,8 @@ Following states will be created by the adapter:
    
    *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*
    
+   *DISPLAY CONTENT IS NOT SUPPORTED FOR HEOS AVR'S*
+   
 * display.brightness
 
    *Number value which represents the display brightness. The value can also set the display brightness by the following encoding:*
@@ -245,6 +247,11 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.1.4
+* (foxriver76) HEOS bug fix (timeout)
+* (foxriver76) new state for custom commands (expertCommand)
+* (foxriver76) enhanced readme
+
 ### 0.1.3
 * (foxriver76) bug fixes for Zone3
 * (foxriver76) new state for main zone power

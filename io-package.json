@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "0.1.3",
+        "version": "0.1.4",
         "news": {
+        	"0.1.4": {
+            	"en": "Added expertCommand, more detailed readme, HEOS fix",
+            	"de": "Status expertCommand hizugefügt, README erweitert, HEOS fix"
+            },
             "0.1.3": {
             	"en": "Added Main Zone Power, Bug Fixes for Zone3",
             	"de": "Main Zone kann nun unabhängig von Power geschaltet werden, Fehlerbehbungen bezüglich Zone3"

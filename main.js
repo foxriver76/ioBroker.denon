@@ -319,16 +319,17 @@ function main() {
     } // endUpdateStates
     
     function pollStates() { // Polls states
-    	var updateCommands = ['NSE']; // Request Display State
+    	var updateCommands = ['NSE', 'SV?']; // Request Display State & Keep HEOS alive
     	var i = 0;
     	var intervalVar = setInterval(function() {
     		if(pollingVar) {
-    			sendRequest(updateCommands[i]);
-    			i++;
-    			if(i == updateCommands.length) {
+    		    	for(i = 0; i < updateCommands.length; i++) {
+    		    	    sendRequest(updateCommands[i]);
+    		    	    if(i == updateCommands.length - 1) {
     				clearInterval(intervalVar);
     				pollingVar = false;
-    			} // endIf
+    		    	    } // endIf
+    		    	} // endFor
     		} // endIf
     	}, 100);
     } // endPollingStates
@@ -484,6 +485,13 @@ function main() {
 		case 'ZMOFF':
 			adapter.setState('powerMainZone', false, true);
 	    		break;
+	    	default: // Keep HEOS connection alive
+			if(!pollingVar) {
+				pollingVar = true;
+				setTimeout(function() {
+					pollStates(); // Poll states every 8 seconds seconds
+				}, 8000);
+			} // endIf
 	} // endSwitch
     } // endHandleResponse
 
