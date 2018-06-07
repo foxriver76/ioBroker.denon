@@ -25,6 +25,9 @@ npm i iobroker.denon
 ```
 
 ## Setup
+Additional to the adapter installation you have to make sure that your AVR is correctly configured.
+
+### ioBroker 
 1. Open your ioBroker interface in a browser (eg: 192.168.1.33:8081)
 2. Navigate to Tab "Adapters"
 3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
@@ -32,6 +35,30 @@ npm i iobroker.denon
 4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR
 ![Adapter Configuration](/documentation/fillInIp.png)
 5. Click on Save & Close
+
+### Network Setup of AV Receiver
+
+1. Press SETUP button, then Menu appears on FL-display(and GUI)
+2. Select "Network" --> "Settings"
+3. Set parameters described below
+
+   *DHCP: "ON" (Use this setting when DHCP server is on the local network.)*
+  
+   *IP Address: When <DHCP> sets "Off”, please set IP address.*
+  
+   *Subnet Mask: When <DHCP> sets "Off", please set Subnet Mask.*
+  
+   *Gateway: Set the address of Gateway when Gateway is on the local network.*
+  
+   *Primary DNS: Do not set this parameter.*
+  
+   *Second DNS: Do not set this parameter.*
+  
+   *Proxy: Set this parameter "Off".*
+  
+4. Press SETUP button, then Menu appears on FL-display (and GUI)
+5. Select “Network" --> Network Control/IP Control"
+6. Set this parameter to "Always On".
 
 ## Usage
 Take note, that the AVRs can only manage a single telnet connection. If you are having an active telnet connection e. g. with the javascript adapter, the AVR will refuse the connection of this adapter.
