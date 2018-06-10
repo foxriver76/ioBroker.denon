@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "0.1.4",
+        "version": "0.1.5",
         "news": {
+        	"0.1.5": {
+            	"en": "Added sleepTimer for every zone, Admin backwards compatibility",
+            	"de": "Sleep Timer für alle Zonen, Admin Abwärtskompatibilität"
+            },
         	"0.1.4": {
             	"en": "Added expertCommand, more detailed readme, HEOS fix",
             	"de": "Status expertCommand hizugefügt, README erweitert, HEOS fix"
@@ -508,6 +512,20 @@
     				"2": "Dimmed",
     				"3": "Bright"
     			}
+    		},
+    		"native": {}
+    	},
+    	{
+    		"_id": "sleepTimer",
+    		"type": "state",
+    		"common": {
+    			"name": "sleepTimer",
+    			"role": "Sleep Timer",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"min": 0,
+    			"max": 120
     		},
     		"native": {}
     	}

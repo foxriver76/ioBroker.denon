@@ -267,6 +267,9 @@ Following states will be created by the adapter:
     ```javascript
     setState('denon.0.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
     ```
+* sleepTimer / zone2.sleepTimer / zone3.sleepTimer
+
+   *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
    
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
@@ -274,6 +277,10 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.1.5
+* (foxriver76) sleep timer for every zone
+* (foxriver76) admin2 compatibility
+* (foxriver76) minor fixes
 ### 0.1.4
 * (foxriver76) HEOS bug fix (timeout)
 * (foxriver76) new state for custom commands (expertCommand)

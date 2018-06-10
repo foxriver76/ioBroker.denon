@@ -290,6 +290,39 @@ function main() {
 			if(state.val === true) adapter.setState('expertCommand', expertState, true);
 		    });
 		    break;
+		case 'sleepTimer':
+		    if(state == 0) {
+			sendRequest('SLPOFF');
+		    } else if(state < 10) {
+			sendRequest('SLP' + '00' + state);
+		    } else if(state < 100) {
+			sendRequest('SLP' + '0' + state);
+		    } else if(state <= 120) {
+			sendRequest('SLP' + state);
+		    } // endElseIf
+		    break;
+		case 'zone2.sleepTimer':
+		    if(state == 0) {
+			sendRequest('Z2SLPOFF');
+		    } else if(state < 10) {
+			sendRequest('Z2SLP' + '00' + state);
+		    } else if(state < 100) {
+			sendRequest('Z2SLP' + '0' + state);
+		    } else if(state <= 120) {
+			sendRequest('Z2SLP' + state);
+		    } // endElseIf
+		    break;
+		case 'zone3.sleepTimer':
+		    if(state == 0) {
+			sendRequest('Z3SLPOFF');
+		    } else if(state < 10) {
+			sendRequest('Z3SLP' + '00' + state);
+		    } else if(state < 100) {
+			sendRequest('Z3SLP' + '0' + state);
+		    } else if(state <= 120) {
+			sendRequest('Z3SLP' + state);
+		    } // endElseIf
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -309,7 +342,7 @@ function main() {
     } // endConnect
 
     function updateStates() {
-    	var updateCommands = ['NSET1 ?','NSFRN ?','ZM?','MU?','PW?','SI?','SV?','MS?','MV?','Z2?','Z2MU?','Z3?','Z3MU?','NSE','VSSC ?','VSASP ?','VSMONI ?','TR?','DIM ?'];
+    	var updateCommands = ['NSET1 ?','NSFRN ?','ZM?','MU?','PW?','SI?','SV?','MS?','MV?','Z2?','Z2MU?','Z3?','Z3MU?','NSE','VSSC ?','VSASP ?','VSMONI ?','TR?','DIM ?', 'Z3SLP?', 'Z2SLP?', 'SLP?'];
     	var i = 0;
     	var intervalVar = setInterval(function() {
 			sendRequest(updateCommands[i]);
@@ -319,7 +352,7 @@ function main() {
     } // endUpdateStates
     
     function pollStates() { // Polls states
-    	var updateCommands = ['NSE', 'SV?']; // Request Display State & Keep HEOS alive
+    	var updateCommands = ['NSE', 'SV?', 'SLP?', 'Z2SLP?', 'Z3SLP?']; // Request Display State & Keep HEOS alive
     	var i = 0;
     	var intervalVar = setInterval(function() {
     		if(pollingVar) {
@@ -485,6 +518,28 @@ function main() {
 		case 'ZMOFF':
 			adapter.setState('powerMainZone', false, true);
 	    		break;
+		case 'SLP':
+		    	data = data.slice(3, data.length);
+		    	adapter.setState('sleepTimer', parseFloat(data), true);
+		    	break;
+		case 'SLPOFF':
+		    	adapter.setState('sleepTimer', 0, true);
+		    	break;
+		case 'Z2SLP':
+		    	data = data.slice(5, data.length);
+		    	adapter.setState('zone2.sleepTimer', parseFloat(data), true);
+		    	break;
+		case 'Z2SLPOFF':
+		    	adapter.setState('zone2.sleepTimer', 0, true);
+		    	break;
+		case 'Z3SLP':
+		    	data = data.slice(5, data.length);
+		    	adapter.setState('zone3.sleepTimer', parseFloat(data), true);
+			break;
+		case 'Z3SLPOFF':
+		    	adapter.setState('zone3.sleepTimer', 0, true);
+		    	break;   	
+
 	    	default: // Keep HEOS connection alive
 			if(!pollingVar) {
 				pollingVar = true;
@@ -668,6 +723,20 @@ function main() {
         },
         native: {}
     });
+    
+    adapter.setObjectNotExists('zone2.sleepTimer', {
+        type: 'state',
+        common: {
+                name: 'zone2.sleepTimer',
+                role: 'Sleep Timer',
+                type: 'number',
+                write: true,
+                read: true,
+                min: 0,
+                max: 120
+        },
+        native: {}
+    });
 
 	zoneTwo = true;
 	adapter.log.debug('Zone 2 detected');
@@ -836,6 +905,20 @@ function main() {
 	                type: 'number',
 	                write: true,
 	                read: true
+	        },
+	        native: {}
+	    });
+	    
+	    adapter.setObjectNotExists('zone3.sleepTimer', {
+	        type: 'state',
+	        common: {
+	                name: 'zone3.sleepTimer',
+	                role: 'Sleep Timer',
+	                type: 'number',
+	                write: true,
+	                read: true,
+	                min: 0,
+	                max: 120
 	        },
 	        native: {}
 	    });
