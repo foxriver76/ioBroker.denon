@@ -118,7 +118,7 @@
         "common": {
                 "name": "expertCommand",
                 "role": "Expert Command",
-                "type": "boolean",
+                "type": "string",
                 "write": true,
                 "read": true
         },
