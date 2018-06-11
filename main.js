@@ -412,16 +412,11 @@ function main() {
     function pollStates() { // Polls states
     	var updateCommands = ['NSE', 'SV?', 'SLP?', 'Z2SLP?', 'Z3SLP?']; // Request Display State & Keep HEOS alive
     	var i = 0;
+	pollingVar = false;
     	var intervalVar = setInterval(function() {
-    		if(pollingVar) {
-    		    	for(i = 0; i < updateCommands.length; i++) {
-    		    	    sendRequest(updateCommands[i]);
-    		    	    if(i == updateCommands.length - 1) {
-    				clearInterval(intervalVar);
-    				pollingVar = false;
-    		    	    } // endIf
-    		    	} // endFor
-    		} // endIf
+    	    sendRequest(updateCommands[i]);
+    	    i++;
+    	    if(i == updateCommands.length) clearInterval(intervalVar);
     	}, 100);
     } // endPollingStates
 
