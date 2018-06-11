@@ -365,6 +365,11 @@ function main() {
 		case 'parameterSettings.containmentAmount':
 		    sendRequest('PSCNTAMT 0' + state);
 		    break;
+		case 'parameterSettings.multEq':
+		    adapter.getObject('parameterSettings.multEq', function(err, obj) {
+			sendRequest('PSMULTEQ:' + stateTextToArray(obj.common.states)[state].toUpperCase());
+		    });
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -391,7 +396,7 @@ function main() {
     	    			'VSSC ?','VSASP ?',
     	    			'VSMONI ?','TR?','DIM ?', 
     	    			'Z3SLP?', 'Z2SLP?', 'SLP?', 
-    	    			'PSDYNEQ ?', 'PSMULTEQ ?',
+    	    			'PSDYNEQ ?', 'PSMULTEQ: ?',
     	    			'PSREFLEV ?', 'PSDYNVOL ?',
     	    			'PSLFC ?', 'PSCNTAMT ?',
     	    			'PSSWL ?', 'PSBAS ?',
@@ -517,7 +522,10 @@ function main() {
 	} else if(command.startsWith("NSFRN")) { // Handle friendly name
 		adapter.setState('info.friendlyName', data.slice(6, data.length), true);
 		return;
-	} // endElseIf
+	} else if(command.startsWith("PSMULTEQ")){
+	    var state = data.split(':')[1];
+	    adapter.setState('parameterSettings.multEq', state, true);
+	}// endElseIf
 	
 	adapter.log.debug('Command to handle is ' + command);
 	switch(command) {

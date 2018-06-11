@@ -307,6 +307,20 @@ Following states will be created by the adapter:
 	
    *Number value to set the Low Frequency Containment Amount. The value can be between 1 and 7.*
    
+* parameterSettings.multEq
+
+   *Number value, to set the MultEQ function of your AVR with the following encoding:*
+   
+   *0: OFF*
+              
+   *1: AUDYSSEY*
+                	
+   *2: BYP.LR*
+   
+   *3: FLAT*
+      
+   *4: MANUAL*
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 

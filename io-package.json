@@ -686,6 +686,25 @@
     			"read": true
     		},
     		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.multEq",
+    		"type": "state",
+    		"common": {
+    			"name": "multEq",
+    			"role": "MultEQ",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"states": {
+    				"0": "OFF",
+                	"1": "AUDYSSEY",
+                	"2": "BYP.LR",
+                	"3": "FLAT",
+                	"4": "MANUAL"	
+                }
+    		},
+    		"native": {}
     	}
         
     ]
