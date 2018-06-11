@@ -321,12 +321,30 @@ Following states will be created by the adapter:
       
    *4: MANUAL*
    
+* parameterSettings.dynamicVolume
+
+   *Number value to select the Dynamic Volume by following encoding:*
+   
+   *0: OFF --> turns Dynamic Volume off*
+   
+   *1: LIT --> turns Dynamic Volume to light*
+   
+   *2: MED --> turns Dynamic Volume to medium*
+   
+   *3: HEV --> turns Dynamic Volume to heavy*
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.1.6
+* (foxriver76) connection stability improvements
+* (foxriver76) some parameter settings added
+* (foxriver76) readme updated
+
 ### 0.1.5
 * (foxriver76) sleep timer for every zone
 * (foxriver76) admin2 compatibility

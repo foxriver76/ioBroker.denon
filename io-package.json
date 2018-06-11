@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "0.1.5",
+        "version": "0.1.6",
         "news": {
+        	"0.1.6": {
+            	"en": "Improved connections stability and parameter settings channel",
+            	"de": "Verbesserte Verbindungsstabilität und neuer Channel für Parameter Settings"
+            },
         	"0.1.5": {
             	"en": "Added sleepTimer for every zone, Admin backwards compatibility",
             	"de": "Sleep Timer für alle Zonen, Admin Abwärtskompatibilität"
@@ -702,6 +706,24 @@
                 	"2": "BYP.LR",
                 	"3": "FLAT",
                 	"4": "MANUAL"	
+                }
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.dynamicVolume",
+    		"type": "state",
+    		"common": {
+    			"name": "dynamicVolume",
+    			"role": "Dynamic Volume",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"states": {
+    				"0": "OFF",
+                	"1": "LIT",
+                	"2": "MED",
+                	"3": "HEV"	
                 }
     		},
     		"native": {}

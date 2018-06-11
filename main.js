@@ -370,6 +370,11 @@ function main() {
 			sendRequest('PSMULTEQ:' + stateTextToArray(obj.common.states)[state].toUpperCase());
 		    });
 		    break;
+		case 'parameterSettings.dynamicVolume':
+		    adapter.getObject('parameterSettings.dynamicVolume', function(err, obj) {
+			sendRequest('PSDYNVOL ' + stateTextToArray(obj.common.states)[state].toUpperCase());
+		    });
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -520,6 +525,9 @@ function main() {
 	} else if(command.startsWith("PSMULTEQ")){
 	    var state = data.split(':')[1];
 	    adapter.setState('parameterSettings.multEq', state, true);
+	} else if(command.startsWith("PSDYNVOL")) {
+	    var state = data.split(' ')[1];
+	    adapter.setState('parameterSettings.dynamicVolume', state, true);
 	}// endElseIf
 	
 	adapter.log.debug('Command to handle is ' + command);
