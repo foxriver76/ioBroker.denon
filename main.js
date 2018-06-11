@@ -351,6 +351,20 @@ function main() {
 		case 'parameterSettings.subwooferTwoLevelUp':
 		    sendRequest('PSSWL2 UP');
 		    break;
+		case 'parameterSettings.audysseyLfc':
+		    if(state) {
+			sendRequest('PSLFC ON');
+		    } else sendRequest('PSLFC OFF');
+		    break;
+		case 'parameterSettings.containmentAmountDown':
+		    sendRequest('PSCNTAMT DOWN');
+		    break;
+		case 'parameterSettings.containmentAmountUp':
+		    sendRequest('PSCNTAMT UP');
+		    break;
+		case 'parameterSettings.containmentAmount':
+		    sendRequest('PSCNTAMT 0' + state);
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -597,6 +611,15 @@ function main() {
 		    	    adapter.setState('parameterSettings.subwooferLevel', parseFloat(state), true);
 		    	} else adapter.setState('parameterSettings.subwooferTwoLevel', parseFloat(state), true);
 		    	break;
+		case 'PSLFCON':
+		    	adapter.setState('parameterSettings.audysseyLfc', true, true);
+		    	break;
+		case 'PSLFCOFF':
+		    	adapter.setState('parameterSettings.audysseyLfc', false, true);
+		    	break;
+		case 'PSCNTAMT':
+		    	var state = data.split(' ')[1];
+		    	adapter.setState('parameterSettings.containmentAmount', parseFloat(state), true)
 	    	default: // Keep HEOS connection alive
 			if(!pollingVar) {
 				pollingVar = true;

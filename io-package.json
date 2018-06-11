@@ -636,6 +636,56 @@
     			"read": true
     		},
     		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.audysseyLfc",
+    		"type": "state",
+    		"common": {
+    			"name": "audysseyLfc",
+    			"role": "Audyssey Low Frequency Containment",
+    			"type": "boolean",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.containmentAmount",
+    		"type": "state",
+    		"common": {
+    			"name": "containmentAmount",
+    			"role": "Audyssey Low Frequency Containment Amount",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"min": 1,
+    			"max": 7
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.containmentAmountUp",
+    		"type": "state",
+    		"common": {
+    			"name": "containmentAmountUp",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.containmentAmountDown",
+    		"type": "state",
+    		"common": {
+    			"name": "containmentAmountDown",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
     	}
         
     ]

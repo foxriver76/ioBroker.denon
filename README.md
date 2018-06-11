@@ -98,6 +98,14 @@ The adapter creates the following buttons:
 * parameterSettings.subwooferLevelUp / parameterSettings.subwooferTwoLevelUp
 
    *Increase subwoofer level by pressing the button.*
+   
+* parameterSettings.containmentAmountDown
+
+   *Decrease Audyssey LFC amount.*
+
+* parameterSettings.containmentAmountUp
+
+   *Increase Audyssey LFC amount.*
 
 ### States
 Following states will be created by the adapter:
@@ -291,6 +299,14 @@ Following states will be created by the adapter:
 
    *Number value which indicates the current subwoofer level. The value has a range from 38 to 62 (50=0dB like on the volume).*
    
+* parameterSettings.audysseyLfc
+
+   *Boolean value, which contains and is able to control Audyssey Low Frequency Containment status (on/off).*
+   
+* parameterSettings.containmentAmount
+	
+   *Number value to set the Low Frequency Containment Amount. The value can be between 1 and 7.*
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 
@@ -301,6 +317,7 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 * (foxriver76) sleep timer for every zone
 * (foxriver76) admin2 compatibility
 * (foxriver76) minor fixes
+
 ### 0.1.4
 * (foxriver76) HEOS bug fix (timeout)
 * (foxriver76) new state for custom commands (expertCommand)
