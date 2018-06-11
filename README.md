@@ -90,6 +90,14 @@ The adapter creates the following buttons:
 * quickSelect1 / zone2.quickSelect1 / zone3.quickSelect1
    
    *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
+   
+* parameterSettings.subwooferLevelDown / parameterSettings.subwooferTwoLevelDown
+
+   *Reduce subwoofer level by pressing the button.*
+   
+* parameterSettings.subwooferLevelUp / parameterSettings.subwooferTwoLevelUp
+
+   *Increase subwoofer level by pressing the button.*
 
 ### States
 Following states will be created by the adapter:
@@ -275,7 +283,14 @@ Following states will be created by the adapter:
 
    *Boolean value which represents the state of Dynamic EQ. You can also set Dynamic EQ on and off with this state.*
 
+* parameterSettings.subwooferLevelState
 
+   *Boolean value, if it's true, you are able to make changes on the subwoofer level.*
+
+* parameterSettings.subwooferLevel / parameterSettings.subwooferTwoLevel
+
+   *Number value which indicates the current subwoofer level. The value has a range from 38 to 62 (50=0dB like on the volume).*
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 

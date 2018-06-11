@@ -548,6 +548,94 @@
     			"read": true
     		},
     		"native": {}
+    	},        
+    	{
+    		"_id": "parameterSettings.subwooferLevelState",
+    		"type": "state",
+    		"common": {
+    			"name": "subwooferLevelState",
+    			"role": "Subwoofer Level State",
+    			"type": "boolean",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.subwooferLevel",
+    		"type": "state",
+    		"common": {
+    			"name": "subwooferLevel",
+    			"role": "Subwoofer Level",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"min": 38,
+    			"max": 62
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.subwooferTwoLevel",
+    		"type": "state",
+    		"common": {
+    			"name": "subwooferTwoLevel",
+    			"role": "Second Subwoofer Level",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"min": 38,
+    			"max": 62
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.subwooferLevelUp",
+    		"type": "state",
+    		"common": {
+    			"name": "subwooferLevelUp",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.subwooferLevelDown",
+    		"type": "state",
+    		"common": {
+    			"name": "subwooferLevelDown",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.subwooferTwoLevelUp",
+    		"type": "state",
+    		"common": {
+    			"name": "subwooferTwoLevelUp",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.subwooferTwoLevelDown",
+    		"type": "state",
+    		"common": {
+    			"name": "subwooferTwoLevelDown",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
     	}
         
     ]

@@ -328,6 +328,29 @@ function main() {
 			sendRequest('PSDYNEQ ON');
 		    } else sendRequest('PSDYNEQ OFF');
 		    break;
+		case 'parameterSettings.subwooferLevel':
+		    sendRequest('PSSWL ' + state);
+		    break;
+		case 'parameterSettings.subwooferLevelDown':
+		    sendRequest('PSSWL DOWN');
+		    break;
+		case 'parameterSettings.subwooferLevelUp':
+		    sendRequest('PSSWL UP');
+		    break;
+		case 'parameterSettings.subwooferLevelState':
+		    if(state) {
+			sendRequest('PSSWL ON');
+		    } else sendRequest('PSSWL OFF');
+		    break;
+		case 'parameterSettings.subwooferTwoLevel':
+		    sendRequest('PSSWL2 ' + state);
+		    break;
+		case 'parameterSettings.subwooferTwoLevelDown':
+		    sendRequest('PSSWL2 DOWN');
+		    break;
+		case 'parameterSettings.subwooferTwoLevelUp':
+		    sendRequest('PSSWL2 UP');
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -354,7 +377,11 @@ function main() {
     	    			'VSSC ?','VSASP ?',
     	    			'VSMONI ?','TR?','DIM ?', 
     	    			'Z3SLP?', 'Z2SLP?', 'SLP?', 
-    	    			'PSDYNEQ ?'];
+    	    			'PSDYNEQ ?', 'PSMULTEQ ?',
+    	    			'PSREFLEV ?', 'PSDYNVOL ?',
+    	    			'PSLFC ?', 'PSCNTAMT ?',
+    	    			'PSSWL ?', 'PSBAS ?',
+    	    			'PSTRE ?'];
     	var i = 0;
     	var intervalVar = setInterval(function() {
 			sendRequest(updateCommands[i]);
@@ -557,7 +584,19 @@ function main() {
 		case 'PSDYNEQOFF':
 		    	adapter.setState('parameterSettings.dynamicEq', false, true)
 		    	break;
-
+		case 'PSSWLON':
+		    	adapter.setState('parameterSettings.subwooferLevelState', true, true)
+		    	break;
+		case 'PSSWLOFF':
+		    	adapter.setState('parameterSettings.subwooferLevelState', false, true)
+		    	break;
+		case 'PSSWL': // Handle Subwoofer Level for first and second SW
+		    	command = data.split(' ')[0];
+		    	var state = data.split(' ')[1];
+		    	if(command == 'PSSWL') { // Check if PSSWL or PSSWL2
+		    	    adapter.setState('parameterSettings.subwooferLevel', parseFloat(state), true);
+		    	} else adapter.setState('parameterSettings.subwooferTwoLevel', parseFloat(state), true);
+		    	break;
 	    	default: // Keep HEOS connection alive
 			if(!pollingVar) {
 				pollingVar = true;
