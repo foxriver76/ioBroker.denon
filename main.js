@@ -323,6 +323,11 @@ function main() {
 			sendRequest('Z3SLP' + state);
 		    } // endElseIf
 		    break;
+		case 'parameterSettings.dynamicEq':
+		    if(state) {
+			sendRequest('PSDYNEQ ON');
+		    } else sendRequest('PSDYNEQ OFF');
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -342,7 +347,14 @@ function main() {
     } // endConnect
 
     function updateStates() {
-    	var updateCommands = ['NSET1 ?','NSFRN ?','ZM?','MU?','PW?','SI?','SV?','MS?','MV?','Z2?','Z2MU?','Z3?','Z3MU?','NSE','VSSC ?','VSASP ?','VSMONI ?','TR?','DIM ?', 'Z3SLP?', 'Z2SLP?', 'SLP?'];
+    	var updateCommands = ['NSET1 ?','NSFRN ?','ZM?',
+    	    			'MU?','PW?','SI?','SV?',
+    	    			'MS?','MV?','Z2?','Z2MU?',
+    	    			'Z3?','Z3MU?','NSE',
+    	    			'VSSC ?','VSASP ?',
+    	    			'VSMONI ?','TR?','DIM ?', 
+    	    			'Z3SLP?', 'Z2SLP?', 'SLP?', 
+    	    			'PSDYNEQ ?'];
     	var i = 0;
     	var intervalVar = setInterval(function() {
 			sendRequest(updateCommands[i]);
@@ -538,7 +550,13 @@ function main() {
 			break;
 		case 'Z3SLPOFF':
 		    	adapter.setState('zone3.sleepTimer', 0, true);
-		    	break;   	
+		    	break;
+		case 'PSDYNEQON':
+		    	adapter.setState('parameterSettings.dynamicEq', true, true)
+		    	break;
+		case 'PSDYNEQOFF':
+		    	adapter.setState('parameterSettings.dynamicEq', false, true)
+		    	break;
 
 	    	default: // Keep HEOS connection alive
 			if(!pollingVar) {

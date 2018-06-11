@@ -271,6 +271,11 @@ Following states will be created by the adapter:
 
    *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
    
+* parameterSettings.dynamicEq
+
+   *Boolean value which represents the state of Dynamic EQ. You can also set Dynamic EQ on and off with this state.*
+
+
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 

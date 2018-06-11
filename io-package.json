@@ -528,6 +528,27 @@
     			"max": 120
     		},
     		"native": {}
+    	},
+    	{
+    	"_id": "parameterSettings",
+        "type": "channel",
+            "common": {
+                "name": "Parameter Settings"
+            },
+            "native": {}
+        },
+        {
+    		"_id": "parameterSettings.dynamicEq",
+    		"type": "state",
+    		"common": {
+    			"name": "dynamicEq",
+    			"role": "Dynamic EQ",
+    			"type": "boolean",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
     	}
+        
     ]
 }
