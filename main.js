@@ -431,6 +431,12 @@ function main() {
     } // endSendRequest
 
     function handleResponse(data) {
+	if(!pollingVar) { // Keep connection alive & poll states
+		pollingVar = true;
+		setTimeout(function() {
+			pollStates(); // Poll states every 8 seconds seconds
+		}, 8000);
+	} // endIf
 	// get command out of String
 	var command;
 	if(data.startsWith("Z2")) { // Transformation for Zone2 commands
@@ -512,12 +518,6 @@ function main() {
 		var displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
 		var dispContNr = data.slice(3, 4); 
 		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
-		if(!pollingVar) {
-			pollingVar = true;
-			setTimeout(function() {
-				pollStates(); // Poll states every 8 seconds seconds
-			}, 8000);
-		} // endIf
 		return;
 	} else if(command.startsWith("NSFRN")) { // Handle friendly name
 		adapter.setState('info.friendlyName', data.slice(6, data.length), true);
@@ -627,14 +627,7 @@ function main() {
 		    	break;
 		case 'PSCNTAMT':
 		    	var state = data.split(' ')[1];
-		    	adapter.setState('parameterSettings.containmentAmount', parseFloat(state), true)
-	    	default: // Keep HEOS connection alive
-			if(!pollingVar) {
-				pollingVar = true;
-				setTimeout(function() {
-					pollStates(); // Poll states every 8 seconds seconds
-				}, 8000);
-			} // endIf
+		    	adapter.setState('parameterSettings.containmentAmount', parseFloat(state), true);
 	} // endSwitch
     } // endHandleResponse
 
