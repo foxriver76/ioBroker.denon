@@ -379,6 +379,9 @@ function main() {
 			sendRequest('PSDYNVOL ' + stateTextToArray(obj.common.states)[state].toUpperCase());
 		    });
 		    break;
+		case 'parameterSettings.referenceLevelOffset':
+		    sendRequest('PSREFLEV ' + state);
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -637,6 +640,12 @@ function main() {
 		case 'PSCNTAMT':
 		    	var state = data.split(' ')[1];
 		    	adapter.setState('parameterSettings.containmentAmount', parseFloat(state), true);
+		    	break;
+		case 'PSREFLEV':
+		    	var state = data.split(' ')[1];
+		    	adapter.setState('parameterSettings.referenceLevelOffset', state + ' dB', true);
+		    	break;
+		    	
 	} // endSwitch
     } // endHandleResponse
 

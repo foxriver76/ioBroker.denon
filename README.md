@@ -333,6 +333,23 @@ Following states will be created by the adapter:
    
    *3: HEV --> turns Dynamic Volume to heavy*
    
+* parameterSettings.referenceLevelOffset
+
+   *Number value to select the Reference Level Offset by the following encoding:*
+   
+   *0: 	0 dB*
+   
+   *5: 	5 dB*
+   
+   *10:	10 dB*
+   
+   *15: 15 dB*
+   
+   *Example:*
+    ```javascript
+    setState('denon.0.parameterSettings.referenceLevelOffset', 5); // Sets Reference Level Offset to 5 dB
+    ```
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 

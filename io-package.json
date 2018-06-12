@@ -727,6 +727,24 @@
                 }
     		},
     		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.referenceLevelOffset",
+    		"type": "state",
+    		"common": {
+    			"name": "referenceLevelOffset",
+    			"role": "Reference Level Offset",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"states": {
+    				"0": 	"0 dB",
+                	"5": 	"5 dB",
+                	"10": 	"10 dB",
+                	"15": 	"15 dB"	
+                }
+    		},
+    		"native": {}
     	}
         
     ]
