@@ -748,6 +748,84 @@
                 }
     		},
     		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.bass",
+    		"type": "state",
+    		"common": {
+    			"name": "parameterSettings.bass",
+    			"role": "Bass Level",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"unit": "dB",
+    			"min": -6,
+    			"max": 6
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.bassUp",
+    		"type": "state",
+    		"common": {
+    			"name": "parameterSettings.bassUp",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.bassDown",
+    		"type": "state",
+    		"common": {
+    			"name": "parameterSettings.bassDown",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.treble",
+    		"type": "state",
+    		"common": {
+    			"name": "parameterSettings.treble",
+    			"role": "Treble Level",
+    			"type": "number",
+    			"write": true,
+    			"read": true,
+    			"unit": "dB",
+    			"min": -6,
+    			"max": 6
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.trebleUp",
+    		"type": "state",
+    		"common": {
+    			"name": "parameterSettings.trebleUp",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	},
+        {
+    		"_id": "parameterSettings.trebleDown",
+    		"type": "state",
+    		"common": {
+    			"name": "parameterSettings.trebleDown",
+    			"role": "button",
+    			"type": "number",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
     	}
         
     ]

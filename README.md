@@ -106,6 +106,22 @@ The adapter creates the following buttons:
 * parameterSettings.containmentAmountUp
 
    *Increase Audyssey LFC amount.*
+   
+* parameterSettings.bassUp
+
+   *Button which increases bass level of the Zone.*
+   
+* parameterSettings.bassDown
+
+   *Button which decreases bass level of the Zone.*
+   
+* parameterSettings.trebleUp
+
+   *Button which increases treble level of the Zone.*
+   
+* parameterSettings.trebleDown
+
+   *Button which decreases treble level of the Zone.*
 
 ### States
 Following states will be created by the adapter:
@@ -349,6 +365,14 @@ Following states will be created by the adapter:
     ```javascript
     setState('denon.0.parameterSettings.referenceLevelOffset', 5); // Sets Reference Level Offset to 5 dB
     ```
+    
+* parameterSettings.bass
+
+   *Number value which represents the bass level of the Zone. Value range is from -6 to +6 dB.*
+   
+* parameterSettings.treble
+
+   *Number value which represents the treble level of the Zone. Value range is from -6 to +6 dB.*
    
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).

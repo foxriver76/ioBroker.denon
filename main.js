@@ -380,6 +380,26 @@ function main() {
 		case 'parameterSettings.referenceLevelOffset':
 		    sendRequest('PSREFLEV ' + state);
 		    break;
+		case 'parameterSettings.bassUp':
+		    sendRequest('PSBAS UP');
+		    break;
+		case 'parameterSettings.bassDown':
+		    sendRequest('PSBAS DOWN');
+		    break;
+		case 'parameterSettings.trebleUp':
+		    sendRequest('PSTRE UP');
+		    break;
+		case 'parameterSettings.trebleDown':
+		    sendRequest('PSTRE DOWN');
+		    break;
+		case 'parameterSettings.bass':
+		    state = dbToAscii(state);
+		    sendRequest('PSBAS ' + state);
+		    break;
+		case 'parameterSettings.treble':
+		    state = dbToAscii(state);
+		    sendRequest('PSTRE ' + state);
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -641,6 +661,16 @@ function main() {
 		case 'PSREFLEV':
 		    	var state = data.split(' ')[1];
 		    	adapter.setState('parameterSettings.referenceLevelOffset', state, true);
+		    	break;
+		case 'PSBAS':
+		    	var state = data.split(' ')[1];
+		    	state = asciiToDb(state);
+		    	adapter.setState('parameterSettings.bass', state, true);
+		    	break;
+		case 'PSTRE':
+		    	var state = data.split(' ')[1];
+		    	state = asciiToDb(state);
+		    	adapter.setState('parameterSettings.treble', state, true);
 		    	break;
 		    	
 	} // endSwitch
