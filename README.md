@@ -297,7 +297,7 @@ Following states will be created by the adapter:
 
 * parameterSettings.subwooferLevel / parameterSettings.subwooferTwoLevel
 
-   *Number value which indicates the current subwoofer level. The value has a range from 38 to 62 (50=0dB like on the volume).*
+   *Number value which indicates the current subwoofer level. The value has a range from -12 to (-12 dB to +12 dB).*
    
 * parameterSettings.audysseyLfc
 

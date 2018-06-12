@@ -329,6 +329,8 @@ function main() {
 		    } else sendRequest('PSDYNEQ OFF');
 		    break;
 		case 'parameterSettings.subwooferLevel':
+		    state += 50; // dB to vol
+		    state = state.toString().replace('.', '');
 		    sendRequest('PSSWL ' + state);
 		    break;
 		case 'parameterSettings.subwooferLevelDown':
@@ -343,6 +345,8 @@ function main() {
 		    } else sendRequest('PSSWL OFF');
 		    break;
 		case 'parameterSettings.subwooferTwoLevel':
+		    state += 50; // dB to vol
+		    state = state.toString().replace('.', '');
 		    sendRequest('PSSWL2 ' + state);
 		    break;
 		case 'parameterSettings.subwooferTwoLevelDown':
@@ -618,6 +622,8 @@ function main() {
 		case 'PSSWL': // Handle Subwoofer Level for first and second SW
 		    	command = data.split(' ')[0];
 		    	var state = data.split(' ')[1];
+		    	if(state.length === 3) state = state / 10;
+		    	state -= 50; // Vol to dB
 		    	if(command == 'PSSWL') { // Check if PSSWL or PSSWL2
 		    	    adapter.setState('parameterSettings.subwooferLevel', parseFloat(state), true);
 		    	} else adapter.setState('parameterSettings.subwooferTwoLevel', parseFloat(state), true);

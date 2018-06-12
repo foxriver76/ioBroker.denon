@@ -574,8 +574,8 @@
     			"type": "number",
     			"write": true,
     			"read": true,
-    			"min": 38,
-    			"max": 62
+    			"min": -12,
+    			"max": 12
     		},
     		"native": {}
     	},
@@ -588,8 +588,8 @@
     			"type": "number",
     			"write": true,
     			"read": true,
-    			"min": 38,
-    			"max": 62
+    			"min": -12,
+    			"max": 12
     		},
     		"native": {}
     	},
