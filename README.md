@@ -146,6 +146,8 @@ Following states will be created by the adapter:
 
    *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here.*
    
+   *Range is from 0 to 98 (maybe lower due to maximumVolume), where 80 = 0 dB*
+   
    *Example:*
     ```javascript
     setState('denon.0.mainVolume', 45.5); // Sets volume of Main Zone to 45.5
@@ -153,7 +155,7 @@ Following states will be created by the adapter:
    
 * maximumVolume
 
-   *Read-only number which represents the maximum possible volume.*
+   *Read-only number which represents the maximum possible volume, where 80 = 0 dB.*
    
 * muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 
@@ -177,49 +179,49 @@ Following states will be created by the adapter:
 
    *The number value contains the current input source. You can also set the input source with the following encoding:*
    
-   *0:PHONO*
+   *0: 	PHONO*
    
-   *1:CD*
+   *1: 	CD*
    
-   *2:TUNER*
+   *2: 	TUNER*
    
-   *3:DVD*
+   *3: 	DVD*
    
-   *4:BD*
+   *4: 	BD*
    
-   *5:TV*
+   *5: 	TV*
    
-   *6:SAT/CBL*
+   *6: 	SAT/CBL*
    
-   *7:MPLAY*
+   *7: 	MPLAY*
    
-   *8:GAME*
+   *8: 	GAME*
    
-   *9:NET*
+   *9: 	NET*
    
-   *10:SPOTIFY*
+   *10:	SPOTIFY*
    
-   *11:LASTFM*
+   *11:	LASTFM*
    
-   *12:IRADIO*
+   *12:	IRADIO*
    
-   *13:SERVER*
+   *13:	SERVER*
    
-   *14:FAVOTITES*
+   *14:	FAVOTITES*
    
-   *15:AUX1*
+   *15:	AUX1*
    
-   *16:AUX2*
+   *16:	AUX2*
    
-   *17:AUX3*
+   *17:	AUX3*
    
-   *18:AUX4*
+   *18:	AUX4*
    
-   *19:AUX5*
+   *19:	AUX5*
    
-   *20:AUX6*
+   *20:	AUX6*
    
-   *21:AUX7*
+   *21:	AUX7*
    
    *Please note, that not every input source is available on every AVR model.*
    
@@ -232,47 +234,47 @@ Following states will be created by the adapter:
 
    *The number value contains the current Surround mode. You can also change the source with the following encoding:*
    
-   *0:STEREO*
+   *0:	STEREO*
    
-   *1:VIRTUAL*
+   *1:	VIRTUAL*
    
-   *2:VIDEO GAME*
+   *2:	VIDEO GAME*
    
-   *3:MCH STEREO*
+   *3:	MCH STEREO*
    
-   *4:DTS SURROUND*
+   *4:	DTS SURROUND*
    
-   *5:DOLBY DIGITAL*
+   *5:	DOLBY DIGITAL*
    
-   *6:MOVIE*
+   *6:	MOVIE*
    
-   *7:MUSIC*
+   *7:	MUSIC*
    
-   *8:DIRECT*
+   *8:	DIRECT*
    
-   *9:PURE DIRECT*
+   *9:	PURE DIRECT*
    
-   *10:AUTO*
+   *10:	AUTO*
    
-   *11:GAME*
+   *11:	GAME*
    
-   *12:AURO3D*
+   *12:	AURO3D*
    
-   *13:AURO2DSURR*
+   *13:	AURO2DSURR*
    
-   *14:WIDE SCREEN*
+   *14:	WIDE SCREEN*
    
-   *15:SUPER STADIUM*
+   *15:	SUPER STADIUM*
    
-   *16:ROCK ARENA*
+   *16:	ROCK ARENA*
    
-   *17:JAZZ CLUB*
+   *17:	JAZZ CLUB*
    
-   *18:CLASSIC CONCERT*
+   *18:	CLASSIC CONCERT*
    
-   *19:MONO MOVIE*
+   *19:	MONO MOVIE*
    
-   *20:MATRIX*
+   *20:	MATRIX*
    
    *Please note, that not every Surround mode is available on every AVR model.*
    
@@ -363,7 +365,7 @@ Following states will be created by the adapter:
    
    *0: 	0 dB*
    
-   *5: 	5 dB*
+   *5:	5 dB*
    
    *10:	10 dB*
    
