@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "0.1.6",
+        "version": "0.1.7",
         "news": {
+        	"0.1.7": {
+            	"en": "Added control of bass, treble, tone control status, subwoofer level now in dB & more",
+            	"de": "Kontrolle von Bass, Höhen, Tone Control Status. Subwoofer Level jetzt in dB & mehr"
+            },
         	"0.1.6": {
             	"en": "Improved connections stability and parameter settings channel",
             	"de": "Verbesserte Verbindungsstabilität und neuer Channel für Parameter Settings"
@@ -826,7 +830,19 @@
     			"read": true
     		},
     		"native": {}
-    	}
+    	},
+        {
+    		"_id": "parameterSettings.toneControl",
+    		"type": "state",
+    		"common": {
+    			"name": "parameterSettings.toneControl",
+    			"role": "Tone Control",
+    			"type": "boolean",
+    			"write": true,
+    			"read": true
+    		},
+    		"native": {}
+    	}   	
         
     ]
 }

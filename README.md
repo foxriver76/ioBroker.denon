@@ -386,12 +386,23 @@ Following states will be created by the adapter:
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
    
+* parameterSettings.toneControl
+
+   *Boolean value, which indicates Tone Control status. You can turn it off/on with this state.*
+   
+   *Tone Control can only be turned on when Dyn EQ is set to OFF*
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.1.7
+* (foxriver76) subwoofer level is now in dB
+* (foxriver76) added control of treble, bass and tone control state
+* (foxriver76) readme updated
 
 ### 0.1.6
 * (foxriver76) connection stability improvements

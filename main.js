@@ -440,6 +440,11 @@ function main() {
 		case 'zone3.parameterSettings.trebleDown':
 		    sendRequest('Z3PSTRE DOWN');
 		    break;
+		case 'parameterSettings.toneControl':
+		    if(state) {
+			sendRequest('PSTONE CTRL ON');
+		    } else sendRequest('PSTONE CTRL OFF');
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -472,7 +477,7 @@ function main() {
     	    			'PSSWL ?', 'PSBAS ?',
     	    			'PSTRE ?', 'Z2PSTRE ?',
     	    			'Z3PSTRE ?', 'Z2PSBAS ?',
-    	    			'Z3PSBAS ?'
+    	    			'Z3PSBAS ?', 'PSTONE CTRL ?'
     	    			];
     	var i = 0;
     	var intervalVar = setInterval(function() {
@@ -728,6 +733,12 @@ function main() {
 		    	if(command == 'Z2PSBAS') {
 		    	    adapter.setState('zone2.parameterSettings.bass', state, true);
 		    	} else adapter.setState('zone3.parameterSettings.bass', state, true);
+		    	break;
+		case 'PSTONECTRLON':
+		    	adapter.setState('parameterSettings.toneControl', true, true);
+		    	break;
+		case 'PSTONECTRLOFF':
+		    	adapter.setState('parameterSettings.toneControl', false, true);
 		    	break;
 		    	
 	} // endSwitch

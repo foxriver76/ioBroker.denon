@@ -1,6 +1,6 @@
 {
   "name": "iobroker.denon",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "ioBroker denon Adapter",
   "author": {
     "name": "Moritz Heusinger",
