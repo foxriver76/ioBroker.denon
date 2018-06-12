@@ -400,6 +400,46 @@ function main() {
 		    state = dbToAscii(state);
 		    sendRequest('PSTRE ' + state);
 		    break;
+		case 'zone2.parameterSettings.bass':
+		    state = dbToAscii(state);
+		    sendRequest('Z2PSBAS ' + state);
+		    break;
+		case 'zone2.parameterSettings.treble':
+		    state = dbToAscii(state);
+		    sendRequest('Z2PSTRE ' + state);
+		    break;
+		case 'zone3.parameterSettings.bass':
+		    state = dbToAscii(state);
+		    sendRequest('Z3PSBAS ' + state);
+		    break;
+		case 'zone3.parameterSettings.treble':
+		    state = dbToAscii(state);
+		    sendRequest('Z3PSTRE ' + state);
+		    break;
+		case 'zone2.parameterSettings.bassUp':
+		    sendRequest('Z2PSBAS UP');
+		    break;
+		case 'zone2.parameterSettings.bassDown':
+		    sendRequest('Z2PSBAS DOWN');
+		    break;
+		case 'zone2.parameterSettings.trebleUp':
+		    sendRequest('Z2PSTRE UP');
+		    break;
+		case 'zone2.parameterSettings.trebleDown':
+		    sendRequest('Z2PSTRE DOWN');
+		    break;
+		case 'zone3.parameterSettings.bassUp':
+		    sendRequest('Z3PSBAS UP');
+		    break;
+		case 'zone3.parameterSettings.bassDown':
+		    sendRequest('Z3PSBAS DOWN');
+		    break;
+		case 'zone3.parameterSettings.trebleUp':
+		    sendRequest('Z3PSTRE UP');
+		    break;
+		case 'zone3.parameterSettings.trebleDown':
+		    sendRequest('Z3PSTRE DOWN');
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -430,7 +470,10 @@ function main() {
     	    			'PSREFLEV ?', 'PSDYNVOL ?',
     	    			'PSLFC ?', 'PSCNTAMT ?',
     	    			'PSSWL ?', 'PSBAS ?',
-    	    			'PSTRE ?'];
+    	    			'PSTRE ?', 'Z2PSTRE ?',
+    	    			'Z3PSTRE ?', 'Z2PSBAS ?',
+    	    			'Z3PSBAS ?'
+    	    			];
     	var i = 0;
     	var intervalVar = setInterval(function() {
 			sendRequest(updateCommands[i]);
@@ -672,6 +715,20 @@ function main() {
 		    	state = asciiToDb(state);
 		    	adapter.setState('parameterSettings.treble', state, true);
 		    	break;
+		case 'ZPSTRE':
+		    	command = data.split(' ')[0];
+		    	var state = data.split(' ')[1];
+		    	if(command == 'Z2PSTRE') {
+		    	    adapter.setState('zone2.parameterSettings.treble', state, true);
+		    	} else adapter.setState('zone3.parameterSettings.treble', state, true);
+		    	break;
+		case 'ZPSBAS':
+		    	command = data.split(' ')[0];
+		    	var state = data.split(' ')[1];
+		    	if(command == 'Z2PSBAS') {
+		    	    adapter.setState('zone2.parameterSettings.bass', state, true);
+		    	} else adapter.setState('zone3.parameterSettings.bass', state, true);
+		    	break;
 		    	
 	} // endSwitch
     } // endHandleResponse
@@ -725,7 +782,7 @@ function main() {
                 	read: true,
                 	write: true,
                 	min: 0,
-                	max: 100
+                	max: 98
         	},
         	native: {}
     	});
@@ -875,7 +932,92 @@ function main() {
         },
         native: {}
     });
-
+    
+    adapter.setObjectNotExists('zone2.parameterSettings', {
+	type: "channel",
+	common: {
+	    name: "Zone2 Parameter Settings"
+	}
+    });
+    
+    adapter.setObjectNotExists('zone2.parameterSettings.bass', {
+	type: "state",
+	common: {
+		name: "zone2.parameterSettings.bass",
+		role: "Zone2 Bass Level",
+		type: "number",
+		write: true,
+		read: true,
+		unit: "dB",
+		min: -6,
+		max: 6
+	},
+	native: {}
+    });
+    
+    adapter.setObjectNotExists('zone2.parameterSettings.bassUp', {
+	type: "state",
+	common: {
+		"name": "zone2.parameterSettings.bassUp",
+		"role": "button",
+		"type": "number",
+		"write": true,
+		"read": true
+	},
+	native: {}
+    });
+    
+    adapter.setObjectNotExists('zone2.parameterSettings.bassDown', {
+	type: "state",
+	common: {
+		"name": "zone2.parameterSettings.bassDown",
+		"role": "button",
+		"type": "number",
+		"write": true,
+		"read": true
+	},
+	native: {}
+    });
+    
+    adapter.setObjectNotExists('zone2.parameterSettings.treble', {
+	type: "state",
+	common: {
+		name: "zone2.parameterSettings.treble",
+		role: "Zone2 Treble Level",
+		type: "number",
+		write: true,
+		read: true,
+		unit: "dB",
+		min: -6,
+		max: 6
+	},
+	native: {}
+    });
+    
+    adapter.setObjectNotExists('zone2.parameterSettings.trebleUp', {
+	type: "state",
+	common: {
+		"name": "zone2.parameterSettings.trebleUp",
+		"role": "button",
+		"type": "number",
+		"write": true,
+		"read": true
+	},
+	native: {}
+    });
+    
+    adapter.setObjectNotExists('zone2.parameterSettings.trebleDown', {
+	type: "state",
+	common: {
+		"name": "zone2.parameterSettings.trebleDown",
+		"role": "button",
+		"type": "number",
+		"write": true,
+		"read": true
+	},
+	native: {}
+    });
+    
 	zoneTwo = true;
 	adapter.log.debug('Zone 2 detected');
    } // endCreateZoneTwo
@@ -910,7 +1052,7 @@ function main() {
 	                	read: true,
 	                	write: true,
 	                	min: 0,
-	                	max: 100
+	                	max: 98
 	        	},
 	        	native: {}
 	    	});
@@ -1059,6 +1201,91 @@ function main() {
 	                max: 120
 	        },
 	        native: {}
+	    });
+	    
+	    adapter.setObjectNotExists('zone3.parameterSettings', {
+		type: "channel",
+		common: {
+		    name: "Zone3 Parameter Settings"
+		}
+	    });
+	   
+	    adapter.setObjectNotExists('zone3.parameterSettings.bass', {
+		type: "state",
+		common: {
+			name: "zone3.parameterSettings.bass",
+			role: "Zone3 Bass Level",
+			type: "number",
+			write: true,
+			read: true,
+			unit: "dB",
+			min: -6,
+			max: 6
+		},
+		native: {}
+	    });
+	    
+	    adapter.setObjectNotExists('zone3.parameterSettings.bassUp', {
+		type: "state",
+		common: {
+			"name": "zone3.parameterSettings.bassUp",
+			"role": "button",
+			"type": "number",
+			"write": true,
+			"read": true
+		},
+		native: {}
+	    });
+	    
+	    adapter.setObjectNotExists('zone3.parameterSettings.bassDown', {
+		type: "state",
+		common: {
+			"name": "zone3.parameterSettings.bassDown",
+			"role": "button",
+			"type": "number",
+			"write": true,
+			"read": true
+		},
+		native: {}
+	    });
+	    
+	    adapter.setObjectNotExists('zone3.parameterSettings.treble', {
+		type: "state",
+		common: {
+			name: "zone3.parameterSettings.treble",
+			role: "Zone3 Treble Level",
+			type: "number",
+			write: true,
+			read: true,
+			unit: "dB",
+			min: -6,
+			max: 6
+		},
+		native: {}
+	    });
+	    
+	    adapter.setObjectNotExists('zone3.parameterSettings.trebleUp', {
+		type: "state",
+		common: {
+			"name": "zone3.parameterSettings.trebleUp",
+			"role": "button",
+			"type": "number",
+			"write": true,
+			"read": true
+		},
+		native: {}
+	    });
+	    
+	    adapter.setObjectNotExists('zone3.parameterSettings.trebleDown', {
+		type: "state",
+		common: {
+			"name": "zone3.parameterSettings.trebleDown",
+			"role": "button",
+			"type": "number",
+			"write": true,
+			"read": true
+		},
+		native: {}
 	    });
 	    
 		zoneThree = true;

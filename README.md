@@ -107,21 +107,29 @@ The adapter creates the following buttons:
 
    *Increase Audyssey LFC amount.*
    
-* parameterSettings.bassUp
+* parameterSettings.bassUp / zone2.parameterSettings.bassUp / zone3.parameterSettings.bassUp
 
    *Button which increases bass level of the Zone.*
    
-* parameterSettings.bassDown
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   
+* parameterSettings.bassDown / zone2.parameterSettings.bassDown / zone3.parameterSettings.bassDown
 
    *Button which decreases bass level of the Zone.*
    
-* parameterSettings.trebleUp
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   
+* parameterSettings.trebleUp / zone2.parameterSettings.trebleUp / zone3.parameterSettings.trebleUp
 
    *Button which increases treble level of the Zone.*
    
-* parameterSettings.trebleDown
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   
+* parameterSettings.trebleDown / zone2.parameterSettings.trebleDown / zone3.parameterSettings.trebleDown
 
    *Button which decreases treble level of the Zone.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
 
 ### States
 Following states will be created by the adapter:
@@ -366,13 +374,17 @@ Following states will be created by the adapter:
     setState('denon.0.parameterSettings.referenceLevelOffset', 5); // Sets Reference Level Offset to 5 dB
     ```
     
-* parameterSettings.bass
+* parameterSettings.bass / zone2.parameterSettings.bass / zone3.parameterSettings.bass
 
    *Number value which represents the bass level of the Zone. Value range is from -6 to +6 dB.*
    
-* parameterSettings.treble
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   
+* parameterSettings.treble / zone2.parameterSettings.treble / zone3.parameterSettings.treble
 
    *Number value which represents the treble level of the Zone. Value range is from -6 to +6 dB.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
    
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).

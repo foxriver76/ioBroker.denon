@@ -166,7 +166,7 @@
                 "read": true,
                 "write": true,
                 "min": 0,
-                "max": 100
+                "max": 98
         },
         "native": {}
     	},
