@@ -575,7 +575,8 @@
     			"write": true,
     			"read": true,
     			"min": -12,
-    			"max": 12
+    			"max": 12,
+    			"unit": "dB"
     		},
     		"native": {}
     	},
@@ -589,7 +590,8 @@
     			"write": true,
     			"read": true,
     			"min": -12,
-    			"max": 12
+    			"max": 12,
+    			"unit": "dB"
     		},
     		"native": {}
     	},
@@ -737,11 +739,12 @@
     			"type": "number",
     			"write": true,
     			"read": true,
+    			"unit": "dB",
     			"states": {
-    				"0": 	"0 dB",
-                	"5": 	"5 dB",
-                	"10": 	"10 dB",
-                	"15": 	"15 dB"	
+    				"0": 	"0",
+                	"5": 	"5",
+                	"10": 	"10",
+                	"15": 	"15"	
                 }
     		},
     		"native": {}
