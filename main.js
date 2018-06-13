@@ -68,11 +68,10 @@ function main() {
     
     client.on('timeout', function() {
     	pollingVar = false;
-    	adapter.log.error('AVR timed out');
+    	adapter.log.warn('AVR timed out due to no response');
     	adapter.setState('info.connection', false, true);
         client.destroy();
         client.unref();
-        adapter.log.info('Connection closed!');
         setTimeout(function() {
                 connect(); // Connect again in 30 seconds
         }, 30000);
@@ -80,12 +79,13 @@ function main() {
 
     // Connection handling
     client.on('error', function(error) {
+	if(error.code == 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
+	else if (error.code == 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
+	else adapter.log.warn('Connection closed: ' + error);
     	pollingVar = false;
     	adapter.setState('info.connection', false, true);
-        adapter.log.error(error);
         client.destroy();
         client.unref();
-        adapter.log.info('Connection closed!');
         setTimeout(function() {
                 connect(); // Connect again in 30 seconds
         }, 30000);
@@ -97,7 +97,6 @@ function main() {
         adapter.setState('info.connection', false, true);
         client.destroy();
         client.unref();
-        adapter.log.info('Connection closed!');
         setTimeout(function() {
         	connect(); // Connect again in 30 seconds
         }, 30000);
