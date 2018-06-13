@@ -105,6 +105,7 @@ function main() {
 
     client.on('connect', function () { // Successfull connected
         adapter.setState('info.connection', true, true);
+        adapter.log.info("Adapter connected to DENON-AVR: " + host + ":23");
         adapter.log.debug("Connected --> updating states on start");
         updateStates(); // Update states when connected
     });
@@ -458,9 +459,7 @@ function main() {
         client.setEncoding('utf8');
         client.setTimeout(35000);
         adapter.log.info("Trying to connect to " + host + ":23");
-        client.connect({port: 23, host: host}, function() {
-                adapter.log.info("Adapter connected to DENON-AVR: " + host + ":23");
-        });
+        client.connect({port: 23, host: host});
     } // endConnect
 
     function updateStates() {
