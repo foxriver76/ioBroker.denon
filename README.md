@@ -401,6 +401,11 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 0.1.8
+* (foxriver76) adapter sepcific connection error handling
+* (foxriver76) minor reconnect fix
+
+
 ### 0.1.7
 * (foxriver76) subwoofer level is now in dB
 * (foxriver76) added control of treble, bass and tone control state

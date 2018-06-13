@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.1.7",
+		"version": "0.1.8",
 		"news": {
+			"0.1.8": {
+				"en": "Adapter specific connection error handling & minor fix on reconnect",
+				"de": "Adapterspezifische Verbindungsfehlerbehandlung & Reconnect Logging fix"
+			},
 			"0.1.7": {
 				"en": "Added control of bass, treble, tone control status, subwoofer level now in dB & more",
 				"de": "Kontrolle von Bass, Höhen, Tone Control Status. Subwoofer Level jetzt in dB & mehr"
