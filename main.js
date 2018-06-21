@@ -149,10 +149,10 @@ function main() {
 		case 'mainVolume':
 			var leadingZero;
 			if (state < 0) state = 0;
+			if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
 			if (state < 10) {
 				leadingZero = "0";
 			} else leadingZero = "";
-			if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
 			state = state.toString().replace('.', '') // remove points
 			sendRequest('MV' + leadingZero + state);
 			adapter.log.debug('Changed mainVolume to ' + state);
@@ -220,10 +220,10 @@ function main() {
 		case 'zone2.volume':
 			var leadingZero;
                         if (state < 0) state = 0;
+                        if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
                         if (state < 10) {
                                 leadingZero = "0";
                         } else leadingZero = "";
-                        if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
                         state = state.toString().replace('.', '') // remove points
 			sendRequest('Z2' + leadingZero + state);
 			break;
@@ -261,10 +261,10 @@ function main() {
 		case 'zone3.volume':
 			var leadingZero;
                     if (state < 0) state = 0;
+                    if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
                     if (state < 10) {
                             leadingZero = "0";
                     } else leadingZero = "";
-                    if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
                     state = state.toString().replace('.', '') // remove points
 			sendRequest('Z3' + leadingZero + state);
 			break;
