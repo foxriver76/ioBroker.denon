@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.1.9",
+		"version": "0.2.0",
 		"news": {
+			"0.2.0": {
+				"en": "Prepared offical repository release",
+				"de": "Offiziellen Release vorbereitet"
+			},
 			"0.1.9": {
 				"en": "Improved stability, improved fault tolerance on volume states",
 				"de": "Verbesserte Stabilität, verbesserte Fehlertoleranz bei Volume States"

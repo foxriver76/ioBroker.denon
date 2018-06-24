@@ -400,6 +400,8 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.2.0
+* (foxriver76) preparations for offical repository
 
 ### 0.1.9
 * (foxriver76) improved stability
