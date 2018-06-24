@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.1.8",
+		"version": "0.1.9",
 		"news": {
+			"0.1.9": {
+				"en": "Improved stability, improved fault tolerance on volume states",
+				"de": "Verbesserte Stabilität, verbesserte Fehlertoleranz bei Volume States"
+			},
 			"0.1.8": {
 				"en": "Adapter specific connection error handling & minor fix on reconnect",
 				"de": "Adapterspezifische Verbindungsfehlerbehandlung & Reconnect Logging fix"

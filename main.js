@@ -81,6 +81,7 @@ function main() {
     client.on('error', function(error) {
 	if(error.code == 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
 	else if (error.code == 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
+	else if(error.code == 'EALREADY' || 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
 	else adapter.log.warn('Connection closed: ' + error);
     	pollingVar = false;
     	adapter.setState('info.connection', false, true);
