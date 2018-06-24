@@ -82,6 +82,7 @@
 			"nl": "docs/nl/admin.md",
 			"pt": "docs/pt/admin.md"
 		},
+		"license": "MIT",
 		"platform": "Javascript/Node.js",
 		"mode": "daemon",
 		"icon": "denon.png",
