@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.2.0",
+		"version": "0.2.1",
 		"news": {
+			"0.2.1": {
+				"en": "Improvements on module size, small bug fix on connection errors",
+				"de": "Moulgröße optimiert, kleine Fehlerbehebung bezüglich Connection Error"
+			},
 			"0.2.0": {
 				"en": "Prepared offical repository release",
 				"de": "Offiziellen Release vorbereitet"
