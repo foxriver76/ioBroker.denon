@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.2.1",
+		"version": "0.2.2",
 		"news": {
+			"0.2.2": {
+				"en": "Removed unnecessary files, better handling of state lists",
+				"de": "Nicht benötigte Dateien entfernt, bessere Handhabung von Status Listen"
+			},
 			"0.2.1": {
 				"en": "Improvements on module size, small bug fix on connection errors",
 				"de": "Moulgröße optimiert, kleine Fehlerbehebung bezüglich Connection Error"

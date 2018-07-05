@@ -406,6 +406,13 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.2.2
+* (foxriver76) removed unneeded files
+* (foxriver76) state lists are now of type string due to better compatibility
+* (foxriver76) optimized matching for state lists
+* (foxriver76) some state lists can be set by the value additionaly to the key
+
 ### 0.2.1
 * (foxriver76) small bug fixes on connection error handling
 * (foxriver76) improvements on module size
