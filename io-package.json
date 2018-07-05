@@ -287,7 +287,7 @@
 			"common": {
 				"name": "selectInput",
 				"role": "Select Input",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -353,7 +353,7 @@
 			"common": {
 				"name": "surroundMode",
 				"role": "Surround Mode",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -596,7 +596,7 @@
 			"common": {
 				"name": "displayBrightness",
 				"role": "Display Brightness",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -818,7 +818,7 @@
 			"common": {
 				"name": "multEq",
 				"role": "MultEQ",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -839,7 +839,7 @@
 			"common": {
 				"name": "dynamicVolume",
 				"role": "Dynamic Volume",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -859,7 +859,7 @@
 			"common": {
 				"name": "referenceLevelOffset",
 				"role": "Reference Level Offset",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"unit": "dB",

@@ -113,8 +113,7 @@ function main() {
     client.on('data', function (data) {
     	// split data by <cr>
     	var dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
-    	var i;
-    	for(i=0; i < dataArr.length; i++) {
+    	for(var i=0; i < dataArr.length; i++) {
     		if(dataArr[i] != "") {
     			handleResponse(dataArr[i]);
         		adapter.log.debug('Incoming data: ' + dataArr[i]);
@@ -127,9 +126,8 @@ function main() {
     	if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
         	return;
     	} // endIf
-	var j;
 	var fullId = id;
-	for(j = 2; j < fullId.split('.').length; j++) { // remove instance name and id
+	for(var j = 2; j < fullId.split('.').length; j++) { // remove instance name and id
 		if(j == 2) id = fullId.split('.')[j];
 		if(j > 2) id = id + '.' + fullId.split('.')[j];
 	} // endFor
@@ -190,12 +188,12 @@ function main() {
 		// Current Source
 		case 'selectInput':
 			adapter.getObject('selectInput', function(err, obj) {
-				sendRequest('SI' + stateTextToArray(obj.common.states)[state].toUpperCase());
+				sendRequest('SI' + decodeState(obj.common.states, state).toUpperCase());
 			});
 			break;
 		case 'surroundMode':
 			adapter.getObject('surroundMode', function(err, obj) {
-				sendRequest('MS' + stateTextToArray(obj.common.states)[state].toUpperCase());
+				sendRequest('MS' + decodeState(obj.common.states, state).toUpperCase());
 			});
 			break;
 		case 'zone2.powerZone':
@@ -230,7 +228,7 @@ function main() {
 			break;
                 case 'zone2.selectInput':
                         adapter.getObject('zone2.selectInput', function(err, obj) {
-                                sendRequest('Z2' + stateTextToArray(obj.common.states)[state].toUpperCase());
+                                sendRequest('Z2' + decodeState(obj.common.states, state).toUpperCase());
                         });
                         break;
 		case 'quickSelect':
@@ -271,7 +269,7 @@ function main() {
 			break;
 		case 'zone3.selectInput':
                     adapter.getObject('zone3.selectInput', function(err, obj) {
-                            sendRequest('Z3' + stateTextToArray(obj.common.states)[state].toUpperCase());
+                            sendRequest('Z3' + decodeState(obj.common.states, state).toUpperCase());
                     });
                     break;
 		case 'zone3.quickSelect':
@@ -279,7 +277,7 @@ function main() {
 		    break;
 		case 'display.brightness':
 		    adapter.getObject('display.brightness', function(err, obj) {
-			sendRequest('DIM ' + stateTextToArray(obj.common.states)[state].toUpperCase().slice(0, 3));
+			sendRequest('DIM ' + decodeState(obj.common.states, state).toUpperCase().slice(0, 3));
 		    });
 		    break;
 		case 'powerMainZone':
@@ -373,12 +371,12 @@ function main() {
 		    break;
 		case 'parameterSettings.multEq':
 		    adapter.getObject('parameterSettings.multEq', function(err, obj) {
-			sendRequest('PSMULTEQ:' + stateTextToArray(obj.common.states)[state].toUpperCase());
+			sendRequest('PSMULTEQ:' + decodeState(obj.common.states, state).toUpperCase());
 		    });
 		    break;
 		case 'parameterSettings.dynamicVolume':
 		    adapter.getObject('parameterSettings.dynamicVolume', function(err, obj) {
-			sendRequest('PSDYNVOL ' + stateTextToArray(obj.common.states)[state].toUpperCase());
+			sendRequest('PSDYNVOL ' + decodeState(obj.common.states, state).toUpperCase());
 		    });
 		    break;
 		case 'parameterSettings.referenceLevelOffset':
@@ -528,11 +526,10 @@ function main() {
 		} // endElseIf
 		if(command.startsWith("Z2")) { // Encode Input Source
 			adapter.getObject('selectInput', function(err, obj) {
-				var j;
 				var zTwoSi = data.slice(2, data.length);
 				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
-				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
-                      			if(stateTextToArray(obj.common.states)[j] == zTwoSi) {
+				for(var j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+                      			if(decodeState(obj.common.states, j) == zTwoSi) {
                       			    adapter.setState('zone2.selectInput', zTwoSi, true);
                       			    return;
                       			} // endIf
@@ -552,11 +549,10 @@ function main() {
 		} // endElseIf
 		if(command.startsWith("Z3")) { // Encode Input Source
 			adapter.getObject('selectInput', function(err, obj) {
-				var j;
 				var zThreeSi = data.slice(2, data.length);
 				zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
-				for(j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
-                  			if(stateTextToArray(obj.common.states)[j] == zThreeSi) {
+				for(var j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+                  			if(decodeState(obj.common.states, j) == zThreeSi) {
                   			    adapter.setState('zone3.selectInput', zThreeSi, true);
                   			    return;
                   			} // endIf
@@ -569,11 +565,10 @@ function main() {
 	
 	if(command.startsWith("DIM")) { // Handle display brightness
 	    adapter.getObject('display.brightness', function(err, obj) {
-		var j;
 		var bright = data.slice(4, data.length);
 		bright = bright.replace(' ', ''); // Remove blanks
-		for(j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
-  			if(stateTextToArray(obj.common.states)[j].toLowerCase().includes(bright.toLowerCase())) {
+		for(var j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
+  			if(decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
   			    adapter.setState('display.brightness', obj.common.states[j], true);
   			    return;
   			} // endIf
@@ -746,12 +741,15 @@ function main() {
 	} // endSwitch
     } // endHandleResponse
 
-    function stateTextToArray(stateNames) { // encoding for e. g. selectInput
+    function decodeState(stateNames, state) { // decoding for e. g. selectInput
    	var stateArray = Object.keys(stateNames).map(function(key) {
    	    return stateNames[key];
    	});
-	return stateArray;
-    } // endStateTextToArray
+   	for(var i = 0; i < stateArray.length; i++) {
+   	    if(state.toString().toUpperCase() == stateArray[i].toUpperCase() || i.toString() == state) return stateArray[i];
+   	} // endFor
+   	    return "";
+   	} // endDecodeState
     
     function asciiToDb(vol) {
     	if(vol.length === 3) vol = vol / 10;
@@ -829,7 +827,7 @@ function main() {
         	common: {
                 	name: 'zone2.selectInput',
                 	role: 'Select Input',
-                	type: 'number',
+                	type: 'string',
                 	write: true,
                 	read: true,
                 	states: {
@@ -1099,7 +1097,7 @@ function main() {
 	        	common: {
 	                	name: 'zone3.selectInput',
 	                	role: 'Select Input',
-	                	type: 'number',
+	                	type: 'string',
 	                	write: true,
 	                	read: true,
 	                	states: {
