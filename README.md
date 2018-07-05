@@ -177,7 +177,7 @@ Following states will be created by the adapter:
    
 * selectInput / zone2.selectInput / zone3.selectInput
 
-   *The number value contains the current input source. You can also set the input source with the following encoding:*
+   *The string value contains the current input source. You can also set the input source with the following encoding:*
    
    *0: 	PHONO*
    
@@ -228,11 +228,11 @@ Following states will be created by the adapter:
    *Example:*
    
    ```javascript
-    setState('denon.0.selectInput', 5); // Selects TV as input for Main Zone
+    setState('denon.0.selectInput', '5'); // Selects TV as input for Main Zone
     ```
 * surroundMode
 
-   *The number value contains the current Surround mode. You can also change the source with the following encoding:*
+   *The string value contains the current Surround mode. You can also change the source with the following encoding:*
    
    *0:	STEREO*
    
@@ -281,7 +281,7 @@ Following states will be created by the adapter:
    *Example:*
    
    ```javascript
-   setState('denon.0.surroundMode', 3); // Sets Multi Channel Stereo as surround mode
+   setState('denon.0.surroundMode', '3'); // Sets Multi Channel Stereo as surround mode
    ```
 * display.displayContent
    
@@ -291,7 +291,7 @@ Following states will be created by the adapter:
    
 * display.brightness
 
-   *Number value which represents the display brightness. The value can also set the display brightness by the following encoding:*
+   *String value which represents the display brightness. The value can also set the display brightness by the following encoding:*
    
    *0: Off --> turns display off*
    
@@ -300,6 +300,12 @@ Following states will be created by the adapter:
    *2: Dimmed --> turns display dimmed*
    
    *3: Bright --> turns display bright*
+   
+   *Example:*
+   
+   ```javascript
+   setState('denon.0.display.brightness', '3'); // Sets display brightness to "Bright"
+   ```
    
 * expertCommand
    *You can send your own custom commands with this state. You can find an overview about the existing commands in the AVR-Control-Protocol.pdf*
@@ -335,7 +341,7 @@ Following states will be created by the adapter:
    
 * parameterSettings.multEq
 
-   *Number value, to set the MultEQ function of your AVR with the following encoding:*
+   *String value, to set the MultEQ function of your AVR with the following encoding:*
    
    *0: OFF*
               
@@ -349,7 +355,7 @@ Following states will be created by the adapter:
    
 * parameterSettings.dynamicVolume
 
-   *Number value to select the Dynamic Volume by following encoding:*
+   *String value to select the Dynamic Volume by following encoding:*
    
    *0: OFF --> turns Dynamic Volume off*
    
@@ -361,7 +367,7 @@ Following states will be created by the adapter:
    
 * parameterSettings.referenceLevelOffset
 
-   *Number value to select the Reference Level Offset by the following encoding:*
+   *String value to select the Reference Level Offset by the following encoding:*
    
    *0: 	0 dB*
    
