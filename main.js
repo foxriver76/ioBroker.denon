@@ -7,11 +7,11 @@
 'use strict';
 
 // you have to require the utils module and call adapter function
-var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
-var net = require('net'); // import net
+const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
+const net = require('net'); // import net
 
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.denon.0
-var adapter = new utils.Adapter('denon');
+const adapter = new utils.Adapter('denon');
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
