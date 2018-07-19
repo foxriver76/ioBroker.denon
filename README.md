@@ -408,6 +408,11 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 0.2.4
+* (foxriver76) prevent adapter from doing more than one reconnect attempt at the same time
+* (foxriver76) improved stability
+* (foxriver76) update readme
+
 ### 0.2.3
 * (foxriver76) added possibility to handle states in dB additional
 * (foxriver76) minor changes

@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.2.3",
+		"version": "0.2.4",
 		"news": {
+			"0.2.4": {
+				"en": "More stability, Prevent reconnect more than one at the same time",
+				"de": "Erhöhte Stabilität, verhindere mehrfaches paralleles neuverbinden"
+			},
 			"0.2.3": {
 				"en": "Added possibility to handle volume states in dB too, minor changes",
 				"de": "Möglichkeit hinzugefügt, Lautstärke in dB zu regeln und kleine Änderungen"
