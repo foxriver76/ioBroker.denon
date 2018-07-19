@@ -408,6 +408,10 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 0.2.3
+* (foxriver76) added possibility to handle states in dB additional
+* (foxriver76) minor changes
+
 ### 0.2.2
 * (foxriver76) removed unneeded files
 * (foxriver76) state lists are now of type string due to better compatibility

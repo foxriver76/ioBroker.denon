@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.2.2",
+		"version": "0.2.3",
 		"news": {
+			"0.2.3": {
+				"en": "Added possibility to handle volume states in dB too, minor changes",
+				"de": "Möglichkeit hinzugefügt, Lautstärke in dB zu regeln und kleine Änderungen"
+			},
 			"0.2.2": {
 				"en": "Removed unnecessary files, better handling of state lists",
 				"de": "Nicht benötigte Dateien entfernt, bessere Handhabung von Status Listen"
