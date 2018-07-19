@@ -59,10 +59,13 @@ function main() {
     // Constants & Variables
     var client = new net.Socket();
     const host = adapter.config.ip;
+    const volumeInDB = adapter.config.volumeInDB
     var zoneTwo = false;
     var zoneThree = false;
     var pollingVar = null;
-
+    
+    checkVolumeDB(volumeInDB);
+    
     // Connect
     connect(); // Connect on start
     
@@ -156,6 +159,18 @@ function main() {
 			sendRequest('MV' + leadingZero + state);
 			adapter.log.debug('Changed mainVolume to ' + state);
 			break;
+		case 'mainVolumeDB':
+		    	state += 80; // convert to Vol
+			var leadingZero;
+			if (state < 0) state = 0;
+			if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+			if (state < 10) {
+				leadingZero = "0";
+			} else leadingZero = "";
+			state = state.toString().replace('.', '') // remove points
+			sendRequest('MV' + leadingZero + state);
+			adapter.log.debug('Changed mainVolume to ' + state);
+			break;
 		case 'powerSystem':
 			if(state === true) {
 				sendRequest('PWON')
@@ -226,6 +241,17 @@ function main() {
                         state = state.toString().replace('.', '') // remove points
 			sendRequest('Z2' + leadingZero + state);
 			break;
+		case 'zone2.volumeDB':
+		    	state += 80; // Convert to Vol
+			var leadingZero;
+                        if (state < 0) state = 0;
+                        if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+                        if (state < 10) {
+                                leadingZero = "0";
+                        } else leadingZero = "";
+                        state = state.toString().replace('.', '') // remove points
+    			sendRequest('Z2' + leadingZero + state);
+    			break;
                 case 'zone2.selectInput':
                         adapter.getObject('zone2.selectInput', function(err, obj) {
                                 sendRequest('Z2' + decodeState(obj.common.states, state).toUpperCase());
@@ -258,7 +284,18 @@ function main() {
 			sendRequest('Z3DOWN');
 			break;
 		case 'zone3.volume':
-			var leadingZero;
+		    var leadingZero;
+                    if (state < 0) state = 0;
+                    if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+                    if (state < 10) {
+                            leadingZero = "0";
+                    } else leadingZero = "";
+                    state = state.toString().replace('.', '') // remove points
+			sendRequest('Z3' + leadingZero + state);
+			break;
+		case 'zone3.volumeDB':
+		    state += 80; // Convert to Vol
+		    var leadingZero;
                     if (state < 0) state = 0;
                     if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
                     if (state < 10) {
@@ -520,6 +557,7 @@ function main() {
 			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
 			adapter.setState('zone2.volume', parseFloat(vol), true);
+		    	if(volumeInDB) adapter.setState('zone2.volumeDB', parseFloat(vol)-80, true);
 			return;
 		} else {
 			command = "Z2" + command.slice(1, command.length);
@@ -543,6 +581,7 @@ function main() {
 			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
 			adapter.setState('zone3.volume', parseFloat(vol), true);
+		    	if(volumeInDB) adapter.setState('zone3.volumeDB', parseFloat(vol)-80, true);
 			return;
 		} else {
 			command = "Z3" + command.slice(1, command.length);
@@ -586,7 +625,7 @@ function main() {
 		return;
 	} else if(command.startsWith("NSE")) { // Handle display content
 		var displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
-		var dispContNr = data.slice(3, 4); 
+		var dispContNr = data.slice(3, 4);
 		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
 		return;
 	} else if(command.startsWith("NSFRN")) { // Handle friendly name
@@ -611,10 +650,12 @@ function main() {
 		case 'MV':
 			data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
 			adapter.setState('mainVolume', parseFloat(data), true);
+		    	if(volumeInDB) adapter.setState('mainVolumeDB', parseFloat(data)-80, true);
 			break;
 		case 'MVMAX':
 			data = data.slice(6, 8) + '.' + data.slice(8, 9);
 			adapter.setState('maximumVolume', parseFloat(data), true);
+		    	if(volumeInDB) adapter.setState('maximumVolumeDB', parseFloat(data)-80, true);
 			break;
 		case 'MUON':
 			adapter.setState('muteIndicator', true, true);
@@ -762,8 +803,39 @@ function main() {
 	vol = vol.toString().replace('.', '');
 	return vol;
     } // endDbToAscii
+    
+    function checkVolumeDB(db) {
+   	    if(db) { // create dB States
+   		adapter.setObjectNotExists('mainVolumeDB', {
+   		    type: 'state',
+   		    common: {
+   			name: 'mainVolumeDB',
+                	role: 'Main Volume DB',
+                	type: 'number',
+                	read: true,
+                	write: true,
+                	min: -80,
+                	max: 18		
+   		    }
+   		});
+   		adapter.setObjectNotExists('maximumVolumeDB', {
+   			type: 'state',
+   			common: {
+   			    name: 'maximumVolumeDB',
+   			    role: 'Maximum Volume DB',
+   			    type: 'number',
+   			    write: false,
+   			    read: true
+   			}
+   	    	});
+   	    } else { // delete dB States
+   		adapter.delObject('mainVolumeDB');
+   		adapter.delObject('maximumVolumeDB');
+   	    } // endElseIf
+   	    
+    } // endCreateVolumeDB
 
-   function createZoneTwo() {
+    function createZoneTwo() {
 	adapter.setObjectNotExists('zone2', {
             type: "channel",
             common: {
@@ -784,19 +856,36 @@ function main() {
         	native: {}
     	});
 
-    	adapter.setObjectNotExists('zone2.volume', {
-        	type: 'state',
-        	common: {
-                	name: 'zone2.volume',
+	if(!volumeInDB) {
+        	adapter.setObjectNotExists('zone2.volume', {
+            		type: 'state',
+            		common: {
+                        	name: 'zone2.volume',
+                        	role: 'Volume',
+                        	type: 'number',
+                        	read: true,
+                        	write: true,
+                        	min: 0,
+                        	max: 98
+            		},
+            		native: {}
+        	});
+        	adapter.delObject('zone2.volumeDB');
+	} else {
+	    adapter.setObjectNotExists('zone2.volumeDB', {
+    		type: 'state',
+    		common: {
+                	name: 'zone2.volumeDB',
                 	role: 'Volume',
                 	type: 'number',
                 	read: true,
                 	write: true,
-                	min: 0,
-                	max: 98
-        	},
-        	native: {}
-    	});
+                	min: -80,
+                	max: 18
+    		},
+    		native: {}
+	});
+	}
 
     	adapter.setObjectNotExists('zone2.volumeUp', {
         	type: 'state',
@@ -1054,6 +1143,7 @@ function main() {
 	        	native: {}
 	    	});
 
+		if(!volumeInDB) {
 	    	adapter.setObjectNotExists('zone3.volume', {
 	        	type: 'state',
 	        	common: {
@@ -1067,6 +1157,22 @@ function main() {
 	        	},
 	        	native: {}
 	    	});
+	    	adapter.delObject('zone3.volumeDB');
+		} else {
+		    	adapter.setObjectNotExists('zone3.volumeDB', {
+		        	type: 'state',
+		        	common: {
+		                	name: 'zone3.volumeDB',
+		                	role: 'Volume',
+		                	type: 'number',
+		                	read: true,
+		                	write: true,
+		                	min: -18,
+		                	max: 80
+		        	},
+		        	native: {}
+		    	});    
+		}
 
 	    	adapter.setObjectNotExists('zone3.volumeUp', {
 	        	type: 'state',

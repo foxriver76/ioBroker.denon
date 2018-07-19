@@ -34,7 +34,8 @@ Additional to the adapter installation you have to make sure that your AVR is co
 ![Add Adapter](/documentation/plusAddAdapter.png)
 4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR
 ![Adapter Configuration](/documentation/fillInIp.png)
-5. Click on Save & Close
+5. If you also want to handle the volume states in dB, make sure to select the "Volume in dB" checkbox. 
+6. Click on Save & Close
 
 ### Network Setup of AV Receiver
 
@@ -144,7 +145,7 @@ Following states will be created by the adapter:
    
 * mainVolume / zone2.volume / zone3.volume
 
-   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here.*
+   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. When Volume in Db is set to true, the state is represented in dB too in separate states, e. g. mainVolumeDB*
    
    *Range is from 0 to 98 (maybe lower due to maximumVolume), where 80 = 0 dB*
    
@@ -155,7 +156,7 @@ Following states will be created by the adapter:
    
 * maximumVolume
 
-   *Read-only number which represents the maximum possible volume, where 80 = 0 dB.*
+   *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in Db is set to true, the state is represented in dB in the maximumVolumeDB state too.*
    
 * muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 
