@@ -63,6 +63,7 @@ function main() {
     var zoneTwo = false;
     var zoneThree = false;
     var pollingVar = null;
+    var connectingVar = null;
     
     checkVolumeDB(volumeInDB);
     
@@ -82,31 +83,38 @@ function main() {
 
     // Connection handling
     client.on('error', function(error) {
+	if(connectingVar) return;
 	if(error.code == 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
 	else if (error.code == 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
 	else if(error.code == 'EALREADY' || error.code == 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
 	else adapter.log.warn('Connection closed: ' + error);
     	pollingVar = false;
     	adapter.setState('info.connection', false, true);
-        client.destroy();
-        client.unref();
-        setTimeout(function() {
-                connect(); // Connect again in 30 seconds
-        }, 30000);
+    	if(!connectingVar) {
+    	    client.destroy();
+            client.unref();
+            connectingVar = setTimeout(function() {
+            	connect(); // Connect again in 30 seconds
+            }, 30000);
+    	} // endIf
     });
 
     client.on('end', function () { // Denon has closed the connection
         adapter.log.warn('Denon AVR has cancelled the connection');
         pollingVar = false;
         adapter.setState('info.connection', false, true);
-        client.destroy();
-        client.unref();
-        setTimeout(function() {
+        if(!connectingVar) {
+            client.destroy();
+            client.unref();
+            setTimeout(function() {
         	connect(); // Connect again in 30 seconds
-        }, 30000);
+            }, 30000);
+        } // endIf
     });
 
     client.on('connect', function () { // Successfull connected
+	clearTimeout(connectingVar);
+	connectingVar = null;
         adapter.setState('info.connection', true, true);
         adapter.log.info("Adapter connected to DENON-AVR: " + host + ":23");
         adapter.log.debug("Connected --> updating states on start");
@@ -497,6 +505,7 @@ function main() {
         client.setEncoding('utf8');
         client.setTimeout(35000);
         adapter.log.info("Trying to connect to " + host + ":23");
+        connectingVar = null;
         client.connect({port: 23, host: host});
     } // endConnect
 
