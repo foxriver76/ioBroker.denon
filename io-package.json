@@ -116,7 +116,8 @@
 	"native": {
 		"ip": "",
 		"volumeInDB": false,
-		"pollInterval": 8000
+		"pollInterval": 8000,
+		"requestInterval": 100
 	},
 	"objects": [],
 	"instanceObjects": [
@@ -777,7 +778,7 @@
 			}
 		},
 		{
-			"_id": "settings.ssubwooferLevel",
+			"_id": "settings.subwooferLevel",
 			"type": "state",
 			"common": {
 				"name": "Subwoofer Level",

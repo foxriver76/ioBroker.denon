@@ -131,9 +131,9 @@
                 <div class="input-field col s1">
                     <a id="browse" class="btn-floating waves-effect waves-light blue disabled"><i class="material-icons">search</i><span class="translate">Search</span></a>
                 </div>
-                <div class="input-field col s4">
-                    <select class="devices" id="devices"></select>
-                    <label class="devices translate"  for="devices">Found devices</label>
+                <div class="input-field col s4 devices" style="display: none;">
+                    <select id="devices"></select>
+                    <label class="translate"  for="devices">Found devices</label>
                 </div>
 
             </div>
@@ -142,6 +142,8 @@
             		<input type="checkbox" id="volumeInDB" class="value"/>
             		<span for="volumeInDB" class="translate">Volume in dB</span>
 				</div>
+            </div>
+            <div class="row">
                 <div class="input-field col s4">
                     <input id="pollInterval" class="value" type="number" min="2000" max="120000"/>
                     <label for="pollInterval" class="translate">Poll interval (ms)</label>

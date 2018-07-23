@@ -13,6 +13,7 @@ const net = require('net'); // import net
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.denon.0
 const adapter = new utils.Adapter('denon');
 const ssdpScan = require('./lib/upnp').ssdpScan;
+let updateTimer = null;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -88,6 +89,10 @@ function main() {
         adapter.setState('info.connection', false, true);
         client.destroy();
         client.unref();
+        if (updateTimer) {
+            clearInterval(updateTimer);
+            updateTimer = null;
+        }
         // Connect again in 30 seconds
         setTimeout(() => connect(), 30000);
     });
@@ -99,8 +104,11 @@ function main() {
         else if (error.code === 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
         else if (error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
         else adapter.log.warn('Connection closed: ' + error);
-        pollingVar = false;
         adapter.setState('info.connection', false, true);
+        if (updateTimer) {
+            clearInterval(updateTimer);
+            updateTimer = null;
+        }
         if (!connectingVar) {
             client.destroy();
             client.unref();
@@ -111,8 +119,11 @@ function main() {
 
     client.on('end', () => { // Denon has closed the connection
         adapter.log.warn('Denon AVR has cancelled the connection');
-        pollingVar = false;
         adapter.setState('info.connection', false, true);
+        if (updateTimer) {
+            clearInterval(updateTimer);
+            updateTimer = null;
+        }
         if (!connectingVar) {
             client.destroy();
             client.unref();
@@ -125,9 +136,10 @@ function main() {
         clearTimeout(connectingVar);
         connectingVar = null;
         adapter.setState('info.connection', true, true);
-        adapter.log.info('Adapter connected to DENON-AVR: ' + host + ':23');
-        adapter.log.debug('Connected --> updating states on start');
-        updateStates(); // Update states when connected
+        adapter.log.info('[CONNECT  ] Adapter connected to DENON-AVR: ' + host + ':23');
+        adapter.log.debug('[CONNECT  ] Connected --> updating states on start');
+        updateStates(pollStates);
+        updateTimer = setInterval(() => updateStates(pollStates), adapter.config.pollInterval);
     });
 
     client.on('data', data => {
@@ -135,8 +147,8 @@ function main() {
         const dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
         for (let i = 0; i < dataArr.length; i++) {
             if (dataArr[i]) {
+                adapter.log.debug('[DATA    ] <== Incoming data: ' + dataArr[i]);
                 handleResponse(dataArr[i]);
-                adapter.log.debug('Incoming data: ' + dataArr[i]);
             } // endIf
         } // endFor
     });
@@ -151,7 +163,7 @@ function main() {
 
         state = state.val; // only get state value
 
-        adapter.log.debug('State Change - ID: ' + id + '; State: ' + state);
+        adapter.log.debug('[COMMAND ] State Change - ID: ' + id + '; State: ' + state);
         let quickNr;
         const m = id.match(/(\w+)\.quickSelect(\d)$/);
         if (m) {
@@ -178,7 +190,7 @@ function main() {
                 }
                 state = state.toString().replace('.', ''); // remove points
                 sendRequest('MV' + leadingZero + state);
-                adapter.log.debug('Changed mainVolume to ' + state);
+                adapter.log.debug('[INFO    ] <== Changed mainVolume to ' + state);
                 break;
             case 'zoneMain.volumeDB':
                 state += 80; // convert to Vol
@@ -191,7 +203,7 @@ function main() {
                 }
                 state = state.toString().replace('.', ''); // remove points
                 sendRequest('MV' + leadingZero + state);
-                adapter.log.debug('Changed mainVolume to ' + state);
+                adapter.log.debug('[INFO    ] <== Changed mainVolume to ' + state);
                 break;
             case 'zoneMain.volumeUp':
                 sendRequest('MVUP');
@@ -415,7 +427,7 @@ function main() {
                 } // endElseIf
                 break;
             case 'settings.surroundMode':
-                adapter.getObject('surroundMode', (err, obj) => {
+                adapter.getObject('settings.surroundMode', (err, obj) => {
                     sendRequest('MS' + decodeState(obj.common.states, state).toUpperCase());
                 });
                 break;
@@ -477,12 +489,12 @@ function main() {
                 sendRequest('PSCNTAMT 0' + state);
                 break;
             case 'settings.multEq':
-                adapter.getObject('parameterSettings.multEq', (err, obj) => {
+                adapter.getObject('settings.multEq', (err, obj) => {
                     sendRequest('PSMULTEQ:' + decodeState(obj.common.states, state).toUpperCase());
                 });
                 break;
             case 'settings.dynamicVolume':
-                adapter.getObject('parameterSettings.dynamicVolume', (err, obj) => {
+                adapter.getObject('settings.dynamicVolume', (err, obj) => {
                     sendRequest('PSDYNVOL ' + decodeState(obj.common.states, state).toUpperCase());
                 });
                 break;
@@ -522,6 +534,18 @@ function main() {
     // all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
 
+    adapter.getForeignObject(adapter.namespace, (err, obj) => {
+        if (!obj) {
+            adapter.setForeignObject(adapter.namespace, {
+                type: 'device',
+                common: {
+                    name: 'DENON device'
+                }
+            });
+        }
+    });
+
+
     /**
      * Internals
      */
@@ -533,56 +557,78 @@ function main() {
         client.connect({port: 23, host: host});
     } // endConnect
 
-    function updateStates() {
-        const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
-            'MU?', 'PW?', 'SI?', 'SV?',
-            'MS?', 'MV?', 'Z2?', 'Z2MU?',
-            'Z3?', 'Z3MU?', 'NSE',
-            'VSSC ?', 'VSASP ?',
-            'VSMONI ?', 'TR?', 'DIM ?',
-            'Z3SLP?', 'Z2SLP?', 'SLP?',
-            'PSDYNEQ ?', 'PSMULTEQ: ?',
-            'PSREFLEV ?', 'PSDYNVOL ?',
-            'PSLFC ?', 'PSCNTAMT ?',
-            'PSSWL ?', 'PSBAS ?',
-            'PSTRE ?', 'Z2PSTRE ?',
-            'Z3PSTRE ?', 'Z2PSBAS ?',
-            'Z3PSBAS ?', 'PSTONE CTRL ?'
-        ];
-        let i = 0;
-        const intervalVar = setInterval(() => {
-            sendRequest(updateCommands[i]);
-            i++;
-            if (i === updateCommands.length) {
-                clearInterval(intervalVar);
-            }
-        }, 100);
+    const updateCommandsStates = [
+        'NSET1 ?', 'NSFRN ?', 'ZM?',
+        'MU?', 'PW?', 'SI?', 'SV?',
+        'MS?', 'MV?', 'Z2?', 'Z2MU?',
+        'Z3?', 'Z3MU?',
+        'VSSC ?', 'VSASP ?',
+        'VSMONI ?', 'TR?', 'DIM ?',
+        'Z3SLP?', 'Z2SLP?', 'SLP?',
+        'PSDYNEQ ?', 'PSMULTEQ: ?',
+        'PSREFLEV ?', 'PSDYNVOL ?',
+        'PSLFC ?', 'PSCNTAMT ?',
+        'PSSWL ?', 'PSBAS ?',
+        'PSTRE ?', 'Z2PSTRE ?',
+        'Z3PSTRE ?', 'Z2PSBAS ?',
+        'Z3PSBAS ?', 'PSTONE CTRL ?'
+    ];
+
+    function updateStates(i, cb) {
+        if (typeof i === 'function') {
+            cb = i;
+            i = 0;
+        }
+        i = i || 0;
+        if (i >= updateCommandsStates.length) {
+            adapter.log.debug('[STATES 1] <== END ==============================');
+            cb && cb();
+        } else {
+            !i && adapter.log.debug('[STATES 1] ==> START ================================');
+            sendRequest(updateCommandsStates[i]);
+            setTimeout(updateStates, adapter.config.requestInterval || 100, i + 1, cb);
+        }
     } // endUpdateStates
 
-    function pollStates() { // Polls states
-        const updateCommands = ['NSE', 'SV?', 'SLP?', 'Z2SLP?', 'Z3SLP?']; // Request Display State & Keep HEOS alive
-        let i = 0;
-        pollingVar = false;
-        const intervalVar = setInterval(() => {
+    const updateCommands = ['NSE', 'SV?', 'SLP?', 'Z2SLP?', 'Z3SLP?']; // Request Display State & Keep HEOS alive
+
+    function pollStates(i, cb) { // Polls states
+        if (typeof i === 'function') {
+            cb = i;
+            i = 0;
+        }
+        i = i || 0;
+        if (i >= updateCommands.length) {
+            adapter.log.debug('[STATES 2] <== END ================================');
+            cb && cb();
+        } else {
+            !i && adapter.log.debug('[STATES 2] ==> START ==============================');
             sendRequest(updateCommands[i]);
-            i++;
-            if (i === updateCommands.length) {
-                clearInterval(intervalVar);
-            }
-        }, 100);
+            setTimeout(pollStates, adapter.config.requestInterval || 100, i + 1, cb);
+        }
     } // endPollingStates
 
     function sendRequest(req) {
         client.write(req + '\r');
-        adapter.log.debug('Message sent: ' + req);
+        if (updateCommandsStates.indexOf(req)) {
+            adapter.log.debug('[STATES 1] ==> Message sent: ' + req);
+        } else if (updateCommands.indexOf(req)) {
+            adapter.log.debug('[STATES 2] ==> Message sent: ' + req);
+        } else {
+            adapter.log.debug('[COMMAND ] ==> Message sent: ' + req);
+        }
     } // endSendRequest
 
+    function numberToString(states, val, id) {
+        Object.keys(states).forEach(i => {
+            if (states[i] === val) {
+                adapter.setState(id, parseInt(i, 10), true);
+                return false;
+            }
+        });
+    }
+
     function handleResponse(data) {
-        if (!pollingVar) { // Keep connection alive & poll states
-            pollingVar = true;
-            // Poll states every 8 seconds seconds
-            setTimeout(() => pollStates(), adapter.config.pollInterval || 8000);
-        } // endIf
         // get command out of String
         let command;
         if (data.startsWith('Z2')) { // Transformation for Zone2 commands
@@ -608,23 +654,11 @@ function main() {
                 let zTwoSi = data.substring(2);
                 zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
                 if (statesMapping.selectInput) {
-                    const mapStates = statesMapping.selectInput;
-                    mapStates.forEach((m, i) => {
-                        if (m === zTwoSi) {
-                            adapter.setState('zone2.selectInput', i, true);
-                            return false;
-                        }
-                    });
+                    numberToString(statesMapping.selectInput, zTwoSi, 'zone2.selectInput');
                 } else {
                     adapter.getObject('zoneMain.selectInput', (err, obj) => {
                         statesMapping.selectInput = obj.common.states;
-                        const mapStates = statesMapping.selectInput;
-                        mapStates.forEach((m, i) => {
-                            if (m === zTwoSi) {
-                                adapter.setState('zone2.selectInput', i, true);
-                                return false;
-                            }
-                        })
+                        numberToString(statesMapping.selectInput, zTwoSi, 'zone2.selectInput');
                     });
                 }
             } // endIf
@@ -649,23 +683,11 @@ function main() {
                 let zThreeSi = data.substring(2);
                 zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
                 if (statesMapping.selectInput) {
-                    const mapStates = statesMapping.selectInput;
-                    mapStates.forEach((m, i) => {
-                        if (m === zThreeSi) {
-                            adapter.setState('zone3.selectInput', i, true);
-                            return false;
-                        }
-                    });
+                    numberToString(statesMapping.selectInput, zThreeSi, 'zone3.selectInput');
                 } else {
                     adapter.getObject('zoneMain.selectInput', (err, obj) => {
                         statesMapping.selectInput = obj.common.states;
-                        const mapStates = statesMapping.selectInput;
-                        mapStates.forEach((m, i) => {
-                            if (m === zThreeSi) {
-                                adapter.setState('zone3.selectInput', i, true);
-                                return false;
-                            }
-                        })
+                        numberToString(statesMapping.selectInput, zThreeSi, 'zone3.selectInput');
                     });
                 }
             } // endIf
@@ -680,18 +702,18 @@ function main() {
                 adapter.getObject('display.brightness', (err, obj) => {
                     statesMapping['display.brightness'] = obj.common.states;
                     const mapStates = statesMapping['display.brightness'];
-                    mapStates.forEach((m, i) => {
-                        if (m.toLowerCase().includes(bright)) {
-                            adapter.setState('display.brightness', i, true);
+                    Object.keys(mapStates).forEach(i => {
+                        if (mapStates[i].toLowerCase().includes(bright)) {
+                            adapter.setState('display.brightness', parseInt(i, 10), true);
                             return false;
                         }
                     });
                 });
             } else {
                 const mapStates = statesMapping['display.brightness'];
-                mapStates.forEach((m, i) => {
-                    if (m.toLowerCase().includes(bright)) {
-                        adapter.setState('display.brightness', i, true);
+                Object.keys(mapStates).forEach(i => {
+                    if (mapStates[i].toLowerCase().includes(bright)) {
+                        adapter.setState('display.brightness', parseInt(i, 10), true);
                         return false;
                     }
                 });
@@ -700,48 +722,24 @@ function main() {
         } else if (command.startsWith('SI')) { // Handle select input
             let siCommand = data.substring(2); // Get only source name
             siCommand = siCommand.replace(' ', ''); // Remove blanks
-            adapter.log.debug('SI-Command: ' + siCommand);
+            adapter.log.debug('[INFO    ] <== SI-Command: ' + siCommand);
             if (statesMapping.selectInput) {
-                const mapStates = statesMapping.selectInput;
-                mapStates.forEach((m, i) => {
-                    if (m === siCommand) {
-                        adapter.setState('zoneMain.selectInput', i, true);
-                        return false;
-                    }
-                });
+                numberToString(statesMapping.selectInput, siCommand, 'zoneMain.selectInput');
             } else {
                 adapter.getObject('zoneMain.selectInput', (err, obj) => {
                     statesMapping.selectInput = obj.common.states;
-                    const mapStates = statesMapping.selectInput;
-                    mapStates.forEach((m, i) => {
-                        if (m === siCommand) {
-                            adapter.setState('zoneMain.selectInput', i, true);
-                            return false;
-                        }
-                    })
+                    numberToString(statesMapping.selectInput, siCommand, 'zoneMain.selectInput');
                 });
             }
             return;
         } else if (command.startsWith('MS')) { // Handle Surround mode
             const msCommand = command.substring(2);
             if (statesMapping.surroundMode) {
-                const mapStates = statesMapping.surroundMode;
-                mapStates.forEach((m, i) => {
-                    if (m === msCommand) {
-                        adapter.setState('settings.surroundMode', i, true);
-                        return false;
-                    }
-                });
+                numberToString(statesMapping.surroundMode, msCommand, 'settings.surroundMode');
             } else {
                 adapter.getObject('settings.surroundMode', (err, obj) => {
                     statesMapping.surroundMode = obj.common.states;
-                    const mapStates = statesMapping.surroundMode;
-                    mapStates.forEach((m, i) => {
-                        if (m === msCommand) {
-                            adapter.setState('settings.surroundMode', i, true);
-                            return false;
-                        }
-                    })
+                    numberToString(statesMapping.surroundMode, msCommand, 'settings.surroundMode');
                 });
             }
             return;
@@ -756,50 +754,27 @@ function main() {
         } else if (command.startsWith('PSMULTEQ')) {
             const state = data.split(':')[1];
             if (statesMapping.multEq) {
-                const mapStates = statesMapping.multEq;
-                mapStates.forEach((m, i) => {
-                    if (m === state) {
-                        adapter.setState('settings.multEq', i, true);
-                        return false;
-                    }
-                });
+                numberToString(statesMapping.multEq, state, 'settings.multEq');
             } else {
                 adapter.getObject('settings.multEq', (err, obj) => {
                     statesMapping.multEq = obj.common.states;
-                    const mapStates = statesMapping.multEq;
-                    mapStates.forEach((m, i) => {
-                        if (m === state) {
-                            adapter.setState('settings.multEq', i, true);
-                            return false;
-                        }
-                    })
+                    numberToString(statesMapping.multEq, state, 'settings.multEq');
                 });
             }
         } else if (command.startsWith('PSDYNVOL')) {
             const state = data.split(' ')[1];
             if (statesMapping.dynamicVolume) {
-                const mapStates = statesMapping.dynamicVolume;
-                mapStates.forEach((m, i) => {
-                    if (m === state) {
-                        adapter.setState('settings.dynamicVolume', i, true);
-                        return false;
-                    }
-                });
+                numberToString(statesMapping.dynamicVolume, state, 'settings.dynamicVolume');
             } else {
                 adapter.getObject('settings.dynamicVolume', (err, obj) => {
                     statesMapping.dynamicVolume = obj.common.states;
-                    const mapStates = statesMapping.dynamicVolume;
-                    mapStates.forEach((m, i) => {
-                        if (m === state) {
-                            adapter.setState('settings.dynamicVolume', i, true);
-                            return false;
-                        }
-                    })
+                    numberToString(statesMapping.dynamicVolume, state, 'settings.dynamicVolume');
                 });
             }
         }// endElseIf
 
-        adapter.log.debug('Command to handle is ' + command);
+        adapter.log.debug('[INFO    ] <== Command to handle is ' + command);
+
         switch (command) {
             case 'PWON':
                 adapter.setState('settings.powerSystem', true, true);
@@ -1287,7 +1262,7 @@ function main() {
         });
 
         zoneTwo = true;
-        adapter.log.debug('Zone 2 detected');
+        adapter.log.debug('[INFO    ] <== Zone 2 detected');
     } // endCreateZoneTwo
 
     function createZoneThree() {
@@ -1569,7 +1544,7 @@ function main() {
         });
 
         zoneThree = true;
-        adapter.log.debug('Zone 3 detected');
+        adapter.log.debug('[INFO    ] <== Zone 3 detected');
     } // endCreateZoneThree
 
 } // endMain
