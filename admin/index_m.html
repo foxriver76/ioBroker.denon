@@ -12,27 +12,27 @@
 <script type="text/javascript" src="../../lib/js/materialize.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 <script type="text/javascript" src="words.js"></script>
- <style>
-  .m .col .select-wrapper+label {
-   top: -26px;  
-  }
-     .m span{
-         font-size: 0.9em;
-     }
- </style>
-<!-- you have to define 2 functions in the global scope: -->
+<style>
+    .m .col .select-wrapper + label {
+        top: -26px;
+    }
+
+    .m span {
+        font-size: 0.9em;
+    }
+</style>
 <script type="text/javascript">
 
-    // the function loadSettings has to exist ...
     function load(settings, onChange) {
-        // example: select elements with id=key and class=value and insert value
        if (!settings) return;
+       if (settings.pollInterval === undefined) settings.pollInterval = 8000;
+
         $('.value').each(function () {            
             var $key = $(this);
             var id = $key.attr('id');
             if ($key.attr('type') === 'checkbox') {
 		        // do not call onChange direct, because onChange could expect some arguments
-                $key.prop('checked', settings[id]).change(function() {
+                $key.prop('checked', settings[id]).on('change', function() {
                     onChange();
                 });
             } else {
