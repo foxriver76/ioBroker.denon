@@ -26,6 +26,7 @@
     function load(settings, onChange) {
        if (!settings) return;
        if (settings.pollInterval === undefined) settings.pollInterval = 8000;
+       if (settings.requestInterval === undefined) settings.requestInterval = 100;
 
         $('.value').each(function () {            
             var $key = $(this);
@@ -147,6 +148,10 @@
                 <div class="input-field col s4">
                     <input id="pollInterval" class="value" type="number" min="2000" max="120000"/>
                     <label for="pollInterval" class="translate">Poll interval (ms)</label>
+                </div>
+                <div class="input-field col s4">
+                    <input id="requestInterval" class="value" type="number" min="2000" max="120000"/>
+                    <label for="requestInterval" class="translate">Interval between commands (ms)</label>
                 </div>
             </div>
         </div>
