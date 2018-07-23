@@ -22,6 +22,23 @@
     }
 </style>
 <script type="text/javascript">
+    function startCounter(i) {
+        var $counter = $('#counter');
+        if (i === undefined) {
+            count = 4;
+        } else if (i === 0) {
+            $counter.hide();
+        } else {
+            $counter.html(i.toString()).show();
+            setTimeout(function () {
+                startCounter(i - 1);
+            }, 1000);
+        }
+    }
+
+    function stopCounter() {
+        $('#counter').hide();
+    }
 
     function load(settings, onChange) {
        if (!settings) return;
@@ -50,9 +67,12 @@
                 $('#browse')
                     .removeClass('disabled')
                     .on('click', function () {
-                        showMessage(_('Be sure your device is not in standby mode.'));
+                        showToast(null, _('Be sure your device is not in standby mode.'));
                         $(this).addClass('disabled');
+                        startCounter(4);
+
                         sendTo(null, 'browse', null, function (data) {
+                            stopCounter();
                             $('#browse').removeClass('disabled');
                             if (data.error) {
                                 showError(data.error);
@@ -112,49 +132,56 @@
 </script>
 </head>
 <body>
-    <!-- you have to put your config page in a div with id adapter-container -->
     <div class="m adapter-container">
         <div class="row">
-            <!-- Forms are the standard way to receive user inputted data.
-         Learn more http://materializecss.com/forms.html-->
-            <div class="row">
-                <div class="input-field col s6">
-                    <img src="denon.png" class="logo">
-                </div>
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s5"><a href="#tab-main"    class="translate active">Main settings</a></li>
+                    <li class="tab col s5"><a href="#tab-advanced" class="translate">Advanced settings</a></li>
+                </ul>
             </div>
-            <div class="row">
-                <div class="input-field col s4">
-                    <input class="value" id="ip" type="text" />
-                    <label for="ip" class="translate">IP-Address</label>
-		            <span class="translate">IP-Address of your AVR</span>
+            <div id="tab-main"    class="col s12 page">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <img src="denon.png" class="logo">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input class="value" id="ip" type="text" />
+                        <label for="ip" class="translate">IP-Address</label>
+                        <span class="translate">IP-Address of your AVR</span>
+
+                    </div>
+                    <div class="input-field col s1">
+                        <a id="browse" class="btn-floating waves-effect waves-light blue disabled"><i class="material-icons">search</i><span class="translate">Search</span></a>
+                        <span id="counter"></span>
+                    </div>
+                    <div class="input-field col s4 devices" style="display: none;">
+                        <select id="devices"></select>
+                        <label class="translate"  for="devices">Found devices</label>
+                    </div>
 
                 </div>
-                <div class="input-field col s1">
-                    <a id="browse" class="btn-floating waves-effect waves-light blue disabled"><i class="material-icons">search</i><span class="translate">Search</span></a>
-                </div>
-                <div class="input-field col s4 devices" style="display: none;">
-                    <select id="devices"></select>
-                    <label class="translate"  for="devices">Found devices</label>
-                </div>
-
             </div>
-            <div class="row">
-            	<div class="input-field col s4">
-            		<input type="checkbox" id="volumeInDB" class="value"/>
-            		<span for="volumeInDB" class="translate">Volume in dB</span>
-				</div>
-            </div>
-            <div class="row">
-                <div class="input-field col s4">
-                    <input id="pollInterval" class="value" type="number" min="2000" max="120000"/>
-                    <label for="pollInterval" class="translate">Poll interval (ms)</label>
+            <div id="tab-advanced"    class="col s12 page">
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input type="checkbox" id="volumeInDB" class="value"/>
+                        <span for="volumeInDB" class="translate">Volume in dB</span>
+                    </div>
                 </div>
-                <div class="input-field col s4">
-                    <input id="requestInterval" class="value" type="number" min="2000" max="120000"/>
-                    <label for="requestInterval" class="translate">Interval between commands (ms)</label>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input id="pollInterval" class="value" type="number" min="2000" max="120000"/>
+                        <label for="pollInterval" class="translate">Poll interval (ms)</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <input id="requestInterval" class="value" type="number" min="2000" max="120000"/>
+                        <label for="requestInterval" class="translate">Interval between commands (ms)</label>
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
 </body>
 
