@@ -37,21 +37,66 @@
                 });
             } else {
 		        // do not call onChange direct, because onChange could expect some arguments
-                $key.val(settings[id]).change(function() {
+                $key.val(settings[id]).on('change', function() {
                     onChange();
-                }).keyup(function() {
+                }).on('keyup', function() {
                     onChange();
                 });
             }
         });
+        getIsAdapterAlive(function (isAlive) {
+            if (isAlive || common.enabled) {
+                $('#browse')
+                    .removeClass('disabled')
+                    .on('click', function () {
+                        showMessage(_('Be sure your device is not in standby mode.'));
+                        $(this).addClass('disabled');
+                        sendTo(null, 'browse', null, function (data) {
+                            $('#browse').removeClass('disabled');
+                            if (data.error) {
+                                showError(data.error);
+                            } else if (data.list && data.list.length) {
+                                var text = '<option value="">' + _('Select one') + '</option>';
+                                var first = '';
+                                for (var j = 0; j < data.list.length; j++) {
+                                    if (!first) {
+                                        first = data.list[j].ip;
+                                    }
+                                    text += '<option value="' + data.list[j].ip + '">' + data.list[j].ip + ' - ' + data.list[j].name + '</option>';
+                                }
+
+                                $('#devices').html(text).removeClass('disabled').select();
+                                $('.devices').show();
+
+                                var $ip = $('#ip');
+                                if (first && !$ip.val()) {
+                                    $ip.val(first).trigger('change');
+                                }
+                            } else {
+                                $('#devices')
+                                    .html('<option value="">' + _('Nothing found') + '</option>')
+                                    .select()
+                                    .addClass('disabled');
+                                $('.devices').show();
+                            }
+                        });
+                });
+                $('#devices').on('change', function () {
+                    var val = $(this).val();
+                    if (val) {
+                        $('#ip').val(val).trigger('change');
+                    }
+                });
+            } else {
+                $('#browse').addClass('disabled');
+            }
+        });
+
         onChange(false);
         M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
     }
 
-    // ... and the function save has to exist.
-    // you have to make sure the callback is called with the settings object as first param!
     function save(callback) {
-        // example: select elements with class=value and build settings object
         var obj = {};
         $('.value').each(function () {
             var $this = $(this);
@@ -77,17 +122,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s3">
+                <div class="input-field col s4">
                     <input class="value" id="ip" type="text" />
-                    <label for="ip" class="translate">IP-Address:</label>
-		    <span class="translate">IP-Address of your AVR</span>
+                    <label for="ip" class="translate">IP-Address</label>
+		            <span class="translate">IP-Address of your AVR</span>
+
                 </div>
+                <div class="input-field col s1">
+                    <a id="browse" class="btn-floating waves-effect waves-light blue disabled"><i class="material-icons">search</i><span class="translate">Search</span></a>
+                </div>
+                <div class="input-field col s4">
+                    <select class="devices" id="devices"></select>
+                    <label class="devices translate"  for="devices">Found devices</label>
+                </div>
+
             </div>
             <div class="row">
-            	<div class="input-field col s3">
+            	<div class="input-field col s4">
             		<input type="checkbox" id="volumeInDB" class="value"/>
-            		<label for="volumeInDB" class="translate">Volume in dB</label>   	
+            		<span for="volumeInDB" class="translate">Volume in dB</span>
 				</div>
+                <div class="input-field col s4">
+                    <input id="pollInterval" class="value" type="number" min="2000" max="120000"/>
+                    <label for="pollInterval" class="translate">Poll interval (ms)</label>
+                </div>
             </div>
         </div>
     </div>

@@ -1,11 +1,13 @@
 ![Logo](admin/denon.png)
+# ioBroker.denon
+===========================
 
-# ioBroker.denon [![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)[![Build status AppVeyor](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon)
+[![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)[![Build status AppVeyor](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon)
 [![NPM version](http://img.shields.io/npm/v/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
 
 [![NPM](https://nodei.co/npm/iobroker.denon.png?downloads=true)](https://nodei.co/npm/iobroker.denon/)
-=================
+
 ## Installation
 You can either install the adapter via the ioBroker web interface or on your local machine via npm.
 
@@ -68,65 +70,65 @@ Here you can find a description of the states and how to use them.
 ### Buttons
 The adapter creates the following buttons:
 
-* playPauseButton
+* playPause
 
    *Play and pause music from Bluetooth, Online, USB/iPod sources.*
-   
+
 * skipMinus
 
    *Skip to previous title.*
-   
+
 * skipPlus
 
    *Skip to next title.*
-   
-* volumeDown / zone2.volumeDown / zone3.volumeDown
-   
+
+* zoneMain.volumeDown / zone2.volumeDown / zone3.volumeDown
+
    *Decrease volume of Main Zone / Zone2 / Zone3.*
    
-* volumeUp / zone2.volumeUp / zone3.volumeUp
+* zoneMain.volumeUp / zone2.volumeUp / zone3.volumeUp
 
    *Increase volume of Main Zone / Zone2 / Zone3.*
    
-* quickSelect1 / zone2.quickSelect1 / zone3.quickSelect1
+* zoneMain.quickSelectX / zone2.quickSelectX / zone3.quickSelectX
    
    *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
    
-* parameterSettings.subwooferLevelDown / parameterSettings.subwooferTwoLevelDown
+* settings.subwooferLevelDown / settings.subwooferTwoLevelDown
 
    *Reduce subwoofer level by pressing the button.*
    
-* parameterSettings.subwooferLevelUp / parameterSettings.subwooferTwoLevelUp
+* settings.subwooferLevelUp / settings.subwooferTwoLevelUp
 
    *Increase subwoofer level by pressing the button.*
    
-* parameterSettings.containmentAmountDown
+* settings.containmentAmountDown
 
    *Decrease Audyssey LFC amount.*
 
-* parameterSettings.containmentAmountUp
+* settings.containmentAmountUp
 
    *Increase Audyssey LFC amount.*
    
-* parameterSettings.bassUp / zone2.parameterSettings.bassUp / zone3.parameterSettings.bassUp
+* zoneMain.equalizerBassUp / zone2.equalizerBassUp / zone3.equalizerBassUp
 
    *Button which increases bass level of the Zone.*
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
    
-* parameterSettings.bassDown / zone2.parameterSettings.bassDown / zone3.parameterSettings.bassDown
+* zoneMain.equalizerBassDown / zone2.equalizerBassDown / zone3.equalizerBassDown
 
    *Button which decreases bass level of the Zone.*
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
    
-* parameterSettings.trebleUp / zone2.parameterSettings.trebleUp / zone3.parameterSettings.trebleUp
+* zoneMain.equalizerTrebleUp / zone2.equalizerTrebleUp / zone3.equalizerTrebleUp
 
    *Button which increases treble level of the Zone.*
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
    
-* parameterSettings.trebleDown / zone2.parameterSettings.trebleDown / zone3.parameterSettings.trebleDown
+* zoneMain.equalizerTrebleDown / zone2.equalizerTrebleDown / zone3.equalizerTrebleDown
 
    *Button which decreases treble level of the Zone.*
    
@@ -143,7 +145,7 @@ Following states will be created by the adapter:
 
    *Read only string. Contains the friendly name of the connected AVR.*
    
-* mainVolume / zone2.volume / zone3.volume
+* zoneMain.volume / zone2.volume / zone3.volume
 
    *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. When Volume in Db is set to true, the state is represented in dB too in separate states, e. g. mainVolumeDB*
    
@@ -151,14 +153,14 @@ Following states will be created by the adapter:
    
    *Example:*
     ```javascript
-    setState('denon.0.mainVolume', 45.5); // Sets volume of Main Zone to 45.5
+    setState('denon.0.zoneMain.volume', 45.5); // Sets volume of Main Zone to 45.5
     ```
    
 * maximumVolume
 
    *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in Db is set to true, the state is represented in dB in the maximumVolumeDB state too.*
    
-* muteIndicator / zone2.muteIndicator / zone3.muteIndicator
+* zoneMain.muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 
    *Boolean value, which is true if the Main Zone / Zone2 / Zone3 is muted, otherwise false. You can mute your AVR with this state.*
    
@@ -172,11 +174,11 @@ Following states will be created by the adapter:
    
    *Boolean value which is true, if the AVR is turned on, otherwise false. You can also turn your AVR on and off with this state.*
    
-* powerZone / zone2.powerZone / zone3.powerZone
+* zoneMain.powerZone / zone2.powerZone / zone3.powerZone
 
    *Boolean value, which is true if the Zone is turned on, otherwise false. You can turn your AVR / Zone on and off with this state.*
    
-* selectInput / zone2.selectInput / zone3.selectInput
+* zoneMain.selectInput / zone2.selectInput / zone3.selectInput
 
    *The string value contains the current input source. You can also set the input source with the following encoding:*
    
@@ -231,7 +233,7 @@ Following states will be created by the adapter:
    ```javascript
     setState('denon.0.selectInput', '5'); // Selects TV as input for Main Zone
     ```
-* surroundMode
+* settings.surroundMode
 
    *The string value contains the current Surround mode. You can also change the source with the following encoding:*
    
@@ -308,39 +310,40 @@ Following states will be created by the adapter:
    setState('denon.0.display.brightness', '3'); // Sets display brightness to "Bright"
    ```
    
-* expertCommand
-   *You can send your own custom commands with this state. You can find an overview about the existing commands in the AVR-Control-Protocol.pdf*
+* settings.expertCommand
+   *You can send your own custom commands with this state. You can find an overview about the existing commands in the [AVR-Control-Protocol.pdf](documentation/AVR-Control-Protocol.pdf)*
    
    *Example:*
    
     ```javascript
     setState('denon.0.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
     ```
-* sleepTimer / zone2.sleepTimer / zone3.sleepTimer
+
+* zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
 
    *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
    
-* parameterSettings.dynamicEq
+* settings.dynamicEq
 
    *Boolean value which represents the state of Dynamic EQ. You can also set Dynamic EQ on and off with this state.*
 
-* parameterSettings.subwooferLevelState
+* settings.subwooferLevelState
 
    *Boolean value, if it's true, you are able to make changes on the subwoofer level.*
 
-* parameterSettings.subwooferLevel / parameterSettings.subwooferTwoLevel
+* settings.subwooferLevel / settings.subwooferTwoLevel
 
    *Number value which indicates the current subwoofer level. The value has a range from -12 to 12 (-12 dB to +12 dB).*
    
-* parameterSettings.audysseyLfc
+* settings.audysseyLfc
 
    *Boolean value, which contains and is able to control Audyssey Low Frequency Containment status (on/off).*
    
-* parameterSettings.containmentAmount
+* settings.containmentAmount
 	
    *Number value to set the Low Frequency Containment Amount. The value can be between 1 and 7.*
    
-* parameterSettings.multEq
+* settings.multEq
 
    *String value, to set the MultEQ function of your AVR with the following encoding:*
    
@@ -354,7 +357,7 @@ Following states will be created by the adapter:
       
    *4: MANUAL*
    
-* parameterSettings.dynamicVolume
+* settings.dynamicVolume
 
    *String value to select the Dynamic Volume by following encoding:*
    
@@ -366,7 +369,7 @@ Following states will be created by the adapter:
    
    *3: HEV --> turns Dynamic Volume to heavy*
    
-* parameterSettings.referenceLevelOffset
+* settings.referenceLevelOffset
 
    *String value to select the Reference Level Offset by the following encoding:*
    
@@ -383,19 +386,19 @@ Following states will be created by the adapter:
     setState('denon.0.parameterSettings.referenceLevelOffset', 5); // Sets Reference Level Offset to 5 dB
     ```
     
-* parameterSettings.bass / zone2.parameterSettings.bass / zone3.parameterSettings.bass
+* zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
 
    *Number value which represents the bass level of the Zone. Value range is from -6 to +6 dB.*
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
    
-* parameterSettings.treble / zone2.parameterSettings.treble / zone3.parameterSettings.treble
+* zoneMain.equalizerTreble / zone2.equalizerTreble / zone3.equalizerTreble
 
    *Number value which represents the treble level of the Zone. Value range is from -6 to +6 dB.*
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
    
-* parameterSettings.toneControl
+* settings.toneControl
 
    *Boolean value, which indicates Tone Control status. You can turn it off/on with this state.*
    
@@ -407,6 +410,10 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.3.0
+* (bluefox) Names and roles were refactored
+* (bluefox) Discovery added
 
 ### 0.2.4
 * (foxriver76) prevent adapter from doing more than one reconnect attempt at the same time
