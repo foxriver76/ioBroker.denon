@@ -26,9 +26,7 @@
 		"type": "git",
 		"url": "https://github.com/foxriver76/ioBroker.denon"
 	},
-	"dependencies": {
-		
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"gulp": "^3.9.1",
 		"mocha": "^4.1.0",
