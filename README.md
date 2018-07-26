@@ -412,7 +412,7 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 ## Changelog
 
 ### 0.3.0
-* (bluefox) Names and roles were refactored
+* (bluefox & foxriver76) Names and roles were refactored
 * (bluefox) Discovery added
 
 ### 0.2.4

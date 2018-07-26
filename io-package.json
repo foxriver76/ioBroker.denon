@@ -116,7 +116,7 @@
 	"native": {
 		"ip": "",
 		"volumeInDB": false,
-		"pollInterval": 8000,
+		"pollInterval": 7000,
 		"requestInterval": 100
 	},
 	"objects": [],
@@ -166,7 +166,7 @@
 			"_id": "zoneMain",
 			"type": "channel",
 			"common": {
-				"name": "Main zone"
+				"name": "Main Zone"
 			},
 			"native": {
 
@@ -207,7 +207,7 @@
 			"type": "state",
 			"common": {
 				"name": "Volume UP",
-				"role": "button.volume.up",
+				"role": "button",
 				"type": "boolean",
 				"write": true,
 				"read": false
@@ -221,7 +221,7 @@
 			"type": "state",
 			"common": {
 				"name": "Volume DOWN",
-				"role": "button.volume.down",
+				"role": "button",
 				"type": "boolean",
 				"write": true,
 				"read": false
@@ -287,7 +287,7 @@
 			"type": "state",
 			"common": {
 				"name": "Next",
-				"role": "button.next",
+				"role": "button",
 				"type": "boolean",
 				"write": true,
 				"read": false
@@ -301,7 +301,7 @@
 			"type": "state",
 			"common": {
 				"name": "Previous",
-				"role": "button.prev",
+				"role": "button",
 				"type": "boolean",
 				"write": true,
 				"read": false
@@ -314,7 +314,7 @@
 			"_id": "zoneMain.maximumVolume",
 			"type": "state",
 			"common": {
-				"name": "Maximum volume",
+				"name": "Maximum Volume",
 				"role": "state",
 				"type": "number",
 				"write": false,
@@ -854,7 +854,7 @@
 			}
 		},
 		{
-			"_id": "settings.SubwooferTwoLevelDown",
+			"_id": "settings.subwooferTwoLevelDown",
 			"type": "state",
 			"common": {
 				"name": "Subwoofer Two Level Down",
@@ -988,7 +988,7 @@
 			}
 		},
 		{
-			"_id": "settings.equalizerToneControl",
+			"_id": "settings.toneControl",
 			"type": "state",
 			"common": {
 				"name": "Tone Control",
