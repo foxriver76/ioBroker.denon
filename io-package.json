@@ -1,11 +1,11 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.2.4",
+		"version": "0.3.0",
 		"news": {
 			"0.3.0": {
-				"en": "Names and roles were refactored",
-				"de": "Namen und Rollen wurden neu strukturiert",
+				"en": "Names and roles were refactored, discovery added, separate play/pause button",
+				"de": "Namen und Rollen wurden neu strukturiert, Discovery Support, Play und Pause Button",
 				"ru": "Имена и роли были реорганизованы",
 				"pt": "Nomes e papéis foram refatorados",
 				"nl": "Namen en rollen werden herschreven",
@@ -82,7 +82,7 @@
 		"title": "DENON AVR",
 		"desc": {
 			"en": "Control your DENON or Marantz AV Receiver",
-			"de": "Kontrollieren Sie Ihren DENON- oder Marantz-AV-Receiver",
+			"de": "Steuern Sie Ihren DENON oder Marantz AV-Receiver",
 			"ru": "Управляйте своим DENON или приемником Marantz AV",
 			"pt": "Controle o seu receptor AV DENON ou Marantz",
 			"nl": "Bedien uw DENON of Marantz AV-ontvanger",

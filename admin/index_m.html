@@ -42,7 +42,7 @@
 
     function load(settings, onChange) {
        if (!settings) return;
-       if (settings.pollInterval === undefined) settings.pollInterval = 8000;
+       if (settings.pollInterval === undefined) settings.pollInterval = 7000;
        if (settings.requestInterval === undefined) settings.requestInterval = 100;
 
         $('.value').each(function () {            
@@ -134,6 +134,7 @@
     }
 </script>
 </head>
+
 <body>
     <div class="m adapter-container">
         <div class="row">
@@ -143,6 +144,7 @@
                     <li class="tab col s5"><a href="#tab-advanced" class="translate">Advanced settings</a></li>
                 </ul>
             </div>
+            
             <div id="tab-main"    class="col s12 page">
                 <div class="row">
                     <div class="input-field col s6">
@@ -167,13 +169,8 @@
 
                 </div>
             </div>
+            
             <div id="tab-advanced"    class="col s12 page">
-                <div class="row">
-                    <div class="input-field col s4">
-                        <input type="checkbox" id="volumeInDB" class="value"/>
-                        <span for="volumeInDB" class="translate">Volume in dB</span>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="input-field col s4">
                         <input id="pollInterval" class="value" type="number" min="2000" max="120000"/>
@@ -184,7 +181,14 @@
                         <label for="requestInterval" class="translate">Interval between commands (ms)</label>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input type="checkbox" id="volumeInDB" class="value"/>
+                        <label for="volumeInDB" class="translate">Volume in dB</label>
+                    </div>
+                </div>
             </div>
+    	</div>
     </div>
 </body>
 

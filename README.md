@@ -13,12 +13,10 @@ You can either install the adapter via the ioBroker web interface or on your loc
 
 ### Browser-based
 1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
-2. Click on Tab "Adapters" --> Install from Custom URL.
-![Custom URL](/documentation/installFromCustomURL.png)
-3. Click on "Custom" and paste following URL:
-https://github.com/foxriver76/ioBroker.denon
-![Paste URL](/documentation/urlInInputField.png)
-4. Click on Install
+2. Click on Tab "Adapters"
+3. Type "Denon" in the Filter
+4. Click on the three points and then on the "+" symbol of the DENON AVR adapter
+![Add Adapter](/documentation/plusAddAdapter.png)
 
 ### Local machine
 Navigate into your iobroker folder and execute the following command: 
@@ -34,9 +32,10 @@ Additional to the adapter installation you have to make sure that your AVR is co
 2. Navigate to Tab "Adapters"
 3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
 ![Add Adapter](/documentation/plusAddAdapter.png)
-4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR
+4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search icon to find AVRs in your network (via UPnP)
 ![Adapter Configuration](/documentation/fillInIp.png)
-5. If you also want to handle the volume states in dB, make sure to select the "Volume in dB" checkbox. 
+5. If you also want to handle the volume states in dB or adjust the reconnect/poll interval, make sure to select the "Volume in dB" checkbox on the "Advanced Settings" Tab.
+![Advanced Settings] (/documentation/advancedSettings.png) 
 6. Click on Save & Close
 
 ### Network Setup of AV Receiver
@@ -422,6 +421,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 ### 0.3.0
 * (bluefox & foxriver76) Names and roles were refactored
 * (bluefox) Discovery added
+* (foxriver76) Update Readme
+* (foxriver76) Implemented separate Play & Pause button
+* (bluefox & foxriver76) Internal improvements
 
 ### 0.2.4
 * (foxriver76) prevent adapter from doing more than one reconnect attempt at the same time
