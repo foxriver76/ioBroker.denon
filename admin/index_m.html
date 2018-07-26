@@ -42,7 +42,7 @@
 
     function load(settings, onChange) {
        if (!settings) return;
-       if (settings.pollInterval === undefined) settings.pollInterval = 7000;
+       if (settings.pollInterval === undefined) settings.pollInterval = 8000;
        if (settings.requestInterval === undefined) settings.requestInterval = 100;
 
         $('.value').each(function () {            
@@ -75,7 +75,7 @@
                             stopCounter();
                             $('#browse').removeClass('disabled');
                             if (data.error) {
-                                showError(data.error);
+                                showError(JSON.stringify(data.error));
                             } else if (data.list && data.list.length) {
                                 var text = '<option value="">' + _('Select one') + '</option>';
                                 var first = '';
@@ -92,6 +92,8 @@
                                 var $ip = $('#ip');
                                 if (first && !$ip.val()) {
                                     $ip.val(first).trigger('change');
+                                    $('#devices').val(first).select();
+                                    M.updateTextFields();
                                 }
                             } else {
                                 $('#devices')
@@ -106,6 +108,7 @@
                     var val = $(this).val();
                     if (val) {
                         $('#ip').val(val).trigger('change');
+                        M.updateTextFields();
                     }
                 });
             } else {
@@ -168,7 +171,7 @@
                 <div class="row">
                     <div class="input-field col s4">
                         <input type="checkbox" id="volumeInDB" class="value"/>
-                        <label for="volumeInDB" class="translate">Volume in dB</label>
+                        <span for="volumeInDB" class="translate">Volume in dB</span>
                     </div>
                 </div>
                 <div class="row">
@@ -177,12 +180,11 @@
                         <label for="pollInterval" class="translate">Poll interval (ms)</label>
                     </div>
                     <div class="input-field col s4">
-                        <input id="requestInterval" class="value" type="number" min="50" max="200"/>
+                        <input id="requestInterval" class="value" type="number" min="2000" max="120000"/>
                         <label for="requestInterval" class="translate">Interval between commands (ms)</label>
                     </div>
                 </div>
             </div>
-    	</div>
     </div>
 </body>
 
