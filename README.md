@@ -34,7 +34,7 @@ Additional to the adapter installation you have to make sure that your AVR is co
 ![Add Adapter](/documentation/plusAddAdapter.png)
 4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search icon to find AVRs in your network (via UPnP)
 ![Adapter Configuration](/documentation/fillInIp.png)
-5. If you also want to handle the volume states in dB or adjust the reconnect/poll interval, make sure to select the "Volume in dB" checkbox on the "Advanced Settings" Tab.
+5. If you also want to handle the volume states in dB or adjust the request/poll interval, make sure to click on the "Advanced Settings" Tab. By decreasing the Poll Interval the adapter will decrease the time between updating the display contents. By decreasing the request interval the time between sending commands will be decreased. The default settings should fit well for the most users.
 ![Advanced Settings](/documentation/advancedSettings.png) 
 6. Click on Save & Close
 
