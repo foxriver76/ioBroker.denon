@@ -228,7 +228,7 @@ function main() {
                 sendRequest('NS9D');
                 break;
             case 'zoneMain.selectInput':
-                adapter.getObject('selectInput', (err, obj) => {
+                adapter.getObject('zoneMain.selectInput', (err, obj) => {
                     sendRequest('SI' + decodeState(obj.common.states, state).toUpperCase());
                 });
                 break;
