@@ -442,7 +442,7 @@
 			"common": {
 				"name": "Sleep timer",
 				"role": "level.timer.sleep",
-				"unit": "sec",
+				"unit": "min",
 				"type": "number",
 				"write": true,
 				"read": true,

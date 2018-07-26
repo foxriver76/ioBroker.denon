@@ -53,8 +53,6 @@ adapter.on('message', obj => {
     } // endIf
 });
 
-// is called when databases are connected and adapter received configuration.
-// start here!
 adapter.on('ready', () => {
     if(adapter.config.ip) {
     	adapter.log.info('Starting DENON AVR adapter');
@@ -63,17 +61,16 @@ adapter.on('ready', () => {
 });
 
 function main() {
-
     // Constants & Variables
-    var client = new net.Socket();
+    const client = new net.Socket();
     const host = adapter.config.ip;
     const volumeInDB = adapter.config.volumeInDB;
     const pollInterval = adapter.config.pollInterval;
     const requestInterval = adapter.config.requestInterval;
-    var zoneTwo = false;
-    var zoneThree = false;
-    var pollingVar = null;
-    var connectingVar = null;
+    let zoneTwo = false;
+    let zoneThree = false;
+    let pollingVar = null;
+    let connectingVar = null;
     
     checkVolumeDB(volumeInDB);
     
@@ -127,8 +124,8 @@ function main() {
 
     client.on('data', data => {
     	// split data by <cr>
-    	var dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
-    	for(var i=0; i < dataArr.length; i++) {
+    	const dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
+    	for(let i=0; i < dataArr.length; i++) {
     		if(dataArr[i]) { // dataArr[i] contains element
     		    adapter.log.debug('[DATA] <== Incoming data: ' + dataArr[i]);
     		    handleResponse(dataArr[i]);
@@ -145,13 +142,14 @@ function main() {
 	
 	adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
 	
-	var quickNr;
+	let quickNr;
 	const m = id.match(/(\w+)\.quickSelect(\d)$/);
         if (m) {
             quickNr = m[2];
             id = m[1] + '.quickSelect'; // m[1] --> zone 
         } // endIf
-	
+        
+	let leadingZero;
 	switch(id) {
         	case 'zoneMain.powerZone':
         	    if(state === true) {
@@ -159,7 +157,6 @@ function main() {
         	    } else sendRequest('ZMOFF');
         	    break;	
 		case 'zoneMain.volume':
-		    var leadingZero;
 		    if (state < 0) state = 0;
 		    if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
 		    if (state < 10) {
@@ -171,7 +168,6 @@ function main() {
 		    break;
 		case 'zoneMain.volumeDB':
 		    state += 80; // convert to Vol
-		    var leadingZero;
 		    if (state < 0) state = 0;
 		    if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
 		    if (state < 10) {
@@ -318,7 +314,7 @@ function main() {
 		    });
 		    break;
 		case 'settings.expertCommand': // Sending custom commands
-		    var expertState = state;
+		    let expertState = state;
 		    sendRequest(state);
 		    adapter.getState('info.connection', (err, state) => {
 			if(state.val === true) adapter.setState('settings.expertCommand', expertState, true);
@@ -366,7 +362,6 @@ function main() {
 		    sendRequest('Z2DOWN');
 		    break;
 		case 'zone2.volume':
-		    var leadingZero;
 		    if (state < 0) state = 0;
 		    if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
 		    if (state < 10) {
@@ -377,7 +372,6 @@ function main() {
 		    break;
 		case 'zone2.volumeDB':
 		    state += 80; // Convert to Vol
-		    var leadingZero;
 		    if (state < 0) state = 0;
 		    if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
 		    if (state < 10) {
@@ -435,7 +429,6 @@ function main() {
 		    sendRequest('Z3DOWN');
 		    break;
 		case 'zone3.volume':
-		    var leadingZero;
                     if (state < 0) state = 0;
                     if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
                     if (state < 10) {
@@ -446,7 +439,6 @@ function main() {
 			break;
 		case 'zone3.volumeDB':
 		    state += 80; // Convert to Vol
-		    var leadingZero;
                     if (state < 0) state = 0;
                     if((state % 0.5) != 0) state = Math.round(state * 2) / 2;
                     if (state < 10) {
@@ -539,8 +531,8 @@ function main() {
 			];
 
     function updateStates() {
-    	var i = 0;
-    	var intervalVar = setInterval(() => {
+    	let i = 0;
+    	let intervalVar = setInterval(() => {
 			sendRequest(updateCommands[i]);
 			i++;
 			if(i == updateCommands.length) clearInterval(intervalVar);
@@ -550,9 +542,9 @@ function main() {
     const pollCommands = ['NSE', 'SLP?', 'Z2SLP?', 'Z3SLP?']; // Request Display State & Sleep Timer
 
     function pollStates() { // Polls states
-    	var i = 0;
+    	let i = 0;
 	pollingVar = false;
-    	var intervalVar = setInterval(() => {
+    	let intervalVar = setInterval(() => {
     	    sendRequest(pollCommands[i]);
     	    i++;
     	    if(i == pollCommands.length) clearInterval(intervalVar);
@@ -570,13 +562,13 @@ function main() {
 		setTimeout(() => pollStates(), pollInterval); // Poll states every configured  seconds
 	} // endIf
 	// get command out of String
-	var command;
+	let command;
 	if(data.startsWith('Z2')) { // Transformation for Zone2 commands
 		if(!zoneTwo) createZoneTwo(); // Create Zone2 states if not done yet
 		command = data.replace(/\s+|\d+/g,'');
 		
 		if(command == 'Z') { // If everything is removed except Z --> Volume
-			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
+			let vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
 			adapter.setState('zone2.volume', parseFloat(vol), true);
 		    	if(volumeInDB) adapter.setState('zone2.volumeDB', parseFloat(vol)-80, true);
@@ -586,9 +578,9 @@ function main() {
 		} // endElseIf
 		if(command.startsWith('Z2')) { // Encode Input Source
 			adapter.getObject('zoneMain.selectInput', (err, obj) => {
-				var zTwoSi = data.slice(2, data.length);
+				let zTwoSi = data.slice(2, data.length);
 				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
-				for(var j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+				for(let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
                       			if(decodeState(obj.common.states, j) == zTwoSi) {
                       			    adapter.setState('zone2.selectInput', zTwoSi, true);
                       			    return;
@@ -600,7 +592,7 @@ function main() {
 		if(!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
 		command = data.replace(/\s+|\d+/g,'');
 		if(command === 'Z') { // if everything is removed except Z --> Volume
-			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
+			let vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
 			adapter.setState('zone3.volume', parseFloat(vol), true);
 		    	if(volumeInDB) adapter.setState('zone3.volumeDB', parseFloat(vol)-80, true);
@@ -610,9 +602,9 @@ function main() {
 		} // endElseIf
 		if(command.startsWith('Z3')) { // Encode Input Source
 			adapter.getObject('zoneMain.selectInput', (err, obj) => {
-				var zThreeSi = data.slice(2, data.length);
+				let zThreeSi = data.slice(2, data.length);
 				zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
-				for(var j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+				for(let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
                   			if(decodeState(obj.common.states, j) == zThreeSi) {
                   			    adapter.setState('zone3.selectInput', zThreeSi, true);
                   			    return;
@@ -626,9 +618,9 @@ function main() {
 	
 	if(command.startsWith('DIM')) { // Handle display brightness
 	    adapter.getObject('display.brightness', (err, obj) => {
-		var bright = data.slice(4, data.length);
+		let bright = data.slice(4, data.length);
 		bright = bright.replace(' ', ''); // Remove blanks
-		for(var j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
+		for(let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
   			if(decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
   			    adapter.setState('display.brightness', obj.common.states[j], true);
   			    return;
@@ -636,28 +628,30 @@ function main() {
 		} // endFor
 	    });
 	} else if(command.startsWith('SI')) { // Handle select input
-		var siCommand = data.slice(2, data.length); // Get only source name
-		siCommand = siCommand.replace(' ', ''); // Remove blanks
-		adapter.setState('zoneMain.selectInput', siCommand, true);
-		return;
+	    let siCommand = data.slice(2, data.length); // Get only source name
+	    siCommand = siCommand.replace(' ', ''); // Remove blanks
+	    adapter.setState('zoneMain.selectInput', siCommand, true);
+	    return;
 	} else if(command.startsWith('MS')) { // Handle Surround mode
-		var msCommand = command.slice(2, command.length);
-		adapter.setState('settings.surroundMode', msCommand, true);
-		return;
+	    let msCommand = command.slice(2, command.length);
+	    adapter.setState('settings.surroundMode', msCommand, true);
+	    return;
 	} else if(command.startsWith('NSE')) { // Handle display content
-		var displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
-		var dispContNr = data.slice(3, 4);
-		adapter.setState('display.displayContent' + dispContNr, displayCont, true);
-		return;
+	    let displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
+	    let dispContNr = data.slice(3, 4);
+	    adapter.setState('display.displayContent' + dispContNr, displayCont, true);
+	    return;
 	} else if(command.startsWith('NSFRN')) { // Handle friendly name
-		adapter.setState('info.friendlyName', data.slice(6, data.length), true);
-		return;
+	    adapter.setState('info.friendlyName', data.slice(6, data.length), true);
+	    return;
 	} else if(command.startsWith('PSMULTEQ')){
-	    var state = data.split(':')[1];
+	    let state = data.split(':')[1];
 	    adapter.setState('settings.multEq', state, true);
+	    return;
 	} else if(command.startsWith('PSDYNVOL')) {
-	    var state = data.split(' ')[1];
+	    let state = data.split(' ')[1];
 	    adapter.setState('settings.dynamicVolume', state, true);
+	    return;
 	}// endElseIf
 	
 	adapter.log.debug('[INFO] <== Command to handle is ' + command);
@@ -749,13 +743,15 @@ function main() {
 		    	adapter.setState('settings.subwooferLevelState', false, true)
 		    	break;
 		case 'PSSWL': // Handle Subwoofer Level for first and second SW
+		    {
 		    	command = data.split(' ')[0];
-		    	var state = data.split(' ')[1];
+		    	let state = data.split(' ')[1];
 		    	state = asciiToDb(state);
 		    	if(command === 'PSSWL') { // Check if PSSWL or PSSWL2
 		    	    adapter.setState('settings.subwooferLevel', parseFloat(state), true);
 		    	} else adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
 		    	break;
+		    }
 		case 'PSLFCON':
 		    	adapter.setState('settings.audysseyLfc', true, true);
 		    	break;
@@ -763,37 +759,47 @@ function main() {
 		    	adapter.setState('settings.audysseyLfc', false, true);
 		    	break;
 		case 'PSCNTAMT':
-		    	var state = data.split(' ')[1];
+		    {
+		    	let state = data.split(' ')[1];
 		    	adapter.setState('settings.containmentAmount', parseFloat(state), true);
 		    	break;
+		    }
 		case 'PSREFLEV':
-		    	var state = data.split(' ')[1];
+		    {
+		    	let state = data.split(' ')[1];
 		    	adapter.setState('settings.referenceLevelOffset', state, true);
 		    	break;
+		    }
 		case 'PSBAS':
-		    	var state = data.split(' ')[1];
+		    {
+		    	let state = data.split(' ')[1];
 		    	state = asciiToDb(state);
 		    	adapter.setState('zoneMain.equalizerBass', state, true);
 		    	break;
+		    }
 		case 'PSTRE':
-		    	var state = data.split(' ')[1];
+		    {
+		    	let state = data.split(' ')[1];
 		    	state = asciiToDb(state);
 		    	adapter.setState('zoneMain.equalizerTreble', state, true);
 		    	break;
+		    }
 		case 'ZPSTRE':
 		    	command = data.split(' ')[0];
-		    	var state = data.split(' ')[1];
+		    	let state = data.split(' ')[1];
 		    	if(command === 'Z2PSTRE') {
 		    	    adapter.setState('zone2.equalizerTreble', state, true);
 		    	} else adapter.setState('zone3.equalizerTreble', state, true);
 		    	break;
 		case 'ZPSBAS':
+		    {
 		    	command = data.split(' ')[0];
-		    	var state = data.split(' ')[1];
+		    	let state = data.split(' ')[1];
 		    	if(command === 'Z2PSBAS') {
 		    	    adapter.setState('zone2.equalizerBass', state, true);
 		    	} else adapter.setState('zone3.equalizerBass', state, true);
 		    	break;
+		    }
 		case 'PSTONECTRLON':
 		    	adapter.setState('settings.toneControl', true, true);
 		    	break;
@@ -806,7 +812,7 @@ function main() {
 
     function decodeState(stateNames, state) { // decoding for e. g. selectInput
    	const stateArray = Object.keys(stateNames).map(key => stateNames[key]); // returns stateNames[key]
-   	for(var i = 0; i < stateArray.length; i++) {
+   	for(let i = 0; i < stateArray.length; i++) {
    	    if(state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) return stateArray[i];
    	} // endFor
    	    return '';
@@ -1045,7 +1051,7 @@ function main() {
             common: {
                 name: 'Zone 2 Sleep Timer',
                 role: 'media.timer.sleep',
-                unit: 'sec',
+                unit: 'min',
                 type: 'number',
                 write: true,
                 read: true,
@@ -1328,7 +1334,7 @@ function main() {
                 name: 'Zone 3 Sleep Timer',
                 role: 'level.timer.sleep',
                 type: 'number',
-                unit: 'sec',
+                unit: 'min',
                 write: true,
                 read: true,
                 min: 0,
