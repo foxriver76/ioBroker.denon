@@ -93,9 +93,9 @@ function main() {
     // Connection handling
     client.on('error', error => {
 	if(connectingVar) return;
-	if(error.code == 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
-	else if (error.code == 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
-	else if(error.code == 'EALREADY' || error.code == 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
+	if(error.code === 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
+	else if (error.code === 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
+	else if(error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
 	else adapter.log.warn('Connection closed: ' + error);
     	pollingVar = false;
     	adapter.setState('info.connection', false, true);
@@ -200,6 +200,12 @@ function main() {
 		case 'zoneMain.playPause':
 			sendRequest('NS94');
 			break;
+		case 'zoneMain.play':
+		    	sendRequest('NS9A');
+		    	break;
+		case 'zoneMain.pause':
+		    	sendRequest('NS9B');
+		    	break;
 		case 'zoneMain.skipMinus':
 			sendRequest('NS9E');
 			break;
@@ -208,12 +214,12 @@ function main() {
 			break;
 		// Current Source
 		case 'zoneMain.selectInput':
-			adapter.getObject('selectInput', (err, obj) => {
+			adapter.getObject('zoneMain.selectInput', (err, obj) => {
 				sendRequest('SI' + decodeState(obj.common.states, state).toUpperCase());
 			});
 			break;
 		case 'settings.surroundMode':
-			adapter.getObject('surroundMode', (err, obj) => {
+			adapter.getObject('settings.surroundMode', (err, obj) => {
 				sendRequest('MS' + decodeState(obj.common.states, state).toUpperCase());
 			});
 			break;
@@ -336,7 +342,7 @@ function main() {
 		    });
 		    break;
 		case 'zoneMain.sleepTimer':
-		    if(state == 0) {
+		    if(!state) { // state === 0
 			sendRequest('SLPOFF');
 		    } else if(state < 10) {
 			sendRequest('SLP' + '00' + state);
@@ -347,7 +353,7 @@ function main() {
 		    } // endElseIf
 		    break;
 		case 'zone2.sleepTimer':
-		    if(state == 0) {
+		    if(!state) { // state === 0
 			sendRequest('Z2SLPOFF');
 		    } else if(state < 10) {
 			sendRequest('Z2SLP' + '00' + state);
@@ -358,7 +364,7 @@ function main() {
 		    } // endElseIf
 		    break;
 		case 'zone3.sleepTimer':
-		    if(state == 0) {
+		    if(!state) { // state === 0
 			sendRequest('Z3SLPOFF');
 		    } else if(state < 10) {
 			sendRequest('Z3SLP' + '00' + state);
@@ -595,7 +601,7 @@ function main() {
 	} else if(data.startsWith('Z3')) { // Transformation for Zone3 commands
 		if(!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
 		command = data.replace(/\s+|\d+/g,'');
-		if(command == 'Z') { // if everything is removed except Z --> Volume
+		if(command === 'Z') { // if everything is removed except Z --> Volume
 			var vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
 			adapter.setState('zone3.volume', parseFloat(vol), true);
@@ -748,7 +754,7 @@ function main() {
 		    	command = data.split(' ')[0];
 		    	var state = data.split(' ')[1];
 		    	state = asciiToDb(state);
-		    	if(command == 'PSSWL') { // Check if PSSWL or PSSWL2
+		    	if(command === 'PSSWL') { // Check if PSSWL or PSSWL2
 		    	    adapter.setState('settings.subwooferLevel', parseFloat(state), true);
 		    	} else adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
 		    	break;
@@ -779,14 +785,14 @@ function main() {
 		case 'ZPSTRE':
 		    	command = data.split(' ')[0];
 		    	var state = data.split(' ')[1];
-		    	if(command == 'Z2PSTRE') {
+		    	if(command === 'Z2PSTRE') {
 		    	    adapter.setState('zone2.equalizerTreble', state, true);
 		    	} else adapter.setState('zone3.equalizerTreble', state, true);
 		    	break;
 		case 'ZPSBAS':
 		    	command = data.split(' ')[0];
 		    	var state = data.split(' ')[1];
-		    	if(command == 'Z2PSBAS') {
+		    	if(command === 'Z2PSBAS') {
 		    	    adapter.setState('zone2.equalizerBass', state, true);
 		    	} else adapter.setState('zone3.equalizerBass', state, true);
 		    	break;

@@ -70,15 +70,23 @@ Here you can find a description of the states and how to use them.
 ### Buttons
 The adapter creates the following buttons:
 
-* playPause
+* zoneMain.playPause
 
    *Play and pause music from Bluetooth, Online, USB/iPod sources.*
+   
+* zoneMain.play
 
-* skipMinus
+   *Play music from Bluetooth, Online, USB/iPod sources.*
+   
+* zoneMain.pause
+
+   *Pause music from Bluetooth, Online, USB/iPod sources.*
+
+* zoneMain.skipMinus
 
    *Skip to previous title.*
 
-* skipPlus
+* zoneMain.skipPlus
 
    *Skip to next title.*
 

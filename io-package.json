@@ -283,6 +283,34 @@
 			}
 		},
 		{
+			"_id": "zoneMain.play",
+			"type": "state",
+			"common": {
+				"name": "Play",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "zoneMain.pause",
+			"type": "state",
+			"common": {
+				"name": "Pause",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": false
+			},
+			"native": {
+				
+			}
+		},
+		{
 			"_id": "zoneMain.skipPlus",
 			"type": "state",
 			"common": {
