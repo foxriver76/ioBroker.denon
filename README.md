@@ -121,25 +121,25 @@ The adapter creates the following buttons:
 
    *Button which increases bass level of the Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
 * zoneMain.equalizerBassDown / zone2.equalizerBassDown / zone3.equalizerBassDown
 
    *Button which decreases bass level of the Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
 * zoneMain.equalizerTrebleUp / zone2.equalizerTrebleUp / zone3.equalizerTrebleUp
 
    *Button which increases treble level of the Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
 * zoneMain.equalizerTrebleDown / zone2.equalizerTrebleDown / zone3.equalizerTrebleDown
 
    *Button which decreases treble level of the Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
 
 ### States
 Following states will be created by the adapter:
@@ -390,26 +390,26 @@ Following states will be created by the adapter:
    
    *Example:*
     ```javascript
-    setState('denon.0.parameterSettings.referenceLevelOffset', 5); // Sets Reference Level Offset to 5 dB
+    setState('denon.0.settings.referenceLevelOffset', '5'); // Sets Reference Level Offset to 5 dB
     ```
     
 * zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
 
    *Number value which represents the bass level of the Zone. Value range is from -6 to +6 dB.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
 * zoneMain.equalizerTreble / zone2.equalizerTreble / zone3.equalizerTreble
 
    *Number value which represents the treble level of the Zone. Value range is from -6 to +6 dB.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF*
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
 * settings.toneControl
 
    *Boolean value, which indicates Tone Control status. You can turn it off/on with this state.*
    
-   *Tone Control can only be turned on when Dyn EQ is set to OFF*
+   *Tone Control can only be turned on when Dyn EQ is set to OFF and Tone Control is on*
    
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
