@@ -35,7 +35,7 @@ Additional to the adapter installation you have to make sure that your AVR is co
 4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search icon to find AVRs in your network (via UPnP)
 ![Adapter Configuration](/documentation/fillInIp.png)
 5. If you also want to handle the volume states in dB or adjust the reconnect/poll interval, make sure to select the "Volume in dB" checkbox on the "Advanced Settings" Tab.
-![Advanced Settings] (/documentation/advancedSettings.png) 
+![Advanced Settings](/documentation/advancedSettings.png) 
 6. Click on Save & Close
 
 ### Network Setup of AV Receiver

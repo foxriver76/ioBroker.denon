@@ -642,7 +642,7 @@ function main() {
 		return;
 	} else if(command.startsWith('MS')) { // Handle Surround mode
 		var msCommand = command.slice(2, command.length);
-		adapter.setState('surroundMode', msCommand, true);
+		adapter.setState('settings.surroundMode', msCommand, true);
 		return;
 	} else if(command.startsWith('NSE')) { // Handle display content
 		var displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
