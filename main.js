@@ -500,7 +500,7 @@ function main() {
                     name: 'DENON device'
                 }
             });
-        }
+        } // endIf
     });
 
     /**
