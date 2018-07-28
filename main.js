@@ -666,12 +666,12 @@ function main() {
 		case 'MV':
 			data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
 			adapter.setState('zoneMain.volume', parseFloat(data), true);
-		    	if(volumeInDB) adapter.setState('mainVolumeDB', parseFloat(data)-80, true);
+		    	if(volumeInDB) adapter.setState('zoneMain.volumeDB', parseFloat(data)-80, true);
 			break;
 		case 'MVMAX':
 			data = data.slice(6, 8) + '.' + data.slice(8, 9);
 			adapter.setState('zoneMain.maximumVolume', parseFloat(data), true);
-		    	if(volumeInDB) adapter.setState('maximumVolumeDB', parseFloat(data)-80, true);
+		    	if(volumeInDB) adapter.setState('zoneMain.maximumVolumeDB', parseFloat(data)-80, true);
 			break;
 		case 'MUON':
 			adapter.setState('zoneMain.muteIndicator', true, true);
@@ -841,7 +841,8 @@ function main() {
                     read: true,
                     write: true,
                     min: -80,
-                    max: 18
+                    max: 18,
+                    unit: 'dB'
                 }
             });
             adapter.setObjectNotExists('zoneMain.maximumVolumeDB', {
@@ -851,7 +852,8 @@ function main() {
                     role: 'state',
                     type: 'number',
                     write: false,
-                    read: true
+                    read: true,
+                    unit: 'dB'
                 }
             });
         } else { // delete dB States

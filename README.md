@@ -154,7 +154,7 @@ Following states will be created by the adapter:
    
 * zoneMain.volume / zone2.volume / zone3.volume
 
-   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. When Volume in Db is set to true, the state is represented in dB too in separate states, e. g. mainVolumeDB*
+   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. When Volume in dB is set to true, the state is represented in dB too in separate states, e. g. mainVolumeDB*
    
    *Range is from 0 to 98 (maybe lower due to maximumVolume), where 80 = 0 dB*
    
@@ -165,7 +165,7 @@ Following states will be created by the adapter:
    
 * maximumVolume
 
-   *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in Db is set to true, the state is represented in dB in the maximumVolumeDB state too.*
+   *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in dB is set to true, the state is represented in dB in the maximumVolumeDB state too.*
    
 * zoneMain.muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 
@@ -417,6 +417,10 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.3.1
+* (foxriver76) Added placeholder ip in config gui
+* (foxriver76) fixed volume in db for main zone
 
 ### 0.3.0
 * (bluefox & foxriver76) Names and roles were refactored

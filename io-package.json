@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.0",
+		"version": "0.3.1",
 		"news": {
+			"0.3.1": {
+				"en": "Added placeholder IP in config, fixes for volume in dB",
+				"de": "Platzhalter für die IP in der Konfiguration hinzugefügt, volume in dB gefixt"
+			},
 			"0.3.0": {
 				"en": "Names and roles were refactored, discovery added, separate play/pause button",
 				"de": "Namen und Rollen wurden neu strukturiert, Discovery Support, Play und Pause Button",
@@ -161,7 +165,6 @@
 				
 			}
 		},
-
 		{
 			"_id": "zoneMain",
 			"type": "channel",
@@ -169,7 +172,7 @@
 				"name": "Main Zone"
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -265,7 +268,7 @@
 				}
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -450,7 +453,7 @@
 				"max": 120
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -467,7 +470,7 @@
 				"max": 6
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -481,7 +484,7 @@
 				"read": false
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -495,7 +498,7 @@
 				"read": false
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -512,7 +515,7 @@
 				"max": 6
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -526,7 +529,7 @@
 				"read": false
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -540,10 +543,9 @@
 				"read": false
 			},
 			"native": {
-
+				
 			}
 		},
-
 		{
 			"_id": "display",
 			"type": "channel",
@@ -700,7 +702,6 @@
 				
 			}
 		},
-
 		{
 			"_id": "settings",
 			"type": "channel",
@@ -708,7 +709,7 @@
 				"name": "Settings and device commands"
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -722,7 +723,7 @@
 				"read": true
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -759,7 +760,7 @@
 				}
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -773,7 +774,7 @@
 				"read": true
 			},
 			"native": {
-
+				
 			}
 		},
 		{
@@ -1026,7 +1027,7 @@
 				"read": true
 			},
 			"native": {
-
+				
 			}
 		}
 	]
