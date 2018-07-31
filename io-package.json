@@ -117,7 +117,8 @@
 		"ip": "",
 		"volumeInDB": false,
 		"pollInterval": 8000,
-		"requestInterval": 100
+		"requestInterval": 100,
+		"fastUpdateInterval": 1000
 	},
 	"objects": [],
 	"instanceObjects": [
@@ -263,6 +264,34 @@
 					"20": "AUX6",
 					"21": "AUX7"
 				}
+			},
+			"native": {
+
+			}
+		},
+		{
+			"_id": "zoneMain.iconURL",
+			"type": "state",
+			"common": {
+				"name": "Cover",
+				"role": "media.cover",
+				"type": "string",
+				"write": false,
+				"read": true
+			},
+			"native": {
+
+			}
+		},
+		{
+			"_id": "zoneMain.state",
+			"type": "state",
+			"common": {
+				"name": "Playing state",
+				"role": "media.state",
+				"type": "boolean",
+				"write": false,
+				"read": true
 			},
 			"native": {
 

@@ -9,11 +9,14 @@
 // you have to require the utils module and call adapter function
 const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
 const net = require('net'); // import net
+const request = require('request');
 
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.denon.0
 const adapter = new utils.Adapter('denon');
 const ssdpScan = require('./lib/upnp').ssdpScan;
 let updateTimer = null;
+let fastUpdateTimer = null;
+let playing = null;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -93,6 +96,10 @@ function main() {
             clearInterval(updateTimer);
             updateTimer = null;
         }
+        if (fastUpdateTimer) {
+            clearInterval(fastUpdateTimer);
+            fastUpdateTimer = null;
+        }
         // Connect again in 30 seconds
         setTimeout(() => connect(), 30000);
     });
@@ -109,6 +116,10 @@ function main() {
             clearInterval(updateTimer);
             updateTimer = null;
         }
+        if (fastUpdateTimer) {
+            clearInterval(fastUpdateTimer);
+            fastUpdateTimer = null;
+        }
         if (!connectingVar) {
             client.destroy();
             client.unref();
@@ -123,6 +134,10 @@ function main() {
         if (updateTimer) {
             clearInterval(updateTimer);
             updateTimer = null;
+        }
+        if (fastUpdateTimer) {
+            clearInterval(fastUpdateTimer);
+            fastUpdateTimer = null;
         }
         if (!connectingVar) {
             client.destroy();
@@ -140,6 +155,7 @@ function main() {
         adapter.log.debug('[CONNECT  ] Connected --> updating states on start');
         updateStates(pollStates);
         updateTimer = setInterval(() => updateStates(pollStates), adapter.config.pollInterval);
+        fastUpdateTimer = setInterval(() => getHtmlStatus(), adapter.config.fastUpdateInterval || 1000);
     });
 
     client.on('data', data => {
@@ -155,7 +171,7 @@ function main() {
 
     // Handle state changes
     adapter.on('stateChange', (id, state) => {
-        if (!id || !state || state.ack) { // Ignore acknowledged state changes or error states
+        if (!id || !state || state.ack || state.val === undefined || state.val === null) { // Ignore acknowledged state changes or error states
             return;
         } // endIf
         const fullId = id;
@@ -278,7 +294,7 @@ function main() {
                 } else {
                     leadingZero = '';
                 }
-                state = state.toString().replace('.', ''); // remove points
+                state = (state || '').toString().replace('.', ''); // remove points
                 sendRequest('Z2' + leadingZero + state);
                 break;
             case 'zone2.volumeDB':
@@ -290,7 +306,7 @@ function main() {
                 } else {
                     leadingZero = '';
                 }
-                state = state.toString().replace('.', ''); // remove points
+                state = (state || '').toString().replace('.', ''); // remove points
                 sendRequest('Z2' + leadingZero + state);
                 break;
             case 'zone2.selectInput':
@@ -933,8 +949,13 @@ function main() {
     function decodeState(stateNames, state) { // decoding for e. g. selectInput
         const stateArray = Object.keys(stateNames).map(key => stateNames[key]);
         for (let i = 0; i < stateArray.length; i++) {
-            if (state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) {
-                return stateArray[i];
+            if (!state) {
+                console.log('aaa');
+                return '';
+            } else {
+                if (state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) {
+                    return stateArray[i];
+                }
             }
         } // endFor
         return '';
@@ -1546,5 +1567,33 @@ function main() {
         zoneThree = true;
         adapter.log.debug('[INFO    ] <== Zone 3 detected');
     } // endCreateZoneThree
+
+    function getHtmlStatus(cb) {
+        if (!adapter.config.ip) {
+            return cb && cb();
+        }
+        request('http://' + adapter.config.ip + '/goform/formNetAudio_StatusXml.xml?ZoneName=MAIN+ZONE', (err, reslt, body) => {
+            if (body) {
+                const isNowPlaying = body.indexOf('<value>Now Playing</value>') !== -1;
+                if (playing === null) {
+                    adapter.getState('zoneMain.state', (err, state) => {
+                        playing = !!(state && state.val);
+
+                        if (playing !== isNowPlaying) {
+                            playing = isNowPlaying;
+                            adapter.setState('zoneMain.state', isNowPlaying, true);
+                            adapter.setState('zoneMain.iconURL', 'http://' + adapter.config.ip + '/NetAudio/art.asp-jpg', true);
+                        }
+                        return cb && cb();
+                    });
+                } else if (playing !== isNowPlaying) {
+                    playing = isNowPlaying;
+                    adapter.setState('zoneMain.state', isNowPlaying, true);
+                    adapter.setState('zoneMain.iconURL', 'http://' + adapter.config.ip + '/NetAudio/art.asp-jpg');
+                    return cb && cb();
+                }
+            }
+        });
+    }
 
 } // endMain
