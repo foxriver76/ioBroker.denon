@@ -430,6 +430,12 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 0.3.2
+* (foxriver76) Added isPlaying state for non-HEOS AVR's, thanks to bluefox
+* (foxriver76) Added link to cover for non-HEOS AVR's
+* (foxriver76) displayContent, isPlaying, coverURL will only be generated for non-HEOS
+* (foxriver76) Updated readme
+
 ### 0.3.1
 * (foxriver76) Added placeholder ip in config gui
 * (foxriver76) fixed volume in db for main zone
