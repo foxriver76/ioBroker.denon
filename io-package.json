@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.1",
+		"version": "0.3.2",
 		"news": {
+			"0.3.2": {
+				"en": "Added state for cover link and isPlaying state, displayContent will only be shown when possible",
+				"de": "Cover Link sowie isPlaying Status hinzugefügt, displayContent wird nur angezeigt wenn verfügbar"
+			},
 			"0.3.1": {
 				"en": "Added placeholder IP in config, fixes for volume in dB",
 				"de": "Platzhalter für die IP in der Konfiguration hinzugefügt, volume in dB gefixt"
@@ -555,133 +559,7 @@
 			"native": {
 				
 			}
-		},
-		{
-			"_id": "display.displayContent0",
-			"type": "state",
-			"common": {
-				"name": "Display content 0",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent1",
-			"type": "state",
-			"common": {
-				"name": "Display content 1",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent2",
-			"type": "state",
-			"common": {
-				"name": "Display content 2",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent3",
-			"type": "state",
-			"common": {
-				"name": "Display content 3",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent4",
-			"type": "state",
-			"common": {
-				"name": "Display content 4",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent5",
-			"type": "state",
-			"common": {
-				"name": "Display content 5",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent6",
-			"type": "state",
-			"common": {
-				"name": "Display content 6",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent7",
-			"type": "state",
-			"common": {
-				"name": "Display content 7",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "display.displayContent8",
-			"type": "state",
-			"common": {
-				"name": "Display content 8",
-				"role": "info.display",
-				"type": "string",
-				"write": false,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
+		},		
 		{
 			"_id": "display.brightness",
 			"type": "state",

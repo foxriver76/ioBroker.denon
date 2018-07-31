@@ -69,6 +69,7 @@ function main() {
     const requestInterval = adapter.config.requestInterval;
     let zoneTwo = false;
     let zoneThree = false;
+    let displayAbility = false;
     let pollingVar = null;
     let connectingVar = null;
     
@@ -637,8 +638,13 @@ function main() {
 	    adapter.setState('settings.surroundMode', msCommand, true);
 	    return;
 	} else if(command.startsWith('NSE')) { // Handle display content
+	    if(!displayAbility) createDisplayAndHttp();
 	    let displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
 	    let dispContNr = data.slice(3, 4);
+	    if(dispContNr === '0') {
+		if(displayCont.includes('Now Playing')) adapter.setState('zoneMain.isPlaying', true, true);
+		else adapter.setState('zoneMain.isPlaying', false, true);	
+	    } // endIf
 	    adapter.setState('display.displayContent' + dispContNr, displayCont, true);
 	    return;
 	} else if(command.startsWith('NSFRN')) { // Handle friendly name
@@ -1426,5 +1432,135 @@ function main() {
         zoneThree = true;
         adapter.log.debug('[INFO] <== Zone 3 detected');
     } // endCreateZoneThree
+    
+    function createDisplayAndHttp() {
+	adapter.setObjectNotExists('display.displayContent0', {
+		type: 'state',
+		common: {
+			'name': 'Display content 0',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent1', {
+		type: 'state',
+		common: {
+			'name': 'Display content 1',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent2', {
+		type: 'state',
+		common: {
+			'name': 'Display content 2',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent3', {
+		type: 'state',
+		common: {
+			'name': 'Display content 3',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent4', {
+		type: 'state',
+		common: {
+			'name': 'Display content 4',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent5', {
+		type: 'state',
+		common: {
+			'name': 'Display content 5',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent6', {
+		type: 'state',
+		common: {
+			'name': 'Display content 6',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent7', {
+		type: 'state',
+		common: {
+			'name': 'Display content 7',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	adapter.setObjectNotExists('display.displayContent8', {
+		type: 'state',
+		common: {
+			'name': 'Display content 8',
+			'role': 'info.display',
+			'type': 'string',
+			'write': false,
+			'read': true
+		},
+		native: {}
+	});
+	
+	adapter.setObjectNotExists('zoneMain.iconURL', {
+		type: 'state',
+		common: {
+        		'name': 'Cover',
+        		'role': 'media.cover',
+        		'type': 'string',
+        		'write': false,
+        		'read': true
+        	},
+        	native: {}
+    	});
+
+    	adapter.setObjectNotExists('zoneMain.isPlaying', {
+        	type: 'state',
+        	common: {
+        		'name': 'Playing state',
+        		'role': 'media.state',
+        		'type': 'boolean',
+        		'write': false,
+        		'read': true
+        	},
+        	native: {}
+	});
+	
+    	adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
+	displayAbility = true;
+	adapter.log.debug('[INFO] <== Display Content created')
+    } // endCreateDisplayAndHttp
 
 } // endMain

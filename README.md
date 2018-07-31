@@ -330,6 +330,18 @@ Following states will be created by the adapter:
 
    *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
    
+* zoneMain.isPlaying
+
+   *Read-only indicator, which is true if music is played on your AVR otherwise false.*
+   
+   *NOT SUPPORTED FOR HEOS AVR'S*
+   
+* zoneMain.iconURL
+
+   *Contains a link where you can find the cover of the channel/song which is currently played.*
+   
+   *NOT SUPPORTED FOR HEOS AVR'S*
+   
 * settings.dynamicEq
 
    *Boolean value which represents the state of Dynamic EQ. You can also set Dynamic EQ on and off with this state.*
