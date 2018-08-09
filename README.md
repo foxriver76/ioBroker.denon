@@ -117,6 +117,26 @@ The adapter creates the following buttons:
 
    *Increase Audyssey LFC amount.*
    
+* settings.cursorUp / settings.cursorDown / settings.cursorLeft / settings.cursorRight
+
+   *Simulates the cursor buttons of your remote control*
+   
+* settings.enter
+
+   *Simulates the enter button of your remote control*
+	
+* settings.return
+
+   *Simulates the return/back button of your remote control*
+   
+* settings.option
+
+   *Simulates the option button of your remote control*
+   
+* settings.info
+
+   *Simulates the info button of your remote control*  
+   
 * zoneMain.equalizerBassUp / zone2.equalizerBassUp / zone3.equalizerBassUp
 
    *Button which increases bass level of the Zone.*
@@ -423,12 +443,21 @@ Following states will be created by the adapter:
    
    *Tone Control can only be turned on when Dyn EQ is set to OFF and Tone Control is on*
    
+* settings.setupMenu
+
+   *Boolean indicator, which indicates if setup menu is currently open or closed. You can open and close it with this state.*
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.3.3
+* (foxriver76) added state for setup button
+* (foxriver76) added cursors and remote control buttons
+* (foxriver76) readme update
 
 ### 0.3.2
 * (foxriver76) Added isPlaying state for non-HEOS AVR's, thanks to bluefox

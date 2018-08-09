@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.2",
+		"version": "0.3.3",
 		"news": {
+			"0.3.3": {
+				"en": "Added state and buttons for remote control cursors and other buttons",
+				"de": "States hinzugefügt für Tasten der Fernbedienung wie Setup und Cursor"
+			},
 			"0.3.2": {
 				"en": "Added state for cover link and isPlaying state, displayContent will only be shown when possible",
 				"de": "Cover Link sowie isPlaying Status hinzugefügt, displayContent wird nur angezeigt wenn verfügbar"
@@ -899,6 +903,132 @@
 			"type": "state",
 			"common": {
 				"name": "Tone Control",
+				"role": "switch",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.cursorUp",
+			"type": "state",
+			"common": {
+				"name": "Cursor Up",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.cursorDown",
+			"type": "state",
+			"common": {
+				"name": "Cursor Down",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.cursorRight",
+			"type": "state",
+			"common": {
+				"name": "Cursor Right",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.cursorLeft",
+			"type": "state",
+			"common": {
+				"name": "Cursor Left",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.enter",
+			"type": "state",
+			"common": {
+				"name": "Enter",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.return",
+			"type": "state",
+			"common": {
+				"name": "Return",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.option",
+			"type": "state",
+			"common": {
+				"name": "Option",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.info",
+			"type": "state",
+			"common": {
+				"name": "Info",
+				"role": "button",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			}
+		},
+		{
+		"_id": "settings.setupMenu",
+			"type": "state",
+			"common": {
+				"name": "Setup Menu",
 				"role": "switch",
 				"type": "boolean",
 				"write": true,

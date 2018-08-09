@@ -487,6 +487,35 @@ function main() {
 		case 'zone3.equalizerTrebleDown':
 		    sendRequest('Z3PSTRE DOWN');
 		    break;
+		case 'settings.cursorUp':
+		    sendRequest('MNCUP');
+		    break;
+		case 'settings.cursorDown':
+		    sendRequest('MNCDN');
+		    break;
+		case 'settings.cursorRight':
+		    sendRequest('MNCRT');
+		    break;
+		case 'settings.cursorLeft':
+		    sendRequest('MNCLT');
+		    break;
+		case 'settings.enter':
+		    sendRequest('MNENT');
+		    break;
+		case 'settings.return':
+		    sendRequest('MNRTN');
+		    break;
+		case 'settings.option':
+		    sendRequest('MNOPT');
+		    break;
+		case 'settings.info':
+		    sendRequest('MNINF');
+		    break;
+		case 'settings.setupMenu':
+		    if(state) {
+			sendRequest('MNMEN ON');
+		    } else sendRequest('MNMEN OFF');
+		    break;
 	} // endSwitch
      }); // endOnStateChange
 
@@ -528,7 +557,8 @@ function main() {
 			'PSSWL ?', 'PSBAS ?',
 			'PSTRE ?', 'Z2PSTRE ?',
 			'Z3PSTRE ?', 'Z2PSBAS ?',
-			'Z3PSBAS ?', 'PSTONE CTRL ?'
+			'Z3PSBAS ?', 'PSTONE CTRL ?',
+			'MNMEN?'
 			];
 
     function updateStates() {
@@ -811,6 +841,12 @@ function main() {
 		    	break;
 		case 'PSTONECTRLOFF':
 		    	adapter.setState('settings.toneControl', false, true);
+		    	break;
+		case 'MNMENON':
+		    	adapter.setState('settings.setupMenu', true, true);
+		    	break;
+		case 'MNMENOFF':
+		    	adapter.setState('settings.setupMenu', false, true);
 		    	break;
 		    	
 	} // endSwitch
