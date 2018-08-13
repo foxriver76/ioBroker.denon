@@ -598,7 +598,7 @@ function main() {
 		if(!zoneTwo) createZoneTwo(); // Create Zone2 states if not done yet
 		command = data.replace(/\s+|\d+/g,'');
 		
-		if(command == 'Z') { // If everything is removed except Z --> Volume
+		if(command === 'Z') { // If everything is removed except Z --> Volume
 			let vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
 			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
 			adapter.setState('zone2.volume', parseFloat(vol), true);
