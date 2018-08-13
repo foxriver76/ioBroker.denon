@@ -667,7 +667,7 @@ function main() {
 	    let msCommand = command.slice(2, command.length);
 	    adapter.setState('settings.surroundMode', msCommand, true);
 	    return;
-	} else if(command.startsWith('NSE')) { // Handle display content
+	} else if(command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
 	    if(!displayAbility) createDisplayAndHttp();
 	    let displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
 	    let dispContNr = data.slice(3, 4);

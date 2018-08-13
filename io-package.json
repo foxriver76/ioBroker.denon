@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.3",
+		"version": "0.3.4",
 		"news": {
+			"0.3.4": {
+				"en": "Fix for HEOS to not show displayContent and http releated states",
+				"de": "Fix damit HEOS keine displayContents und Http states mehr anlegt"
+			},
 			"0.3.3": {
 				"en": "Added state and buttons for remote control cursors and other buttons",
 				"de": "States hinzugefügt für Tasten der Fernbedienung wie Setup und Cursor"

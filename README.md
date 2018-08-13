@@ -453,6 +453,8 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 0.3.4
+* (foxriver76) fix that HEOS does not create http and display content related states
 
 ### 0.3.3
 * (foxriver76) added state for setup button
