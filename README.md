@@ -350,12 +350,6 @@ Following states will be created by the adapter:
 
    *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
    
-* zoneMain.isPlaying
-
-   *Read-only indicator, which is true if music is played on your AVR otherwise false.*
-   
-   *NOT SUPPORTED FOR HEOS AVR'S*
-   
 * zoneMain.iconURL
 
    *Contains a link where you can find the cover of the channel/song which is currently played.*
@@ -453,6 +447,11 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.3.5
+* (foxriver76) removed isPlaying state, because not working properly
+* (foxriver76) update readme
+
 ### 0.3.4
 * (foxriver76) fix that HEOS does not create http and display content related states
 

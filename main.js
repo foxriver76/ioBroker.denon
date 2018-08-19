@@ -671,10 +671,6 @@ function main() {
 	    if(!displayAbility) createDisplayAndHttp();
 	    let displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
 	    let dispContNr = data.slice(3, 4);
-	    if(dispContNr === '0') {
-		if(displayCont.includes('Now Playing')) adapter.setState('zoneMain.isPlaying', true, true);
-		else adapter.setState('zoneMain.isPlaying', false, true);	
-	    } // endIf
 	    adapter.setState('display.displayContent' + dispContNr, displayCont, true);
 	    return;
 	} else if(command.startsWith('NSFRN')) { // Handle friendly name
@@ -1581,18 +1577,6 @@ function main() {
         	},
         	native: {}
     	});
-
-    	adapter.setObjectNotExists('zoneMain.isPlaying', {
-        	type: 'state',
-        	common: {
-        		'name': 'Playing state',
-        		'role': 'media.state',
-        		'type': 'boolean',
-        		'write': false,
-        		'read': true
-        	},
-        	native: {}
-	});
 	
     	adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
 	displayAbility = true;
