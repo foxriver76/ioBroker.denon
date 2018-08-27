@@ -225,7 +225,7 @@
 			"_id": "zoneMain.volumeUp",
 			"type": "state",
 			"common": {
-				"name": "Volume UP",
+				"name": "Volume Up",
 				"role": "button",
 				"type": "boolean",
 				"write": true,
@@ -239,7 +239,7 @@
 			"_id": "zoneMain.volumeDown",
 			"type": "state",
 			"common": {
-				"name": "Volume DOWN",
+				"name": "Volume Down",
 				"role": "button",
 				"type": "boolean",
 				"write": true,
