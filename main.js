@@ -669,7 +669,7 @@ function main() {
 	    return;
 	} else if(command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
 	    if(!displayAbility) createDisplayAndHttp();
-	    let displayCont = data.slice(4, data.length).replace(/[\0\1\2]/, ''); // Remove STX, SOH, NULL 
+	    let displayCont = data.slice(4, data.length).replace(/[^\x20-\x7E]+/g, ''); // Remove STX, SOH, NULL & all other non-printables
 	    let dispContNr = data.slice(3, 4);
 	    adapter.setState('display.displayContent' + dispContNr, displayCont, true);
 	    return;

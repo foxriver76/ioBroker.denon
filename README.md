@@ -183,7 +183,7 @@ Following states will be created by the adapter:
     setState('denon.0.zoneMain.volume', 45.5); // Sets volume of Main Zone to 45.5
     ```
    
-* maximumVolume
+* zoneMain.maximumVolume
 
    *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in dB is set to true, the state is represented in dB in the maximumVolumeDB state too.*
    
@@ -197,7 +197,7 @@ Following states will be created by the adapter:
     setState('denon.0.muteIndicator', true); // Mutes the Main Zone of your AVR
     ```
    
-* powerSystem
+* settings.powerSystem
    
    *Boolean value which is true, if the AVR is turned on, otherwise false. You can also turn your AVR on and off with this state.*
    
