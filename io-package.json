@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.5",
+		"version": "0.3.6",
 		"news": {
+			"0.3.6": {
+				"en": "Fixes for old Denon displayContent, readme fixes, minor naming fixes",
+				"de": "Problem behoben mit displayContent alter AVR's, ReadMe ausgebessert, kleine Namensverbesserungen"
+			},
 			"0.3.5": {
 				"en": "Removed isPlaying state, because not working properly",
 				"de": "isPlaying Status entfernt, da er nicht korrekt funktioniert"

@@ -259,7 +259,8 @@ Following states will be created by the adapter:
    
    ```javascript
     setState('denon.0.selectInput', '5'); // Selects TV as input for Main Zone
-    ```
+   ```
+    
 * settings.surroundMode
 
    *The string value contains the current Surround mode. You can also change the source with the following encoding:*
@@ -313,6 +314,7 @@ Following states will be created by the adapter:
    ```javascript
    setState('denon.0.surroundMode', '3'); // Sets Multi Channel Stereo as surround mode
    ```
+   
 * display.displayContent
    
    *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*
@@ -447,6 +449,12 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.3.6
+* (foxriver76) fixed displayState non-readable chars for old AVRs
+* (foxriver76) fixes on readme
+* (foxriver76) capital chars in mainZone volumeUp/down names, are now lowercase
+
 
 ### 0.3.5
 * (foxriver76) removed isPlaying state, because not working properly
