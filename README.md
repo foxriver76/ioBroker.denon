@@ -237,7 +237,7 @@ Following states will be created by the adapter:
    
    *13:	SERVER*
    
-   *14:	FAVOTITES*
+   *14:	FAVORITES*
    
    *15:	AUX1*
    
