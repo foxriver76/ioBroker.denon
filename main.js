@@ -619,6 +619,7 @@ function main() {
                       			} // endIf
 				} // endFor
 			});
+			return;
 		} // endIf
 	} else if(data.startsWith('Z3')) { // Transformation for Zone3 commands
 		if(!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
@@ -643,6 +644,7 @@ function main() {
                   			} // endIf
 				} // endFor
 			});
+			return;
 		} // endIf 
 	} else { // Transformation for normal commands
 		command = data.replace(/\s+|\d+/g,'');
@@ -676,6 +678,9 @@ function main() {
 	    return;
 	} else if(command.startsWith('NSET')) {
 	    // Network settings info
+	    return;
+	} else if (command.startsWith('SV')){
+	    // Select Video
 	    return;
 	} else if(command.startsWith('NSFRN')) { // Handle friendly name
 	    adapter.setState('info.friendlyName', data.slice(6, data.length), true);
@@ -848,8 +853,11 @@ function main() {
 		case 'MNMENOFF':
 		    	adapter.setState('settings.setupMenu', false, true);
 		    	break;
-		case 'SV':
-		    	// Select Video
+		case 'PSDRCOFF':
+		    	// Dynamic Compression direct change is off
+		    	break;
+		case 'PSLFE':
+		    	// LFE --> amount of subwoofer signal additional directed to speakers
 		    	break;
 		default:
 		    	adapter.log.debug('[INFO] <== Unhandled command ' + command);
