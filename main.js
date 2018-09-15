@@ -594,6 +594,7 @@ function main() {
 	} // endIf
 	// get command out of String
 	let command;
+	
 	if(data.startsWith('Z2')) { // Transformation for Zone2 commands
 		if(!zoneTwo) createZoneTwo(); // Create Zone2 states if not done yet
 		command = data.replace(/\s+|\d+/g,'');
@@ -654,10 +655,10 @@ function main() {
 		for(let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
   			if(decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
   			    adapter.setState('display.brightness', obj.common.states[j], true);
-  			    return;
   			} // endIf
 		} // endFor
 	    });
+	    return;
 	} else if(command.startsWith('SI')) { // Handle select input
 	    let siCommand = data.slice(2, data.length); // Get only source name
 	    siCommand = siCommand.replace(' ', ''); // Remove blanks
@@ -672,6 +673,9 @@ function main() {
 	    let displayCont = data.slice(4, data.length).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
 	    let dispContNr = data.slice(3, 4);
 	    adapter.setState('display.displayContent' + dispContNr, displayCont, true);
+	    return;
+	} else if(command.startsWith('NSET')) {
+	    // Network settings info
 	    return;
 	} else if(command.startsWith('NSFRN')) { // Handle friendly name
 	    adapter.setState('info.friendlyName', data.slice(6, data.length), true);
@@ -844,7 +848,11 @@ function main() {
 		case 'MNMENOFF':
 		    	adapter.setState('settings.setupMenu', false, true);
 		    	break;
-		    	
+		case 'SV':
+		    	// Select Video
+		    	break;
+		default:
+		    	adapter.log.debug('[INFO] <== Unhandled command ' + command);
 	} // endSwitch
     } // endHandleResponse
 

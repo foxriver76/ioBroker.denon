@@ -451,6 +451,11 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 ## Changelog
 
 ### 0.3.6
+* (foxriver76) minor code optimization
+* (foxriver76) fixes on readme
+* (foxriver76) logging undhandled commands on debug
+
+### 0.3.6
 * (foxriver76) fixed displayState non-readable chars for old AVRs
 * (foxriver76) fixes on readme
 * (foxriver76) capital chars in mainZone volumeUp/down names, are now lowercase

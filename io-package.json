@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.6",
+		"version": "0.3.7",
 		"news": {
+			"0.3.7": {
+				"en": "Minor code optimization, typo fix, added logging of unhandled commands on debug",
+				"de": "Kleine Optimierungen, Readme Fehler gefixt, derzeit nicht gehandelte Kommandos werden auf Debug geloggt"
+			},
 			"0.3.6": {
 				"en": "Fixes for old Denon displayContent, readme fixes, minor naming fixes",
 				"de": "Problem behoben mit displayContent alter AVR's, ReadMe ausgebessert, kleine Namensverbesserungen"
