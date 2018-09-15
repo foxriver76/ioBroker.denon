@@ -1632,8 +1632,8 @@ function main() {
 	adapter.setObjectNotExists('settings.outputMonitor', {
             type: 'state',
             common: {
-                name: 'Zone 2 Select input',
-                role: 'media.input',
+                name: 'Output monitor',
+                role: 'video.output',
                 type: 'number',
                 write: true,
                 read: true,
