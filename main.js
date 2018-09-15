@@ -70,6 +70,7 @@ function main() {
     let zoneTwo = false;
     let zoneThree = false;
     let displayAbility = false;
+    let multiMonitor = false;
     let pollingVar = null;
     let connectingVar = null;
     
@@ -516,6 +517,13 @@ function main() {
 			sendRequest('MNMEN ON');
 		    } else sendRequest('MNMEN OFF');
 		    break;
+		case 'settings.outputMonitor':
+		    adapter.getObject('settings.outputMonitor', (err, obj) => {
+			sendRequest('VSMONI' + decodeState(obj.common.states, state));
+		    });
+		    break;
+		default:
+		    adapter.log.error('[COMMAND] ' + id + 'is not a valid state');
 	} // endSwitch
      }); // endOnStateChange
 
@@ -693,7 +701,22 @@ function main() {
 	    let state = data.split(' ')[1];
 	    adapter.setState('settings.dynamicVolume', state, true);
 	    return;
-	}// endElseIf
+	} else if (command.startsWith('VSMONI')) {
+	    let state = data.substring(6);
+	    
+	    if(!multiMonitor) { // make sure that state exists
+		createMonitorState(() => {
+		   if(state === 'AUTO') {
+		       adapter.setState('settings.outputMonitor', 0, true); 
+		   } else adapter.setState('settings.outputMonitor', parseFloat(state), true); 
+		});
+	    } else {
+		if(state === 'AUTO') {
+		    adapter.setState('settings.outputMonitor', 0, true); 
+		} else adapter.setState('settings.outputMonitor', parseFloat(state), true); 
+	    } // endElse
+	    return;	    
+	} // endElseIf
 	
 	adapter.log.debug('[INFO] <== Command to handle is ' + command);
 	
@@ -917,7 +940,7 @@ function main() {
 
     } // endCreateVolumeDB
 
-    function createZoneTwo() {
+    function createZoneTwo(cb) {
         adapter.setObjectNotExists('zone2', {
             type: 'channel',
             common: {
@@ -1197,9 +1220,11 @@ function main() {
 
         zoneTwo = true;
         adapter.log.debug('[INFO] <== Zone 2 detected');
+	if (cb && typeof(cb) === "function") return cb();
+	
     } // endCreateZoneTwo
 
-    function createZoneThree() {
+    function createZoneThree(cb) {
         adapter.setObjectNotExists('zone3', {
             type: 'channel',
             common: {
@@ -1479,9 +1504,11 @@ function main() {
 
         zoneThree = true;
         adapter.log.debug('[INFO] <== Zone 3 detected');
+	if (cb && typeof(cb) === "function") return cb();
+
     } // endCreateZoneThree
     
-    function createDisplayAndHttp() {
+    function createDisplayAndHttp(cb) {
 	adapter.setObjectNotExists('display.displayContent0', {
 		type: 'state',
 		common: {
@@ -1597,6 +1624,30 @@ function main() {
     	adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
 	displayAbility = true;
 	adapter.log.debug('[INFO] <== Display Content created')
+	if (cb && typeof(cb) === "function") return cb();
     } // endCreateDisplayAndHttp
+    
+    function createMonitorState(cb) {
+	
+	adapter.setObjectNotExists('settings.outputMonitor', {
+            type: 'state',
+            common: {
+                name: 'Zone 2 Select input',
+                role: 'media.input',
+                type: 'number',
+                write: true,
+                read: true,
+                states: {
+                    '0': 'AUTO',
+                    '1': '1',
+                    '2': '2'
+                }
+            },
+            native: {}
+        });
+	
+	multiMonitor = true;	
+	if (cb && typeof(cb) === "function") return cb();
+    } // endCreateMonitorState
 
 } // endMain

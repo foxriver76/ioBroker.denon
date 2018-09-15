@@ -348,6 +348,16 @@ Following states will be created by the adapter:
     setState('denon.0.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
     ```
 
+* settings.outputMonitor
+
+   *Select the output monitor of your AVR. This state will only be created if your AVR supports two HDMI outputs. You can switch the state between:*
+   
+   *0: AUTO --> Auto detection of monitor*
+   
+   *1: 1 --> Outputs signal to monitor 1*
+   
+   *2: 2 --> Outputs signal to monitor 2*
+
 * zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
 
    *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
