@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.7",
+		"version": "0.3.8",
 		"news": {
+			"0.3.8": {
+				"en": "Readme enhanced an corrected, added center spread control state",
+				"de": "Verbesserungen an der Readme, Center Spread status hinzugefügt"
+			},
 			"0.3.7": {
 				"en": "Minor code optimization, typo fix, added logging of unhandled commands on debug",
 				"de": "Kleine Optimierungen, Readme Fehler gefixt, derzeit nicht gehandelte Kommandos werden auf Debug geloggt"
@@ -1052,7 +1056,21 @@
 			},
 			"native": {
 				
-			}
+			} 
+		},
+		{
+		"_id": "settings.centerSpread",
+			"type": "state",
+			"common": {
+				"name": "Center Spread",
+				"role": "switch",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {
+				
+			} 
 		}
 	]
 }

@@ -522,6 +522,10 @@ function main() {
 			sendRequest('VSMONI' + decodeState(obj.common.states, state));
 		    });
 		    break;
+		case 'settings.centerSpread':
+		    if(state) sendRequest('PSCES ON');
+		    else sendRequest('PSCES OFF');
+		    break;
 		default:
 		    adapter.log.error('[COMMAND] ' + id + 'is not a valid state');
 	} // endSwitch
@@ -566,7 +570,7 @@ function main() {
 			'PSTRE ?', 'Z2PSTRE ?',
 			'Z3PSTRE ?', 'Z2PSBAS ?',
 			'Z3PSBAS ?', 'PSTONE CTRL ?',
-			'MNMEN?'
+			'MNMEN?', 'PSCES ?'
 			];
 
     function updateStates() {
@@ -875,6 +879,12 @@ function main() {
 		    	break;
 		case 'MNMENOFF':
 		    	adapter.setState('settings.setupMenu', false, true);
+		    	break;
+		case 'PSCESON':
+		    	adapter.setState('settings.centerSpread', true, true);
+		    	break;
+		case 'PSCESOFF':
+		    	adapter.setState('settings.centerSpread', false, true);
 		    	break;
 		case 'PSDRCOFF':
 		    	// Dynamic Compression direct change is off

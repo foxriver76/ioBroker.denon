@@ -179,6 +179,7 @@ Following states will be created by the adapter:
    *Range is from 0 to 98 (maybe lower due to maximumVolume), where 80 = 0 dB*
    
    *Example:*
+   
     ```javascript
     setState('denon.0.zoneMain.volume', 45.5); // Sets volume of Main Zone to 45.5
     ```
@@ -194,7 +195,7 @@ Following states will be created by the adapter:
    *Example:*
    
     ```javascript
-    setState('denon.0.muteIndicator', true); // Mutes the Main Zone of your AVR
+    setState('denon.0.zoneMain.muteIndicator', true); // Mutes the Main Zone of your AVR
     ```
    
 * settings.powerSystem
@@ -258,7 +259,7 @@ Following states will be created by the adapter:
    *Example:*
    
    ```javascript
-    setState('denon.0.selectInput', '5'); // Selects TV as input for Main Zone
+    setState('denon.0.zoneMain.selectInput', '5'); // Selects TV as input for Main Zone
    ```
     
 * settings.surroundMode
@@ -312,7 +313,7 @@ Following states will be created by the adapter:
    *Example:*
    
    ```javascript
-   setState('denon.0.surroundMode', '3'); // Sets Multi Channel Stereo as surround mode
+   setState('denon.0.settings.surroundMode', '3'); // Sets Multi Channel Stereo as surround mode
    ```
    
 * display.displayContent
@@ -345,7 +346,7 @@ Following states will be created by the adapter:
    *Example:*
    
     ```javascript
-    setState('denon.0.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
+    setState('denon.0.settings.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
     ```
 
 * settings.outputMonitor
@@ -357,6 +358,10 @@ Following states will be created by the adapter:
    *1: 1 --> Outputs signal to monitor 1*
    
    *2: 2 --> Outputs signal to monitor 2*
+   
+* settings.centerSpread
+
+   *Boolean-value which is true if center spread is truned on, else false. You can also turn on/off center spread with this state.*
 
 * zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
 
@@ -460,6 +465,10 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 0.3.8
+* (foxriver76) add state to control center spread
+* (foxriver76) readme updated
+
 ### 0.3.7
 * (foxriver76) minor code optimization
 * (foxriver76) fixes on readme
@@ -469,7 +478,6 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 * (foxriver76) fixed displayState non-readable chars for old AVRs
 * (foxriver76) fixes on readme
 * (foxriver76) capital chars in mainZone volumeUp/down names, are now lowercase
-
 
 ### 0.3.5
 * (foxriver76) removed isPlaying state, because not working properly
