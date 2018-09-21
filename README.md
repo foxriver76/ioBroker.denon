@@ -359,6 +359,16 @@ Following states will be created by the adapter:
    
    *2: 2 --> Outputs signal to monitor 2*
    
+* settings.videoProcessingMode
+
+   *Select the video processing mode of your AVR. This state will only be created if your AVR supports two HDMI outputs. You can switch the state between:*
+   
+   *0: AUTO*
+   
+   *1: GAME*
+   
+   *2: MOVIE*
+   
 * settings.centerSpread
 
    *Boolean-value which is true if center spread is truned on, else false. You can also turn on/off center spread with this state.*
