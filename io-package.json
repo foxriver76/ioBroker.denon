@@ -4,8 +4,8 @@
 		"version": "0.3.8",
 		"news": {
 			"0.3.8": {
-				"en": "Readme enhanced an corrected, added center spread control state",
-				"de": "Verbesserungen an der Readme, Center Spread status hinzugefügt"
+				"en": "Readme enhanced an corrected, added center spread control state and video processing mode, minor fixes",
+				"de": "Verbesserungen an der Readme, Center Spread und Video Processing Mode status hinzugefügt, kleine Fehlerbehebungen"
 			},
 			"0.3.7": {
 				"en": "Minor code optimization, typo fix, added logging of unhandled commands on debug",

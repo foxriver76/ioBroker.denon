@@ -17,7 +17,7 @@ const ssdpScan = require('./lib/upnp').ssdpScan;
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
     try {
-        adapter.log.info('Stopping Denon AVR adapter...');
+        adapter.log.info('[END] Stopping Denon AVR adapter...');
 	adapter.setState('info.connection', false, true);
 	client.destroy(); // kill connection
         client.unref();	// kill connection
@@ -55,7 +55,7 @@ adapter.on('message', obj => {
 
 adapter.on('ready', () => {
     if(adapter.config.ip) {
-    	adapter.log.info('Starting DENON AVR adapter');
+    	adapter.log.info('[START] Starting DENON AVR adapter');
     	main();
     } else adapter.log.warn('No IP-address set');
 });
@@ -526,6 +526,11 @@ function main() {
 		    if(state) sendRequest('PSCES ON');
 		    else sendRequest('PSCES OFF');
 		    break;
+		case 'settings.videoProcessingMode':
+            adapter.getObject('settings.videoProcessingMode', (err, obj) => {
+                sendRequest('VSVPM' + decodeState(obj.common.states, state));
+            });
+			break;
 		default:
 		    adapter.log.error('[COMMAND] ' + id + 'is not a valid state');
 	} // endSwitch
@@ -551,7 +556,7 @@ function main() {
     function connect() {
         client.setEncoding('utf8');
         client.setTimeout(35000);
-        adapter.log.info('Trying to connect to ' + host + ':23');
+        adapter.log.info('[CONNECT] Trying to connect to ' + host + ':23');
         connectingVar = null;
         client.connect({port: 23, host: host});
     } // endConnect
@@ -570,7 +575,7 @@ function main() {
 			'PSTRE ?', 'Z2PSTRE ?',
 			'Z3PSTRE ?', 'Z2PSBAS ?',
 			'Z3PSBAS ?', 'PSTONE CTRL ?',
-			'MNMEN?', 'PSCES ?'
+			'MNMEN?', 'PSCES ?', 'VSVPM ?'
 			];
 
     function updateStates() {
@@ -600,308 +605,322 @@ function main() {
     } // endSendRequest
 
     function handleResponse(data) {
-	if(!pollingVar) { // Keep connection alive & poll states
-		pollingVar = true;
-		setTimeout(() => pollStates(), pollInterval); // Poll states every configured  seconds
-	} // endIf
-	// get command out of String
-	let command;
-	
-	if(data.startsWith('Z2')) { // Transformation for Zone2 commands
-		if(!zoneTwo) createZoneTwo(); // Create Zone2 states if not done yet
-		command = data.replace(/\s+|\d+/g,'');
-		
-		if(command === 'Z') { // If everything is removed except Z --> Volume
-			let vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
-			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
-			adapter.setState('zone2.volume', parseFloat(vol), true);
-		    	if(volumeInDB) adapter.setState('zone2.volumeDB', parseFloat(vol)-80, true);
-			return;
-		} else {
-			command = 'Z2' + command.slice(1, command.length);
-		} // endElseIf
-		if(command.startsWith('Z2')) { // Encode Input Source
-			adapter.getObject('zoneMain.selectInput', (err, obj) => {
-				let zTwoSi = data.slice(2, data.length);
-				zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
-				for(let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
-                      			if(decodeState(obj.common.states, j) == zTwoSi) {
-                      			    adapter.setState('zone2.selectInput', zTwoSi, true);
-                      			    return;
-                      			} // endIf
-				} // endFor
-			});
-			return;
+		if(!pollingVar) { // Keep connection alive & poll states
+			pollingVar = true;
+			setTimeout(() => pollStates(), pollInterval); // Poll states every configured  seconds
 		} // endIf
-	} else if(data.startsWith('Z3')) { // Transformation for Zone3 commands
-		if(!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
-		command = data.replace(/\s+|\d+/g,'');
-		if(command === 'Z') { // if everything is removed except Z --> Volume
-			let vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
-			vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
-			adapter.setState('zone3.volume', parseFloat(vol), true);
-		    	if(volumeInDB) adapter.setState('zone3.volumeDB', parseFloat(vol)-80, true);
-			return;
-		} else {
-			command = 'Z3' + command.slice(1, command.length);
-		} // endElseIf
-		if(command.startsWith('Z3')) { // Encode Input Source
-			adapter.getObject('zoneMain.selectInput', (err, obj) => {
-				let zThreeSi = data.slice(2, data.length);
-				zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
-				for(let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
-                  			if(decodeState(obj.common.states, j) == zThreeSi) {
-                  			    adapter.setState('zone3.selectInput', zThreeSi, true);
-                  			    return;
-                  			} // endIf
-				} // endFor
+		// get command out of String
+		let command;
+
+		if(data.startsWith('Z2')) { // Transformation for Zone2 commands
+			if(!zoneTwo) createZoneTwo(); // Create Zone2 states if not done yet
+			command = data.replace(/\s+|\d+/g,'');
+
+			if(command === 'Z') { // If everything is removed except Z --> Volume
+				let vol = data.substring(2).replace(/\s|[A-Z]/g, '');
+				vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
+				adapter.setState('zone2.volume', parseFloat(vol), true);
+					if(volumeInDB) adapter.setState('zone2.volumeDB', parseFloat(vol)-80, true);
+				return;
+			} else {
+				command = 'Z2' + command.slice(1, command.length);
+			} // endElseIf
+			if(command.startsWith('Z2')) { // Encode Input Source
+				adapter.getObject('zoneMain.selectInput', (err, obj) => {
+					let zTwoSi = data.slice(2, data.length);
+					zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
+					for(let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+									if(decodeState(obj.common.states, j) == zTwoSi) {
+										adapter.setState('zone2.selectInput', zTwoSi, true);
+										return;
+									} // endIf
+					} // endFor
+				});
+				return;
+			} // endIf
+		} else if(data.startsWith('Z3')) { // Transformation for Zone3 commands
+			if(!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
+			command = data.replace(/\s+|\d+/g,'');
+			if(command === 'Z') { // if everything is removed except Z --> Volume
+				let vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
+				vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
+				adapter.setState('zone3.volume', parseFloat(vol), true);
+					if(volumeInDB) adapter.setState('zone3.volumeDB', parseFloat(vol)-80, true);
+				return;
+			} else {
+				command = 'Z3' + command.slice(1, command.length);
+			} // endElseIf
+			if(command.startsWith('Z3')) { // Encode Input Source
+				adapter.getObject('zoneMain.selectInput', (err, obj) => {
+					let zThreeSi = data.substring(2);
+					zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
+					for(let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+								if(decodeState(obj.common.states, j) == zThreeSi) {
+									adapter.setState('zone3.selectInput', zThreeSi, true);
+									return;
+								} // endIf
+					} // endFor
+				});
+				return;
+			} // endIf
+		} else { // Transformation for normal commands
+			command = data.replace(/\s+|\d+/g,'');
+		} // endElse
+
+		if(command.startsWith('DIM')) { // Handle display brightness
+			adapter.getObject('display.brightness', (err, obj) => {
+			let bright = data.substring(4);
+			bright = bright.replace(' ', ''); // Remove blanks
+			for(let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
+				if(decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
+					adapter.setState('display.brightness', obj.common.states[j], true);
+				} // endIf
+			} // endFor
 			});
 			return;
-		} // endIf 
-	} else { // Transformation for normal commands
-		command = data.replace(/\s+|\d+/g,'');
-	} // endElse
-	
-	if(command.startsWith('DIM')) { // Handle display brightness
-	    adapter.getObject('display.brightness', (err, obj) => {
-		let bright = data.slice(4, data.length);
-		bright = bright.replace(' ', ''); // Remove blanks
-		for(let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
-  			if(decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
-  			    adapter.setState('display.brightness', obj.common.states[j], true);
-  			} // endIf
-		} // endFor
-	    });
-	    return;
-	} else if(command.startsWith('SI')) { // Handle select input
-	    let siCommand = data.slice(2, data.length); // Get only source name
-	    siCommand = siCommand.replace(' ', ''); // Remove blanks
-	    adapter.setState('zoneMain.selectInput', siCommand, true);
-	    return;
-	} else if(command.startsWith('MS')) { // Handle Surround mode
-	    let msCommand = command.slice(2, command.length);
-	    adapter.setState('settings.surroundMode', msCommand, true);
-	    return;
-	} else if(command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
-	    if(!displayAbility) createDisplayAndHttp();
-	    let displayCont = data.slice(4, data.length).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
-	    let dispContNr = data.slice(3, 4);
-	    adapter.setState('display.displayContent' + dispContNr, displayCont, true);
-	    return;
-	} else if(command.startsWith('NSET')) {
-	    // Network settings info
-	    return;
-	} else if (command.startsWith('SV')){
-	    // Select Video
-	    return;
-	} else if(command.startsWith('NSFRN')) { // Handle friendly name
-	    adapter.setState('info.friendlyName', data.slice(6, data.length), true);
-	    return;
-	} else if(command.startsWith('PSMULTEQ')){
-	    let state = data.split(':')[1];
-	    adapter.setState('settings.multEq', state, true);
-	    return;
-	} else if(command.startsWith('PSDYNVOL')) {
-	    let state = data.split(' ')[1];
-	    adapter.setState('settings.dynamicVolume', state, true);
-	    return;
-	} else if (command.startsWith('VSMONI')) {
-	    let state = data.substring(6);
-	    
-	    if(!multiMonitor) { // make sure that state exists
-		createMonitorState(() => {
-		   if(state === 'AUTO') {
-		       adapter.setState('settings.outputMonitor', 0, true); 
-		   } else adapter.setState('settings.outputMonitor', parseFloat(state), true); 
-		});
-	    } else {
-		if(state === 'AUTO') {
-		    adapter.setState('settings.outputMonitor', 0, true); 
-		} else adapter.setState('settings.outputMonitor', parseFloat(state), true); 
-	    } // endElse
-	    return;	    
-	} // endElseIf
-	
-	adapter.log.debug('[INFO] <== Command to handle is ' + command);
-	
-	switch(command) {
-		case 'PWON':
-			adapter.setState('settings.powerSystem', true, true);
-			break;
-		case 'PWSTANDBY':
-			adapter.setState('settings.powerSystem', false, true);
-			break;
-		case 'MV':
-			data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
-			adapter.setState('zoneMain.volume', parseFloat(data), true);
-		    	if(volumeInDB) adapter.setState('zoneMain.volumeDB', parseFloat(data)-80, true);
-			break;
-		case 'MVMAX':
-			data = data.slice(6, 8) + '.' + data.slice(8, 9);
-			adapter.setState('zoneMain.maximumVolume', parseFloat(data), true);
-		    	if(volumeInDB) adapter.setState('zoneMain.maximumVolumeDB', parseFloat(data)-80, true);
-			break;
-		case 'MUON':
-			adapter.setState('zoneMain.muteIndicator', true, true);
-			break;
-		case 'MUOFF':
-			adapter.setState('zoneMain.muteIndicator', false, true);
-			break;
-		case 'Z2ON':
-			adapter.setState('zone2.powerZone', true, true);
-			break;
-		case 'Z2OFF':
-			adapter.setState('zone2.powerZone', false, true);
-			break;
-		case 'Z2MUON':
-			adapter.setState('zone2.muteIndicator', true, true);
-			break;
-		case 'Z2MUOFF':
-			adapter.setState('zone2.muteIndicator', false, true);
-			break;
-		case 'Z3ON':
-			adapter.setState('zone3.powerZone', true, true);
-			break;
-		case 'Z3OFF':
-			adapter.setState('zone3.powerZone', false, true);
-			break;
-		case 'Z3MUON':
-			adapter.setState('zone3.muteIndicator', true, true);
-			break;
-		case 'Z3MUOFF':
-			adapter.setState('zone3.muteIndicator', false, true);
-			break;
-		case 'ZMON':
-		    	adapter.setState('zoneMain.powerZone', true, true);
-		    	break;
-		case 'ZMOFF':
-			adapter.setState('zoneMain.powerZone', false, true);
-	    		break;
-		case 'SLP':
-		    	data = data.slice(3, data.length);
-		    	adapter.setState('zoneMain.sleepTimer', parseFloat(data), true);
-		    	break;
-		case 'SLPOFF':
-		    	adapter.setState('zoneMain.sleepTimer', 0, true);
-		    	break;
-		case 'Z2SLP':
-		    	data = data.slice(5, data.length);
-		    	adapter.setState('zone2.sleepTimer', parseFloat(data), true);
-		    	break;
-		case 'Z2SLPOFF':
-		    	adapter.setState('zone2.sleepTimer', 0, true);
-		    	break;
-		case 'Z3SLP':
-		    	data = data.slice(5, data.length);
-		    	adapter.setState('zone3.sleepTimer', parseFloat(data), true);
-			break;
-		case 'Z3SLPOFF':
-		    	adapter.setState('zone3.sleepTimer', 0, true);
-		    	break;
-		case 'PSDYNEQON':
-		    	adapter.setState('settings.dynamicEq', true, true)
-		    	break;
-		case 'PSDYNEQOFF':
-		    	adapter.setState('settings.dynamicEq', false, true)
-		    	break;
-		case 'PSSWLON':
-		    	adapter.setState('settings.subwooferLevelState', true, true)
-		    	break;
-		case 'PSSWLOFF':
-		    	adapter.setState('settings.subwooferLevelState', false, true)
-		    	break;
-		case 'PSSWL': // Handle Subwoofer Level for first and second SW
-		    {
-		    	command = data.split(' ')[0];
-		    	let state = data.split(' ')[1];
-		    	state = asciiToDb(state);
-		    	if(command === 'PSSWL') { // Check if PSSWL or PSSWL2
-		    	    adapter.setState('settings.subwooferLevel', parseFloat(state), true);
-		    	} else adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
-		    	break;
-		    }
-		case 'PSLFCON':
-		    	adapter.setState('settings.audysseyLfc', true, true);
-		    	break;
-		case 'PSLFCOFF':
-		    	adapter.setState('settings.audysseyLfc', false, true);
-		    	break;
-		case 'PSCNTAMT':
-		    {
-		    	let state = data.split(' ')[1];
-		    	adapter.setState('settings.containmentAmount', parseFloat(state), true);
-		    	break;
-		    }
-		case 'PSREFLEV':
-		    {
-		    	let state = data.split(' ')[1];
-		    	adapter.setState('settings.referenceLevelOffset', state, true);
-		    	break;
-		    }
-		case 'PSBAS':
-		    {
-		    	let state = data.split(' ')[1];
-		    	state = asciiToDb(state);
-		    	adapter.setState('zoneMain.equalizerBass', state, true);
-		    	break;
-		    }
-		case 'PSTRE':
-		    {
-		    	let state = data.split(' ')[1];
-		    	state = asciiToDb(state);
-		    	adapter.setState('zoneMain.equalizerTreble', state, true);
-		    	break;
-		    }
-		case 'ZPSTRE':
-		    	command = data.split(' ')[0];
-		    	let state = data.split(' ')[1];
-		    	if(command === 'Z2PSTRE') {
-		    	    adapter.setState('zone2.equalizerTreble', state, true);
-		    	} else adapter.setState('zone3.equalizerTreble', state, true);
-		    	break;
-		case 'ZPSBAS':
-		    {
-		    	command = data.split(' ')[0];
-		    	let state = data.split(' ')[1];
-		    	if(command === 'Z2PSBAS') {
-		    	    adapter.setState('zone2.equalizerBass', state, true);
-		    	} else adapter.setState('zone3.equalizerBass', state, true);
-		    	break;
-		    }
-		case 'PSTONECTRLON':
-		    	adapter.setState('settings.toneControl', true, true);
-		    	break;
-		case 'PSTONECTRLOFF':
-		    	adapter.setState('settings.toneControl', false, true);
-		    	break;
-		case 'MNMENON':
-		    	adapter.setState('settings.setupMenu', true, true);
-		    	break;
-		case 'MNMENOFF':
-		    	adapter.setState('settings.setupMenu', false, true);
-		    	break;
-		case 'PSCESON':
-		    	adapter.setState('settings.centerSpread', true, true);
-		    	break;
-		case 'PSCESOFF':
-		    	adapter.setState('settings.centerSpread', false, true);
-		    	break;
-		case 'PSDRCOFF':
-		    	// Dynamic Compression direct change is off
-		    	break;
-		case 'PSLFE':
-		    	// LFE --> amount of subwoofer signal additional directed to speakers
-		    	break;
-		default:
-		    	adapter.log.debug('[INFO] <== Unhandled command ' + command);
-	} // endSwitch
+		} else if(command.startsWith('SI')) { // Handle select input
+			let siCommand = data.substring(2); // Get only source name
+			siCommand = siCommand.replace(' ', ''); // Remove blanks
+			adapter.setState('zoneMain.selectInput', siCommand, true);
+			return;
+		} else if(command.startsWith('MS')) { // Handle Surround mode
+			let msCommand = command.substring(2);
+			adapter.setState('settings.surroundMode', msCommand, true);
+			return;
+		} else if(command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
+            let displayCont = data.substring(4).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
+            let dispContNr = data.slice(3, 4);
+
+			if(!displayAbility) {
+				createDisplayAndHttp(() => adapter.setState('display.displayContent' + dispContNr, displayCont, true));
+            } else
+				adapter.setState('display.displayContent' + dispContNr, displayCont, true);
+			return;
+		} else if(command.startsWith('NSET')) {
+			// Network settings info
+			return;
+		} else if (command.startsWith('SV')){
+			// Select Video
+			return;
+		} else if(command.startsWith('NSFRN')) { // Handle friendly name
+			adapter.setState('info.friendlyName', data.substring(6), true);
+			return;
+		} else if(command.startsWith('PSMULTEQ')){
+			let state = data.split(':')[1];
+			adapter.setState('settings.multEq', state, true);
+			return;
+		} else if(command.startsWith('PSDYNVOL')) {
+			let state = data.split(' ')[1];
+			adapter.setState('settings.dynamicVolume', state, true);
+			return;
+		} else if(command.startsWith('VSMONI')) {
+			let state = data.substring(6);
+
+			if(!multiMonitor) { // make sure that state exists
+				createMonitorState(() => {
+				   if(state === 'AUTO') {
+					   adapter.setState('settings.outputMonitor', 0, true);
+				   } else adapter.setState('settings.outputMonitor', parseFloat(state), true);
+				});
+			} else {
+				if(state === 'AUTO') {
+					adapter.setState('settings.outputMonitor', 0, true);
+				} else adapter.setState('settings.outputMonitor', parseFloat(state), true);
+			} // endElse
+
+			return;
+		} else if(command.startsWith('VSVPM')) {
+            let processingMode = data.substring(4);
+
+            if(!multiMonitor) { // make sure that state exists
+				createMonitorState(() => adapter.setState('settings.videoProcessingMode', processingMode, true));
+			} else {
+            	adapter.setState('settings.videoProcessingMode', processingMode, true);
+			} // endElse
+
+			return;
+		}// endElseIf
+
+		adapter.log.debug('[INFO] <== Command to handle is ' + command);
+
+		switch(command) {
+			case 'PWON':
+				adapter.setState('settings.powerSystem', true, true);
+				break;
+			case 'PWSTANDBY':
+				adapter.setState('settings.powerSystem', false, true);
+				break;
+			case 'MV':
+				data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
+				adapter.setState('zoneMain.volume', parseFloat(data), true);
+					if(volumeInDB) adapter.setState('zoneMain.volumeDB', parseFloat(data)-80, true);
+				break;
+			case 'MVMAX':
+				data = data.slice(6, 8) + '.' + data.slice(8, 9);
+				adapter.setState('zoneMain.maximumVolume', parseFloat(data), true);
+					if(volumeInDB) adapter.setState('zoneMain.maximumVolumeDB', parseFloat(data)-80, true);
+				break;
+			case 'MUON':
+				adapter.setState('zoneMain.muteIndicator', true, true);
+				break;
+			case 'MUOFF':
+				adapter.setState('zoneMain.muteIndicator', false, true);
+				break;
+			case 'Z2ON':
+				adapter.setState('zone2.powerZone', true, true);
+				break;
+			case 'Z2OFF':
+				adapter.setState('zone2.powerZone', false, true);
+				break;
+			case 'Z2MUON':
+				adapter.setState('zone2.muteIndicator', true, true);
+				break;
+			case 'Z2MUOFF':
+				adapter.setState('zone2.muteIndicator', false, true);
+				break;
+			case 'Z3ON':
+				adapter.setState('zone3.powerZone', true, true);
+				break;
+			case 'Z3OFF':
+				adapter.setState('zone3.powerZone', false, true);
+				break;
+			case 'Z3MUON':
+				adapter.setState('zone3.muteIndicator', true, true);
+				break;
+			case 'Z3MUOFF':
+				adapter.setState('zone3.muteIndicator', false, true);
+				break;
+			case 'ZMON':
+					adapter.setState('zoneMain.powerZone', true, true);
+					break;
+			case 'ZMOFF':
+				adapter.setState('zoneMain.powerZone', false, true);
+					break;
+			case 'SLP':
+					data = data.slice(3, data.length);
+					adapter.setState('zoneMain.sleepTimer', parseFloat(data), true);
+					break;
+			case 'SLPOFF':
+					adapter.setState('zoneMain.sleepTimer', 0, true);
+					break;
+			case 'Z2SLP':
+					data = data.slice(5, data.length);
+					adapter.setState('zone2.sleepTimer', parseFloat(data), true);
+					break;
+			case 'Z2SLPOFF':
+					adapter.setState('zone2.sleepTimer', 0, true);
+					break;
+			case 'Z3SLP':
+					data = data.slice(5, data.length);
+					adapter.setState('zone3.sleepTimer', parseFloat(data), true);
+				break;
+			case 'Z3SLPOFF':
+					adapter.setState('zone3.sleepTimer', 0, true);
+					break;
+			case 'PSDYNEQON':
+					adapter.setState('settings.dynamicEq', true, true)
+					break;
+			case 'PSDYNEQOFF':
+					adapter.setState('settings.dynamicEq', false, true)
+					break;
+			case 'PSSWLON':
+					adapter.setState('settings.subwooferLevelState', true, true)
+					break;
+			case 'PSSWLOFF':
+					adapter.setState('settings.subwooferLevelState', false, true)
+					break;
+			case 'PSSWL': // Handle Subwoofer Level for first and second SW
+				{
+					command = data.split(' ')[0];
+					let state = data.split(' ')[1];
+					state = asciiToDb(state);
+					if(command === 'PSSWL') { // Check if PSSWL or PSSWL2
+						adapter.setState('settings.subwooferLevel', parseFloat(state), true);
+					} else adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
+					break;
+				}
+			case 'PSLFCON':
+					adapter.setState('settings.audysseyLfc', true, true);
+					break;
+			case 'PSLFCOFF':
+					adapter.setState('settings.audysseyLfc', false, true);
+					break;
+			case 'PSCNTAMT':
+				{
+					let state = data.split(' ')[1];
+					adapter.setState('settings.containmentAmount', parseFloat(state), true);
+					break;
+				}
+			case 'PSREFLEV':
+				{
+					let state = data.split(' ')[1];
+					adapter.setState('settings.referenceLevelOffset', state, true);
+					break;
+				}
+			case 'PSBAS':
+				{
+					let state = data.split(' ')[1];
+					state = asciiToDb(state);
+					adapter.setState('zoneMain.equalizerBass', state, true);
+					break;
+				}
+			case 'PSTRE':
+				{
+					let state = data.split(' ')[1];
+					state = asciiToDb(state);
+					adapter.setState('zoneMain.equalizerTreble', state, true);
+					break;
+				}
+			case 'ZPSTRE':
+					command = data.split(' ')[0];
+					let state = data.split(' ')[1];
+					if(command === 'Z2PSTRE') {
+						adapter.setState('zone2.equalizerTreble', state, true);
+					} else adapter.setState('zone3.equalizerTreble', state, true);
+					break;
+			case 'ZPSBAS':
+				{
+					command = data.split(' ')[0];
+					let state = data.split(' ')[1];
+					if(command === 'Z2PSBAS') {
+						adapter.setState('zone2.equalizerBass', state, true);
+					} else adapter.setState('zone3.equalizerBass', state, true);
+					break;
+				}
+			case 'PSTONECTRLON':
+					adapter.setState('settings.toneControl', true, true);
+					break;
+			case 'PSTONECTRLOFF':
+					adapter.setState('settings.toneControl', false, true);
+					break;
+			case 'MNMENON':
+					adapter.setState('settings.setupMenu', true, true);
+					break;
+			case 'MNMENOFF':
+					adapter.setState('settings.setupMenu', false, true);
+					break;
+			case 'PSCESON':
+					adapter.setState('settings.centerSpread', true, true);
+					break;
+			case 'PSCESOFF':
+					adapter.setState('settings.centerSpread', false, true);
+					break;
+			case 'PSDRCOFF':
+					// Dynamic Compression direct change is off
+					break;
+			case 'PSLFE':
+					// LFE --> amount of subwoofer signal additional directed to speakers
+					break;
+			default:
+					adapter.log.debug('[INFO] <== Unhandled command ' + command);
+		} // endSwitch
     } // endHandleResponse
 
-    function decodeState(stateNames, state) { // decoding for e. g. selectInput
-   	const stateArray = Object.keys(stateNames).map(key => stateNames[key]); // returns stateNames[key]
-   	for(let i = 0; i < stateArray.length; i++) {
-   	    if(state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) return stateArray[i];
-   	} // endFor
+    function decodeState(stateNames, state) { // decoding for e. g. selectInput --> Input: Key or Value Output: Value
+		const stateArray = Object.keys(stateNames).map(key => stateNames[key]); // returns stateNames[key]
+		for(let i = 0; i < stateArray.length; i++) {
+			if(state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) return stateArray[i];
+		} // endFor
    	    return '';
    	} // endDecodeState
     
@@ -912,9 +931,9 @@ function main() {
     } // endAsciiToDb
     
     function dbToAscii(vol) {
-	vol += 50; // dB to vol
-	vol = vol.toString().replace('.', '');
-	return vol;
+		vol += 50; // dB to vol
+		vol = vol.toString().replace('.', '');
+		return vol;
     } // endDbToAscii
     
     function checkVolumeDB(db) {
@@ -1519,145 +1538,164 @@ function main() {
     } // endCreateZoneThree
     
     function createDisplayAndHttp(cb) {
-	adapter.setObjectNotExists('display.displayContent0', {
-		type: 'state',
-		common: {
-			'name': 'Display content 0',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent1', {
-		type: 'state',
-		common: {
-			'name': 'Display content 1',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent2', {
-		type: 'state',
-		common: {
-			'name': 'Display content 2',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent3', {
-		type: 'state',
-		common: {
-			'name': 'Display content 3',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent4', {
-		type: 'state',
-		common: {
-			'name': 'Display content 4',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent5', {
-		type: 'state',
-		common: {
-			'name': 'Display content 5',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent6', {
-		type: 'state',
-		common: {
-			'name': 'Display content 6',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent7', {
-		type: 'state',
-		common: {
-			'name': 'Display content 7',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	adapter.setObjectNotExists('display.displayContent8', {
-		type: 'state',
-		common: {
-			'name': 'Display content 8',
-			'role': 'info.display',
-			'type': 'string',
-			'write': false,
-			'read': true
-		},
-		native: {}
-	});
-	
-	adapter.setObjectNotExists('zoneMain.iconURL', {
-		type: 'state',
-		common: {
-        		'name': 'Cover',
-        		'role': 'media.cover',
-        		'type': 'string',
-        		'write': false,
-        		'read': true
-        	},
-        	native: {}
-    	});
-	
-    	adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
-	displayAbility = true;
-	adapter.log.debug('[INFO] <== Display Content created')
-	if (cb && typeof(cb) === "function") return cb();
+		adapter.setObjectNotExists('display.displayContent0', {
+			type: 'state',
+			common: {
+				'name': 'Display content 0',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent1', {
+			type: 'state',
+			common: {
+				'name': 'Display content 1',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent2', {
+			type: 'state',
+			common: {
+				'name': 'Display content 2',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent3', {
+			type: 'state',
+			common: {
+				'name': 'Display content 3',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent4', {
+			type: 'state',
+			common: {
+				'name': 'Display content 4',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent5', {
+			type: 'state',
+			common: {
+				'name': 'Display content 5',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent6', {
+			type: 'state',
+			common: {
+				'name': 'Display content 6',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent7', {
+			type: 'state',
+			common: {
+				'name': 'Display content 7',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+		adapter.setObjectNotExists('display.displayContent8', {
+			type: 'state',
+			common: {
+				'name': 'Display content 8',
+				'role': 'info.display',
+				'type': 'string',
+				'write': false,
+				'read': true
+			},
+			native: {}
+		});
+
+		adapter.setObjectNotExists('zoneMain.iconURL', {
+			type: 'state',
+			common: {
+					'name': 'Cover',
+					'role': 'media.cover',
+					'type': 'string',
+					'write': false,
+					'read': true
+				},
+				native: {}
+		});
+
+		adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
+		displayAbility = true;
+		adapter.log.debug('[INFO] <== Display Content created');
+
+		if (cb && typeof(cb) === "function") return cb();
     } // endCreateDisplayAndHttp
     
     function createMonitorState(cb) {
 	
-	adapter.setObjectNotExists('settings.outputMonitor', {
+		adapter.setObjectNotExists('settings.outputMonitor', {
+				type: 'state',
+				common: {
+					name: 'Output monitor',
+					role: 'video.output',
+					type: 'number',
+					write: true,
+					read: true,
+					states: {
+						'0': 'AUTO',
+						'1': '1',
+						'2': '2'
+					}
+				},
+				native: {}
+			});
+
+        adapter.setObjectNotExists('settings.videoProcessingMode', {
             type: 'state',
             common: {
-                name: 'Output monitor',
-                role: 'video.output',
+                name: 'Video processing mode',
+                role: 'video.processingMode',
                 type: 'number',
                 write: true,
                 read: true,
                 states: {
                     '0': 'AUTO',
-                    '1': '1',
-                    '2': '2'
+                    '1': 'GAME',
+                    '2': 'MOVIE'
                 }
             },
             native: {}
         });
-	
-	multiMonitor = true;	
-	if (cb && typeof(cb) === "function") return cb();
+
+        multiMonitor = true;
+
+        if (cb && typeof(cb) === "function") return cb();
     } // endCreateMonitorState
 
 } // endMain

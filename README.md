@@ -16,7 +16,7 @@ You can either install the adapter via the ioBroker web interface or on your loc
 2. Click on Tab "Adapters"
 3. Type "Denon" in the Filter
 4. Click on the three points and then on the "+" symbol of the DENON AVR adapter
-![Add Adapter](/documentation/plusAddAdapter.png)
+![Add Adapter](/doc/plusAddAdapter.png)
 
 ### Local machine
 Navigate into your iobroker folder and execute the following command: 
@@ -31,11 +31,11 @@ Additional to the adapter installation you have to make sure that your AVR is co
 1. Open your ioBroker interface in a browser (eg: 192.168.1.33:8081)
 2. Navigate to Tab "Adapters"
 3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
-![Add Adapter](/documentation/plusAddAdapter.png)
+![Add Adapter](/doc/plusAddAdapter.png)
 4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search icon to find AVRs in your network (via UPnP)
-![Adapter Configuration](/documentation/fillInIp.png)
+![Adapter Configuration](/doc/fillInIp.png)
 5. If you also want to handle the volume states in dB or adjust the request/poll interval, make sure to click on the "Advanced Settings" Tab. By decreasing the Poll Interval the adapter will decrease the time between updating the display contents. By decreasing the request interval the time between sending commands will be decreased. The default settings should fit well for the most users.
-![Advanced Settings](/documentation/advancedSettings.png) 
+![Advanced Settings](/doc/advancedSettings.png) 
 6. Click on Save & Close
 
 ### Network Setup of AV Receiver
@@ -341,7 +341,7 @@ Following states will be created by the adapter:
    ```
    
 * settings.expertCommand
-   *You can send your own custom commands with this state. You can find an overview about the existing commands in the [AVR-Control-Protocol.pdf](documentation/AVR-Control-Protocol.pdf)*
+   *You can send your own custom commands with this state. You can find an overview about the existing commands in the [AVR-Control-Protocol.pdf](doc/AVR-Control-Protocol.pdf)*
    
    *Example:*
    
@@ -468,6 +468,8 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 ### 0.3.8
 * (foxriver76) add state to control center spread
 * (foxriver76) readme updated
+* (foxriver76) addded video processing mode control
+* (foxriver76) optimizations and minor fixes
 
 ### 0.3.7
 * (foxriver76) minor code optimization
