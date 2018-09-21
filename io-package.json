@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.8",
+		"version": "0.3.9",
 		"news": {
+			"0.3.9": {
+				"en": "only create containment amount, audyssey lfc, subwoofer two level if supproted",
+				"de": "Contaiment Amount, Audyssey LFC und Subwoofer Two States werden nur erstellt, falls unterstüzt"
+			},
 			"0.3.8": {
 				"en": "Readme enhanced an corrected, added center spread control state and video processing mode, minor fixes",
 				"de": "Verbesserungen an der Readme, Center Spread und Video Processing Mode status hinzugefügt, kleine Fehlerbehebungen"
@@ -726,23 +730,6 @@
 			}
 		},
 		{
-			"_id": "settings.subwooferTwoLevel",
-			"type": "state",
-			"common": {
-				"name": "Second Subwoofer Level",
-				"role": "level",
-				"type": "number",
-				"write": true,
-				"read": true,
-				"min": -12,
-				"max": 12,
-				"unit": "dB"
-			},
-			"native": {
-				
-			}
-		},
-		{
 			"_id": "settings.subwooferLevelUp",
 			"type": "state",
 			"common": {
@@ -761,92 +748,6 @@
 			"type": "state",
 			"common": {
 				"name": "Subwoofer level Down",
-				"role": "button",
-				"type": "boolean",
-				"write": true,
-				"read": false
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "settings.subwooferTwoLevelUp",
-			"type": "state",
-			"common": {
-				"name": "subwooferTwoLevelUp",
-				"role": "button",
-				"type": "boolean",
-				"write": true,
-				"read": false
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "settings.subwooferTwoLevelDown",
-			"type": "state",
-			"common": {
-				"name": "Subwoofer Two Level Down",
-				"role": "button",
-				"type": "boolean",
-				"write": true,
-				"read": false
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "settings.audysseyLfc",
-			"type": "state",
-			"common": {
-				"name": "Audyssey Low Frequency Containment",
-				"role": "switch",
-				"type": "boolean",
-				"write": true,
-				"read": true
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "settings.containmentAmount",
-			"type": "state",
-			"common": {
-				"name": "Audyssey Low Frequency Containment Amount",
-				"role": "level",
-				"type": "number",
-				"write": true,
-				"read": true,
-				"min": 1,
-				"max": 7
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "settings.containmentAmountUp",
-			"type": "state",
-			"common": {
-				"name": "Containment Amount Up",
-				"role": "button",
-				"type": "boolean",
-				"write": true,
-				"read": false
-			},
-			"native": {
-				
-			}
-		},
-		{
-			"_id": "settings.containmentAmountDown",
-			"type": "state",
-			"common": {
-				"name": "Containment Amount Down",
 				"role": "button",
 				"type": "boolean",
 				"write": true,

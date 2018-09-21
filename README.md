@@ -111,11 +111,11 @@ The adapter creates the following buttons:
    
 * settings.containmentAmountDown
 
-   *Decrease Audyssey LFC amount.*
+   *Decrease Audyssey LFC amount. The button will only be created, if it is supported by your AVR.*
 
 * settings.containmentAmountUp
 
-   *Increase Audyssey LFC amount.*
+   *Increase Audyssey LFC amount. The button will only be created, if it is supported by your AVR.*
    
 * settings.cursorUp / settings.cursorDown / settings.cursorLeft / settings.cursorRight
 
@@ -393,15 +393,18 @@ Following states will be created by the adapter:
 
 * settings.subwooferLevel / settings.subwooferTwoLevel
 
-   *Number value which indicates the current subwoofer level. The value has a range from -12 to 12 (-12 dB to +12 dB).*
+   *Number value which indicates the current subwoofer level. The value has a range from -12 to 12 (-12 dB to +12 dB).
+   The SubwooferTwoLevel state will only be created if it is supported by your AVR.*
    
 * settings.audysseyLfc
 
-   *Boolean value, which contains and is able to control Audyssey Low Frequency Containment status (on/off).*
+   *Boolean value, which contains and is able to control Audyssey Low Frequency Containment status (on/off).
+   The state will only be created, if it is supported by your AVR.*
    
 * settings.containmentAmount
 	
-   *Number value to set the Low Frequency Containment Amount. The value can be between 1 and 7.*
+   *Number value to set the Low Frequency Containment Amount. The value can be between 1 and 7. The state will only be
+   created, if it is supported by your AVR.*
    
 * settings.multEq
 
@@ -474,6 +477,10 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+## 0.3.9
+* (foxriver76) only create containment amount, audyssey lfc, subwoofer two level if supproted
+* (foxriver76) readme updated
 
 ### 0.3.8
 * (foxriver76) add state to control center spread

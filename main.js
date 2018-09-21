@@ -73,6 +73,8 @@ function main() {
     let multiMonitor = false;
     let pollingVar = null;
     let connectingVar = null;
+    let subTwo = false;
+    let audysseyLfc = false;
     
     checkVolumeDB(volumeInDB);
     
@@ -836,20 +838,45 @@ function main() {
 					state = asciiToDb(state);
 					if(command === 'PSSWL') { // Check if PSSWL or PSSWL2
 						adapter.setState('settings.subwooferLevel', parseFloat(state), true);
-					} else adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
+					} else {
+					    if(!subTwo) { // make sure sub two state exists
+                            createSubTwo(() => {
+                                adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
+                            });
+                        } else
+					        adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
+                    } // endElse
 					break;
 				}
 			case 'PSLFCON':
-					adapter.setState('settings.audysseyLfc', true, true);
+					if(!audysseyLfc) {
+						createLfcAudyseey(() => {
+                            adapter.setState('settings.audysseyLfc', true, true);
+						});
+					} else
+                        adapter.setState('settings.audysseyLfc', true, true);
+
 					break;
 			case 'PSLFCOFF':
-					adapter.setState('settings.audysseyLfc', false, true);
-					break;
+                if(!audysseyLfc) {
+                    createLfcAudyseey(() => {
+                        adapter.setState('settings.audysseyLfc', false, true);
+                    });
+                } else
+                    adapter.setState('settings.audysseyLfc', false, true);
+
+                break;
 			case 'PSCNTAMT':
 				{
 					let state = data.split(' ')[1];
-					adapter.setState('settings.containmentAmount', parseFloat(state), true);
-					break;
+                    if(!audysseyLfc) {
+                        createLfcAudyseey(() => {
+                            adapter.setState('settings.containmentAmount', parseFloat(state), true);
+						});
+					} else
+						adapter.setState('settings.containmentAmount', parseFloat(state), true);
+
+                    break;
 				}
 			case 'PSREFLEV':
 				{
@@ -1660,21 +1687,21 @@ function main() {
     function createMonitorState(cb) {
 	
 		adapter.setObjectNotExists('settings.outputMonitor', {
-				type: 'state',
-				common: {
-					name: 'Output monitor',
-					role: 'video.output',
-					type: 'number',
-					write: true,
-					read: true,
-					states: {
-						'0': 'AUTO',
-						'1': '1',
-						'2': '2'
-					}
-				},
-				native: {}
-			});
+            type: 'state',
+            common: {
+                name: 'Output monitor',
+                role: 'video.output',
+                type: 'number',
+                write: true,
+                read: true,
+                states: {
+                    '0': 'AUTO',
+                    '1': '1',
+                    '2': '2'
+                }
+            },
+            native: {}
+        });
 
         adapter.setObjectNotExists('settings.videoProcessingMode', {
             type: 'state',
@@ -1695,7 +1722,116 @@ function main() {
 
         multiMonitor = true;
 
+        adapter.log.debug('[INFO] <== Created monitor states');
+
         if (cb && typeof(cb) === "function") return cb();
     } // endCreateMonitorState
+
+    function createSubTwo(cb) {
+
+        adapter.setObjectNotExists('settings.subwooferTwoLevel', {
+            type: 'state',
+            common: {
+                name: 'Second Subwoofer Level',
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: -12,
+                max: 12,
+                unit: 'dB'
+        },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('settings.subwooferTwoLevelUp', {
+            type: 'state',
+            common: {
+                name: 'Subwoofer Two Level Up',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+        },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('settings.subwooferTwoLevelDown', {
+            type: 'state',
+            common: {
+                name: 'Subwoofer Two Level Down',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+        },
+            native: {}
+        });
+
+        adapter.log.debug('[INFO] <== Created subwoofer two states');
+
+        subTwo = true;
+
+        if (cb && typeof(cb) === "function") return cb();
+    } // endCreateSubTwo
+
+    function createLfcAudyseey(cb) {
+
+        adapter.setObjectNotExists('settings.audysseyLfc', {
+            type: 'state',
+            common: {
+                name: 'Audyssey Low Frequency Containment',
+                role: 'switch',
+                type: 'boolean',
+                write: true,
+                read: true
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('settings.containmentAmount', {
+            type: 'state',
+            common: {
+                name: 'Audyssey Low Frequency Containment Amount',
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: 1,
+                max: 7
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('settings.containmentAmountUp', {
+            type: 'state',
+            common: {
+                name: 'Containment Amount Up',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('settings.containmentAmountDown', {
+            type: 'state',
+            common: {
+                name: 'Containment Amount Down',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        });
+
+        adapter.log.debug('[INFO] <== Created Audyssey LFC states');
+
+        audysseyLfc = true;
+
+        if (cb && typeof(cb) === "function") return cb();
+    } // endCreateLfcAudyssey
 
 } // endMain
