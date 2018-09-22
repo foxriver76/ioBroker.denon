@@ -72,7 +72,7 @@ Nach Abschluß der Installation einer Adapterinstanz öffnet sich automatisch ei
 |:-------------|:-------------|
 |Abrufintervall|Hiermit kann festgelegt werden, wie oft der Adapter manche Objekte aktualisiert. Die meisten Objekte werden bei einer Änderung automatisch aktualisiert. Der voreingestellte Wert hat sich als geeignet erwiesen.|
 |Intervall zwischen Befehlen|Hier kann festgelegt werden, wie lange der Adapter zwischen Befehlen wartet. Sollten Sie einen alten AV-Receiver haben und Probleme mit dem adapter haben, kann es sinnvoll sein, diesen Wert zu erhöhen (z. B. auf 200 ms).|
-|Lautstärke in dB|Die AV-Receiver bieten zwei Formen die Lautstärke darzustellen: dB und Volume. Sollten Sie es gewohnt sein, ihren AV-Receiver in dB zu regeln, können Sie diese Checkbox aktivieren. Es werden automatisch zusätzliche Objekte erzeugt um die Lautstärke in dB zu verwalten.|
+|Lautstärke in dB|Die AV-Receiver bieten zwei Möglichkeiten die Lautstärke darzustellen: dB und Volume. Sollten Sie es gewohnt sein, Ihren AV-Receiver in dB zu regeln, können Sie diese Checkbox aktivieren. Es werden automatisch zusätzliche Objekte erzeugt um die Lautstärke in dB zu verwalten.|
 
 Nach Abschluß der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
 Dadurch efolgt im Anschluß ein Neustart des Adapters.
@@ -477,9 +477,38 @@ Following states will be created by the adapter:
    *15: 15 dB*
    
    *Example:*
+   
     ```javascript
     setState('denon.0.settings.referenceLevelOffset', '5'); // Sets Reference Level Offset to 5 dB
     ```
+    
+* settings.pictureMode
+
+   *String value to set the Picture Mode Direct Change. This state will only be created when your AVR supports it*
+   
+   *You can set the following values as string:
+   
+   *'Off'* 
+   
+   *'Standard'*
+   
+   *'Movie'*
+   
+   *'Vivid'*
+   
+   *'Stream'*
+    
+   *'Custom'*
+   
+   *'ISF Day'*
+   
+   *'ISF Night'*
+   
+   *Example:*
+   
+   ```javascript
+   setState('denon.0.settings.pictureMode', 'Standard'); // Set Picture Mode Direct Change to Standard
+   ```
     
 * zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
 
@@ -502,4 +531,5 @@ Following states will be created by the adapter:
 * settings.setupMenu
 
    *Boolean indicator, which indicates if setup menu is currently open or closed. You can open and close it with this state.*
+   
    

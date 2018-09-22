@@ -29,6 +29,7 @@ let pollingVar = null;
 let connectingVar = null;
 let subTwo = false;
 let audysseyLfc = false;
+let pictureMode = false;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -541,6 +542,11 @@ adapter.on('stateChange', (id, state) => {
                 sendRequest('VSVPM' + decodeState(obj.common.states, state));
             });
             break;
+        case 'settings.pictureMode':
+            adapter.getObject('settings.pictureMode', (err, obj) => {
+               sendRequest('PV' + getKeyByValue(obj.common.states, state));
+            });
+            break;
         default:
             adapter.log.error('[COMMAND] ' + id + 'is not a valid state');
     } // endSwitch
@@ -582,7 +588,8 @@ const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
     'PSTRE ?', 'Z2PSTRE ?',
     'Z3PSTRE ?', 'Z2PSBAS ?',
     'Z3PSBAS ?', 'PSTONE CTRL ?',
-    'MNMEN?', 'PSCES ?', 'VSVPM ?'
+    'MNMEN?', 'PSCES ?', 'VSVPM ?',
+    'PV?'
 ];
 
 function updateStates() {
@@ -745,6 +752,21 @@ function handleResponse(data) {
             adapter.setState('settings.videoProcessingMode', processingMode, true);
         } // endElse
 
+        return;
+    } else if (command.startsWith('PV')) {
+        let pictureMode = data.substring(1);
+
+        if (!pictureMode) {
+            createPictureMode(() => {
+                adapter.getObject('settings.pictureMode', (err, obj) => {
+                    adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
+                });
+            });
+        } else {
+            adapter.getObject('settings.pictureMode', (err, obj) => {
+                adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
+            });
+        } // endElse
         return;
     }// endElseIf
 
@@ -943,13 +965,17 @@ function handleResponse(data) {
     } // endSwitch
 } // endHandleResponse
 
-function decodeState(stateNames, state) { // decoding for e. g. selectInput --> Input: Key or Value Output: Value
+function decodeState(stateNames, state) { // decoding for e. g. selectInput --> Input: Key (when ascending integer) or Value Output: Value
     const stateArray = Object.keys(stateNames).map(key => stateNames[key]); // returns stateNames[key]
     for (let i = 0; i < stateArray.length; i++) {
         if (state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) return stateArray[i];
     } // endFor
     return '';
 } // endDecodeState
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+} // endGetKeyByValue
 
 function asciiToDb(vol) {
     if (vol.length === 3) vol = vol / 10;
@@ -1834,3 +1860,31 @@ function createLfcAudyseey(cb) {
 
     if (cb && typeof(cb) === "function") return cb();
 } // endCreateLfcAudyssey
+
+function createPictureMode(cb) {
+
+    adapter.setObjectNotExists('settings.pictureMode', {
+        type: 'state',
+        common: {
+            name: 'Picture Mode Direct Change',
+            role: 'button',
+            type: 'string',
+            write: true,
+            read: false,
+            states: {
+                'OFF': 'Off',
+                'STD': 'Standard',
+                'MOV': 'Movie',
+                'VVD': 'Vivid',
+                'STM': 'Stream',
+                'CTM': 'Custom',
+                'DAY': 'ISF Day',
+                'NGT': 'ISF Night'
+            }
+        },
+        native: {}
+    });
+
+    pictureMode = true;
+    if (cb && typeof(cb) === "function") return cb();
+} // endCreatePictureMode

@@ -445,9 +445,38 @@ Following states will be created by the adapter:
    *15: 15 dB*
    
    *Example:*
+   
     ```javascript
     setState('denon.0.settings.referenceLevelOffset', '5'); // Sets Reference Level Offset to 5 dB
     ```
+    
+* settings.pictureMode
+
+   *String value to set the Picture Mode Direct Change. This state will only be created when your AVR supports it*
+   
+   *You can set the following values as string:
+   
+   *'Off'* 
+   
+   *'Standard'*
+   
+   *'Movie'*
+   
+   *'Vivid'*
+   
+   *'Stream'*
+    
+   *'Custom'*
+   
+   *'ISF Day'*
+   
+   *'ISF Night'*
+   
+   *Example:*
+   
+   ```javascript
+   setState('denon.0.settings.pictureMode', 'Standard'); // Set Picture Mode Direct Change to Standard
+   ```
     
 * zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
 

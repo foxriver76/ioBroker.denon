@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.3.9",
+		"version": "0.4.0",
 		"news": {
+			"0.4.0": {
+				"en": "create possibility to control  picture mode direct change",
+				"de": "Status für Picture Mode Direct Change hinzugefügt"
+			},
 			"0.3.9": {
 				"en": "only create containment amount, audyssey lfc, subwoofer two level if supproted",
 				"de": "Contaiment Amount, Audyssey LFC und Subwoofer Two States werden nur erstellt, falls unterstüzt"
@@ -274,7 +278,7 @@
 			"common": {
 				"name": "Select input",
 				"role": "media.input",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -641,7 +645,7 @@
 			"common": {
 				"name": "Surround mode",
 				"role": "state",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -766,7 +770,7 @@
 			"common": {
 				"name": "Mult EQ",
 				"role": "level",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -787,7 +791,7 @@
 			"common": {
 				"name": "Dynamic Volume",
 				"role": "level",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"states": {
@@ -807,7 +811,7 @@
 			"common": {
 				"name": "Reference Level Offset",
 				"role": "level",
-				"type": "number",
+				"type": "string",
 				"write": true,
 				"read": true,
 				"unit": "dB",
