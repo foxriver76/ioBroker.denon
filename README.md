@@ -1,4 +1,4 @@
-![Logo](admin/denon.png)
+![Logo](/admin/denon.png)
 # ioBroker.denon
 ===========================
 
