@@ -1,71 +1,102 @@
-![Logo](/admin/denon.png)
-# ioBroker.denon
-===========================
+![Logo](media/denon.png)
 
-[![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)[![Build status](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n/branch/master?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon/branch/master)
-[![NPM version](http://img.shields.io/npm/v/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
+# DENON/Marantz AV-Receiver Adapter
 
-[![NPM](https://nodei.co/npm/iobroker.denon.png?downloads=true)](https://nodei.co/npm/iobroker.denon/)
+Der DENON Adapter ermöglicht die Einbindung eines AV-Receivers des Herstellers DENON oder Marantz in das ioBroker System.
+
+## Überblick
+
+### DENON AV-Receiver
+Bei DENON und Marantz AV-Receivern handelt es sich um AV-Receiver der Mittel bis Oberklasse. Unterstützt wird regulär mindestens
+5.1 Surround Sound. So ist es möglich Boxen und Subwoofer unterschiedlicher Hersteller in das Multimediasystem einzubinden. 
+<br/>
+Ebenfalls sind die meisten neueren Geräte netzwerkfähig, wodurch sie neben den klassischen Eingangssignalen auch Internetradio, 
+Serverdateien und via Bluetooth oder Netzwerk gestreamte Dateien wiedergeben können.
+
+### DENON Adapter
+Der DENON Adapter findet automatisch kompatible DENON und Marantz AV-Receiver, die sich im gleichen Netzwerksubnetz wie
+der ioBroker befinden.
+<br/>
+Der Adapter legt automatisch alle für das jeweilige Modell verüfgbaren Befehle und Stati in Form von Objekten an. 
+Ein Großteil der Stati kann ebenfalls ausgelesen werden, wie z. B. die aktuelle Laustärke, der Eingangskanal und viele mehr.
+Durch geziehltes Beschreiben oder Lesen der angelegten Objekten kann deren Status geändert und 
+damit Aktionen ausgelöst oder auch abgefragt werden. 
+
+## Voraussetzungen vor der Installation
+Bevor der Adapter mit Ihrem AV-Receiver kommunizieren kann, sollte sichergestellt werden, dass der AV-Receiver korrekt
+konfiguriert ist. Ebenfalls muss der AV-Receiver über eine aktive Netzwerkverindung verfügen.
+
+1. Drücken Sie die SETUP Taste auf Ihrer Fernbedienung. Das Menü öffnet sich auf dem Onscreen-Display (OSD) sowie auf dem
+angeschlossenen Videoausgangs-Gerät.
+2. Wählen Sie den Menüpunkt Netzwerk und anschließend den Punkt Einstellungen.
+3. Konfigurieren Sie nun die folgenden Parameter
+
+   *DHCP: EIN (Nutzen Sie diese Einstellung wenn es einen DHCP Server (z. B. FRITZ!Box) im lokalen Netzwerk gibt)*
+  
+   *IP-Adresse: Wenn DHCP ausgeschaltet ist, muss eine IP-Adresse konfiguriert werden.*
+  
+   *Subnetz Maske: Subnetzmaske muss nur konfiguriert werden wenn DHCP ausgeschaltet wurde.*
+  
+   *Standardgateway: Konfigurieren Sie die Adresse des Gateways, falls DHCP ausgeschaltet wurde.*
+  
+   *Prim. DNS-Server: Nicht konfigurieren.*
+  
+   *Second DNS: Nicht konfigurieren.*
+  
+   *Proxy: AUS*
+  
+4. Speichern Sie die Einstellungen 
+5. Drücken Sie erneut den SETUP Knopf
+6. Navigieren Sie in das Menü Netzwerk und anschließend nach Netzwerk-Strg."
+7. Setzen Sie den Parameter auf "Immer ein"
 
 ## Installation
-Der Adapter kann sowohl über das ioBroker Web Interface als auch über das Terminal installiert werden.
+Eine Instanz des Adapters wird über die ioBroker Admin-Oberfläche installiert. 
+Die ausführliche Anleitung für die dazu notwendigen Installatonschritte finden sie hier.
+<br/><br/>
+Nach Abschluß der Installation einer Adapterinstanz öffnet sich automatisch ein Konfigurationsfenster.
 
-### Admin Oberfläche
-1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
-2. Click on Tab "Adapters"
-3. Type "Denon" in the Filter
-4. Click on the three points and then on the "+" symbol of the DENON AVR adapter
-![Add Adapter](/docs/en/img/plusAddAdapter.png)
+## Konfiguration
 
-### Terminal
-Navigate into your iobroker folder and execute the following command:
- 
-```bash
-npm i iobroker.denon
-```
+## Fenster "Haupteinstellungen"
+![Adapter Configuration](media/fillInIp.png "Haupteinstellungen")<span style="color:grey">*Admin Oberfläche*</span>
 
-## Setup
-Additional to the adapter installation you have to make sure that your AVR is correctly configured.
+| Feld         | Beschreibung |                                                                       
+|:-------------|:-------------|
+|IP Adresse    |Hier soll die IP-Adresse des gewünschten AV-Receivers eingegeben werden. Alternativ können Geräte im Netzwerk durch Klick auf die Lupe gesucht und anschließend im Dropdown Menü selektiert werden.|
 
-### ioBroker 
-1. Open your ioBroker interface in a browser (eg: 192.168.1.33:8081)
-2. Navigate to Tab "Adapters"
-3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
-![Add Adapter](/docs/en/img/plusAddAdapter.png)
-4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search icon to find AVRs in your network (via UPnP)
-![Adapter Configuration](/docs/de/img/fillInIp.png)
-5. If you also want to handle the volume states in dB or adjust the request/poll interval, make sure to click on the "Advanced Settings" Tab. By decreasing the Poll Interval the adapter will decrease the time between updating the display contents. By decreasing the request interval the time between sending commands will be decreased. The default settings should fit well for the most users.
-![Advanced Settings](/docs/de/img/advancedSettings.png) 
-6. Click on Save & Close
+## Fenster "Erweiterte Einstellungen"
+![Advanced Settings](media/advancedSettings.png "Erweiterte Einstellungen")<span style="color:grey">*Admin Oberfläche*</span>
 
-### Netzwerkkonfiguration des AV Receiver
+| Feld         | Beschreibung |                                                                       
+|:-------------|:-------------|
+|Abrufintervall|Hiermit kann festgelegt werden, wie oft der Adapter manche Objekte aktualisiert. Die meisten Objekte werden bei einer Änderung automatisch aktualisiert. Der voreingestellte Wert hat sich als geeignet erwiesen.|
+|Intervall zwischen Befehlen|Hier kann festgelegt werden, wie lange der Adapter zwischen Befehlen wartet. Sollten Sie einen alten AV-Receiver haben und Probleme mit dem adapter haben, kann es sinnvoll sein, diesen Wert zu erhöhen (z. B. auf 200 ms).|
+|Lautstärke in dB|Die AV-Receiver bieten zwei Formen die Lautstärke darzustellen: dB und Volume. Sollten Sie es gewohnt sein, ihren AV-Receiver in dB zu regeln, können Sie diese Checkbox aktivieren. Es werden automatisch zusätzliche Objekte erzeugt um die Lautstärke in dB zu verwalten.|
 
-1. Press SETUP button, then Menu appears on FL-display(and GUI)
-2. Select "Network" --> "Settings"
-3. Set parameters described below
+Nach Abschluß der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
+Dadurch efolgt im Anschluß ein Neustart des Adapters.
 
-   *DHCP: "ON" (Use this setting when DHCP server is on the local network.)*
-  
-   *IP Address: When <DHCP> sets "Off”, please set IP address.*
-  
-   *Subnet Mask: When <DHCP> sets "Off", please set Subnet Mask.*
-  
-   *Gateway: Set the address of Gateway when Gateway is on the local network.*
-  
-   *Primary DNS: Do not set this parameter.*
-  
-   *Second DNS: Do not set this parameter.*
-  
-   *Proxy: Set this parameter "Off".*
-  
-4. Press SETUP button, then Menu appears on FL-display (and GUI)
-5. Select “Network" --> Network Control/IP Control"
-6. Set this parameter to "Always On".
+## Instanzen
+Die Installation des Adapters hat im Bereich `Objekte` eine aktive Instanz des DENON Adapters angelegt.
+<br/><br/>
+![Instanz](media/instance.png "Instanz")<span style="color:grey">  
+*Erste Instanz*</span>
 
-## Nutzung
-Take note, that the AVRs can only manage a single telnet connection. If you are having an active telnet connection e. g. with the javascript adapter, the AVR will refuse the connection of this adapter.
-Here you can find a description of the states and how to use them.
+Auf einem ioBroker Server können mehrere DENON Adapter Instanzen angelegt werden. Jedoch kann ein AV-Receiver nur mit 
+einem ioBroker Server gleichzeitig verbunden sein. Sollten Sie mehrere Geräte von einem ioBroker Server steuern, sollten 
+Sie je AV-Receiver eine Instanz anlegen.
+<br/><br/>
+Ob der Adapter aktiviert oder mit dem Logitech Harmony Hub verbunden ist, wird mit der Farbe des Status-Feldes der 
+Instanz verdeutlicht. Zeigt der Mauszeiger auf das Symbol, werden weitere Detailinformationen dargestellt. 
+
+## Objekte des Adapters
+Im Bereich `Objekte` werden in einer Baumstruktur alle vom Adapter im Hub 
+erkannten Geräte und Aktivitäten aufgelistet. Zusätzlich wird auch noch 
+darüber informiert, ob die Kommunikation mit dem Hub reibungslos erfolgt.
+
+![Objekte](media/objekte.png "DENON Objekte")<span style="color:grey">  
+*Objekte des DENON Adapters*</span>
 
 ### Buttons
 The adapter creates the following buttons:
@@ -472,152 +503,3 @@ Following states will be created by the adapter:
 
    *Boolean indicator, which indicates if setup menu is currently open or closed. You can open and close it with this state.*
    
-## Missing functions & bugs
-If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
-
-The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
-   
-## Changelog
-
-## 0.3.9
-* (foxriver76) only create containment amount, audyssey lfc, subwoofer two level if supproted
-* (foxriver76) readme updated
-
-### 0.3.8
-* (foxriver76) add state to control center spread
-* (foxriver76) readme updated
-* (foxriver76) addded video processing mode control
-* (foxriver76) optimizations and minor fixes
-
-### 0.3.7
-* (foxriver76) minor code optimization
-* (foxriver76) fixes on readme
-* (foxriver76) logging undhandled commands on debug
-
-### 0.3.6
-* (foxriver76) fixed displayState non-readable chars for old AVRs
-* (foxriver76) fixes on readme
-* (foxriver76) capital chars in mainZone volumeUp/down names, are now lowercase
-
-### 0.3.5
-* (foxriver76) removed isPlaying state, because not working properly
-* (foxriver76) update readme
-
-### 0.3.4
-* (foxriver76) fix that HEOS does not create http and display content related states
-
-### 0.3.3
-* (foxriver76) added state for setup button
-* (foxriver76) added cursors and remote control buttons
-* (foxriver76) readme update
-
-### 0.3.2
-* (foxriver76) Added isPlaying state for non-HEOS AVR's, thanks to bluefox
-* (foxriver76) Added link to cover for non-HEOS AVR's
-* (foxriver76) displayContent, isPlaying, coverURL will only be generated for non-HEOS
-* (foxriver76) Updated readme
-
-### 0.3.1
-* (foxriver76) Added placeholder ip in config gui
-* (foxriver76) fixed volume in db for main zone
-
-### 0.3.0
-* (bluefox & foxriver76) Names and roles were refactored
-* (bluefox) Discovery added
-* (foxriver76) Update Readme
-* (foxriver76) Implemented separate Play & Pause button
-* (bluefox & foxriver76) Internal improvements
-
-### 0.2.4
-* (foxriver76) prevent adapter from doing more than one reconnect attempt at the same time
-* (foxriver76) improved stability
-* (foxriver76) update readme
-
-### 0.2.3
-* (foxriver76) added possibility to handle states in dB additional
-* (foxriver76) minor changes
-
-### 0.2.2
-* (foxriver76) removed unneeded files
-* (foxriver76) state lists are now of type string due to better compatibility
-* (foxriver76) optimized matching for state lists
-* (foxriver76) some state lists can be set by the value additionaly to the key
-
-### 0.2.1
-* (foxriver76) small bug fixes on connection error handling
-* (foxriver76) improvements on module size
-
-### 0.2.0
-* (foxriver76) preparations for offical repository
-
-### 0.1.9
-* (foxriver76) improved stability
-* (foxriver76) improved fault tolerance on volume (e. g. for use as smart device)
-
-### 0.1.8
-* (foxriver76) adapter sepcific connection error handling
-* (foxriver76) minor reconnect fix
-
-### 0.1.7
-* (foxriver76) subwoofer level is now in dB
-* (foxriver76) added control of treble, bass and tone control state
-* (foxriver76) readme updated
-
-### 0.1.6
-* (foxriver76) connection stability improvements
-* (foxriver76) some parameter settings added
-* (foxriver76) readme updated
-
-### 0.1.5
-* (foxriver76) sleep timer for every zone
-* (foxriver76) admin2 compatibility
-* (foxriver76) minor fixes
-
-### 0.1.4
-* (foxriver76) HEOS bug fix (timeout)
-* (foxriver76) new state for custom commands (expertCommand)
-* (foxriver76) enhanced readme
-
-### 0.1.3
-* (foxriver76) bug fixes for Zone3
-* (foxriver76) new state for main zone power
-* (foxriver76) minor other improvements
-
-### 0.1.2
-* (foxriver76) Performance optimization
-* (foxriver76) Faster display update
-* (foxriver76) More appropriate reconnect intervall
-
-### 0.1.1
-* (foxriver76) new readme for npm
-
-### 0.1.0
-* (foxriver76) handling up to three zones
-* (foxriver76) handling display content
-* (foxriver76) setting display brightness
-
-### 0.0.1
-* (foxriver76) initial release
-
-## License
-The MIT License (MIT)
-
-Copyright (c) 2018 Moritz Heusinger <moritz.heusinger@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.

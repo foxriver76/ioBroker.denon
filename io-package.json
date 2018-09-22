@@ -149,6 +149,9 @@
 		"loglevel": "info",
 		"type": "multimedia"
 	},
+	"docs": {
+		"de": "docs/de/README.md"
+	},
 	"native": {
 		"ip": "",
 		"volumeInDB": false,
