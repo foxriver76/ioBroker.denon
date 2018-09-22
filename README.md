@@ -507,6 +507,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+## 0.4.0
+* (foxriver76) added picture mode direct change
+
 ## 0.3.9
 * (foxriver76) only create containment amount, audyssey lfc, subwoofer two level if supproted
 * (foxriver76) readme updated
