@@ -58,14 +58,14 @@ Nach Abschluß der Installation einer Adapterinstanz öffnet sich automatisch ei
 
 ## Konfiguration
 
-## Fenster "Haupteinstellungen"
+### Fenster "Haupteinstellungen"
 ![Adapter Configuration](media/fillInIp.png "Haupteinstellungen")<span style="color:grey">*Admin Oberfläche*</span>
 
 | Feld         | Beschreibung |                                                                       
 |:-------------|:-------------|
 |IP Adresse    |Hier soll die IP-Adresse des gewünschten AV-Receivers eingegeben werden. Alternativ können Geräte im Netzwerk durch Klick auf die Lupe gesucht und anschließend im Dropdown Menü selektiert werden.|
 
-## Fenster "Erweiterte Einstellungen"
+### Fenster "Erweiterte Einstellungen"
 ![Advanced Settings](media/advancedSettings.png "Erweiterte Einstellungen")<span style="color:grey">*Admin Oberfläche*</span>
 
 | Feld         | Beschreibung |                                                                       
@@ -95,7 +95,7 @@ Im Bereich `Objekte` werden in einer Baumstruktur alle vom Adapter im Hub
 erkannten Geräte und Aktivitäten aufgelistet. Zusätzlich wird auch noch 
 darüber informiert, ob die Kommunikation mit dem Hub reibungslos erfolgt.
 
-![Objekte](media/objekte.png "DENON Objekte")<span style="color:grey">  
+![Objekte](media/objects.png "DENON Objekte")<span style="color:grey">  
 *Objekte des DENON Adapters*</span>
 
 ### Buttons
