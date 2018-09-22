@@ -9,17 +9,18 @@
 [![NPM](https://nodei.co/npm/iobroker.denon.png?downloads=true)](https://nodei.co/npm/iobroker.denon/)
 
 ## Installation
-You can either install the adapter via the ioBroker web interface or on your local machine via npm.
+Der Adapter kann sowohl über das ioBroker Web Interface als auch über das Terminal installiert werden.
 
-### Browser-based
+### Admin Oberfläche
 1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
 2. Click on Tab "Adapters"
 3. Type "Denon" in the Filter
 4. Click on the three points and then on the "+" symbol of the DENON AVR adapter
 ![Add Adapter](/docs/en/img/plusAddAdapter.png)
 
-### Local machine
-Navigate into your iobroker folder and execute the following command: 
+### Terminal
+Navigate into your iobroker folder and execute the following command:
+ 
 ```bash
 npm i iobroker.denon
 ```
@@ -33,12 +34,12 @@ Additional to the adapter installation you have to make sure that your AVR is co
 3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
 ![Add Adapter](/docs/en/img/plusAddAdapter.png)
 4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search icon to find AVRs in your network (via UPnP)
-![Adapter Configuration](/docs/en/img/fillInIp.png)
+![Adapter Configuration](/docs/de/img/fillInIp.png)
 5. If you also want to handle the volume states in dB or adjust the request/poll interval, make sure to click on the "Advanced Settings" Tab. By decreasing the Poll Interval the adapter will decrease the time between updating the display contents. By decreasing the request interval the time between sending commands will be decreased. The default settings should fit well for the most users.
-![Advanced Settings](/docs/en/img/advancedSettings.png) 
+![Advanced Settings](/docs/de/img/advancedSettings.png) 
 6. Click on Save & Close
 
-### Network Setup of AV Receiver
+### Netzwerkkonfiguration des AV Receiver
 
 1. Press SETUP button, then Menu appears on FL-display(and GUI)
 2. Select "Network" --> "Settings"
@@ -62,7 +63,7 @@ Additional to the adapter installation you have to make sure that your AVR is co
 5. Select “Network" --> Network Control/IP Control"
 6. Set this parameter to "Always On".
 
-## Usage
+## Nutzung
 Take note, that the AVRs can only manage a single telnet connection. If you are having an active telnet connection e. g. with the javascript adapter, the AVR will refuse the connection of this adapter.
 Here you can find a description of the states and how to use them.
 
