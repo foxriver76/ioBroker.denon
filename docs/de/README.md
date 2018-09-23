@@ -10,7 +10,7 @@ Der DENON Adapter ermöglicht die Einbindung eines AV-Receivers des Herstellers 
 Bei DENON und Marantz AV-Receivern handelt es sich um AV-Receiver der Mittel bis Oberklasse. Unterstützt wird regulär mindestens
 5.1 Surround Sound. So ist es möglich Boxen und Subwoofer unterschiedlicher Hersteller in das Multimediasystem einzubinden. 
 <br/>
-Ebenfalls sind die meisten neueren Geräte netzwerkfähig, wodurch sie neben den klassischen Eingangssignalen auch Internetradio, 
+Ebenfalls sind die meisten neueren Geräte netzwerkfähig, wodurch diese neben den klassischen Eingangssignalen auch Internetradio, 
 Serverdateien und via Bluetooth oder Netzwerk gestreamte Dateien wiedergeben können.
 
 ### DENON Adapter
@@ -23,21 +23,21 @@ Durch geziehltes Beschreiben oder Lesen der angelegten Objekten kann deren Statu
 damit Aktionen ausgelöst oder auch abgefragt werden. 
 
 ## Voraussetzungen vor der Installation
-Bevor der Adapter mit Ihrem AV-Receiver kommunizieren kann, sollte sichergestellt werden, dass der AV-Receiver korrekt
+Bevor der Adapter mit einem AV-Receiver kommunizieren kann, sollte sichergestellt werden, dass der AV-Receiver korrekt
 konfiguriert ist. Ebenfalls muss der AV-Receiver über eine aktive Netzwerkverindung verfügen.
 
-1. Drücken Sie die SETUP Taste auf Ihrer Fernbedienung. Das Menü öffnet sich auf dem Onscreen-Display (OSD) sowie auf dem
+1. Durch das Drücken der "SETUP" Taste auf der Fernbedienung, öffnet sich das Menü auf dem Onscreen-Display (OSD) sowie auf dem
 angeschlossenen Videoausgangs-Gerät.
-2. Wählen Sie den Menüpunkt Netzwerk und anschließend den Punkt Einstellungen.
-3. Konfigurieren Sie nun die folgenden Parameter
+2. Anschließend muss der Menüpunkt "Netzwerk" und anschließend der Punkt "Einstellungen" gewählt werden.
+3. Die Parameter sollten wie folgt konfiguriert werden:
 
-   *DHCP: EIN (Nutzen Sie diese Einstellung wenn es einen DHCP Server (z. B. FRITZ!Box) im lokalen Netzwerk gibt)*
+   *DHCP: EIN (Diese Einstellung sollte genutzt werden, wenn es einen DHCP Server (z. B. FRITZ!Box) im lokalen Netzwerk gibt)*
   
    *IP-Adresse: Wenn DHCP ausgeschaltet ist, muss eine IP-Adresse konfiguriert werden.*
   
    *Subnetz Maske: Subnetzmaske muss nur konfiguriert werden wenn DHCP ausgeschaltet wurde.*
   
-   *Standardgateway: Konfigurieren Sie die Adresse des Gateways, falls DHCP ausgeschaltet wurde.*
+   *Standardgateway: Die Adresse des Gateways sollte konfiguirert werden, falls DHCP ausgeschaltet wurde.*
   
    *Prim. DNS-Server: Nicht konfigurieren.*
   
@@ -45,14 +45,14 @@ angeschlossenen Videoausgangs-Gerät.
   
    *Proxy: AUS*
   
-4. Speichern Sie die Einstellungen 
-5. Drücken Sie erneut den SETUP Knopf
-6. Navigieren Sie in das Menü Netzwerk und anschließend nach Netzwerk-Strg."
-7. Setzen Sie den Parameter auf "Immer ein"
+4. Durch Drücken des Punktes "Speichern" werden die Einstellungen übernommen
+5. Der "SETUP" Knopf auf der Fernbedienung muss erneut gedrückt werden
+6. Nun sollte in das Menü "Netzwerk" navigiert werden und anschließend "Netzwerk-Strg" geäwhlt werden.
+7. Der konfigurierebare Parameter sollte auf "Immer ein" gestellt werden.
 
 ## Installation
 Eine Instanz des Adapters wird über die ioBroker Admin-Oberfläche installiert. 
-Die ausführliche Anleitung für die dazu notwendigen Installatonschritte finden sie hier.
+Die ausführliche Anleitung für die dazu notwendigen Installatonschritte kann hier (TODO:LINK) nachgelesen werden.
 <br/><br/>
 Nach Abschluß der Installation einer Adapterinstanz öffnet sich automatisch ein Konfigurationsfenster.
 
@@ -71,8 +71,8 @@ Nach Abschluß der Installation einer Adapterinstanz öffnet sich automatisch ei
 | Feld         | Beschreibung |                                                                       
 |:-------------|:-------------|
 |Abrufintervall|Hiermit kann festgelegt werden, wie oft der Adapter manche Objekte aktualisiert. Die meisten Objekte werden bei einer Änderung automatisch aktualisiert. Der voreingestellte Wert hat sich als geeignet erwiesen.|
-|Intervall zwischen Befehlen|Hier kann festgelegt werden, wie lange der Adapter zwischen Befehlen wartet. Sollten Sie einen alten AV-Receiver haben und Probleme mit dem adapter haben, kann es sinnvoll sein, diesen Wert zu erhöhen (z. B. auf 200 ms).|
-|Lautstärke in dB|Die AV-Receiver bieten zwei Möglichkeiten die Lautstärke darzustellen: dB und Volume. Sollten Sie es gewohnt sein, Ihren AV-Receiver in dB zu regeln, können Sie diese Checkbox aktivieren. Es werden automatisch zusätzliche Objekte erzeugt um die Lautstärke in dB zu verwalten.|
+|Intervall zwischen Befehlen|Hier kann festgelegt werden, wie lange der Adapter zwischen Befehlen wartet. Sollte ein älterer AV-Receiver genutzt werden und Probleme mit dem Adapter auftreten, kann es sinnvoll sein, diesen Wert zu erhöhen (z. B. auf 200 ms).|
+|Lautstärke in dB|Die AV-Receiver bieten zwei Möglichkeiten die Lautstärke darzustellen: dB und Volume. Sollte es gewünscht sein, den AV-Receiver in dB zu regeln, sollte diese Checkbox aktiviert werden. Es werden automatisch zusätzliche Objekte erzeugt um die Lautstärke in dB zu verwalten.|
 
 Nach Abschluß der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
 Dadurch efolgt im Anschluß ein Neustart des Adapters.
@@ -84,8 +84,8 @@ Die Installation des Adapters hat im Bereich `Objekte` eine aktive Instanz des D
 *Erste Instanz*</span>
 
 Auf einem ioBroker Server können mehrere DENON Adapter Instanzen angelegt werden. Jedoch kann ein AV-Receiver nur mit 
-einem ioBroker Server gleichzeitig verbunden sein. Sollten Sie mehrere Geräte von einem ioBroker Server steuern, sollten 
-Sie je AV-Receiver eine Instanz anlegen.
+einem ioBroker Server gleichzeitig verbunden sein. Sollen mehrere Geräte von einem ioBroker Server gesteuert werden, sollte 
+je AV-Receiver eine Instanz angelegt werden.
 <br/><br/>
 Ob der Adapter aktiviert oder mit dem Logitech Harmony Hub verbunden ist, wird mit der Farbe des Status-Feldes der 
 Instanz verdeutlicht. Zeigt der Mauszeiger auf das Symbol, werden weitere Detailinformationen dargestellt. 
@@ -98,66 +98,77 @@ darüber informiert, ob die Kommunikation mit dem Hub reibungslos erfolgt.
 ![Objekte](media/objects.png "DENON Objekte")<span style="color:grey">  
 *Objekte des DENON Adapters*</span>
 
+Nachfolgend werden die Objekte in States und Buttons unterteilt. 
+Jeder Datenpunkt ist mit seinem zugehörigen Datentyp sowie seinen Berechtigungen aufgehführt. 
+Berechtigungen können lesend (R) sowie schreibend (W) sein. Jeder Datenpunkt kann mindestens gelesen (R) werden, während
+andere ebenfalls beschrieben werden können. Zur Suche nach einem bestimmten Datenpunkt empfiehlt sich die Suche mittels 
+der Tastenkombination "STRG + F".
+
 ### Buttons
-The adapter creates the following buttons:
+Der Adapter erstellt die folgenden Buttons:
 
 #### Channel: zoneMain / zone2 / zone3
 
 * zoneMain.playPause
 
-   *Play and pause music from Bluetooth, Online, USB/iPod sources.*
+   *Wiedergeben und pausieren von Musik von den Quellen: Bluetooth, Online, USB/iPod.*
    
 * zoneMain.play
 
-   *Play music from Bluetooth, Online, USB/iPod sources.*
+   *Wiedergeben von Musik von den Quellen: Bluetooth, Online, USB/iPod.*
    
 * zoneMain.pause
 
-   *Pause music from Bluetooth, Online, USB/iPod sources.*
+   *Pausieren von Musik von den Quellen: Bluetooth, Online, USB/iPod.*
 
 * zoneMain.skipMinus
 
-   *Skip to previous title.*
+   *Springe zum nächsten Titel.*
 
 * zoneMain.skipPlus
 
-   *Skip to next title.*
+   *Springe zum vorherigen Titel.*
 
 * zoneMain.volumeDown / zone2.volumeDown / zone3.volumeDown
 
-   *Decrease volume of Main Zone / Zone2 / Zone3.*
+   *"Leiser"-Knopf für die Zonen: Main Zone / Zone2 / Zone3.*
    
 * zoneMain.volumeUp / zone2.volumeUp / zone3.volumeUp
 
-   *Increase volume of Main Zone / Zone2 / Zone3.*
+   *"Lauter"-Knopf für die Zonen: Main Zone / Zone2 / Zone3.*
    
 * zoneMain.quickSelectX / zone2.quickSelectX / zone3.quickSelectX
    
-   *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
+   *Emuliert die entsprechenden "Quick Select" Knöpfe der Fernbedienung für die jeweiligen Zonen:
+   Main Zone / Zone2 / Zone3.*
    
 * zoneMain.equalizerBassUp / zone2.equalizerBassUp / zone3.equalizerBassUp
 
-   *Button which increases bass level of the Zone.*
+   *Diser Knopf erhöht das Bass Level der jeweiligen Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
+   eingeschaltet ist.*
    
 * zoneMain.equalizerBassDown / zone2.equalizerBassDown / zone3.equalizerBassDown
 
-   *Button which decreases bass level of the Zone.*
+   *Diser Knopf verringert das Bass Level der jeweiligen Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
+    eingeschaltet ist.*
    
 * zoneMain.equalizerTrebleUp / zone2.equalizerTrebleUp / zone3.equalizerTrebleUp
 
-   *Button which increases treble level of the Zone.*
+   *Diser Knopf erhöht das Treble Level der jeweiligen Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
+    eingeschaltet ist.*
    
 * zoneMain.equalizerTrebleDown / zone2.equalizerTrebleDown / zone3.equalizerTrebleDown
 
-   *Button which decreases treble level of the Zone.*
+   *Diser Knopf verringert das Treble Level der jeweiligen Zone.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
+    eingeschaltet ist.*
    
 #### Channel: settings
    
@@ -198,13 +209,13 @@ The adapter creates the following buttons:
    *Simulates the info button of your remote control*
 
 ### States
-Following states will be created by the adapter:
+Die folgenden States werden vom Adapter angelegt:
 
 #### Channel: info
 
 * info.connection
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R|
 
@@ -212,7 +223,7 @@ Following states will be created by the adapter:
    
 * info.friendlyName
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R|
 
@@ -222,7 +233,7 @@ Following states will be created by the adapter:
    
 * zoneMain.volume / zone2.volume / zone3.volume
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |number|R/W|
 
@@ -238,7 +249,7 @@ Following states will be created by the adapter:
    
 * zoneMain.maximumVolume
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |number|R|
 
@@ -246,7 +257,7 @@ Following states will be created by the adapter:
    
 * zoneMain.muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
@@ -260,7 +271,7 @@ Following states will be created by the adapter:
    
 * zoneMain.powerZone / zone2.powerZone / zone3.powerZone
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
@@ -268,7 +279,7 @@ Following states will be created by the adapter:
    
 * zoneMain.selectInput / zone2.selectInput / zone3.selectInput
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -328,7 +339,7 @@ Following states will be created by the adapter:
    
 * zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |number|R/W|
 
@@ -336,7 +347,7 @@ Following states will be created by the adapter:
    
 * zoneMain.iconURL
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R|
 
@@ -346,7 +357,7 @@ Following states will be created by the adapter:
    
 * zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
     
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |number|R/W|
 
@@ -356,7 +367,7 @@ Following states will be created by the adapter:
    
 * zoneMain.equalizerTreble / zone2.equalizerTreble / zone3.equalizerTreble
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |number|R/W|
 
@@ -368,7 +379,7 @@ Following states will be created by the adapter:
 
 * display.displayContent
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R|
    
@@ -378,7 +389,7 @@ Following states will be created by the adapter:
    
 * display.brightness
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -401,7 +412,7 @@ Following states will be created by the adapter:
 
 * settings.powerSystem
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
    
@@ -409,7 +420,7 @@ Following states will be created by the adapter:
    
 * settings.surroundMode
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -467,7 +478,7 @@ Following states will be created by the adapter:
    
 * settings.expertCommand
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -481,7 +492,7 @@ Following states will be created by the adapter:
 
 * settings.outputMonitor
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -495,7 +506,7 @@ Following states will be created by the adapter:
    
 * settings.videoProcessingMode
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -509,7 +520,7 @@ Following states will be created by the adapter:
    
 * settings.centerSpread
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
@@ -517,7 +528,7 @@ Following states will be created by the adapter:
    
 * settings.dynamicEq
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
@@ -525,7 +536,7 @@ Following states will be created by the adapter:
 
 * settings.subwooferLevelState
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
@@ -533,7 +544,7 @@ Following states will be created by the adapter:
 
 * settings.subwooferLevel / settings.subwooferTwoLevel
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |number|R/W|
 
@@ -542,7 +553,7 @@ Following states will be created by the adapter:
    
 * settings.audysseyLfc
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
@@ -551,7 +562,7 @@ Following states will be created by the adapter:
    
 * settings.containmentAmount
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |number|R/W|
 	
@@ -560,7 +571,7 @@ Following states will be created by the adapter:
    
 * settings.multEq
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -578,7 +589,7 @@ Following states will be created by the adapter:
    
 * settings.dynamicVolume
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -594,7 +605,7 @@ Following states will be created by the adapter:
    
 * settings.referenceLevelOffset
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -616,7 +627,7 @@ Following states will be created by the adapter:
     
 * settings.pictureMode
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
@@ -648,7 +659,7 @@ Following states will be created by the adapter:
    
 * settings.toneControl
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
     
@@ -658,7 +669,7 @@ Following states will be created by the adapter:
    
 * settings.setupMenu
 
-    |Data type|Permission|                                                                       
+    |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
