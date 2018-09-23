@@ -69,6 +69,8 @@ Here you can find a description of the states and how to use them.
 ### Buttons
 The adapter creates the following buttons:
 
+#### Channel: zoneMain / zone2 / zone3
+
 * zoneMain.playPause
 
    *Play and pause music from Bluetooth, Online, USB/iPod sources.*
@@ -100,6 +102,32 @@ The adapter creates the following buttons:
 * zoneMain.quickSelectX / zone2.quickSelectX / zone3.quickSelectX
    
    *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
+   
+* zoneMain.equalizerBassUp / zone2.equalizerBassUp / zone3.equalizerBassUp
+
+   *Button which increases bass level of the Zone.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   
+* zoneMain.equalizerBassDown / zone2.equalizerBassDown / zone3.equalizerBassDown
+
+   *Button which decreases bass level of the Zone.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   
+* zoneMain.equalizerTrebleUp / zone2.equalizerTrebleUp / zone3.equalizerTrebleUp
+
+   *Button which increases treble level of the Zone.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   
+* zoneMain.equalizerTrebleDown / zone2.equalizerTrebleDown / zone3.equalizerTrebleDown
+
+   *Button which decreases treble level of the Zone.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   
+#### Channel: settings
    
 * settings.subwooferLevelDown / settings.subwooferTwoLevelDown
 
@@ -135,44 +163,36 @@ The adapter creates the following buttons:
    
 * settings.info
 
-   *Simulates the info button of your remote control*  
-   
-* zoneMain.equalizerBassUp / zone2.equalizerBassUp / zone3.equalizerBassUp
-
-   *Button which increases bass level of the Zone.*
-   
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
-   
-* zoneMain.equalizerBassDown / zone2.equalizerBassDown / zone3.equalizerBassDown
-
-   *Button which decreases bass level of the Zone.*
-   
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
-   
-* zoneMain.equalizerTrebleUp / zone2.equalizerTrebleUp / zone3.equalizerTrebleUp
-
-   *Button which increases treble level of the Zone.*
-   
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
-   
-* zoneMain.equalizerTrebleDown / zone2.equalizerTrebleDown / zone3.equalizerTrebleDown
-
-   *Button which decreases treble level of the Zone.*
-   
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   *Simulates the info button of your remote control*
 
 ### States
 Following states will be created by the adapter:
 
+#### Channel: info
+
 * info.connection
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R|
 
    *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false.*
    
 * info.friendlyName
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R|
+
    *Read only string. Contains the friendly name of the connected AVR.*
    
+#### Channel: zoneMain / zone2 / zone3
+   
 * zoneMain.volume / zone2.volume / zone3.volume
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R/W|
 
    *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. When Volume in dB is set to true, the state is represented in dB too in separate states, e. g. mainVolumeDB*
    
@@ -186,9 +206,17 @@ Following states will be created by the adapter:
    
 * zoneMain.maximumVolume
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R|
+
    *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in dB is set to true, the state is represented in dB in the maximumVolumeDB state too.*
    
 * zoneMain.muteIndicator / zone2.muteIndicator / zone3.muteIndicator
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
 
    *Boolean value, which is true if the Main Zone / Zone2 / Zone3 is muted, otherwise false. You can mute your AVR with this state.*
    
@@ -198,15 +226,19 @@ Following states will be created by the adapter:
     setState('denon.0.zoneMain.muteIndicator', true); // Mutes the Main Zone of your AVR
     ```
    
-* settings.powerSystem
-   
-   *Boolean value which is true, if the AVR is turned on, otherwise false. You can also turn your AVR on and off with this state.*
-   
 * zoneMain.powerZone / zone2.powerZone / zone3.powerZone
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
 
    *Boolean value, which is true if the Zone is turned on, otherwise false. You can turn your AVR / Zone on and off with this state.*
    
 * zoneMain.selectInput / zone2.selectInput / zone3.selectInput
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
 
    *The string value contains the current input source. You can also set the input source with the following encoding:*
    
@@ -261,8 +293,93 @@ Following states will be created by the adapter:
    ```javascript
     setState('denon.0.zoneMain.selectInput', '5'); // Selects TV as input for Main Zone
    ```
+   
+* zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
+   
+* zoneMain.iconURL
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R|
+
+   *Contains a link where you can find the cover of the channel/song which is currently played.*
+   
+   *NOT SUPPORTED FOR HEOS AVR'S*
+   
+* zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
     
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number value which represents the bass level of the Zone. Value range is from -6 to +6 dB.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   
+* zoneMain.equalizerTreble / zone2.equalizerTreble / zone3.equalizerTreble
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number value which represents the treble level of the Zone. Value range is from -6 to +6 dB.*
+   
+   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   
+#### Channel: display
+
+* display.displayContent
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R|
+   
+   *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*
+   
+   *DISPLAY CONTENT IS NOT SUPPORTED FOR HEOS AVR'S*
+   
+* display.brightness
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+
+   *String value which represents the display brightness. The value can also set the display brightness by the following encoding:*
+   
+   *0: Off --> turns display off*
+   
+   *1: Dark --> turns display dark*
+   
+   *2: Dimmed --> turns display dimmed*
+   
+   *3: Bright --> turns display bright*
+   
+   *Example:*
+   
+   ```javascript
+   setState('denon.0.display.brightness', '3'); // Sets display brightness to "Bright"
+   ```
+#### Channel: settings
+
+* settings.powerSystem
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
+   
+   *Boolean value which is true, if the AVR is turned on, otherwise false. You can also turn your AVR on and off with this state.*
+   
 * settings.surroundMode
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
 
    *The string value contains the current Surround mode. You can also change the source with the following encoding:*
    
@@ -316,31 +433,12 @@ Following states will be created by the adapter:
    setState('denon.0.settings.surroundMode', '3'); // Sets Multi Channel Stereo as surround mode
    ```
    
-* display.displayContent
-   
-   *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*
-   
-   *DISPLAY CONTENT IS NOT SUPPORTED FOR HEOS AVR'S*
-   
-* display.brightness
-
-   *String value which represents the display brightness. The value can also set the display brightness by the following encoding:*
-   
-   *0: Off --> turns display off*
-   
-   *1: Dark --> turns display dark*
-   
-   *2: Dimmed --> turns display dimmed*
-   
-   *3: Bright --> turns display bright*
-   
-   *Example:*
-   
-   ```javascript
-   setState('denon.0.display.brightness', '3'); // Sets display brightness to "Bright"
-   ```
-   
 * settings.expertCommand
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+
    *You can send your own custom commands with this state. You can find an overview about the existing commands in the [AVR-Control-Protocol.pdf](docs/AVR-Control-Protocol.pdf)*
    
    *Example:*
@@ -350,6 +448,10 @@ Following states will be created by the adapter:
     ```
 
 * settings.outputMonitor
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
 
    *Select the output monitor of your AVR. This state will only be created if your AVR supports two HDMI outputs. You can switch the state between:*
    
@@ -361,6 +463,10 @@ Following states will be created by the adapter:
    
 * settings.videoProcessingMode
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+
    *Select the video processing mode of your AVR. This state will only be created if your AVR supports two HDMI outputs. You can switch the state between:*
    
    *0: AUTO*
@@ -371,42 +477,60 @@ Following states will be created by the adapter:
    
 * settings.centerSpread
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
+
    *Boolean-value which is true if center spread is truned on, else false. You can also turn on/off center spread with this state.*
-
-* zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
-
-   *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
-   
-* zoneMain.iconURL
-
-   *Contains a link where you can find the cover of the channel/song which is currently played.*
-   
-   *NOT SUPPORTED FOR HEOS AVR'S*
    
 * settings.dynamicEq
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
 
    *Boolean value which represents the state of Dynamic EQ. You can also set Dynamic EQ on and off with this state.*
 
 * settings.subwooferLevelState
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
+
    *Boolean value, if it's true, you are able to make changes on the subwoofer level.*
 
 * settings.subwooferLevel / settings.subwooferTwoLevel
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R/W|
 
    *Number value which indicates the current subwoofer level. The value has a range from -12 to 12 (-12 dB to +12 dB).
    The SubwooferTwoLevel state will only be created if it is supported by your AVR.*
    
 * settings.audysseyLfc
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
+
    *Boolean value, which contains and is able to control Audyssey Low Frequency Containment status (on/off).
    The state will only be created, if it is supported by your AVR.*
    
 * settings.containmentAmount
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R/W|
 	
    *Number value to set the Low Frequency Containment Amount. The value can be between 1 and 7. The state will only be
    created, if it is supported by your AVR.*
    
 * settings.multEq
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
 
    *String value, to set the MultEQ function of your AVR with the following encoding:*
    
@@ -422,6 +546,10 @@ Following states will be created by the adapter:
    
 * settings.dynamicVolume
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+
    *String value to select the Dynamic Volume by following encoding:*
    
    *0: OFF --> turns Dynamic Volume off*
@@ -433,6 +561,10 @@ Following states will be created by the adapter:
    *3: HEV --> turns Dynamic Volume to heavy*
    
 * settings.referenceLevelOffset
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
 
    *String value to select the Reference Level Offset by the following encoding:*
    
@@ -451,6 +583,10 @@ Following states will be created by the adapter:
     ```
     
 * settings.pictureMode
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
 
    *String value to set the Picture Mode Direct Change. This state will only be created when your AVR supports it*
    
@@ -477,26 +613,22 @@ Following states will be created by the adapter:
    ```javascript
    setState('denon.0.settings.pictureMode', 'Standard'); // Set Picture Mode Direct Change to Standard
    ```
-    
-* zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
-
-   *Number value which represents the bass level of the Zone. Value range is from -6 to +6 dB.*
-   
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
-   
-* zoneMain.equalizerTreble / zone2.equalizerTreble / zone3.equalizerTreble
-
-   *Number value which represents the treble level of the Zone. Value range is from -6 to +6 dB.*
-   
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
 * settings.toneControl
 
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
+    
    *Boolean value, which indicates Tone Control status. You can turn it off/on with this state.*
    
    *Tone Control can only be turned on when Dyn EQ is set to OFF and Tone Control is on*
    
 * settings.setupMenu
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
 
    *Boolean indicator, which indicates if setup menu is currently open or closed. You can open and close it with this state.*
    
