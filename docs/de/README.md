@@ -174,39 +174,39 @@ Der Adapter erstellt die folgenden Buttons:
    
 * settings.subwooferLevelDown / settings.subwooferTwoLevelDown
 
-   *Reduce subwoofer level by pressing the button.*
+   *Verringert das Subwoofer Bevel.*
    
 * settings.subwooferLevelUp / settings.subwooferTwoLevelUp
 
-   *Increase subwoofer level by pressing the button.*
+   *Erhöht das Subwoofer Bevel.*
    
 * settings.containmentAmountDown
 
-   *Decrease Audyssey LFC amount. The button will only be created, if it is supported by your AVR.*
+   *Verrinert die Menge an Audyssey LFC. Dieser Button wird nur erstellt, wenn er vom AVR unterstützt wird*
 
 * settings.containmentAmountUp
 
-   *Increase Audyssey LFC amount. The button will only be created, if it is supported by your AVR.*
+   *Erhöht die Menge an Audyssey LFC. Dieser Button wird nur erstellt, wenn er vom AVR unterstützt wird*
    
 * settings.cursorUp / settings.cursorDown / settings.cursorLeft / settings.cursorRight
 
-   *Simulates the cursor buttons of your remote control*
+   *Simuliert die Pfeiltasten der Fernbedienung.*
    
 * settings.enter
 
-   *Simulates the enter button of your remote control*
+   *Simuliert den "Enter"-Knopf der Fernbedienung.*
 	
 * settings.return
 
-   *Simulates the return/back button of your remote control*
+   *Simuliert den "RETURN" oder "BACK" Knopf der Fernbedienung.*
    
 * settings.option
 
-   *Simulates the option button of your remote control*
+   *Simuliert den "Option"-Knopf der Fernbedienung.*
    
 * settings.info
 
-   *Simulates the info button of your remote control*
+   *Simuliert den "Info"-Knopf der Fernbedienung.*
 
 ### States
 Die folgenden States werden vom Adapter angelegt:
@@ -219,7 +219,7 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R|
 
-   *Read-only boolean indicator. If your broker is connected to your DENON AVR, the state is true otherwise false.*
+   *Nur lesbarer Indikator, der true ist, wenn der ioBroker mit dem AVR verbunden ist.*
    
 * info.friendlyName
 
@@ -227,7 +227,7 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R|
 
-   *Read only string. Contains the friendly name of the connected AVR.*
+   *Nur lesbarer String, der den Netzwerknamen des AVR's beinhaltet.*
    
 #### Channel: zoneMain / zone2 / zone3
    
@@ -237,14 +237,17 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |number|R/W|
 
-   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. When Volume in dB is set to true, the state is represented in dB too in separate states, e. g. mainVolumeDB*
+   *Number Wert der die derzeitige Lautstärke der jeweiligen Zone (Main Zone / Zone2 / Zone 3 )repsäentiert. 
+   Durch beschreiben des Wertes wird der AVR auf die jeweilige Lautstärke gestellt. 
+   Wenn "Volume in dB" in den erweiterten Einstellungen angehakt wurde gibt es einen zusätzlichen State pro Zone, 
+   z. B. zoneMain.VolumeDB*
    
-   *Range is from 0 to 98 (maybe lower due to maximumVolume), where 80 = 0 dB*
+   *Der Bereich reicht von 0 zu 98 (eventuell niedriger durch die konfigurierte maximumVolume), wobei 80 = 0 dB*
    
-   *Example:*
+   *Beispiel:*
    
     ```javascript
-    setState('denon.0.zoneMain.volume', 45.5); // Sets volume of Main Zone to 45.5
+    setState('denon.0.zoneMain.volume', 45.5); // Setzt die Lautstärke der Main Zone auf 45.5
     ```
    
 * zoneMain.maximumVolume
@@ -253,7 +256,9 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |number|R|
 
-   *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in dB is set to true, the state is represented in dB in the maximumVolumeDB state too.*
+   *Nur lesbarer Wert, der die maximal mögliche Lautstärke repräsentiert, wobei 80 = 0 dB. 
+   Wenn Volume in dB in den erweiterten Einstellungen aktiviert wurde, existiert ein zusätlicher State maximumVolumeDB,
+   welcher die maximal mögliche Laustärle in dB darstellt.*
    
 * zoneMain.muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 
@@ -261,12 +266,13 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean value, which is true if the Main Zone / Zone2 / Zone3 is muted, otherwise false. You can mute your AVR with this state.*
+   *Boolscher Wert, welcher true liefert wenn die Main Zone / Zone2 / Zone3 stumm geschaltet ist, sonst false. 
+   Durch setzen des States kann die entsprechende Zone stumm geschaltet werden.*
    
-   *Example:*
+   *Beispiel:*
    
     ```javascript
-    setState('denon.0.zoneMain.muteIndicator', true); // Mutes the Main Zone of your AVR
+    setState('denon.0.zoneMain.muteIndicator', true); // Schaltet die Main Zone stumm
     ```
    
 * zoneMain.powerZone / zone2.powerZone / zone3.powerZone
@@ -275,7 +281,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean value, which is true if the Zone is turned on, otherwise false. You can turn your AVR / Zone on and off with this state.*
+   *Boolscher Wert, welcher true ist, wenn die jeweilige Zone eingeschalten ist.
+   Die jeweilige Zone kann mit diesem State ein- und ausgeschaltet werden*
    
 * zoneMain.selectInput / zone2.selectInput / zone3.selectInput
 
@@ -283,7 +290,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *The string value contains the current input source. You can also set the input source with the following encoding:*
+   *Der string Wert beinhaltet die aktuelle Eingangsquelle. Dieser kann hierbei ebenfalls gesetzt werden. Die Key-Value 
+   Liste ist wie folgt aufgebaut:*
    
    *0: 	PHONO*
    
@@ -329,9 +337,9 @@ Die folgenden States werden vom Adapter angelegt:
    
    *21:	AUX7*
    
-   *Please note, that not every input source is available on every AVR model.*
+   *Hinweis: Nicht jede Eingangsquelle ist auf jedem Modell verfügbar.*
    
-   *Example:*
+   *Beispiel:*
    
    ```javascript
     setState('denon.0.zoneMain.selectInput', '5'); // Selects TV as input for Main Zone
@@ -343,7 +351,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |number|R/W|
 
-   *Number-value to read and set the sleep timer for the selected zone. The value will be updated in less than 10 seconds.*
+   *Number Wert um den Sleep Timer zu setzen und zu lesen. Der Wert wird entsprechend, dem in den 
+   erweiterten Einstellungen konfigurierebarem Abfrageintervall aktualisiert.*
    
 * zoneMain.iconURL
 
@@ -351,9 +360,9 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R|
 
-   *Contains a link where you can find the cover of the channel/song which is currently played.*
+   *Beinhaltet einen Link zum Cover des aktuell abgespielten Senders oder Musikstücks.*
    
-   *NOT SUPPORTED FOR HEOS AVR'S*
+   *Hinweis: Dieser State ist auf HEOS-fähigen Geräten nicht verfügbar.*
    
 * zoneMain.equalizerBass / zone2.equalizerBass / zone3.equalizerBass
     
@@ -361,9 +370,10 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |number|R/W|
 
-   *Number value which represents the bass level of the Zone. Value range is from -6 to +6 dB.*
+   *Number Wert welcher das aktuelle Bass Level der jeweiligen Zone repräsentiert. Der Wertebereich liegt von -6 bis +6 dB.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
+    eingeschaltet ist.*
    
 * zoneMain.equalizerTreble / zone2.equalizerTreble / zone3.equalizerTreble
 
@@ -371,9 +381,10 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |number|R/W|
 
-   *Number value which represents the treble level of the Zone. Value range is from -6 to +6 dB.*
+   *Number Wert welcher das aktuelle Treble Level der jeweiligen Zone repräsentiert. Der Wertebereich liegt von -6 bis +6 dB.*
    
-   *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
+   *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
+    eingeschaltet ist.*
    
 #### Channel: display
 
@@ -383,9 +394,9 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R|
    
-   *Read-only string which contains the content of your AVR display. It has nine states 0 - 9.*
+   *Nur lesbarer string, welcher den Inhalt des Onscreen-Displays enthält. Es gibt neun States, nummeriert von 0 - 9.*
    
-   *DISPLAY CONTENT IS NOT SUPPORTED FOR HEOS AVR'S*
+   *Hinweis: Dieser State ist auf HEOS-fähigen Geräten nicht verfügbar.*
    
 * display.brightness
 
@@ -393,7 +404,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *String value which represents the display brightness. The value can also set the display brightness by the following encoding:*
+   *String Wert, welcher die Displayheligkeit des Onscreen-Display repräsentiert.
+   Mit dem State kann diese ebenfalls gestuert werden. Die Key-Value Liste ist wie folgt aufgebaut:*
    
    *0: Off --> turns display off*
    
@@ -403,10 +415,10 @@ Die folgenden States werden vom Adapter angelegt:
    
    *3: Bright --> turns display bright*
    
-   *Example:*
+   *Beispiel:*
    
    ```javascript
-   setState('denon.0.display.brightness', '3'); // Sets display brightness to "Bright"
+   setState('denon.0.display.brightness', '3'); // Stellt die Helligkeit des Onscreen-Displays auf das Maximum
    ```
 #### Channel: settings
 
@@ -470,7 +482,7 @@ Die folgenden States werden vom Adapter angelegt:
    
    *Please note, that not every Surround mode is available on every AVR model.*
    
-   *Example:*
+   *Beispiel:*
    
    ```javascript
    setState('denon.0.settings.surroundMode', '3'); // Sets Multi Channel Stereo as surround mode
@@ -484,7 +496,7 @@ Die folgenden States werden vom Adapter angelegt:
 
    *You can send your own custom commands with this state. You can find an overview about the existing commands in the [AVR-Control-Protocol.pdf](docs/AVR-Control-Protocol.pdf)*
    
-   *Example:*
+   *Beispiel:*
    
     ```javascript
     setState('denon.0.settings.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
@@ -619,7 +631,7 @@ Die folgenden States werden vom Adapter angelegt:
    
    *15: 15 dB*
    
-   *Example:*
+   *Beispiel:*
    
     ```javascript
     setState('denon.0.settings.referenceLevelOffset', '5'); // Sets Reference Level Offset to 5 dB
@@ -651,7 +663,7 @@ Die folgenden States werden vom Adapter angelegt:
    
    *'ISF Night'*
    
-   *Example:*
+   *Beispiel:*
    
    ```javascript
    setState('denon.0.settings.pictureMode', 'Standard'); // Set Picture Mode Direct Change to Standard

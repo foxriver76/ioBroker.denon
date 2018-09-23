@@ -29,7 +29,7 @@ let pollingVar = null;
 let connectingVar = null;
 let subTwo = false;
 let audysseyLfc = false;
-let pictureMode = false;
+let pictureModeAbility = false;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -756,7 +756,7 @@ function handleResponse(data) {
     } else if (command.startsWith('PV')) {
         let pictureMode = data.substring(1);
 
-        if (!pictureMode) {
+        if (!pictureModeAbility) {
             createPictureMode(() => {
                 adapter.getObject('settings.pictureMode', (err, obj) => {
                     adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
@@ -1885,6 +1885,6 @@ function createPictureMode(cb) {
         native: {}
     });
 
-    pictureMode = true;
+    pictureModeAbility = true;
     if (cb && typeof(cb) === "function") return cb();
 } // endCreatePictureMode
