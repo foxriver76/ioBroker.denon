@@ -461,19 +461,31 @@ Following states will be created by the adapter:
    
    *2: 2 --> Outputs signal to monitor 2*
    
+   *Example:*
+     
+   ```javascript
+   setState('denon.0.settings.outputMonitor', '2'); // Sets monitor 2 as active monitor
+   ```
+   
 * settings.videoProcessingMode
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R/W|
 
-   *Select the video processing mode of your AVR. This state will only be created if your AVR supports two HDMI outputs. You can switch the state between:*
+   *Select the video processing mode of your AVR. This state will only be created if your AVR supports it. You can switch the state between:*
    
    *0: AUTO*
    
    *1: GAME*
    
    *2: MOVIE*
+       
+   *Example:*
+ 
+    ```javascript
+    setState('denon.0.settings.videoProcessingMode', '2'); // Sets Video Processing Mode to "MOVIE"
+    ```
    
 * settings.centerSpread
 
@@ -590,7 +602,7 @@ Following states will be created by the adapter:
 
    *String value to set the Picture Mode Direct Change. This state will only be created when your AVR supports it*
    
-   *You can set the following values as string:
+   *You can set the following values as string:*
    
    *'Off'* 
    
@@ -622,7 +634,7 @@ Following states will be created by the adapter:
     
    *Boolean value, which indicates Tone Control status. You can turn it off/on with this state.*
    
-   *Tone Control can only be turned on when Dyn EQ is set to OFF and Tone Control is on*
+   *Tone Control can only be turned on when Dyn EQ is set to OFF*
    
 * settings.setupMenu
 
@@ -639,7 +651,7 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
-## 0.4.0
+## 0.4.1
 * (foxriver76) added picture mode direct change
 
 ## 0.3.9

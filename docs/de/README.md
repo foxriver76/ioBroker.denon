@@ -428,7 +428,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
    
-   *Boolean value which is true, if the AVR is turned on, otherwise false. You can also turn your AVR on and off with this state.*
+   *Boolscher Wert, welcher true ist, falls der AVR eingeschaltet ist, sonst false. Der AVR kann ebenfalls durch setzen 
+   des States ein- und ausgeschaltet werden.*
    
 * settings.surroundMode
 
@@ -436,7 +437,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *The string value contains the current Surround mode. You can also change the source with the following encoding:*
+   *Der string Wert beinhaltet den derzeitigen Surround Mode. Dieser kann ebenfalls durch die folgende Key-Value Liste
+   gesteuert werden:*
    
    *0:	STEREO*
    
@@ -480,12 +482,12 @@ Die folgenden States werden vom Adapter angelegt:
    
    *20:	MATRIX*
    
-   *Please note, that not every Surround mode is available on every AVR model.*
+   *Hinweis: Nicht jeder Surround Mode ist auf jedem Modell verfügbar.*
    
    *Beispiel:*
    
    ```javascript
-   setState('denon.0.settings.surroundMode', '3'); // Sets Multi Channel Stereo as surround mode
+   setState('denon.0.settings.surroundMode', '3'); // Setze Multi Channel Stereo als Surround Mode
    ```
    
 * settings.expertCommand
@@ -494,12 +496,13 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *You can send your own custom commands with this state. You can find an overview about the existing commands in the [AVR-Control-Protocol.pdf](docs/AVR-Control-Protocol.pdf)*
+   *Mittels dem experten Kommando können eigene Befehle an den AVR gesendet werden. Eine Übersicht kann in [AVR-Control-Protocol.pdf](media/AVR-Control-Protocol.pdf)
+   gefunden werden.*
    
    *Beispiel:*
    
     ```javascript
-    setState('denon.0.settings.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
+    setState('denon.0.settings.expertCommand', 'ECOON'); // Schaltet den ECO Mode für die Main Zone ein 
     ```
 
 * settings.outputMonitor
@@ -508,7 +511,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *Select the output monitor of your AVR. This state will only be created if your AVR supports two HDMI outputs. You can switch the state between:*
+   *Setzt den Ausgangsmonitor für den AVR. Dieser State ist nur verfügbar wenn das Modell über zwei HDMI Ausgänge verfügt. 
+   Der State kann durch die folgende Key-Value Liste gesetzt werden:*
    
    *0: AUTO --> Auto detection of monitor*
    
@@ -516,13 +520,21 @@ Die folgenden States werden vom Adapter angelegt:
    
    *2: 2 --> Outputs signal to monitor 2*
    
+  *Beispiel:*
+  
+   ```javascript
+   setState('denon.0.settings.outputMonitor', '2'); // Leitet das Videosignal zu Monitor 2
+   ```
+   
 * settings.videoProcessingMode
 
     |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
-   *Select the video processing mode of your AVR. This state will only be created if your AVR supports two HDMI outputs. You can switch the state between:*
+   *Der Video Processing Mode kann durch diesen State ausgelesen und gesetzt werden. 
+   Der State wird nur erstellt, wenn er vom AVR unterstützt wird. Die States können durch die folgende Key-Value Liste
+   gesteuert werden:*
    
    *0: AUTO*
    
@@ -530,13 +542,20 @@ Die folgenden States werden vom Adapter angelegt:
    
    *2: MOVIE*
    
+   *Beispiel:*
+ 
+    ```javascript
+    setState('denon.0.settings.videoProcessingMode', '2'); // Setzt den Video Processing Mode auf "MOVIE"
+    ```
+   
 * settings.centerSpread
 
     |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean-value which is true if center spread is truned on, else false. You can also turn on/off center spread with this state.*
+   *Boolscher Wert der true ist, wenn Center Spread aktiviert ist, sonst false. 
+   Mittels diesem State kann Center Spread an und aus geschaltet werden.*
    
 * settings.dynamicEq
 
@@ -544,7 +563,7 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean value which represents the state of Dynamic EQ. You can also set Dynamic EQ on and off with this state.*
+   *Boolscher Wert welcher true ist, wenn Dynamic EQ aktiviert ist. Dynamic EQ kann hiermit ein- und ausgeschaltet werden.*
 
 * settings.subwooferLevelState
 
@@ -552,7 +571,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean value, if it's true, you are able to make changes on the subwoofer level.*
+   *Boolscher Wert, der aussagt ob Änderungen am Subwoofer Level gemacht werden können. Diese Einstellung kann hiermit
+   gesetzt werden.*
 
 * settings.subwooferLevel / settings.subwooferTwoLevel
 
@@ -560,8 +580,9 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |number|R/W|
 
-   *Number value which indicates the current subwoofer level. The value has a range from -12 to 12 (-12 dB to +12 dB).
-   The SubwooferTwoLevel state will only be created if it is supported by your AVR.*
+   *Number Wert, welcher das aktuelle Subwoofer Level repräsentiert. Der Wert ist in einem Bereich von -12 bis 
+   12 (-12 dB bis +12 dB).
+   Der subwooferTwoLevel state ist nur verfügbar, wenn dies vom AVR unterstützt wird..*
    
 * settings.audysseyLfc
 
@@ -569,8 +590,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean value, which contains and is able to control Audyssey Low Frequency Containment status (on/off).
-   The state will only be created, if it is supported by your AVR.*
+   *Boolscher Wert, welcher aussagt ob Audyssey Low Frequency Containment aus- oder eingeschaltet ist.
+   Der State wird nur erstellt, wenn er vom AVR unterstützt wird.*
    
 * settings.containmentAmount
 
@@ -578,8 +599,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |number|R/W|
 	
-   *Number value to set the Low Frequency Containment Amount. The value can be between 1 and 7. The state will only be
-   created, if it is supported by your AVR.*
+   *Number Wert um die Menge an Low Frequency Containment auszulesen und zu steuern. 
+   Der Wert kann zwischen 1 und 7 liegen. Der State wird nur erstellt, wenn er vom AVR unterstüzt wird.*
    
 * settings.multEq
 
@@ -587,7 +608,7 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *String value, to set the MultEQ function of your AVR with the following encoding:*
+   *String Wert, um die MultEQ Funktion des AVR's zu steuern. Hierbei kann folgende Key-Value Liste genutzt werden:*
    
    *0: OFF*
               
@@ -605,7 +626,8 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *String value to select the Dynamic Volume by following encoding:*
+   *String Wert um die Dynamic Volume Funktion des AVR's zu steuern. Hierbei wird auf folgende Key-Value 
+   Liste zurückgegriffen:*
    
    *0: OFF --> turns Dynamic Volume off*
    
@@ -621,7 +643,7 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *String value to select the Reference Level Offset by the following encoding:*
+   *String Wert um die ReferenceLeveLOffset Funktion des AVR's zu steuern. Basierend auf folgender Key-Value Liste:
    
    *0: 	0 dB*
    
@@ -634,7 +656,7 @@ Die folgenden States werden vom Adapter angelegt:
    *Beispiel:*
    
     ```javascript
-    setState('denon.0.settings.referenceLevelOffset', '5'); // Sets Reference Level Offset to 5 dB
+    setState('denon.0.settings.referenceLevelOffset', '5'); // Setzt das Reference Level Offset auf 5 dB
     ```
     
 * settings.pictureMode
@@ -643,9 +665,10 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R/W|
 
-   *String value to set the Picture Mode Direct Change. This state will only be created when your AVR supports it*
+   *String Wert um die Picture Mode Direct Change Funktion des AVR's auszulesen und zu steuern. 
+   Der State wird nur erstellt, wenn er vom AVR unterstützt wird.*
    
-   *You can set the following values as string:
+   *Die folgenden Werte können als String gesetzt werden:*
    
    *'Off'* 
    
@@ -666,7 +689,7 @@ Die folgenden States werden vom Adapter angelegt:
    *Beispiel:*
    
    ```javascript
-   setState('denon.0.settings.pictureMode', 'Standard'); // Set Picture Mode Direct Change to Standard
+   setState('denon.0.settings.pictureMode', 'Standard'); // Setzt den  Picture Mode Direct Change auf Standard
    ```
    
 * settings.toneControl
@@ -675,9 +698,10 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
     
-   *Boolean value, which indicates Tone Control status. You can turn it off/on with this state.*
+   *Boolscher Wert, welcher true ist, wenn Änderungen an den Bass und Treble States möglich sind. Diese Funktion kann hiermit 
+   ebenfalls gesteuert werden.*
    
-   *Tone Control can only be turned on when Dyn EQ is set to OFF and Tone Control is on*
+   *Der State kann nur genutzt werden, wenn Dyn EQ ausgeschaltet ist.*
    
 * settings.setupMenu
 
@@ -685,5 +709,6 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean indicator, which indicates if setup menu is currently open or closed. You can open and close it with this state.*
+   *Boolscher Indikator, welcher true ist, wenn das Setup Menü derzeit geöffnet ist.
+   Durch setzen des States, kann das Menü geöffnet und geschlossen werden.*
       
