@@ -54,7 +54,7 @@ angeschlossenen Videoausgangs-Gerät.
 Eine Instanz des Adapters wird über die ioBroker Admin-Oberfläche installiert. 
 Die ausführliche Anleitung für die dazu notwendigen Installatonschritte kann hier (TODO:LINK) nachgelesen werden.
 <br/><br/>
-Nach Abschluß der Installation einer Adapterinstanz öffnet sich automatisch ein Konfigurationsfenster.
+Nach Abschluss der Installation einer Adapterinstanz öffnet sich automatisch ein Konfigurationsfenster.
 
 ## Konfiguration
 
@@ -74,7 +74,7 @@ Nach Abschluß der Installation einer Adapterinstanz öffnet sich automatisch ei
 |Intervall zwischen Befehlen|Hier kann festgelegt werden, wie lange der Adapter zwischen Befehlen wartet. Sollte ein älterer AV-Receiver genutzt werden und Probleme mit dem Adapter auftreten, kann es sinnvoll sein, diesen Wert zu erhöhen (z. B. auf 200 ms).|
 |Lautstärke in dB|Die AV-Receiver bieten zwei Möglichkeiten die Lautstärke darzustellen: dB und Volume. Sollte es gewünscht sein, den AV-Receiver in dB zu regeln, sollte diese Checkbox aktiviert werden. Es werden automatisch zusätzliche Objekte erzeugt um die Lautstärke in dB zu verwalten.|
 
-Nach Abschluß der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
+Nach Abschluss der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
 Dadurch efolgt im Anschluß ein Neustart des Adapters.
 
 ## Instanzen
@@ -87,7 +87,7 @@ Auf einem ioBroker Server können mehrere DENON Adapter Instanzen angelegt werde
 einem ioBroker Server gleichzeitig verbunden sein. Sollen mehrere Geräte von einem ioBroker Server gesteuert werden, sollte 
 je AV-Receiver eine Instanz angelegt werden.
 <br/><br/>
-Ob der Adapter aktiviert oder mit dem Logitech Harmony Hub verbunden ist, wird mit der Farbe des Status-Feldes der 
+Ob der Adapter aktiviert oder mit dem AV-Receiver verbunden ist, wird mit der Farbe des Status-Feldes der 
 Instanz verdeutlicht. Zeigt der Mauszeiger auf das Symbol, werden weitere Detailinformationen dargestellt. 
 
 ## Objekte des Adapters
