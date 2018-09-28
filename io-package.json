@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.4.2",
+		"version": "0.4.3",
 		"news": {
+			"0.4.3":{
+				"en": "fallback for advanced settings",
+				"de": "Fallback für die erweiterten Einstellungen hinzugefügt"
+			},
 			"0.4.2":{
 				"en": "fix role of picture mode",
 				"de": "Rolle von pictureMode State korrigiert"

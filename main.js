@@ -76,8 +76,8 @@ adapter.on('ready', () => {
         adapter.log.info('[START] Starting DENON AVR adapter');
         host = adapter.config.ip;
         volumeInDB = adapter.config.volumeInDB;
-        pollInterval = adapter.config.pollInterval;
-        requestInterval = adapter.config.requestInterval;
+        pollInterval = adapter.config.pollInterval || 7000;
+        requestInterval = adapter.config.requestInterval || 100;
         main();
 
     } else adapter.log.warn('No IP-address set');

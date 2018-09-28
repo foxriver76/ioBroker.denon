@@ -650,7 +650,11 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
-## 0.4.1
+
+## 0.4.3
+* (foxriver76) fallback for advanced settings
+
+## 0.4.2
 * (foxriver76) pictureMode role fixed
 
 ## 0.4.1
