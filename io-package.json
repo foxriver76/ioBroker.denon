@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.4.1",
+		"version": "0.4.2",
 		"news": {
+			"0.4.2":{
+				"en": "fix role of picture mode",
+				"de": "Rolle von pictureMode State korrigiert"
+			},
 			"0.4.1": {
 				"en": "create possibility to control picture mode direct change",
 				"de": "Status für Picture Mode Direct Change hinzugefügt"

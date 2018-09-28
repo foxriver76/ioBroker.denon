@@ -1867,7 +1867,7 @@ function createPictureMode(cb) {
         type: 'state',
         common: {
             name: 'Picture Mode Direct Change',
-            role: 'button',
+            role: 'media.pictureMode',
             type: 'string',
             write: true,
             read: false,
