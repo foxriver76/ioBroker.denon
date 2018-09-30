@@ -651,18 +651,18 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
-## 0.4.3
+### 0.4.3
 * (foxriver76) fallback for advanced settings
 * (foxriver76) fix double reconnection when AVR closes the socket
 * (foxriver76) fix a problem where callback for pictureMode is called to early
 
-## 0.4.2
+### 0.4.2
 * (foxriver76) pictureMode role fixed
 
-## 0.4.1
+### 0.4.1
 * (foxriver76) added picture mode direct change
 
-## 0.3.9
+### 0.3.9
 * (foxriver76) only create containment amount, audyssey lfc, subwoofer two level if supproted
 * (foxriver76) readme updated
 
