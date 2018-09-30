@@ -71,13 +71,6 @@ adapter.on('message', obj => {
 });
 
 adapter.on('ready', () => {
-    let pictureMode = 'MOV';
-    createPictureMode(() => {
-        adapter.getObject('settings.pictureMode', (err, obj) => {
-            adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
-        });
-    });
-
     if (adapter.config.ip) {
 
         adapter.log.info('[START] Starting DENON AVR adapter');
