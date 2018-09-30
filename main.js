@@ -543,9 +543,7 @@ adapter.on('stateChange', (id, state) => {
             });
             break;
         case 'settings.pictureMode':
-            adapter.getObject('settings.pictureMode', (err, obj) => {
-               sendRequest('PV' + getKeyByValue(obj.common.states, state));
-            });
+            sendRequest('PV' + state);
             break;
         default:
             adapter.log.error('[COMMAND] ' + id + 'is not a valid state');
@@ -972,10 +970,6 @@ function decodeState(stateNames, state) { // decoding for e. g. selectInput --> 
     } // endFor
     return '';
 } // endDecodeState
-
-function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
-} // endGetKeyByValue
 
 function asciiToDb(vol) {
     if (vol.length === 3) vol = vol / 10;

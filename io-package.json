@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "denon",
-		"version": "0.4.3",
+		"version": "0.4.4",
 		"news": {
+            "0.4.4":{
+              "en": "fix setting of pictureMode",
+              "de": "Bug behoben --> pictureMode kann nun gesetzt werden"
+            },
 			"0.4.3":{
 				"en": "fallback for advanced settings, fix to early callback of createPictureMode, fix double reconnection when AVR closes socket",
 				"de": "Fallback für die erweiterten Einstellungen hinzugefügt, zu früher callback bei Erstellung des PictureMode states gefixt, Neuverbindung wenn AVR Socket schließt optimiert"

@@ -651,6 +651,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 0.4.4
+* (foxriver76) fix bug where picture mode command was sent as undefined
+
 ### 0.4.3
 * (foxriver76) fallback for advanced settings
 * (foxriver76) fix double reconnection when AVR closes the socket
