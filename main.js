@@ -71,6 +71,13 @@ adapter.on('message', obj => {
 });
 
 adapter.on('ready', () => {
+    let pictureMode = 'MOV';
+    createPictureMode(() => {
+        adapter.getObject('settings.pictureMode', (err, obj) => {
+            adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
+        });
+    });
+
     if (adapter.config.ip) {
 
         adapter.log.info('[START] Starting DENON AVR adapter');
@@ -122,7 +129,7 @@ client.on('end', () => { // Denon has closed the connection
     if (!connectingVar) {
         client.destroy();
         client.unref();
-        setTimeout(() => connect(), 30000); // Connect again in 30 seconds
+        connectingVar = setTimeout(() => connect(), 30000); // Connect again in 30 seconds
     } // endIf
 });
 
@@ -1883,8 +1890,9 @@ function createPictureMode(cb) {
             }
         },
         native: {}
+    }, () => {
+        pictureModeAbility = true;
+        if (cb && typeof(cb) === "function") return cb();
     });
 
-    pictureModeAbility = true;
-    if (cb && typeof(cb) === "function") return cb();
 } // endCreatePictureMode

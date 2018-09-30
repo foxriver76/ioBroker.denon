@@ -653,6 +653,8 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 
 ## 0.4.3
 * (foxriver76) fallback for advanced settings
+* (foxriver76) fix double reconnection when AVR closes the socket
+* (foxriver76) fix a problem where callback for pictureMode is called to early
 
 ## 0.4.2
 * (foxriver76) pictureMode role fixed
