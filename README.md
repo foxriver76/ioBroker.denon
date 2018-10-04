@@ -332,6 +332,15 @@ Following states will be created by the adapter:
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
+* zoneMain.channelVolumeFrontLeft / ...
+
+   |Data type|Permission|                                                                       
+   |:---:|:---:|
+   |number|R/W|
+   
+   *Number value which represents the current channel volume for each speaker. Each speaker has a separate state. The 
+   settings affect the current Select Input Mode. The state can be adjusted from -12 dB to +12 dB.*
+   
 #### Channel: display
 
 * display.displayContent

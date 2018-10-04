@@ -385,6 +385,15 @@ Die folgenden States werden vom Adapter angelegt:
    
    *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
     eingeschaltet ist.*
+    
+* zoneMain.channelVolumeFrontLeft / ...
+
+   |Data type|Permission|                                                                       
+   |:---:|:---:|
+   |number|R/W|
+   
+   *Number wert welcher die derzeitige Kanallautstärke der Box darstellt. Jede Box hat einen separaten State. Die
+   Einstellungen sind für den derzeitigen Select Input Modus wirksam und können von -12 dB bis + 12 dB justiert werden.*
    
 #### Channel: display
 
