@@ -545,8 +545,23 @@ adapter.on('stateChange', (id, state) => {
         case 'settings.pictureMode':
             sendRequest('PV' + state);
             break;
+        case 'zoneMain.channelVolumeFrontLeft':
+            sendRequest('CVFL ' + dbToAscii(state));
+            break;
+        case 'zoneMain.channelVolumeFrontRight':
+            sendRequest('CVFR ' + dbToAscii(state));
+            break;
+        case 'zoneMain.channelVolumeCenter':
+            sendRequest('CVC ' + dbToAscii(state));
+            break;
+        case 'zoneMain.channelVolumeSurroundRight':
+            sendRequest('CVSR ' + dbToAscii(state));
+            break;
+        case 'zoneMain.channelVolumeSurroundLeft':
+            sendRequest('CVSL ' + dbToAscii(state));
+            break;
         default:
-            adapter.log.error('[COMMAND] ' + id + 'is not a valid state');
+            adapter.log.error('[COMMAND] ' + id + ' is not a valid state');
     } // endSwitch
 }); // endOnStateChange
 
@@ -587,7 +602,7 @@ const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
     'Z3PSTRE ?', 'Z2PSBAS ?',
     'Z3PSBAS ?', 'PSTONE CTRL ?',
     'MNMEN?', 'PSCES ?', 'VSVPM ?',
-    'PV?'
+    'PV?', 'CV?'
 ];
 
 function updateStates() {
@@ -958,6 +973,31 @@ function handleResponse(data) {
         case 'PSLFE':
             // LFE --> amount of subwoofer signal additional directed to speakers
             break;
+        case 'CVFL': {
+            let channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeFrontLeft', asciiToDb(channelVolume), true);
+            break;
+        }
+        case 'CVFR': {
+            let channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeFrontRight', asciiToDb(channelVolume), true);
+            break;
+        }
+        case 'CVC': {
+            let channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeCenter', asciiToDb(channelVolume), true);
+            break;
+        }
+        case 'CVSR': {
+            let channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSurroundRight', asciiToDb(channelVolume), true);
+            break;
+        }
+        case 'CVSL': {
+            let channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSurroundLeft', asciiToDb(channelVolume), true);
+            break;
+        }
         default:
             adapter.log.debug('[INFO] <== Unhandled command ' + command);
     } // endSwitch

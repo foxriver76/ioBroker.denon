@@ -651,6 +651,10 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+# 0.5.0
+* (foxriver76) added possibility to control channelVolume per speaker for Main Zone
+* (foxriver76) new states added to readme and documentation
+
 ### 0.4.4
 * (foxriver76) fix bug where picture mode command was sent as undefined
 
