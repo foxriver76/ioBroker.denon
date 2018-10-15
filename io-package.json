@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "denon",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "news": {
+      "0.6.0": {
+        "en": "fix that enables Marantz receiver to use the quickSelect functionality, Quick Select is now acknowledged",
+        "de": "Fix um die QuickSelect Funktionalität auf Marantz Receivern zu gewährleisten, ebenfalls wird der State nun bestätigt"
+      },
       "0.5.0": {
         "en": "add possibility to adjust chanel volume for main zone",
         "de": "Chanel volume kann nun für Main Zone angepasst werden"
@@ -409,66 +413,16 @@
       }
     },
     {
-      "_id": "zoneMain.quickSelect1",
+      "_id": "zoneMain.quickSelect",
       "type": "state",
       "common": {
-        "name": "Quick select 1",
-        "role": "button",
-        "type": "boolean",
+        "name": "Quick select",
+        "role": "media.quickSelect",
+        "type": "number",
         "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.quickSelect2",
-      "type": "state",
-      "common": {
-        "name": "Quick select 2",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.quickSelect3",
-      "type": "state",
-      "common": {
-        "name": "Quick select 3",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.quickSelect4",
-      "type": "state",
-      "common": {
-        "name": "Quick select 4",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.quickSelect5",
-      "type": "state",
-      "common": {
-        "name": "Quick select 5",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
+        "read": true,
+        "min": 1,
+        "max": 5
       },
       "native": {
       }

@@ -155,14 +155,8 @@ adapter.on('stateChange', (id, state) => {
 
     adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
 
-    let quickNr;
-    const m = id.match(/(\w+)\.quickSelect(\d)$/);
-    if (m) {
-        quickNr = m[2];
-        id = m[1] + '.quickSelect'; // m[1] --> zone
-    } // endIf
-
     let leadingZero;
+
     switch (id) {
         case 'zoneMain.powerZone':
             if (state === true) {
@@ -235,7 +229,7 @@ adapter.on('stateChange', (id, state) => {
             });
             break;
         case 'zoneMain.quickSelect':
-            sendRequest('MSQUICK' + quickNr);
+            sendRequest('MSQUICK' + state, () => sendRequest('MSSMART' + state));
             break;
         case 'zoneMain.equalizerBassUp':
             sendRequest('PSBAS UP');
@@ -399,7 +393,7 @@ adapter.on('stateChange', (id, state) => {
             });
             break;
         case 'zone2.quickSelect':
-            sendRequest('Z2QUICK' + quickNr);
+            sendRequest('Z2QUICK' + state, () => 'Z2SMART' + state);
             break;
         case 'zone2.equalizerBassUp':
             sendRequest('Z2PSBAS UP');
@@ -466,7 +460,7 @@ adapter.on('stateChange', (id, state) => {
             });
             break;
         case 'zone3.quickSelect':
-            sendRequest('Z3QUICK' + quickNr);
+            sendRequest('Z3QUICK' + state, () => 'Z3SMART' + state);
             break;
         case 'zone3.sleepTimer':
             if (!state) { // state === 0
@@ -602,7 +596,10 @@ const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
     'Z3PSTRE ?', 'Z2PSBAS ?',
     'Z3PSBAS ?', 'PSTONE CTRL ?',
     'MNMEN?', 'PSCES ?', 'VSVPM ?',
-    'PV?', 'CV?'
+    'PV?', 'CV?', 'MSQUICK ?',
+    'Z2QUICK ?', 'Z3QUICK ?',
+    'MSSMART ?', 'Z2SMART ?',
+    'Z3SMART ?'
 ];
 
 function updateStates() {
@@ -614,7 +611,12 @@ function updateStates() {
     }, requestInterval);
 } // endUpdateStates
 
-const pollCommands = ['NSE', 'SLP?', 'Z2SLP?', 'Z3SLP?']; // Request Display State & Sleep Timer
+const pollCommands = ['NSE', 'SLP?',
+    'Z2SLP?', 'Z3SLP?', 'MSQUICK ?',
+    'MSSMART ?',
+    'Z2QUICK ?', 'Z3QUICK ?',
+    'Z2SMART ?', 'Z3SMART ?'
+]; // Request Display State, Sleep Timer & Quick Select
 
 function pollStates() { // Polls states
     let i = 0;
@@ -626,9 +628,10 @@ function pollStates() { // Polls states
     }, requestInterval);
 } // endPollStates
 
-function sendRequest(req) {
+function sendRequest(req, cb) {
     client.write(req + '\r');
     adapter.log.debug('[INFO] ==> Message sent: ' + req);
+    if (cb && typeof(cb) === "function") return cb();
 } // endSendRequest
 
 function handleResponse(data) {
@@ -651,8 +654,13 @@ function handleResponse(data) {
             return;
         } else {
             command = 'Z2' + command.slice(1, command.length);
-        } // endElseIf
-        if (command.startsWith('Z2')) { // Encode Input Source
+        } // endElse
+
+        if (data.startsWith('Z2QUICK')  || data.startsWith('Z2SMART')) {
+            let quickNr = data.slice(-1);
+            adapter.setState('zone2.quickSelect', parseFloat(quickNr), true);
+            return;
+        } else if (command.startsWith('Z2')) { // Encode Input Source
             adapter.getObject('zoneMain.selectInput', (err, obj) => {
                 let zTwoSi = data.slice(2, data.length);
                 zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
@@ -663,7 +671,6 @@ function handleResponse(data) {
                     } // endIf
                 } // endFor
             });
-            return;
         } // endIf
     } else if (data.startsWith('Z3')) { // Transformation for Zone3 commands
         if (!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
@@ -677,7 +684,11 @@ function handleResponse(data) {
         } else {
             command = 'Z3' + command.slice(1, command.length);
         } // endElseIf
-        if (command.startsWith('Z3')) { // Encode Input Source
+        if (data.startsWith('Z3QUICK')  || data.startsWith('Z3SMART')) {
+            let quickNr = data.slice(-1);
+            adapter.setState('zone3.quickSelect', parseFloat(quickNr), true);
+            return;
+        } else if (command.startsWith('Z3')) { // Encode Input Source
             adapter.getObject('zoneMain.selectInput', (err, obj) => {
                 let zThreeSi = data.substring(2);
                 zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
@@ -688,7 +699,6 @@ function handleResponse(data) {
                     } // endIf
                 } // endFor
             });
-            return;
         } // endIf
     } else { // Transformation for normal commands
         command = data.replace(/\s+|\d+/g, '');
@@ -710,9 +720,13 @@ function handleResponse(data) {
         siCommand = siCommand.replace(' ', ''); // Remove blanks
         adapter.setState('zoneMain.selectInput', siCommand, true);
         return;
-    } else if (command.startsWith('MS')) { // Handle Surround mode
+    } else if (command.startsWith('MS') && command != 'MSQUICK' && command != 'MSSMART') { // Handle Surround mode
         let msCommand = command.substring(2);
         adapter.setState('settings.surroundMode', msCommand, true);
+        return;
+    } else if (command === 'MSQUICK'  || command === 'MSSMART') {
+        let quickNr = data.slice(-1);
+        adapter.setState('zoneMain.quickSelect', parseFloat(quickNr), true);
         return;
     } else if (command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
         let displayCont = data.substring(4).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
@@ -1182,62 +1196,16 @@ function createZoneTwo(cb) {
         native: {}
     });
 
-    adapter.setObjectNotExists('zone2.quickSelect1', {
+    adapter.setObjectNotExists('zone2.quickSelect', {
         type: 'state',
         common: {
-            name: 'Zone 2 Quick select 1',
-            role: 'button',
-            type: 'boolean',
+            name: 'Zone 2 Quick select',
+            role: 'media.quickSelect',
+            type: 'number',
             write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.quickSelect2', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Quick select 2',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.quickSelect3', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Quick select 3',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.quickSelect4', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Quick select 4',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.quickSelect5', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Quick select 5',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
+            read: true,
+            min: 1,
+            max: 5
         },
         native: {}
     });
@@ -1466,62 +1434,16 @@ function createZoneThree(cb) {
         native: {}
     });
 
-    adapter.setObjectNotExists('zone3.quickSelect1', {
+    adapter.setObjectNotExists('zone3.quickSelect', {
         type: 'state',
         common: {
-            name: 'Zone 3 Quick select 1',
-            role: 'button',
-            type: 'boolean',
+            name: 'Zone 3 Quick select',
+            role: 'media.quickSelect',
+            type: 'number',
             write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.quickSelect2', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Quick select 2',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.quickSelect3', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Quick select 3',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.quickSelect4', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Quick select 4',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.quickSelect5', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Quick select 5',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
+            read: true,
+            min: 1,
+            max: 5
         },
         native: {}
     });

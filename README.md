@@ -99,10 +99,6 @@ The adapter creates the following buttons:
 
    *Increase volume of Main Zone / Zone2 / Zone3.*
    
-* zoneMain.quickSelectX / zone2.quickSelectX / zone3.quickSelectX
-   
-   *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
-   
 * zoneMain.equalizerBassUp / zone2.equalizerBassUp / zone3.equalizerBassUp
 
    *Button which increases bass level of the Zone.*
@@ -293,6 +289,14 @@ Following states will be created by the adapter:
    ```javascript
     setState('denon.0.zoneMain.selectInput', '5'); // Selects TV as input for Main Zone
    ```
+   
+* zoneMain.quickSelect / zone2.quickSelect / zone3.quickSelect
+
+   |Data type|Permission|                                                                       
+   |:---:|:---:|
+   |number|R/W|
+   
+   *Emulates the quick select buttons of your remote, with numbers from 1 to 5 for Main Zone / Zone2 / Zone3.*
    
 * zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
 
@@ -659,6 +663,11 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 0.6.0
+* (foxriver76) fix that enables Marantz receiver to use the quickSelect functionality
+* (foxriver76) quick select is now acknoledged
+* (foxriver76) remove old quick select buttons
 
 # 0.5.0
 * (foxriver76) added possibility to control channelVolume per speaker for Main Zone

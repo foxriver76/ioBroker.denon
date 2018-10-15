@@ -137,11 +137,6 @@ Der Adapter erstellt die folgenden Buttons:
 
    *"Lauter"-Knopf für die Zonen: Main Zone / Zone2 / Zone3.*
    
-* zoneMain.quickSelectX / zone2.quickSelectX / zone3.quickSelectX
-   
-   *Emuliert die entsprechenden "Quick Select" Knöpfe der Fernbedienung für die jeweiligen Zonen:
-   Main Zone / Zone2 / Zone3.*
-   
 * zoneMain.equalizerBassUp / zone2.equalizerBassUp / zone3.equalizerBassUp
 
    *Diser Knopf erhöht das Bass Level der jeweiligen Zone.*
@@ -344,6 +339,15 @@ Die folgenden States werden vom Adapter angelegt:
    ```javascript
     setState('denon.0.zoneMain.selectInput', '5'); // Selects TV as input for Main Zone
    ```
+
+* zoneMain.quickSelect / zone2.quickSelect / zone3.quickSelect
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |number|R/W|
+   
+    *Steuert die "QuickSelect" bzw. "SmartSelect" Tasten des AVR's an. Nummern zwischen 1 und 5 für 
+    Main Zone / Zone2 / Zone3 sind möglich.*
    
 * zoneMain.sleepTimer / zone2.sleepTimer / zone3.sleepTimer
 
