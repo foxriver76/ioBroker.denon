@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "denon",
-    "version": "0.6.0",
+    "version": "1.0.0",
     "news": {
+      "1.0.0": {
+        "en": "formal version increment due to semaVer",
+        "de": "Formelle Versionserhöhung"
+      },
       "0.6.0": {
         "en": "fix that enables Marantz receiver to use the quickSelect functionality, Quick Select is now acknowledged",
         "de": "Fix um die QuickSelect Funktionalität auf Marantz Receivern zu gewährleisten, ebenfalls wird der State nun bestätigt"

@@ -664,6 +664,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.0.0
+* (foxriver76) formal version increment
+
 ### 0.6.0
 * (foxriver76) fix that enables Marantz receiver to use the quickSelect functionality
 * (foxriver76) quick select is now acknoledged
