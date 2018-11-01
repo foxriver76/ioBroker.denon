@@ -6,7 +6,7 @@
 [![NPM version](http://img.shields.io/npm/v/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
 
-[![NPM](https://nodei.co/npm/iobroker.denon.png?downloads=true)](https://nodei.co/npm/iobroker.denon/)
+[![NPM](https://nodei.co/npm/iobroker.denon.png?downloads=true)](https://nodei.co/npm/iobroker.denon/) [![Greenkeeper badge](https://badges.greenkeeper.io/foxriver76/ioBroker.denon.svg)](https://greenkeeper.io/)
 
 ## Installation
 You can either install the adapter via the ioBroker web interface or on your local machine via npm.
