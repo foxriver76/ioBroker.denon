@@ -672,7 +672,7 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 * (foxriver76) quick select is now acknoledged
 * (foxriver76) remove old quick select buttons
 
-# 0.5.0
+### 0.5.0
 * (foxriver76) added possibility to control channelVolume per speaker for Main Zone
 * (foxriver76) new states added to readme and documentation
 
