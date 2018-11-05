@@ -1,985 +1,990 @@
 {
-  "common": {
-    "name": "denon",
-    "version": "1.0.0",
-    "news": {
-      "1.0.0": {
-        "en": "formal version increment due to semaVer",
-        "de": "Formelle Versionserhöhung"
-      },
-      "0.6.0": {
-        "en": "fix that enables Marantz receiver to use the quickSelect functionality, Quick Select is now acknowledged",
-        "de": "Fix um die QuickSelect Funktionalität auf Marantz Receivern zu gewährleisten, ebenfalls wird der State nun bestätigt"
-      },
-      "0.5.0": {
-        "en": "add possibility to adjust chanel volume for main zone",
-        "de": "Chanel volume kann nun für Main Zone angepasst werden"
-      },
-      "0.4.4": {
-        "en": "fix setting of pictureMode",
-        "de": "Bug behoben --> pictureMode kann nun gesetzt werden"
-      },
-      "0.4.3": {
-        "en": "fallback for advanced settings, fix to early callback of createPictureMode, fix double reconnection when AVR closes socket",
-        "de": "Fallback für die erweiterten Einstellungen hinzugefügt, zu früher callback bei Erstellung des PictureMode states gefixt, Neuverbindung wenn AVR Socket schließt optimiert"
-      },
-      "0.4.2": {
-        "en": "fix role of picture mode",
-        "de": "Rolle von pictureMode State korrigiert"
-      },
-      "0.4.1": {
-        "en": "create possibility to control picture mode direct change",
-        "de": "Status für Picture Mode Direct Change hinzugefügt"
-      },
-      "0.3.9": {
-        "en": "only create containment amount, audyssey lfc, subwoofer two level if supproted",
-        "de": "Contaiment Amount, Audyssey LFC und Subwoofer Two States werden nur erstellt, falls unterstüzt"
-      },
-      "0.3.8": {
-        "en": "Readme enhanced an corrected, added center spread control state and video processing mode, minor fixes",
-        "de": "Verbesserungen an der Readme, Center Spread und Video Processing Mode status hinzugefügt, kleine Fehlerbehebungen"
-      },
-      "0.3.7": {
-        "en": "Minor code optimization, typo fix, added logging of unhandled commands on debug",
-        "de": "Kleine Optimierungen, Readme Fehler gefixt, derzeit nicht gehandelte Kommandos werden auf Debug geloggt"
-      },
-      "0.3.6": {
-        "en": "Fixes for old Denon displayContent, readme fixes, minor naming fixes",
-        "de": "Problem behoben mit displayContent alter AVR's, ReadMe ausgebessert, kleine Namensverbesserungen"
-      },
-      "0.3.5": {
-        "en": "Removed isPlaying state, because not working properly",
-        "de": "isPlaying Status entfernt, da er nicht korrekt funktioniert"
-      },
-      "0.3.4": {
-        "en": "Fix for HEOS to not show displayContent and http releated states",
-        "de": "Fix damit HEOS keine displayContents und Http states mehr anlegt"
-      },
-      "0.3.3": {
-        "en": "Added state and buttons for remote control cursors and other buttons",
-        "de": "States hinzugefügt für Tasten der Fernbedienung wie Setup und Cursor"
-      },
-      "0.3.2": {
-        "en": "Added state for cover link and isPlaying state, displayContent will only be shown when possible",
-        "de": "Cover Link sowie isPlaying Status hinzugefügt, displayContent wird nur angezeigt wenn verfügbar"
-      },
-      "0.3.1": {
-        "en": "Added placeholder IP in config, fixes for volume in dB",
-        "de": "Platzhalter für die IP in der Konfiguration hinzugefügt, volume in dB gefixt"
-      },
-      "0.3.0": {
-        "en": "Names and roles were refactored, discovery added, separate play/pause button",
-        "de": "Namen und Rollen wurden neu strukturiert, Discovery Support, Play und Pause Button",
-        "ru": "Имена и роли были реорганизованы",
-        "pt": "Nomes e papéis foram refatorados",
-        "nl": "Namen en rollen werden herschreven",
-        "fr": "Les noms et les rôles ont été refaits",
-        "it": "Nomi e ruoli sono stati rifatti",
-        "es": "Nombres y roles fueron refactorizados",
-        "pl": "Nazwy i role zostały refaktoryzowane"
-      },
-      "0.2.4": {
-        "en": "More stability, Prevent reconnect more than one at the same time",
-        "de": "Erhöhte Stabilität, verhindere mehrfaches paralleles neuverbinden"
-      },
-      "0.2.3": {
-        "en": "Added possibility to handle volume states in dB too, minor changes",
-        "de": "Möglichkeit hinzugefügt, Lautstärke in dB zu regeln und kleine Änderungen"
-      },
-      "0.2.2": {
-        "en": "Removed unnecessary files, better handling of state lists",
-        "de": "Nicht benötigte Dateien entfernt, bessere Handhabung von Status Listen"
-      },
-      "0.2.1": {
-        "en": "Improvements on module size, small bug fix on connection errors",
-        "de": "Moulgröße optimiert, kleine Fehlerbehebung bezüglich Connection Error"
-      },
-      "0.2.0": {
-        "en": "Prepared offical repository release",
-        "de": "Offiziellen Release vorbereitet"
-      },
-      "0.1.9": {
-        "en": "Improved stability, improved fault tolerance on volume states",
-        "de": "Verbesserte Stabilität, verbesserte Fehlertoleranz bei Volume States"
-      },
-      "0.1.8": {
-        "en": "Adapter specific connection error handling & minor fix on reconnect",
-        "de": "Adapterspezifische Verbindungsfehlerbehandlung & Reconnect Logging fix"
-      },
-      "0.1.7": {
-        "en": "Added control of bass, treble, tone control status, subwoofer level now in dB & more",
-        "de": "Kontrolle von Bass, Höhen, Tone Control Status. Subwoofer Level jetzt in dB & mehr"
-      },
-      "0.1.6": {
-        "en": "Improved connections stability and parameter settings channel",
-        "de": "Verbesserte Verbindungsstabilität und neuer Channel für Parameter Settings"
-      },
-      "0.1.5": {
-        "en": "Added sleepTimer for every zone, Admin backwards compatibility",
-        "de": "Sleep Timer für alle Zonen, Admin Abwärtskompatibilität"
-      },
-      "0.1.4": {
-        "en": "Added expertCommand, more detailed readme, HEOS fix",
-        "de": "Status expertCommand hizugefügt, README erweitert, HEOS fix"
-      },
-      "0.1.3": {
-        "en": "Added Main Zone Power, Bug Fixes for Zone3",
-        "de": "Main Zone kann nun unabhängig von Power geschaltet werden, Fehlerbehbungen bezüglich Zone3"
-      },
-      "0.1.2": {
-        "en": "Performance optimization and faster display update",
-        "de": "Code optimiert und Displayinhalt wird schneller aktualisiert"
-      },
-      "0.1.1": {
-        "en": "New README.md for npm",
-        "de": "Neue README.md angepasst an npm"
-      },
-      "0.1.0": {
-        "en": "Beta Version: Handling all 3 Zones, getting display content & brightness",
-        "de": "Beta Version: Bedienung von bis zu drei Zonen, Displayinhalt auslesen sowie Helligkeit einstellen"
-      },
-      "0.0.1": {
-        "en": "initial adapter",
-        "de": "Initiale Version"
-      }
+    "common": {
+        "name": "denon",
+        "version": "1.1.0",
+        "news": {
+            "1.1.0": {
+                "en": "added bluetooth to selectInput as BT",
+                "de": "Bluetooth kann nun als Eingangssignal gewählt werden, mittels selectInput (BT)"
+            },
+            "1.0.0": {
+                "en": "formal version increment due to semaVer",
+                "de": "Formelle Versionserhöhung"
+            },
+            "0.6.0": {
+                "en": "fix that enables Marantz receiver to use the quickSelect functionality, Quick Select is now acknowledged",
+                "de": "Fix um die QuickSelect Funktionalität auf Marantz Receivern zu gewährleisten, ebenfalls wird der State nun bestätigt"
+            },
+            "0.5.0": {
+                "en": "add possibility to adjust chanel volume for main zone",
+                "de": "Chanel volume kann nun für Main Zone angepasst werden"
+            },
+            "0.4.4": {
+                "en": "fix setting of pictureMode",
+                "de": "Bug behoben --> pictureMode kann nun gesetzt werden"
+            },
+            "0.4.3": {
+                "en": "fallback for advanced settings, fix to early callback of createPictureMode, fix double reconnection when AVR closes socket",
+                "de": "Fallback für die erweiterten Einstellungen hinzugefügt, zu früher callback bei Erstellung des PictureMode states gefixt, Neuverbindung wenn AVR Socket schließt optimiert"
+            },
+            "0.4.2": {
+                "en": "fix role of picture mode",
+                "de": "Rolle von pictureMode State korrigiert"
+            },
+            "0.4.1": {
+                "en": "create possibility to control picture mode direct change",
+                "de": "Status für Picture Mode Direct Change hinzugefügt"
+            },
+            "0.3.9": {
+                "en": "only create containment amount, audyssey lfc, subwoofer two level if supproted",
+                "de": "Contaiment Amount, Audyssey LFC und Subwoofer Two States werden nur erstellt, falls unterstüzt"
+            },
+            "0.3.8": {
+                "en": "Readme enhanced an corrected, added center spread control state and video processing mode, minor fixes",
+                "de": "Verbesserungen an der Readme, Center Spread und Video Processing Mode status hinzugefügt, kleine Fehlerbehebungen"
+            },
+            "0.3.7": {
+                "en": "Minor code optimization, typo fix, added logging of unhandled commands on debug",
+                "de": "Kleine Optimierungen, Readme Fehler gefixt, derzeit nicht gehandelte Kommandos werden auf Debug geloggt"
+            },
+            "0.3.6": {
+                "en": "Fixes for old Denon displayContent, readme fixes, minor naming fixes",
+                "de": "Problem behoben mit displayContent alter AVR's, ReadMe ausgebessert, kleine Namensverbesserungen"
+            },
+            "0.3.5": {
+                "en": "Removed isPlaying state, because not working properly",
+                "de": "isPlaying Status entfernt, da er nicht korrekt funktioniert"
+            },
+            "0.3.4": {
+                "en": "Fix for HEOS to not show displayContent and http releated states",
+                "de": "Fix damit HEOS keine displayContents und Http states mehr anlegt"
+            },
+            "0.3.3": {
+                "en": "Added state and buttons for remote control cursors and other buttons",
+                "de": "States hinzugefügt für Tasten der Fernbedienung wie Setup und Cursor"
+            },
+            "0.3.2": {
+                "en": "Added state for cover link and isPlaying state, displayContent will only be shown when possible",
+                "de": "Cover Link sowie isPlaying Status hinzugefügt, displayContent wird nur angezeigt wenn verfügbar"
+            },
+            "0.3.1": {
+                "en": "Added placeholder IP in config, fixes for volume in dB",
+                "de": "Platzhalter für die IP in der Konfiguration hinzugefügt, volume in dB gefixt"
+            },
+            "0.3.0": {
+                "en": "Names and roles were refactored, discovery added, separate play/pause button",
+                "de": "Namen und Rollen wurden neu strukturiert, Discovery Support, Play und Pause Button",
+                "ru": "Имена и роли были реорганизованы",
+                "pt": "Nomes e papéis foram refatorados",
+                "nl": "Namen en rollen werden herschreven",
+                "fr": "Les noms et les rôles ont été refaits",
+                "it": "Nomi e ruoli sono stati rifatti",
+                "es": "Nombres y roles fueron refactorizados",
+                "pl": "Nazwy i role zostały refaktoryzowane"
+            },
+            "0.2.4": {
+                "en": "More stability, Prevent reconnect more than one at the same time",
+                "de": "Erhöhte Stabilität, verhindere mehrfaches paralleles neuverbinden"
+            },
+            "0.2.3": {
+                "en": "Added possibility to handle volume states in dB too, minor changes",
+                "de": "Möglichkeit hinzugefügt, Lautstärke in dB zu regeln und kleine Änderungen"
+            },
+            "0.2.2": {
+                "en": "Removed unnecessary files, better handling of state lists",
+                "de": "Nicht benötigte Dateien entfernt, bessere Handhabung von Status Listen"
+            },
+            "0.2.1": {
+                "en": "Improvements on module size, small bug fix on connection errors",
+                "de": "Moulgröße optimiert, kleine Fehlerbehebung bezüglich Connection Error"
+            },
+            "0.2.0": {
+                "en": "Prepared offical repository release",
+                "de": "Offiziellen Release vorbereitet"
+            },
+            "0.1.9": {
+                "en": "Improved stability, improved fault tolerance on volume states",
+                "de": "Verbesserte Stabilität, verbesserte Fehlertoleranz bei Volume States"
+            },
+            "0.1.8": {
+                "en": "Adapter specific connection error handling & minor fix on reconnect",
+                "de": "Adapterspezifische Verbindungsfehlerbehandlung & Reconnect Logging fix"
+            },
+            "0.1.7": {
+                "en": "Added control of bass, treble, tone control status, subwoofer level now in dB & more",
+                "de": "Kontrolle von Bass, Höhen, Tone Control Status. Subwoofer Level jetzt in dB & mehr"
+            },
+            "0.1.6": {
+                "en": "Improved connections stability and parameter settings channel",
+                "de": "Verbesserte Verbindungsstabilität und neuer Channel für Parameter Settings"
+            },
+            "0.1.5": {
+                "en": "Added sleepTimer for every zone, Admin backwards compatibility",
+                "de": "Sleep Timer für alle Zonen, Admin Abwärtskompatibilität"
+            },
+            "0.1.4": {
+                "en": "Added expertCommand, more detailed readme, HEOS fix",
+                "de": "Status expertCommand hizugefügt, README erweitert, HEOS fix"
+            },
+            "0.1.3": {
+                "en": "Added Main Zone Power, Bug Fixes for Zone3",
+                "de": "Main Zone kann nun unabhängig von Power geschaltet werden, Fehlerbehbungen bezüglich Zone3"
+            },
+            "0.1.2": {
+                "en": "Performance optimization and faster display update",
+                "de": "Code optimiert und Displayinhalt wird schneller aktualisiert"
+            },
+            "0.1.1": {
+                "en": "New README.md for npm",
+                "de": "Neue README.md angepasst an npm"
+            },
+            "0.1.0": {
+                "en": "Beta Version: Handling all 3 Zones, getting display content & brightness",
+                "de": "Beta Version: Bedienung von bis zu drei Zonen, Displayinhalt auslesen sowie Helligkeit einstellen"
+            },
+            "0.0.1": {
+                "en": "initial adapter",
+                "de": "Initiale Version"
+            }
+        },
+        "title": "DENON AVR",
+        "desc": {
+            "en": "Control your DENON or Marantz AV Receiver",
+            "de": "Steuern Sie Ihren DENON oder Marantz AV-Receiver",
+            "ru": "Управляйте своим DENON или приемником Marantz AV",
+            "pt": "Controle o seu receptor AV DENON ou Marantz",
+            "nl": "Bedien uw DENON of Marantz AV-ontvanger",
+            "fr": "Contrôlez votre récepteur AV DENON ou Marantz",
+            "it": "Controlla il tuo ricevitore audio DENON o Marantz",
+            "es": "Controle su receptor AV DENON o Marantz",
+            "pl": "Kontroluj swój odbiornik DENON lub Marantz AV"
+        },
+        "authors": [
+            "Moritz Heusinger <moritz.heusinger@gmail.com>"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "denon.png",
+        "materialize": true,
+        "enabled": true,
+        "messagebox": true,
+        "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.denon/master/admin/denon.png",
+        "keywords": [
+            "denon",
+            "marantz",
+            "avr",
+            "harmony",
+            "audio"
+        ],
+        "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
+        "loglevel": "info",
+        "type": "multimedia"
     },
-    "title": "DENON AVR",
-    "desc": {
-      "en": "Control your DENON or Marantz AV Receiver",
-      "de": "Steuern Sie Ihren DENON oder Marantz AV-Receiver",
-      "ru": "Управляйте своим DENON или приемником Marantz AV",
-      "pt": "Controle o seu receptor AV DENON ou Marantz",
-      "nl": "Bedien uw DENON of Marantz AV-ontvanger",
-      "fr": "Contrôlez votre récepteur AV DENON ou Marantz",
-      "it": "Controlla il tuo ricevitore audio DENON o Marantz",
-      "es": "Controle su receptor AV DENON o Marantz",
-      "pl": "Kontroluj swój odbiornik DENON lub Marantz AV"
+    "docs": {
+        "de": "docs/de/README.md"
     },
-    "authors": [
-      "Moritz Heusinger <moritz.heusinger@gmail.com>"
-    ],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "mode": "daemon",
-    "icon": "denon.png",
-    "materialize": true,
-    "enabled": true,
-    "messagebox": true,
-    "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.denon/master/admin/denon.png",
-    "keywords": [
-      "denon",
-      "marantz",
-      "avr",
-      "harmony",
-      "audio"
-    ],
-    "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
-    "loglevel": "info",
-    "type": "multimedia"
-  },
-  "docs": {
-    "de": "docs/de/README.md"
-  },
-  "native": {
-    "ip": "",
-    "volumeInDB": false,
-    "pollInterval": 7000,
-    "requestInterval": 100
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "info",
-      "type": "channel",
-      "common": {
-        "name": "Information"
-      },
-      "native": {
-      }
+    "native": {
+        "ip": "",
+        "volumeInDB": false,
+        "pollInterval": 7000,
+        "requestInterval": 100
     },
-    {
-      "_id": "info.connection",
-      "type": "state",
-      "common": {
-        "role": "indicator.connected",
-        "name": "If connected to AVR",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "info.friendlyName",
-      "type": "state",
-      "common": {
-        "role": "info.name",
-        "name": "Friendly Name",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain",
-      "type": "channel",
-      "common": {
-        "name": "Main Zone"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.powerZone",
-      "type": "state",
-      "common": {
-        "name": "Main Zone Power State",
-        "role": "switch.power.zone",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.volume",
-      "type": "state",
-      "common": {
-        "name": "Main Volume",
-        "role": "level.volume",
-        "type": "number",
-        "read": true,
-        "write": true,
-        "min": 0,
-        "max": 98
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.volumeUp",
-      "type": "state",
-      "common": {
-        "name": "Volume Up",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.volumeDown",
-      "type": "state",
-      "common": {
-        "name": "Volume Down",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.selectInput",
-      "type": "state",
-      "common": {
-        "name": "Select input",
-        "role": "media.input",
-        "type": "string",
-        "write": true,
-        "read": true,
-        "states": {
-          "0": "PHONO",
-          "1": "CD",
-          "2": "TUNER",
-          "3": "DVD",
-          "4": "BD",
-          "5": "TV",
-          "6": "SAT/CBL",
-          "7": "MPLAY",
-          "8": "GAME",
-          "9": "NET",
-          "10": "SPOTIFY",
-          "11": "LASTFM",
-          "12": "IRADIO",
-          "13": "SERVER",
-          "14": "FAVORITES",
-          "15": "AUX1",
-          "16": "AUX2",
-          "17": "AUX3",
-          "18": "AUX4",
-          "19": "AUX5",
-          "20": "AUX6",
-          "21": "AUX7"
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If connected to AVR",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.friendlyName",
+            "type": "state",
+            "common": {
+                "role": "info.name",
+                "name": "Friendly Name",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain",
+            "type": "channel",
+            "common": {
+                "name": "Main Zone"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.powerZone",
+            "type": "state",
+            "common": {
+                "name": "Main Zone Power State",
+                "role": "switch.power.zone",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.volume",
+            "type": "state",
+            "common": {
+                "name": "Main Volume",
+                "role": "level.volume",
+                "type": "number",
+                "read": true,
+                "write": true,
+                "min": 0,
+                "max": 98
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.volumeUp",
+            "type": "state",
+            "common": {
+                "name": "Volume Up",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.volumeDown",
+            "type": "state",
+            "common": {
+                "name": "Volume Down",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.selectInput",
+            "type": "state",
+            "common": {
+                "name": "Select input",
+                "role": "media.input",
+                "type": "string",
+                "write": true,
+                "read": true,
+                "states": {
+                    "0": "PHONO",
+                    "1": "CD",
+                    "2": "TUNER",
+                    "3": "DVD",
+                    "4": "BD",
+                    "5": "TV",
+                    "6": "SAT/CBL",
+                    "7": "MPLAY",
+                    "8": "GAME",
+                    "9": "NET",
+                    "10": "SPOTIFY",
+                    "11": "LASTFM",
+                    "12": "IRADIO",
+                    "13": "SERVER",
+                    "14": "FAVORITES",
+                    "15": "AUX1",
+                    "16": "AUX2",
+                    "17": "AUX3",
+                    "18": "AUX4",
+                    "19": "AUX5",
+                    "20": "AUX6",
+                    "21": "AUX7",
+                    "22": "BT"
+                }
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.playPause",
+            "type": "state",
+            "common": {
+                "name": "Play/Pause",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.play",
+            "type": "state",
+            "common": {
+                "name": "Play",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.pause",
+            "type": "state",
+            "common": {
+                "name": "Pause",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.skipPlus",
+            "type": "state",
+            "common": {
+                "name": "Next",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.skipMinus",
+            "type": "state",
+            "common": {
+                "name": "Previous",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.maximumVolume",
+            "type": "state",
+            "common": {
+                "name": "Maximum Volume",
+                "role": "state",
+                "type": "number",
+                "write": false,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.muteIndicator",
+            "type": "state",
+            "common": {
+                "name": "Muted",
+                "role": "media.mute",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.quickSelect",
+            "type": "state",
+            "common": {
+                "name": "Quick select",
+                "role": "media.quickSelect",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "min": 1,
+                "max": 5
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.sleepTimer",
+            "type": "state",
+            "common": {
+                "name": "Sleep timer",
+                "role": "level.timer.sleep",
+                "unit": "min",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "min": 0,
+                "max": 120
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.equalizerBass",
+            "type": "state",
+            "common": {
+                "name": "Bass Level",
+                "role": "level.bass",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "unit": "dB",
+                "min": -6,
+                "max": 6
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.equalizerBassUp",
+            "type": "state",
+            "common": {
+                "name": "Bass Up",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.equalizerBassDown",
+            "type": "state",
+            "common": {
+                "name": "Bass Down",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.equalizerTreble",
+            "type": "state",
+            "common": {
+                "name": "Treble Level",
+                "role": "level.treble",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "unit": "dB",
+                "min": -6,
+                "max": 6
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.equalizerTrebleUp",
+            "type": "state",
+            "common": {
+                "name": "Treble Up",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.equalizerTrebleDown",
+            "type": "state",
+            "common": {
+                "name": "Treble Down",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.channelVolumeFrontLeft",
+            "type": "state",
+            "common": {
+                "name": "Channel Volume Front Left",
+                "role": "level",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "unit": "dB",
+                "min": -12,
+                "max": 12
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.channelVolumeFrontRight",
+            "type": "state",
+            "common": {
+                "name": "Channel Volume Front Right",
+                "role": "level",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "min": -12,
+                "max": 12,
+                "unit": "dB"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.channelVolumeCenter",
+            "type": "state",
+            "common": {
+                "name": "Channel Volume Center",
+                "role": "level",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "min": -12,
+                "max": 12,
+                "unit": "dB"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.channelVolumeSurroundRight",
+            "type": "state",
+            "common": {
+                "name": "Channel Volume Surround Right",
+                "role": "level",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "min": -12,
+                "max": 12,
+                "unit": "dB"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "zoneMain.channelVolumeSurroundLeft",
+            "type": "state",
+            "common": {
+                "name": "Channel Volume Surround Left",
+                "role": "level",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "min": -12,
+                "max": 12,
+                "unit": "dB"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "display",
+            "type": "channel",
+            "common": {
+                "name": "Display Information"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "display.brightness",
+            "type": "state",
+            "common": {
+                "name": "Display brightness",
+                "role": "state",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "states": {
+                    "0": "Off",
+                    "1": "Dark",
+                    "2": "Dimmed",
+                    "3": "Bright"
+                }
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings",
+            "type": "channel",
+            "common": {
+                "name": "Settings and device commands"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.powerSystem",
+            "type": "state",
+            "common": {
+                "name": "System Power State",
+                "role": "switch.power",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.surroundMode",
+            "type": "state",
+            "common": {
+                "name": "Surround mode",
+                "role": "state",
+                "type": "string",
+                "write": true,
+                "read": true,
+                "states": {
+                    "0": "STEREO",
+                    "1": "VIRTUAL",
+                    "2": "VIDEO GAME",
+                    "3": "MCH STEREO",
+                    "4": "DTS SURROUND",
+                    "5": "DOLBY DIGITAL",
+                    "6": "MOVIE",
+                    "7": "MUSIC",
+                    "8": "DIRECT",
+                    "9": "PURE DIRECT",
+                    "10": "AUTO",
+                    "11": "GAME",
+                    "12": "AURO3D",
+                    "13": "AURO2DSURR",
+                    "14": "WIDE SCREEN",
+                    "15": "SUPER STADIUM",
+                    "16": "ROCK ARENA",
+                    "17": "JAZZ CLUB",
+                    "18": "CLASSIC CONCERT",
+                    "19": "MONO MOVIE",
+                    "20": "MATRIX"
+                }
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.expertCommand",
+            "type": "state",
+            "common": {
+                "name": "Expert Command",
+                "role": "state",
+                "type": "string",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.dynamicEq",
+            "type": "state",
+            "common": {
+                "name": "Dynamic Eq",
+                "role": "switch",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.subwooferLevelState",
+            "type": "state",
+            "common": {
+                "name": "Subwoofer Level State",
+                "desc": "Subwoofer Level State",
+                "role": "switch",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.subwooferLevel",
+            "type": "state",
+            "common": {
+                "name": "Subwoofer Level",
+                "role": "level",
+                "type": "number",
+                "write": true,
+                "read": true,
+                "min": -12,
+                "max": 12,
+                "unit": "dB"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.subwooferLevelUp",
+            "type": "state",
+            "common": {
+                "name": "Subwoofer level Up",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.subwooferLevelDown",
+            "type": "state",
+            "common": {
+                "name": "Subwoofer level Down",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.multEq",
+            "type": "state",
+            "common": {
+                "name": "Mult EQ",
+                "role": "level",
+                "type": "string",
+                "write": true,
+                "read": true,
+                "states": {
+                    "0": "OFF",
+                    "1": "AUDYSSEY",
+                    "2": "BYP.LR",
+                    "3": "FLAT",
+                    "4": "MANUAL"
+                }
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.dynamicVolume",
+            "type": "state",
+            "common": {
+                "name": "Dynamic Volume",
+                "role": "level",
+                "type": "string",
+                "write": true,
+                "read": true,
+                "states": {
+                    "0": "OFF",
+                    "1": "LIT",
+                    "2": "MED",
+                    "3": "HEV"
+                }
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.referenceLevelOffset",
+            "type": "state",
+            "common": {
+                "name": "Reference Level Offset",
+                "role": "level",
+                "type": "string",
+                "write": true,
+                "read": true,
+                "unit": "dB",
+                "states": {
+                    "0": "0",
+                    "5": "5",
+                    "10": "10",
+                    "15": "15"
+                }
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.toneControl",
+            "type": "state",
+            "common": {
+                "name": "Tone Control",
+                "role": "switch",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.cursorUp",
+            "type": "state",
+            "common": {
+                "name": "Cursor Up",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.cursorDown",
+            "type": "state",
+            "common": {
+                "name": "Cursor Down",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.cursorRight",
+            "type": "state",
+            "common": {
+                "name": "Cursor Right",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.cursorLeft",
+            "type": "state",
+            "common": {
+                "name": "Cursor Left",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.enter",
+            "type": "state",
+            "common": {
+                "name": "Enter",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.return",
+            "type": "state",
+            "common": {
+                "name": "Return",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.option",
+            "type": "state",
+            "common": {
+                "name": "Option",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.info",
+            "type": "state",
+            "common": {
+                "name": "Info",
+                "role": "button",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.setupMenu",
+            "type": "state",
+            "common": {
+                "name": "Setup Menu",
+                "role": "switch",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.centerSpread",
+            "type": "state",
+            "common": {
+                "name": "Center Spread",
+                "role": "switch",
+                "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
         }
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.playPause",
-      "type": "state",
-      "common": {
-        "name": "Play/Pause",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.play",
-      "type": "state",
-      "common": {
-        "name": "Play",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.pause",
-      "type": "state",
-      "common": {
-        "name": "Pause",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.skipPlus",
-      "type": "state",
-      "common": {
-        "name": "Next",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.skipMinus",
-      "type": "state",
-      "common": {
-        "name": "Previous",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.maximumVolume",
-      "type": "state",
-      "common": {
-        "name": "Maximum Volume",
-        "role": "state",
-        "type": "number",
-        "write": false,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.muteIndicator",
-      "type": "state",
-      "common": {
-        "name": "Muted",
-        "role": "media.mute",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.quickSelect",
-      "type": "state",
-      "common": {
-        "name": "Quick select",
-        "role": "media.quickSelect",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "min": 1,
-        "max": 5
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.sleepTimer",
-      "type": "state",
-      "common": {
-        "name": "Sleep timer",
-        "role": "level.timer.sleep",
-        "unit": "min",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "min": 0,
-        "max": 120
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.equalizerBass",
-      "type": "state",
-      "common": {
-        "name": "Bass Level",
-        "role": "level.bass",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "unit": "dB",
-        "min": -6,
-        "max": 6
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.equalizerBassUp",
-      "type": "state",
-      "common": {
-        "name": "Bass Up",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.equalizerBassDown",
-      "type": "state",
-      "common": {
-        "name": "Bass Down",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.equalizerTreble",
-      "type": "state",
-      "common": {
-        "name": "Treble Level",
-        "role": "level.treble",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "unit": "dB",
-        "min": -6,
-        "max": 6
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.equalizerTrebleUp",
-      "type": "state",
-      "common": {
-        "name": "Treble Up",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.equalizerTrebleDown",
-      "type": "state",
-      "common": {
-        "name": "Treble Down",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.channelVolumeFrontLeft",
-      "type": "state",
-      "common": {
-        "name": "Channel Volume Front Left",
-        "role": "level",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "unit": "dB",
-        "min": -12,
-        "max": 12
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.channelVolumeFrontRight",
-      "type": "state",
-      "common": {
-        "name": "Channel Volume Front Right",
-        "role": "level",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "min": -12,
-        "max": 12,
-        "unit": "dB"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.channelVolumeCenter",
-      "type": "state",
-      "common": {
-        "name": "Channel Volume Center",
-        "role": "level",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "min": -12,
-        "max": 12,
-        "unit": "dB"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.channelVolumeSurroundRight",
-      "type": "state",
-      "common": {
-        "name": "Channel Volume Surround Right",
-        "role": "level",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "min": -12,
-        "max": 12,
-        "unit": "dB"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "zoneMain.channelVolumeSurroundLeft",
-      "type": "state",
-      "common": {
-        "name": "Channel Volume Surround Left",
-        "role": "level",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "min": -12,
-        "max": 12,
-        "unit": "dB"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "display",
-      "type": "channel",
-      "common": {
-        "name": "Display Information"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "display.brightness",
-      "type": "state",
-      "common": {
-        "name": "Display brightness",
-        "role": "state",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "states": {
-          "0": "Off",
-          "1": "Dark",
-          "2": "Dimmed",
-          "3": "Bright"
-        }
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings",
-      "type": "channel",
-      "common": {
-        "name": "Settings and device commands"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.powerSystem",
-      "type": "state",
-      "common": {
-        "name": "System Power State",
-        "role": "switch.power",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.surroundMode",
-      "type": "state",
-      "common": {
-        "name": "Surround mode",
-        "role": "state",
-        "type": "string",
-        "write": true,
-        "read": true,
-        "states": {
-          "0": "STEREO",
-          "1": "VIRTUAL",
-          "2": "VIDEO GAME",
-          "3": "MCH STEREO",
-          "4": "DTS SURROUND",
-          "5": "DOLBY DIGITAL",
-          "6": "MOVIE",
-          "7": "MUSIC",
-          "8": "DIRECT",
-          "9": "PURE DIRECT",
-          "10": "AUTO",
-          "11": "GAME",
-          "12": "AURO3D",
-          "13": "AURO2DSURR",
-          "14": "WIDE SCREEN",
-          "15": "SUPER STADIUM",
-          "16": "ROCK ARENA",
-          "17": "JAZZ CLUB",
-          "18": "CLASSIC CONCERT",
-          "19": "MONO MOVIE",
-          "20": "MATRIX"
-        }
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.expertCommand",
-      "type": "state",
-      "common": {
-        "name": "Expert Command",
-        "role": "state",
-        "type": "string",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.dynamicEq",
-      "type": "state",
-      "common": {
-        "name": "Dynamic Eq",
-        "role": "switch",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.subwooferLevelState",
-      "type": "state",
-      "common": {
-        "name": "Subwoofer Level State",
-        "desc": "Subwoofer Level State",
-        "role": "switch",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.subwooferLevel",
-      "type": "state",
-      "common": {
-        "name": "Subwoofer Level",
-        "role": "level",
-        "type": "number",
-        "write": true,
-        "read": true,
-        "min": -12,
-        "max": 12,
-        "unit": "dB"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.subwooferLevelUp",
-      "type": "state",
-      "common": {
-        "name": "Subwoofer level Up",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.subwooferLevelDown",
-      "type": "state",
-      "common": {
-        "name": "Subwoofer level Down",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.multEq",
-      "type": "state",
-      "common": {
-        "name": "Mult EQ",
-        "role": "level",
-        "type": "string",
-        "write": true,
-        "read": true,
-        "states": {
-          "0": "OFF",
-          "1": "AUDYSSEY",
-          "2": "BYP.LR",
-          "3": "FLAT",
-          "4": "MANUAL"
-        }
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.dynamicVolume",
-      "type": "state",
-      "common": {
-        "name": "Dynamic Volume",
-        "role": "level",
-        "type": "string",
-        "write": true,
-        "read": true,
-        "states": {
-          "0": "OFF",
-          "1": "LIT",
-          "2": "MED",
-          "3": "HEV"
-        }
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.referenceLevelOffset",
-      "type": "state",
-      "common": {
-        "name": "Reference Level Offset",
-        "role": "level",
-        "type": "string",
-        "write": true,
-        "read": true,
-        "unit": "dB",
-        "states": {
-          "0": "0",
-          "5": "5",
-          "10": "10",
-          "15": "15"
-        }
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.toneControl",
-      "type": "state",
-      "common": {
-        "name": "Tone Control",
-        "role": "switch",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.cursorUp",
-      "type": "state",
-      "common": {
-        "name": "Cursor Up",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.cursorDown",
-      "type": "state",
-      "common": {
-        "name": "Cursor Down",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.cursorRight",
-      "type": "state",
-      "common": {
-        "name": "Cursor Right",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.cursorLeft",
-      "type": "state",
-      "common": {
-        "name": "Cursor Left",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.enter",
-      "type": "state",
-      "common": {
-        "name": "Enter",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.return",
-      "type": "state",
-      "common": {
-        "name": "Return",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.option",
-      "type": "state",
-      "common": {
-        "name": "Option",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.info",
-      "type": "state",
-      "common": {
-        "name": "Info",
-        "role": "button",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.setupMenu",
-      "type": "state",
-      "common": {
-        "name": "Setup Menu",
-        "role": "switch",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.centerSpread",
-      "type": "state",
-      "common": {
-        "name": "Center Spread",
-        "role": "switch",
-        "type": "boolean",
-        "write": true,
-        "read": true
-      },
-      "native": {
-      }
-    }
-  ]
+    ]
 }

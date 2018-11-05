@@ -664,7 +664,7 @@ function handleResponse(data) {
             adapter.getObject('zoneMain.selectInput', (err, obj) => {
                 let zTwoSi = data.slice(2, data.length);
                 zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
-                for (let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+                for (let j = 0; j < 22; j++) { // Check if command contains one of the possible Select Inputs
                     if (decodeState(obj.common.states, j) == zTwoSi) {
                         adapter.setState('zone2.selectInput', zTwoSi, true);
                         return;
@@ -692,7 +692,7 @@ function handleResponse(data) {
             adapter.getObject('zoneMain.selectInput', (err, obj) => {
                 let zThreeSi = data.substring(2);
                 zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
-                for (let j = 0; j < 21; j++) { // Check if command contains one of the possible Select Inputs
+                for (let j = 0; j < 22; j++) { // Check if command contains one of the possible Select Inputs
                     if (decodeState(obj.common.states, j) == zThreeSi) {
                         adapter.setState('zone3.selectInput', zThreeSi, true);
                         return;
@@ -1178,7 +1178,8 @@ function createZoneTwo(cb) {
                 '18': 'AUX4',
                 '19': 'AUX5',
                 '20': 'AUX6',
-                '21': 'AUX7'
+                '21': 'AUX7',
+                '22': 'BT'
             }
         },
         native: {}
@@ -1416,7 +1417,8 @@ function createZoneThree(cb) {
                 '18': 'AUX4',
                 '19': 'AUX5',
                 '20': 'AUX6',
-                '21': 'AUX7'
+                '21': 'AUX7',
+                '22': 'BT'
             }
         },
         native: {}

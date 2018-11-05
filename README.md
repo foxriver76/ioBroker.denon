@@ -281,6 +281,8 @@ Following states will be created by the adapter:
    *20:	AUX6*
    
    *21:	AUX7*
+
+   *22: BT*
    
    *Please note, that not every input source is available on every AVR model.*
    
@@ -663,6 +665,9 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 1.1.0
+* (foxriver76) added Bluetooth as select input (BT)
 
 ### 1.0.0
 * (foxriver76) formal version increment
