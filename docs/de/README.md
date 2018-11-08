@@ -78,7 +78,7 @@ Nach Abschluss der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UN
 Dadurch efolgt im Anschluß ein Neustart des Adapters.
 
 ## Instanzen
-Die Installation des Adapters hat im Bereich `Objekte` eine aktive Instanz des DENON Adapters angelegt.
+Die Installation des Adapters hat im Bereich `Instanzen` eine aktive Instanz des DENON Adapters angelegt.
 <br/><br/>
 ![Instanz](media/instance.png "Instanz")<span style="color:grey">  
 *Erste Instanz*</span>
@@ -169,11 +169,11 @@ Der Adapter erstellt die folgenden Buttons:
    
 * settings.subwooferLevelDown / settings.subwooferTwoLevelDown
 
-   *Verringert das Subwoofer Bevel.*
+   *Verringert das Subwoofer Level.*
    
 * settings.subwooferLevelUp / settings.subwooferTwoLevelUp
 
-   *Erhöht das Subwoofer Bevel.*
+   *Erhöht das Subwoofer Level.*
    
 * settings.containmentAmountDown
 
