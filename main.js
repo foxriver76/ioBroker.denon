@@ -818,7 +818,7 @@ function handleResponse(data) {
             let knownPresets;
             if (!state) knownPresets = {};
             else knownPresets = JSON.parse(state.val);
-            knownPresets[presetNumber] = data.substring(5);
+            knownPresets[presetNumber] = data.substring(5).replace(/\s\s+/g, '');
             let sortedPresets = {};
             Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
             adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
