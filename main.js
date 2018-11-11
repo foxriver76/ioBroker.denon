@@ -393,7 +393,7 @@ adapter.on('stateChange', (id, state) => {
             });
             break;
         case 'zone2.quickSelect':
-            sendRequest('Z2QUICK' + state, () => 'Z2SMART' + state);
+            sendRequest('Z2QUICK' + state, () => sendRequest('Z2SMART' + state));
             break;
         case 'zone2.equalizerBassUp':
             sendRequest('Z2PSBAS UP');
@@ -460,7 +460,7 @@ adapter.on('stateChange', (id, state) => {
             });
             break;
         case 'zone3.quickSelect':
-            sendRequest('Z3QUICK' + state, () => 'Z3SMART' + state);
+            sendRequest('Z3QUICK' + state, () => sendRequest('Z3SMART' + state));
             break;
         case 'zone3.sleepTimer':
             if (!state) { // state === 0
@@ -554,6 +554,23 @@ adapter.on('stateChange', (id, state) => {
         case 'zoneMain.channelVolumeSurroundLeft':
             sendRequest('CVSL ' + dbToAscii(state));
             break;
+        case 'settings.loadPreset': {
+            let loadPresetState;
+            if (parseFloat(state) < 10)
+                loadPresetState = '0' + state;
+            else loadPresetState = state;
+            adapter.log.warn(loadPresetState);
+            sendRequest('NSB' + loadPresetState);
+            break;
+        }
+        case 'settings.savePreset': {
+            let savePresetState;
+            if (parseFloat(state) < 10)
+                savePresetState = '0' + state;
+            else savePresetState = state;
+            sendRequest('NSC' + savePresetState, () => sendRequest('NSH'));
+            break;
+        }
         default:
             adapter.log.error('[COMMAND] ' + id + ' is not a valid state');
     } // endSwitch
@@ -599,7 +616,7 @@ const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
     'PV?', 'CV?', 'MSQUICK ?',
     'Z2QUICK ?', 'Z3QUICK ?',
     'MSSMART ?', 'Z2SMART ?',
-    'Z3SMART ?'
+    'Z3SMART ?', 'NSH'
 ];
 
 function updateStates() {
@@ -795,7 +812,18 @@ function handleResponse(data) {
             });
         } // endElse
         return;
-    }// endElseIf
+    } else if (command.startsWith('NSH')) {
+        let presetNumber = parseFloat(data.slice(3, 5));
+        adapter.getState('info.onlinePresets', (err, state) => {
+            let knownPresets;
+            if (!state) knownPresets = {};
+            else knownPresets = JSON.parse(state.val);
+            knownPresets[presetNumber] = data.substring(5);
+            let sortedPresets = {};
+            Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
+            adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
+        });
+    } // endElseIf
 
     adapter.log.debug('[INFO] <== Command to handle is ' + command);
 

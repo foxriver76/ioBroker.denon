@@ -666,6 +666,10 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.2.0
+* (foxriver76) added info.onlinePresets which is a JSON string containing all presets
+* (foxriver76) settings.savePreset and loadPreset to save and load presets according to the info.onlinePresets
+
 ### 1.1.0
 * (foxriver76) added Bluetooth as select input (BT)
 

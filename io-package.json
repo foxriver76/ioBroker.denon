@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "news": {
+            "1.2.0": {
+                "en": "added info.onlinePresets and functionality to load and save Presets",
+                "de": "info.onlinePresets mit Favoriten hinzugefügt sowie laden und speichern der Presets ermöglicht"
+            },
             "1.1.0": {
                 "en": "added bluetooth to selectInput as BT",
                 "de": "Bluetooth kann nun als Eingangssignal gewählt werden, mittels selectInput (BT)"
@@ -980,6 +984,46 @@
                 "name": "Center Spread",
                 "role": "switch",
                 "type": "boolean",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.onlinePresets",
+            "type": "state",
+            "common": {
+                "name": "Net Audio Presets",
+                "role": "presets.json",
+                "type": "string",
+                "write": false,
+                "read": true,
+                "def": "{}"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.savePreset",
+            "type": "state",
+            "common": {
+                "name": "Save Net Audio Preset",
+                "role": "presets.save",
+                "type": "string",
+                "write": true,
+                "read": true
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.loadPreset",
+            "type": "state",
+            "common": {
+                "name": "Load Net Audio Preset",
+                "role": "presets.load",
+                "type": "string",
                 "write": true,
                 "read": true
             },
