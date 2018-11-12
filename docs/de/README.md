@@ -210,7 +210,7 @@ Die folgenden States werden vom Adapter angelegt:
 
 * info.connection
 
-    |Datentyp|Berechtigung|                                                                       
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |boolean|R|
 
@@ -218,11 +218,21 @@ Die folgenden States werden vom Adapter angelegt:
    
 * info.friendlyName
 
-    |Datentyp|Berechtigung|                                                                       
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R|
 
    *Nur lesbarer String, der den Netzwerknamen des AVR's beinhaltet.*
+
+* info.onlinePresets
+
+    |Datentyp|Berechtigung|
+    |:---:|:---:|
+    |string|R|
+
+    *String im JSON Format, welcher die derzeit gespeicherten Online-Favoriten enthält. Um den
+    derzeitigen Sender auf eine Id zu speichern kann settings.savePreset genutzt werden. Das abspielen
+    eines Favoritenkanals erfolgt durch den settings.loadPreset State.*
    
 #### Channel: zoneMain / zone2 / zone3
    
@@ -707,7 +717,7 @@ Die folgenden States werden vom Adapter angelegt:
    
 * settings.toneControl
 
-    |Datentyp|Berechtigung|                                                                       
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |boolean|R/W|
     
@@ -718,10 +728,30 @@ Die folgenden States werden vom Adapter angelegt:
    
 * settings.setupMenu
 
-    |Datentyp|Berechtigung|                                                                       
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |boolean|R/W|
 
    *Boolscher Indikator, welcher true ist, wenn das Setup Menü derzeit geöffnet ist.
    Durch setzen des States, kann das Menü geöffnet und geschlossen werden.*
-      
+
+* settings.savePreset
+
+    |Datentyp|Berechtigung|
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number Wert, welcher auf eine Id von info.onlinePresets gesetzt werden kann. Entsprechend wird der aktuelle Sender auf eine Id entsprechend dem
+   gesetzten Number Wert gespeichert. Hierbei können nur Id's welche in info.onlinePresets enthalten sind, genutzt werden. Dieser State
+   erhält kein acknowledge, selbst dann nicht, wenn er erfolgreich durchgeführt wurde.
+   Durch das Prüfen des info.onlinePresets States, kann getestet werden ob der Befehl erfolgreich war.*
+
+* settings.loadPreset
+
+    |Datentyp|Berechtigung|
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number Wert, welcher auf eine in info.onlinePresets enthaltene Id gesetzt werden kann.
+   Hierdurch wird der entsprechende Favoriten-Sender wiedergegeben.
+   Dieser State erhält kein acknowledge, selbst dann nicht, wenn er erfolgreich durchgeführt wurde.*

@@ -181,7 +181,16 @@ Following states will be created by the adapter:
     |string|R|
 
    *Read only string. Contains the friendly name of the connected AVR.*
-   
+
+* info.onlinePresets
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R|
+
+    *String in JSON format, which represents the current saved favorites by its id. You can save the current channel to an id by setting
+    settings.savePreset and load one by setting settings.loadPreset to the related id.*
+
 #### Channel: zoneMain / zone2 / zone3
    
 * zoneMain.volume / zone2.volume / zone3.volume
@@ -658,6 +667,25 @@ Following states will be created by the adapter:
     |boolean|R/W|
 
    *Boolean indicator, which indicates if setup menu is currently open or closed. You can open and close it with this state.*
+
+* settings.savePreset
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number value, which can be set to a value of info.onlinePresets. Then the current channel will be saved as a preset to the given number.
+   Only numbers which are contained in info.onlinePresets can be used. The state will not get an acknowledge, no matter the command was successful
+   or not. You can check info.onlinePresets to check if the command has worked as aspected.*
+
+* settings.loadPreset
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number value, which can be set to a value of info.onlinePresets. This will load the related channel.
+   This state will not get an acknowledge, no matter the command has been successful or not.*
    
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
