@@ -188,8 +188,10 @@ Following states will be created by the adapter:
     |:---:|:---:|
     |string|R|
 
-    *String in JSON format, which represents the current saved favorites by its id. You can save the current channel to an id by setting
-    settings.savePreset and load one by setting settings.loadPreset to the related id.*
+    *String in JSON format, which represents the current saved favorites by its id.
+    The names of the channel are limited by 20 digits. You can save the
+    current channel to an id by setting settings.savePreset and load one
+    by setting settings.loadPreset to the related id.*
 
 #### Channel: zoneMain / zone2 / zone3
    

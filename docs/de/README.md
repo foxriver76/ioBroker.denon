@@ -230,8 +230,9 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R|
 
-    *String im JSON Format, welcher die derzeit gespeicherten Online-Favoriten enthält. Um den
-    derzeitigen Sender auf eine Id zu speichern kann settings.savePreset genutzt werden. Das abspielen
+    *String im JSON Format, welcher die derzeit gespeicherten Online-Favoriten enthält.
+    Der Name je Sender ist hierbei auf 20 Zeichen begrenzt. Um den
+    derzeitigen Sender auf eine Id zu speichern kann settings.savePreset genutzt werden. Das Abspielen
     eines Favoritenkanals erfolgt durch den settings.loadPreset State.*
    
 #### Channel: zoneMain / zone2 / zone3
