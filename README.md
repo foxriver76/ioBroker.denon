@@ -188,8 +188,9 @@ Following states will be created by the adapter:
     |:---:|:---:|
     |string|R|
 
-    *String in JSON format, which represents the current saved favorites by its id.
-    The names of the channel are limited by 20 digits. You can save the
+    *String in JSON array format, which represents the current saved
+    favorites by its id and channel.
+    The names of each channel are limited by 20 digits. You can save the
     current channel to an id by setting settings.savePreset and load one
     by setting settings.loadPreset to the related id.*
 
@@ -695,6 +696,9 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 1.2.1
+* (foxriver76) info.onlinePresets converted to JSON array to work properly with widgets
 
 ### 1.2.0
 * (foxriver76) added info.onlinePresets which is a JSON string containing all presets

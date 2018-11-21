@@ -816,10 +816,14 @@ function handleResponse(data) {
         let presetNumber = parseFloat(data.slice(3, 5));
         adapter.getState('info.onlinePresets', (err, state) => {
             let knownPresets;
-            if (!state) knownPresets = {};
+            if (!state || !state.val) knownPresets = [];
             else knownPresets = JSON.parse(state.val);
-            knownPresets[presetNumber] = data.substring(5).replace(/\s\s+/g, '');
-            let sortedPresets = {};
+            knownPresets[presetNumber] = {
+                id: presetNumber,
+                channel: data.substring(5).replace(/\s\s+/g, '')
+            };
+
+            let sortedPresets = [];
             Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
             adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
         });

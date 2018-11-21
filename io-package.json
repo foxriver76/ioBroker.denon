@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "news": {
+            "1.2.1": {
+                "en": "info.onlinePresets converted to JSON array to work properly with widgets",
+                "de": "info.onlinePresets in ein JSON Array umgewandelt, um die Funktionalität mit Widgets zu ermöglichen"
+            },
             "1.2.0": {
                 "en": "added info.onlinePresets and functionality to load and save Presets",
                 "de": "info.onlinePresets mit Favoriten hinzugefügt sowie laden und speichern der Presets ermöglicht"
