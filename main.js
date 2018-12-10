@@ -7,7 +7,7 @@
 'use strict';
 
 // you have to require the utils module and call adapter function
-const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
+const utils = require('@iobroker/adapter-core'); // Get common adapter utils
 const net = require('net'); // import net
 const client = new net.Socket();
 

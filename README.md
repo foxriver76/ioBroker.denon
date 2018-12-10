@@ -697,6 +697,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.2.2
+* (foxriver76) use adapter core
+
 ### 1.2.1
 * (foxriver76) info.onlinePresets converted to JSON array to work properly with widgets
 
