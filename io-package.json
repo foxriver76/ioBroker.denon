@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.2.3",
+        "version": "1.2.4",
         "news": {
+            "1.2.4": {
+                "en": "fix verbose logging, as long as connection error stays the same, logging happens on debug level",
+                "de": "Verbose Protokollierung behoben, solange der Verbindungsfehler gleich bleibt, erfolgt die Protokollierung auf Debug-Ebene",
+                "ru": "исправить подробное ведение журнала, пока ошибка соединения остается той же, ведение журнала происходит на уровне отладки",
+                "pt": "consertar o registro detalhado, contanto que o erro de conexão permaneça o mesmo, o registro ocorrerá no nível de depuração",
+                "nl": "fix uitgebreide logging, zolang de verbindingsfout gelijk blijft, gebeurt het loggen op foutopsporingsniveau",
+                "fr": "correction de la journalisation prolixe, tant que l'erreur de connexion reste la même, la journalisation a lieu au niveau débogage",
+                "it": "correggi la registrazione dettagliata, purché l'errore di connessione rimanga lo stesso, la registrazione avviene a livello di debug",
+                "es": "arregle el registro detallado, siempre que el error de conexión permanezca igual, el registro ocurre en el nivel de depuración",
+                "pl": "naprawiaj szczegółowe rejestrowanie, o ile błąd połączenia pozostaje ten sam, rejestracja odbywa się na poziomie debugowania"
+            },
             "1.2.3": {
                 "en": "add missing usb to selectInput for all zones",
                 "de": "fehlender USB Eingangskanal wurde hinzugefügt für alle Zonen"

@@ -697,6 +697,10 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.2.4
+* (foxriver76) fix verbose logging on network issues
+* (foxriver76) as long as connection error stays the same, logging happens on debug
+
 ### 1.2.3
 * (foxriver76) add missing usb to selectInput for all zones
 

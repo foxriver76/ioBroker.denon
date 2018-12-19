@@ -20,6 +20,8 @@ let host;
 let volumeInDB;
 let pollInterval;
 let requestInterval;
+let verboseConnection = true;
+let previousError;
 
 let zoneTwo = false;
 let zoneThree = false;
@@ -101,11 +103,23 @@ client.on('timeout', () => {
 
 // Connection handling
 client.on('error', error => {
+    if (error.code === previousError) {
+        verboseConnection = false;
+    } else verboseConnection = true;
     if (connectingVar) return;
-    if (error.code === 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
-    else if (error.code === 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
-    else if (error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
-    else adapter.log.warn('Connection closed: ' + error);
+    previousError = error.code;
+    if (verboseConnection) {
+        if (error.code === 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
+        else if (error.code === 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
+        else if (error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
+        else adapter.log.warn('Connection closed: ' + error);
+    } else {
+        if (error.code === 'ECONNREFUSED') adapter.log.debug('Connection refused, make sure that there is no other Telnet connection');
+        else if (error.code === 'EHOSTUNREACH') adapter.log.debug('AVR unreachable, check the Network Config of your AVR');
+        else if (error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.debug('Adapter is already connecting/connected');
+        else adapter.log.warn('Connection closed: ' + error);
+    }
+
     pollingVar = false;
     adapter.setState('info.connection', false, true);
     if (!connectingVar) {
@@ -129,6 +143,8 @@ client.on('end', () => { // Denon has closed the connection
 client.on('connect', () => { // Successfull connected
     clearTimeout(connectingVar);
     connectingVar = null;
+    previousError = null;
+    verboseConnection = true;
     adapter.setState('info.connection', true, true);
     adapter.log.info('[CONNECT] Adapter connected to DENON-AVR: ' + host + ':23');
     adapter.log.debug('[CONNECT] Connected --> updating states on start');
@@ -593,7 +609,9 @@ adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device nam
 function connect() {
     client.setEncoding('utf8');
     client.setTimeout(35000);
-    adapter.log.info('[CONNECT] Trying to connect to ' + host + ':23');
+    if (verboseConnection)
+        adapter.log.info('[CONNECT] Trying to connect to ' + host + ':23');
+    else adapter.log.debug('[CONNECT] Trying to connect to ' + host + ':23');
     connectingVar = null;
     client.connect({port: 23, host: host});
 } // endConnect
