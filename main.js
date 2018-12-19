@@ -1211,7 +1211,8 @@ function createZoneTwo(cb) {
                 '19': 'AUX5',
                 '20': 'AUX6',
                 '21': 'AUX7',
-                '22': 'BT'
+                '22': 'BT',
+                '23': 'USB'
             }
         },
         native: {}
@@ -1450,7 +1451,8 @@ function createZoneThree(cb) {
                 '19': 'AUX5',
                 '20': 'AUX6',
                 '21': 'AUX7',
-                '22': 'BT'
+                '22': 'BT',
+                '23': 'USB'
             }
         },
         native: {}

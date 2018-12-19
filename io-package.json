@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.2.2",
+        "version": "1.2.3",
         "news": {
+            "1.2.3": {
+                "en": "add missing usb to selectInput for all zones",
+                "de": "fehlender USB Eingangskanal wurde hinzugefügt für alle Zonen"
+            },
             "1.2.2": {
                 "en": "use adapter core",
                 "de": "Nutzung von Adapter-Core"
@@ -336,7 +340,8 @@
                     "19": "AUX5",
                     "20": "AUX6",
                     "21": "AUX7",
-                    "22": "BT"
+                    "22": "BT",
+                    "23": "USB"
                 }
             },
             "native": {

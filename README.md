@@ -697,6 +697,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.2.3
+* (foxriver76) add missing usb to selectInput for all zones
+
 ### 1.2.2
 * (foxriver76) use adapter core
 
