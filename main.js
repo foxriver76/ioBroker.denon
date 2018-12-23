@@ -678,7 +678,7 @@ function handleResponse(data) {
     // get command out of String
     let command;
 
-    if (/Z\d.*/g.test(data)) { // Transformation for Zone2+ commands
+    if (/^Z\d.*/g.test(data)) { // Transformation for Zone2+ commands
         const zoneNumber = parseInt(data.slice(1, 2));
         if (!zonesCreated[zoneNumber]) createZone(zoneNumber); // Create Zone2+ states if not done yet
         command = data.replace(/\s+|\d+/g, '');
@@ -693,14 +693,17 @@ function handleResponse(data) {
             command = 'Z' + zoneNumber + command.slice(1, command.length);
         } // endElse
 
-        if (/Z\dQUICK.*/g.test(data) || /Z\dSMART.*/g.test(data)) {
+        if (/^Z\dQUICK.*/g.test(data) || /^Z\dSMART.*/g.test(data)) {
             const quickNr = parseInt(data.slice(-1));
             adapter.getStateAsync('zone' + zoneNumber + '.quickSelect').then((state) => {
                 if (state.val === quickNr && state.ack) return;
                 adapter.setState('zone' + zoneNumber + '.quickSelect', parseFloat(quickNr), true);
                 return;
+            }).catch(() => {
+                adapter.setState('zone' + zoneNumber + '.quickSelect', parseFloat(quickNr), true);
+                return;
             });
-        } else if (/Z\d.*/g.test(command)) { // Encode Input Source
+        } else if (/^Z\d.*/g.test(command)) { // Encode Input Source
             adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
                 let zoneSi = data.substring(2);
                 zoneSi = zoneSi.replace(' ', ''); // Remove blanks
@@ -740,6 +743,9 @@ function handleResponse(data) {
         const quickNr = parseInt(data.slice(-1));
         adapter.getStateAsync('zoneMain.quickSelect').then((state) => {
             if (state.val === quickNr && state.ack) return;
+            adapter.setState('zoneMain.quickSelect', parseFloat(quickNr), true);
+            return;
+        }).catch(() => {
             adapter.setState('zoneMain.quickSelect', parseFloat(quickNr), true);
             return;
         });
@@ -891,39 +897,39 @@ function handleResponse(data) {
             adapter.getStateAsync('zoneMain.sleepTimer').then((state) => {
                 if (state.val !== parseInt(data) || !state.ack)
                     adapter.setState('zoneMain.sleepTimer', parseFloat(data), true);
-            });
+            }).catch(() => adapter.setState('zoneMain.sleepTimer', parseFloat(data), true));
             break;
         case 'SLPOFF':
             adapter.getStateAsync('zoneMain.sleepTimer').then((state) => {
                 if (state.val !== 0 || !state.ack)
                     adapter.setState('zoneMain.sleepTimer', 0, true);
-            });
+            }).catch(() => adapter.setState('zoneMain.sleepTimer', 0, true));
             break;
         case 'Z2SLP':
             data = data.slice(5, data.length);
             adapter.getStateAsync('zone2.sleepTimer').then((state) => {
                 if (state.val !== parseInt(data) || !state.ack)
                     adapter.setState('zone2.sleepTimer', parseFloat(data), true);
-            });
+            }).catch(() => adapter.setState('zone2.sleepTimer', parseFloat(data), true));
             break;
         case 'Z2SLPOFF':
             adapter.getStateAsync('zone2.sleepTimer').then((state) => {
                 if (state.val !== 0 || !state.ack)
                     adapter.setState('zone2.sleepTimer', 0, true);
-            });
+            }).catch(() => adapter.setState('zone2.sleepTimer', 0, true));
             break;
         case 'Z3SLP':
             data = data.slice(5, data.length);
             adapter.getStateAsync('zone3.sleepTimer').then((state) => {
                 if (state.val !== parseInt(data) || !state.ack)
                     adapter.setState('zone3.sleepTimer', parseFloat(data), true);
-            });
+            }).catch(() => adapter.setState('zone3.sleepTimer', parseFloat(data), true));
             break;
         case 'Z3SLPOFF':
             adapter.getStateAsync('zone3.sleepTimer').then((state) => {
                 if (state.val !== 0 || !state.ack)
                     adapter.setState('zone3.sleepTimer', 0, true);
-            });
+            }).catch(() => adapter.setState('zone3.sleepTimer', 0, true));
             break;
         case 'PSDYNEQON':
             adapter.setState('settings.dynamicEq', true, true);

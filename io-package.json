@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.2.5",
+        "version": "1.2.6",
         "news": {
-            "1.2.5": {
+            "1.2.6": {
                 "en": "only updating some states when changed, promises and minor improvements",
                 "de": "Einige Zustände werden nur bei Änderungen aktualisiert, Promises und geringfügigen Verbesserungen",
                 "ru": "Обновление только некоторых состояний при изменении, обещаний и незначительных улучшений",
