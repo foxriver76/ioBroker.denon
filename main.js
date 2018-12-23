@@ -1107,7 +1107,8 @@ function checkVolumeDB(db) {
                     unit: 'dB'
                 }
             });
-            adapter.setObjectNotExists('zoneMain.maximumVolumeDB', {
+
+            adapter.setObjectNotExistsAsync('zoneMain.maximumVolumeDB', {
                 type: 'state',
                 common: {
                     name: 'Maximum Volume DB',
@@ -1117,7 +1118,7 @@ function checkVolumeDB(db) {
                     read: true,
                     unit: 'dB'
                 }
-            }, () => resolve());
+            }).then(() => resolve());
         } else { // delete dB States
             adapter.delObject('zoneMain.volumeDB');
             adapter.delObject('zoneMain.maximumVolumeDB');
