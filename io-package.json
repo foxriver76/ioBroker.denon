@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.2.4",
+        "version": "1.2.5",
         "news": {
+            "1.2.5": {
+                "en": "only updating some states when changed, promises and minor improvements",
+                "de": "Einige Zustände werden nur bei Änderungen aktualisiert, Promises und geringfügigen Verbesserungen",
+                "ru": "Обновление только некоторых состояний при изменении, обещаний и незначительных улучшений",
+                "pt": "apenas atualizando alguns estados quando alterado, promessas e pequenas melhorias",
+                "nl": "alleen het bijwerken van een aantal staten bij verandering, beloftes en kleine verbeteringen",
+                "fr": "mettre à jour seulement certains états lors de modifications, promesses et améliorations mineures",
+                "it": "solo aggiornando alcuni stati quando modificati, promesse e miglioramenti minori",
+                "es": "Solo se actualizan algunos estados cuando se cambian, promesas y mejoras menores.",
+                "pl": "aktualizuje tylko niektóre stany po zmianie, obietnice i drobne poprawki"
+            }
             "1.2.4": {
                 "en": "fix verbose logging, as long as connection error stays the same, logging happens on debug level",
                 "de": "Verbose Protokollierung behoben, solange der Verbindungsfehler gleich bleibt, erfolgt die Protokollierung auf Debug-Ebene",
