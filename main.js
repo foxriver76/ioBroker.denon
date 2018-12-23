@@ -23,8 +23,7 @@ let requestInterval;
 let verboseConnection = true;
 let previousError;
 
-let zoneTwo = false;
-let zoneThree = false;
+const zonesCreated = {};
 let displayAbility = false;
 let multiMonitor = false;
 let pollingVar = null;
@@ -88,8 +87,7 @@ adapter.on('ready', () => {
 function main() {
     adapter.subscribeStates('*');
 
-    checkVolumeDB(volumeInDB, () => connect()); // Connect on start
-
+    checkVolumeDB(volumeInDB).then(() => connect()); // Connect on start
 } // endMain
 
 client.on('timeout', () => {
@@ -240,12 +238,12 @@ adapter.on('stateChange', (id, state) => {
             sendRequest('NS9D');
             break;
         case 'zoneMain.selectInput':
-            adapter.getObject('zoneMain.selectInput', (err, obj) => {
+            adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
                 sendRequest('SI' + decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'zoneMain.quickSelect':
-            sendRequest('MSQUICK' + state, () => sendRequest('MSSMART' + state));
+            sendRequest('MSQUICK' + state).then(() => sendRequest('MSSMART' + state));
             break;
         case 'zoneMain.equalizerBassUp':
             sendRequest('PSBAS UP');
@@ -319,12 +317,12 @@ adapter.on('stateChange', (id, state) => {
             sendRequest('PSCNTAMT 0' + state);
             break;
         case 'settings.multEq':
-            adapter.getObject('settings.multEq', (err, obj) => {
+            adapter.getObjectAsync('settings.multEq').then((obj) => {
                 sendRequest('PSMULTEQ:' + decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'settings.dynamicVolume':
-            adapter.getObject('settings.dynamicVolume', (err, obj) => {
+            adapter.getObjectAsync('settings.dynamicVolume').then((obj) => {
                 sendRequest('PSDYNVOL ' + decodeState(obj.common.states, state).toUpperCase());
             });
             break;
@@ -332,14 +330,14 @@ adapter.on('stateChange', (id, state) => {
             sendRequest('PSREFLEV ' + state);
             break;
         case 'settings.surroundMode':
-            adapter.getObject('settings.surroundMode', (err, obj) => {
+            adapter.getObjectAsync('settings.surroundMode').then((obj) => {
                 sendRequest('MS' + decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'settings.expertCommand': // Sending custom commands
             const expertState = state;
             sendRequest(state);
-            adapter.getState('info.connection', (err, state) => {
+            adapter.getStateAsync('info.connection').then((state) => {
                 if (state.val === true) adapter.setState('settings.expertCommand', expertState, true);
             });
             break;
@@ -349,7 +347,7 @@ adapter.on('stateChange', (id, state) => {
             } else sendRequest('PSTONE CTRL OFF');
             break;
         case 'display.brightness':
-            adapter.getObject('display.brightness', (err, obj) => {
+            adapter.getObjectAsync('display.brightness').then((obj) => {
                 sendRequest('DIM ' + decodeState(obj.common.states, state).toUpperCase().slice(0, 3));
             });
             break;
@@ -404,12 +402,12 @@ adapter.on('stateChange', (id, state) => {
             sendRequest('Z2' + leadingZero + state);
             break;
         case 'zone2.selectInput':
-            adapter.getObject('zone2.selectInput', (err, obj) => {
+            adapter.getObjectAsync('zone2.selectInput').then((obj) => {
                 sendRequest('Z2' + decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'zone2.quickSelect':
-            sendRequest('Z2QUICK' + state, () => sendRequest('Z2SMART' + state));
+            sendRequest('Z2QUICK' + state).then(() => sendRequest('Z2SMART' + state));
             break;
         case 'zone2.equalizerBassUp':
             sendRequest('Z2PSBAS UP');
@@ -471,12 +469,12 @@ adapter.on('stateChange', (id, state) => {
             sendRequest('Z3' + leadingZero + state);
             break;
         case 'zone3.selectInput':
-            adapter.getObject('zone3.selectInput', (err, obj) => {
+            adapter.getObjectAsync('zone3.selectInput').then((obj) => {
                 sendRequest('Z3' + decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'zone3.quickSelect':
-            sendRequest('Z3QUICK' + state, () => sendRequest('Z3SMART' + state));
+            sendRequest('Z3QUICK' + state).then(() => sendRequest('Z3SMART' + state));
             break;
         case 'zone3.sleepTimer':
             if (!state) { // state === 0
@@ -539,7 +537,7 @@ adapter.on('stateChange', (id, state) => {
             } else sendRequest('MNMEN OFF');
             break;
         case 'settings.outputMonitor':
-            adapter.getObject('settings.outputMonitor', (err, obj) => {
+            adapter.getObjectAsync('settings.outputMonitor').then((obj) => {
                 sendRequest('VSMONI' + decodeState(obj.common.states, state));
             });
             break;
@@ -548,7 +546,7 @@ adapter.on('stateChange', (id, state) => {
             else sendRequest('PSCES OFF');
             break;
         case 'settings.videoProcessingMode':
-            adapter.getObject('settings.videoProcessingMode', (err, obj) => {
+            adapter.getObjectAsync('settings.videoProcessingMode').then((obj) => {
                 sendRequest('VSVPM' + decodeState(obj.common.states, state));
             });
             break;
@@ -584,7 +582,7 @@ adapter.on('stateChange', (id, state) => {
             if (parseFloat(state) < 10)
                 savePresetState = '0' + state;
             else savePresetState = state;
-            sendRequest('NSC' + savePresetState, () => sendRequest('NSH'));
+            sendRequest('NSC' + savePresetState).then(() => sendRequest('NSH'));
             break;
         }
         default:
@@ -592,7 +590,7 @@ adapter.on('stateChange', (id, state) => {
     } // endSwitch
 }); // endOnStateChange
 
-adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
+adapter.getForeignObjectAsync(adapter.namespace).then((obj) => { // create device namespace
     if (!obj) {
         adapter.setForeignObject(adapter.namespace, {
             type: 'device',
@@ -642,7 +640,7 @@ function updateStates() {
     const intervalVar = setInterval(() => {
         sendRequest(updateCommands[i]);
         i++;
-        if (i == updateCommands.length) clearInterval(intervalVar);
+        if (i === updateCommands.length) clearInterval(intervalVar);
     }, requestInterval);
 } // endUpdateStates
 
@@ -659,26 +657,28 @@ function pollStates() { // Polls states
     const intervalVar = setInterval(() => {
         sendRequest(pollCommands[i]);
         i++;
-        if (i == pollCommands.length) clearInterval(intervalVar);
+        if (i === pollCommands.length) clearInterval(intervalVar);
     }, requestInterval);
 } // endPollStates
 
-function sendRequest(req, cb) {
-    client.write(req + '\r');
-    adapter.log.debug('[INFO] ==> Message sent: ' + req);
-    if (cb && typeof(cb) === 'function') return cb();
+function sendRequest(req) {
+    return new Promise(resolve => {
+        client.write(req + '\r');
+        adapter.log.debug('[INFO] ==> Message sent: ' + req);
+        resolve();
+    });
 } // endSendRequest
 
 function handleResponse(data) {
     if (!pollingVar) { // Keep connection alive & poll states
         pollingVar = true;
-        setTimeout(() => pollStates(), pollInterval); // Poll states every configured  seconds
+        setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
     } // endIf
     // get command out of String
     let command;
 
     if (data.startsWith('Z2')) { // Transformation for Zone2 commands
-        if (!zoneTwo) createZoneTwo(); // Create Zone2 states if not done yet
+        if (!zonesCreated[2]) createZone(2); // Create Zone2 states if not done yet
         command = data.replace(/\s+|\d+/g, '');
 
         if (command === 'Z') { // If everything is removed except Z --> Volume
@@ -691,12 +691,12 @@ function handleResponse(data) {
             command = 'Z2' + command.slice(1, command.length);
         } // endElse
 
-        if (data.startsWith('Z2QUICK')  || data.startsWith('Z2SMART')) {
+        if (data.startsWith('Z2QUICK') || data.startsWith('Z2SMART')) {
             const quickNr = data.slice(-1);
             adapter.setState('zone2.quickSelect', parseFloat(quickNr), true);
             return;
         } else if (command.startsWith('Z2')) { // Encode Input Source
-            adapter.getObject('zoneMain.selectInput', (err, obj) => {
+            adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
                 let zTwoSi = data.slice(2, data.length);
                 zTwoSi = zTwoSi.replace(' ', ''); // Remove blanks
                 for (let j = 0; j < 22; j++) { // Check if command contains one of the possible Select Inputs
@@ -708,7 +708,7 @@ function handleResponse(data) {
             });
         } // endIf
     } else if (data.startsWith('Z3')) { // Transformation for Zone3 commands
-        if (!zoneThree) createZoneThree(); // Create Zone 3 states if not done yet
+        if (!zonesCreated[3]) createZone(3); // Create Zone 3 states if not done yet
         command = data.replace(/\s+|\d+/g, '');
         if (command === 'Z') { // if everything is removed except Z --> Volume
             let vol = data.slice(2, data.toString().length).replace(/\s|[A-Z]/g, '');
@@ -719,12 +719,12 @@ function handleResponse(data) {
         } else {
             command = 'Z3' + command.slice(1, command.length);
         } // endElseIf
-        if (data.startsWith('Z3QUICK')  || data.startsWith('Z3SMART')) {
+        if (data.startsWith('Z3QUICK') || data.startsWith('Z3SMART')) {
             const quickNr = data.slice(-1);
             adapter.setState('zone3.quickSelect', parseFloat(quickNr), true);
             return;
         } else if (command.startsWith('Z3')) { // Encode Input Source
-            adapter.getObject('zoneMain.selectInput', (err, obj) => {
+            adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
                 let zThreeSi = data.substring(2);
                 zThreeSi = zThreeSi.replace(' ', ''); // Remove blanks
                 for (let j = 0; j < 22; j++) { // Check if command contains one of the possible Select Inputs
@@ -740,7 +740,7 @@ function handleResponse(data) {
     } // endElse
 
     if (command.startsWith('DIM')) { // Handle display brightness
-        adapter.getObject('display.brightness', (err, obj) => {
+        adapter.getObjectAsync('display.brightness').then((obj) => {
             let bright = data.substring(4);
             bright = bright.replace(' ', ''); // Remove blanks
             for (let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
@@ -759,7 +759,7 @@ function handleResponse(data) {
         const msCommand = command.substring(2);
         adapter.setState('settings.surroundMode', msCommand, true);
         return;
-    } else if (command === 'MSQUICK'  || command === 'MSSMART') {
+    } else if (command === 'MSQUICK' || command === 'MSSMART') {
         const quickNr = data.slice(-1);
         adapter.setState('zoneMain.quickSelect', parseFloat(quickNr), true);
         return;
@@ -768,7 +768,9 @@ function handleResponse(data) {
         const dispContNr = data.slice(3, 4);
 
         if (!displayAbility) {
-            createDisplayAndHttp(() => adapter.setState('display.displayContent' + dispContNr, displayCont, true));
+            createDisplayAndHttp().then(() => {
+                adapter.setState('display.displayContent' + dispContNr, displayCont, true);
+            });
         } else
             adapter.setState('display.displayContent' + dispContNr, displayCont, true);
         return;
@@ -793,7 +795,7 @@ function handleResponse(data) {
         const state = data.substring(6);
 
         if (!multiMonitor) { // make sure that state exists
-            createMonitorState(() => {
+            createMonitorState().then(() => {
                 if (state === 'AUTO') {
                     adapter.setState('settings.outputMonitor', 0, true);
                 } else adapter.setState('settings.outputMonitor', parseFloat(state), true);
@@ -809,7 +811,9 @@ function handleResponse(data) {
         const processingMode = data.substring(4);
 
         if (!multiMonitor) { // make sure that state exists
-            createMonitorState(() => adapter.setState('settings.videoProcessingMode', processingMode, true));
+            createMonitorState().then(() => {
+                adapter.setState('settings.videoProcessingMode', processingMode, true);
+            });
         } else {
             adapter.setState('settings.videoProcessingMode', processingMode, true);
         } // endElse
@@ -819,20 +823,20 @@ function handleResponse(data) {
         const pictureMode = data.substring(1);
 
         if (!pictureModeAbility) {
-            createPictureMode(() => {
-                adapter.getObject('settings.pictureMode', (err, obj) => {
+            createPictureMode().then(() => {
+                adapter.getObjectAsync('settings.pictureMode').then((obj) => {
                     adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
                 });
             });
         } else {
-            adapter.getObject('settings.pictureMode', (err, obj) => {
+            adapter.getObjectAsync('settings.pictureMode').then((obj) => {
                 adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
             });
         } // endElse
         return;
     } else if (command.startsWith('NSH')) {
         const presetNumber = parseFloat(data.slice(3, 5));
-        adapter.getState('info.onlinePresets', (err, state) => {
+        adapter.getStateAsync('info.onlinePresets').then((state) => {
             let knownPresets;
             if (!state || !state.val) knownPresets = [];
             else knownPresets = JSON.parse(state.val);
@@ -944,7 +948,7 @@ function handleResponse(data) {
                 adapter.setState('settings.subwooferLevel', parseFloat(state), true);
             } else {
                 if (!subTwo) { // make sure sub two state exists
-                    createSubTwo(() => {
+                    createSubTwo().then(() => {
                         adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
                     });
                 } else
@@ -954,7 +958,7 @@ function handleResponse(data) {
         }
         case 'PSLFCON':
             if (!audysseyLfc) {
-                createLfcAudyseey(() => {
+                createLfcAudyseey().then(() => {
                     adapter.setState('settings.audysseyLfc', true, true);
                 });
             } else
@@ -963,7 +967,7 @@ function handleResponse(data) {
             break;
         case 'PSLFCOFF':
             if (!audysseyLfc) {
-                createLfcAudyseey(() => {
+                createLfcAudyseey().then(() => {
                     adapter.setState('settings.audysseyLfc', false, true);
                 });
             } else
@@ -973,7 +977,7 @@ function handleResponse(data) {
         case 'PSCNTAMT': {
             const state = data.split(' ')[1];
             if (!audysseyLfc) {
-                createLfcAudyseey(() => {
+                createLfcAudyseey().then(() => {
                     adapter.setState('settings.containmentAmount', parseFloat(state), true);
                 });
             } else
@@ -1069,7 +1073,7 @@ function handleResponse(data) {
 
 function decodeState(stateNames, state) { // decoding for e. g. selectInput --> Input: Key (when ascending integer) or Value Output: Value
     const stateArray = Object.keys(stateNames).map(key => stateNames[key]); // returns stateNames[key]
-    for (let i = 0; i < stateArray.length; i++) {
+    for (const i in stateArray) {
         if (state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) return stateArray[i];
     } // endFor
     return '';
@@ -1087,66 +1091,68 @@ function dbToAscii(vol) {
     return vol;
 } // endDbToAscii
 
-function checkVolumeDB(db, cb) {
-    if (db) { // create dB States
-        adapter.setObjectNotExists('zoneMain.volumeDB', {
-            type: 'state',
-            common: {
-                name: 'Main Volume DB',
-                role: 'level.volume.main',
-                type: 'number',
-                read: true,
-                write: true,
-                min: -80,
-                max: 18,
-                unit: 'dB'
-            }
-        });
-        adapter.setObjectNotExists('zoneMain.maximumVolumeDB', {
-            type: 'state',
-            common: {
-                name: 'Maximum Volume DB',
-                role: 'state',
-                type: 'number',
-                write: false,
-                read: true,
-                unit: 'dB'
-            }
-        });
-    } else { // delete dB States
-        adapter.delObject('zoneMain.volumeDB');
-        adapter.delObject('zoneMain.maximumVolumeDB');
-    } // endElseIf
-
-    if (cb && typeof(cb) === 'function') return cb();
+function checkVolumeDB(db) {
+    return new Promise(resolve => {
+        if (db) { // create dB States
+            adapter.setObjectNotExists('zoneMain.volumeDB', {
+                type: 'state',
+                common: {
+                    name: 'Main Volume DB',
+                    role: 'level.volume.main',
+                    type: 'number',
+                    read: true,
+                    write: true,
+                    min: -80,
+                    max: 18,
+                    unit: 'dB'
+                }
+            });
+            adapter.setObjectNotExists('zoneMain.maximumVolumeDB', {
+                type: 'state',
+                common: {
+                    name: 'Maximum Volume DB',
+                    role: 'state',
+                    type: 'number',
+                    write: false,
+                    read: true,
+                    unit: 'dB'
+                }
+            }, () => resolve());
+        } else { // delete dB States
+            adapter.delObject('zoneMain.volumeDB');
+            adapter.delObject('zoneMain.maximumVolumeDB');
+            resolve();
+        } // endElseIf
+    });
 } // endCreateVolumeDB
 
-function createZoneTwo(cb) {
-    adapter.setObjectNotExists('zone2', {
-        type: 'channel',
-        common: {
-            name: 'Zone 2'
-        },
-        native: {}
-    });
+function createZone(zone) {
+    zonesCreated[zone] = true;
+    return new Promise(resolve => {
+        adapter.setObjectNotExists('zone' + zone, {
+            type: 'channel',
+            common: {
+                name: 'Zone ' + zone
+            },
+            native: {}
+        });
 
-    adapter.setObjectNotExists('zone2.powerZone', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Power State',
-            role: 'switch.power.zone',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    });
-
-    if (!volumeInDB) {
-        adapter.setObjectNotExists('zone2.volume', {
+        adapter.setObjectNotExists('zone' + zone + '.powerZone', {
             type: 'state',
             common: {
-                name: 'Zone 2 Volume',
+                name: 'Zone ' + zone + ' Power State',
+                role: 'switch.power.zone',
+                type: 'boolean',
+                write: true,
+                read: true
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('zone' + zone + '.volume', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' Volume',
                 role: 'level.volume.zone',
                 type: 'number',
                 read: true,
@@ -1156,746 +1162,507 @@ function createZoneTwo(cb) {
             },
             native: {}
         });
-        adapter.delObject('zone2.volumeDB');
-    } else {
-        adapter.setObjectNotExists('zone2.volumeDB', {
+
+        if (!volumeInDB) {
+            adapter.delObject('zone' + zone + '.volumeDB');
+        } else {
+            adapter.setObjectNotExists('zone' + zone + '.volumeDB', {
+                type: 'state',
+                common: {
+                    name: 'Zone ' + zone + ' VolumeDB',
+                    role: 'level.volume',
+                    type: 'number',
+                    unit: 'dB',
+                    read: true,
+                    write: true,
+                    min: -80,
+                    max: 18
+                },
+                native: {}
+            });
+        }
+
+        adapter.setObjectNotExists('zone' + zone + '.volumeUp', {
             type: 'state',
             common: {
-                name: 'Zone 2 VolumeDB',
-                role: 'level.volume',
-                type: 'number',
-                unit: 'dB',
-                read: true,
+                name: 'Zone ' + zone + ' Volume Up',
+                role: 'button',
+                type: 'boolean',
                 write: true,
-                min: -80,
-                max: 18
+                read: false
             },
             native: {}
         });
-    }
 
-    adapter.setObjectNotExists('zone2.volumeUp', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Volume Up',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.volumeDown', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Volume Down',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.selectInput', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Select input',
-            role: 'media.input',
-            type: 'number',
-            write: true,
-            read: true,
-            states: {
-                '0': 'PHONO',
-                '1': 'CD',
-                '2': 'TUNER',
-                '3': 'DVD',
-                '4': 'BD',
-                '5': 'TV',
-                '6': 'SAT/CBL',
-                '7': 'MPLAY',
-                '8': 'GAME',
-                '9': 'NET',
-                '10': 'SPOTIFY',
-                '11': 'LASTFM',
-                '12': 'IRADIO',
-                '13': 'SERVER',
-                '14': 'FAVORITES',
-                '15': 'AUX1',
-                '16': 'AUX2',
-                '17': 'AUX3',
-                '18': 'AUX4',
-                '19': 'AUX5',
-                '20': 'AUX6',
-                '21': 'AUX7',
-                '22': 'BT',
-                '23': 'USB'
-            }
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.muteIndicator', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Muted',
-            role: 'media.mute',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.quickSelect', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Quick select',
-            role: 'media.quickSelect',
-            type: 'number',
-            write: true,
-            read: true,
-            min: 1,
-            max: 5
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.sleepTimer', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Sleep Timer',
-            role: 'media.timer.sleep',
-            unit: 'min',
-            type: 'number',
-            write: true,
-            read: true,
-            min: 0,
-            max: 120
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.equalizerBass', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Bass Level',
-            role: 'level.bass',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -6,
-            max: 6
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.equalizerBassUp', {
-        type: 'state',
-        common: {
-            'name': 'Zone 2 Bass Up',
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.equalizerBassDown', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Bass Down',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.equalizerTreble', {
-        type: 'state',
-        common: {
-            name: 'Zone 2 Treble',
-            role: 'level.treble',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -6,
-            max: 6
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.equalizerTrebleUp', {
-        type: 'state',
-        common: {
-            'name': 'Zone 2 Treble Up',
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone2.equalizerTrebleDown', {
-        type: 'state',
-        common: {
-            'name': 'Zone 2 Treble Down',
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    });
-
-    zoneTwo = true;
-    adapter.log.debug('[INFO] <== Zone 2 detected');
-    if (cb && typeof(cb) === 'function') return cb();
-
-} // endCreateZoneTwo
-
-function createZoneThree(cb) {
-    adapter.setObjectNotExists('zone3', {
-        type: 'channel',
-        common: {
-            name: 'Zone 3'
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.powerZone', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Power State',
-            role: 'switch.power.zone',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    });
-
-    if (!volumeInDB) {
-        adapter.setObjectNotExists('zone3.volume', {
+        adapter.setObjectNotExists('zone' + zone + '.volumeDown', {
             type: 'state',
             common: {
-                name: 'Zone 3 volume',
-                role: 'level.volume.zone',
-                type: 'number',
-                read: true,
+                name: 'Zone ' + zone + ' Volume Down',
+                role: 'button',
+                type: 'boolean',
                 write: true,
+                read: false
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('zone' + zone + '.selectInput', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' Select input',
+                role: 'media.input',
+                type: 'number',
+                write: true,
+                read: true,
+                states: {
+                    '0': 'PHONO',
+                    '1': 'CD',
+                    '2': 'TUNER',
+                    '3': 'DVD',
+                    '4': 'BD',
+                    '5': 'TV',
+                    '6': 'SAT/CBL',
+                    '7': 'MPLAY',
+                    '8': 'GAME',
+                    '9': 'NET',
+                    '10': 'SPOTIFY',
+                    '11': 'LASTFM',
+                    '12': 'IRADIO',
+                    '13': 'SERVER',
+                    '14': 'FAVORITES',
+                    '15': 'AUX1',
+                    '16': 'AUX2',
+                    '17': 'AUX3',
+                    '18': 'AUX4',
+                    '19': 'AUX5',
+                    '20': 'AUX6',
+                    '21': 'AUX7',
+                    '22': 'BT',
+                    '23': 'USB'
+                }
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('zone' + zone + '.muteIndicator', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' Muted',
+                role: 'media.mute',
+                type: 'boolean',
+                write: true,
+                read: true
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('zone' + zone + '.quickSelect', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' Quick select',
+                role: 'media.quickSelect',
+                type: 'number',
+                write: true,
+                read: true,
+                min: 1,
+                max: 5
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('zone' + zone + '.sleepTimer', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' Sleep Timer',
+                role: 'media.timer.sleep',
+                unit: 'min',
+                type: 'number',
+                write: true,
+                read: true,
                 min: 0,
-                max: 98
+                max: 120
             },
             native: {}
         });
-        adapter.delObject('zone3.volumeDB');
-    } else {
-        adapter.setObjectNotExists('zone3.volumeDB', {
+
+        adapter.setObjectNotExists('zone' + zone + '.equalizerBass', {
             type: 'state',
             common: {
-                name: 'Zone 3 volumeDB',
-                role: 'level.volume.zone',
+                name: 'Zone ' + zone + ' Bass Level',
+                role: 'level.bass',
                 type: 'number',
-                unit: 'dB',
-                read: true,
                 write: true,
-                min: -18,
-                max: 80
+                read: true,
+                unit: 'dB',
+                min: -6,
+                max: 6
             },
             native: {}
         });
-    }
 
-    adapter.setObjectNotExists('zone3.volumeUp', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Volume Up',
-            role: 'button',
-            type: 'number',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
+        adapter.setObjectNotExists('zone' + zone + '.equalizerBassUp', {
+            type: 'state',
+            common: {
+                'name': 'Zone ' + zone + ' Bass Up',
+                'role': 'button',
+                'type': 'boolean',
+                'write': true,
+                'read': false
+            },
+            native: {}
+        });
 
-    adapter.setObjectNotExists('zone3.volumeDown', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Volume Down',
-            role: 'button',
-            type: 'number',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
+        adapter.setObjectNotExists('zone' + zone + '.equalizerBassDown', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' Bass Down',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        });
 
-    adapter.setObjectNotExists('zone3.selectInput', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Select input',
-            role: 'media.input',
-            type: 'string',
-            write: true,
-            read: true,
-            states: {
-                '0': 'PHONO',
-                '1': 'CD',
-                '2': 'TUNER',
-                '3': 'DVD',
-                '4': 'BD',
-                '5': 'TV',
-                '6': 'SAT/CBL',
-                '7': 'MPLAY',
-                '8': 'GAME',
-                '9': 'NET',
-                '10': 'SPOTIFY',
-                '11': 'LASTFM',
-                '12': 'IRADIO',
-                '13': 'SERVER',
-                '14': 'FAVORITES',
-                '15': 'AUX1',
-                '16': 'AUX2',
-                '17': 'AUX3',
-                '18': 'AUX4',
-                '19': 'AUX5',
-                '20': 'AUX6',
-                '21': 'AUX7',
-                '22': 'BT',
-                '23': 'USB'
-            }
-        },
-        native: {}
-    });
+        adapter.setObjectNotExists('zone' + zone + '.equalizerTreble', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' Treble',
+                role: 'level.treble',
+                type: 'number',
+                write: true,
+                read: true,
+                unit: 'dB',
+                min: -6,
+                max: 6
+            },
+            native: {}
+        });
 
-    adapter.setObjectNotExists('zone3.muteIndicator', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Muted',
-            role: 'media.mute',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    });
+        adapter.setObjectNotExists('zone' + zone + '.equalizerTrebleUp', {
+            type: 'state',
+            common: {
+                'name': 'Zone ' + zone + ' Treble Up',
+                'role': 'button',
+                'type': 'boolean',
+                'write': true,
+                'read': false
+            },
+            native: {}
+        });
 
-    adapter.setObjectNotExists('zone3.quickSelect', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Quick select',
-            role: 'media.quickSelect',
-            type: 'number',
-            write: true,
-            read: true,
-            min: 1,
-            max: 5
-        },
-        native: {}
+        adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerTrebleDown', {
+            type: 'state',
+            common: {
+                'name': 'Zone ' + zone + ' Treble Down',
+                'role': 'button',
+                'type': 'boolean',
+                'write': true,
+                'read': false
+            },
+            native: {}
+        }).then(() => {
+            adapter.log.debug('[INFO] <== Zone ' + zone + ' detected');
+            resolve();
+        });
     });
+} // endCreateZone
 
-    adapter.setObjectNotExists('zone3.sleepTimer', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Sleep Timer',
-            role: 'level.timer.sleep',
-            type: 'number',
-            unit: 'min',
-            write: true,
-            read: true,
-            min: 0,
-            max: 120
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.equalizerBass', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Bass Level',
-            role: 'level.bass',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -6,
-            max: 6
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.equalizerBassUp', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Bass Up',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.equalizerBassDown', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Bass Down',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.equalizerTreble', {
-        type: 'state',
-        common: {
-            name: 'Zone 3 Treble',
-            role: 'level.treble',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -6,
-            max: 6
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.equalizerTrebleUp', {
-        type: 'state',
-        common: {
-            'name': 'Zone 3 Treble Up',
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zone3.equalizerTrebleDown', {
-        type: 'state',
-        common: {
-            'name': 'Zone 3 Treble Down',
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    });
-
-    zoneThree = true;
-    adapter.log.debug('[INFO] <== Zone 3 detected');
-    if (cb && typeof(cb) === 'function') return cb();
-
-} // endCreateZoneThree
-
-function createDisplayAndHttp(cb) {
-    adapter.setObjectNotExists('display.displayContent0', {
-        type: 'state',
-        common: {
-            'name': 'Display content 0',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent1', {
-        type: 'state',
-        common: {
-            'name': 'Display content 1',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent2', {
-        type: 'state',
-        common: {
-            'name': 'Display content 2',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent3', {
-        type: 'state',
-        common: {
-            'name': 'Display content 3',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent4', {
-        type: 'state',
-        common: {
-            'name': 'Display content 4',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent5', {
-        type: 'state',
-        common: {
-            'name': 'Display content 5',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent6', {
-        type: 'state',
-        common: {
-            'name': 'Display content 6',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent7', {
-        type: 'state',
-        common: {
-            'name': 'Display content 7',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-    adapter.setObjectNotExists('display.displayContent8', {
-        type: 'state',
-        common: {
-            'name': 'Display content 8',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('zoneMain.iconURL', {
-        type: 'state',
-        common: {
-            'name': 'Cover',
-            'role': 'media.cover',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    });
-
-    adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
+function createDisplayAndHttp() {
     displayAbility = true;
-    adapter.log.debug('[INFO] <== Display Content created');
+    return new Promise(resolve => {
+        adapter.setObjectNotExists('display.displayContent0', {
+            type: 'state',
+            common: {
+                'name': 'Display content 0',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent1', {
+            type: 'state',
+            common: {
+                'name': 'Display content 1',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent2', {
+            type: 'state',
+            common: {
+                'name': 'Display content 2',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent3', {
+            type: 'state',
+            common: {
+                'name': 'Display content 3',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent4', {
+            type: 'state',
+            common: {
+                'name': 'Display content 4',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent5', {
+            type: 'state',
+            common: {
+                'name': 'Display content 5',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent6', {
+            type: 'state',
+            common: {
+                'name': 'Display content 6',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent7', {
+            type: 'state',
+            common: {
+                'name': 'Display content 7',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('display.displayContent8', {
+            type: 'state',
+            common: {
+                'name': 'Display content 8',
+                'role': 'info.display',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        });
 
-    if (cb && typeof(cb) === 'function') return cb();
+        adapter.setObjectNotExistsAsync('zoneMain.iconURL', {
+            type: 'state',
+            common: {
+                'name': 'Cover',
+                'role': 'media.cover',
+                'type': 'string',
+                'write': false,
+                'read': true
+            },
+            native: {}
+        }).then(() => {
+            adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
+            adapter.log.debug('[INFO] <== Display Content created');
+            resolve();
+        });
+    });
 } // endCreateDisplayAndHttp
 
-function createMonitorState(cb) {
-
-    adapter.setObjectNotExists('settings.outputMonitor', {
-        type: 'state',
-        common: {
-            name: 'Output monitor',
-            role: 'video.output',
-            type: 'number',
-            write: true,
-            read: true,
-            states: {
-                '0': 'AUTO',
-                '1': '1',
-                '2': '2'
-            }
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('settings.videoProcessingMode', {
-        type: 'state',
-        common: {
-            name: 'Video processing mode',
-            role: 'video.processingMode',
-            type: 'number',
-            write: true,
-            read: true,
-            states: {
-                '0': 'AUTO',
-                '1': 'GAME',
-                '2': 'MOVIE'
-            }
-        },
-        native: {}
-    });
-
+function createMonitorState() {
     multiMonitor = true;
+    return new Promise(resolve => {
+        adapter.setObjectNotExists('settings.outputMonitor', {
+            type: 'state',
+            common: {
+                name: 'Output monitor',
+                role: 'video.output',
+                type: 'number',
+                write: true,
+                read: true,
+                states: {
+                    '0': 'AUTO',
+                    '1': '1',
+                    '2': '2'
+                }
+            },
+            native: {}
+        });
 
-    adapter.log.debug('[INFO] <== Created monitor states');
+        adapter.setObjectNotExistsAsync('settings.videoProcessingMode', {
+            type: 'state',
+            common: {
+                name: 'Video processing mode',
+                role: 'video.processingMode',
+                type: 'number',
+                write: true,
+                read: true,
+                states: {
+                    '0': 'AUTO',
+                    '1': 'GAME',
+                    '2': 'MOVIE'
+                }
+            },
+            native: {}
+        }).then(() => {
+            adapter.log.debug('[INFO] <== Created monitor states');
+            resolve();
+        });
+    });
 
-    if (cb && typeof(cb) === 'function') return cb();
 } // endCreateMonitorState
 
-function createSubTwo(cb) {
-
-    adapter.setObjectNotExists('settings.subwooferTwoLevel', {
-        type: 'state',
-        common: {
-            name: 'Second Subwoofer Level',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('settings.subwooferTwoLevelUp', {
-        type: 'state',
-        common: {
-            name: 'Subwoofer Two Level Up',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('settings.subwooferTwoLevelDown', {
-        type: 'state',
-        common: {
-            name: 'Subwoofer Two Level Down',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.log.debug('[INFO] <== Created subwoofer two states');
-
+function createSubTwo() {
     subTwo = true;
+    return new Promise(resolve => {
+        adapter.setObjectNotExists('settings.subwooferTwoLevel', {
+            type: 'state',
+            common: {
+                name: 'Second Subwoofer Level',
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: -12,
+                max: 12,
+                unit: 'dB'
+            },
+            native: {}
+        });
 
-    if (cb && typeof(cb) === 'function') return cb();
+        adapter.setObjectNotExists('settings.subwooferTwoLevelUp', {
+            type: 'state',
+            common: {
+                name: 'Subwoofer Two Level Up',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelDown', {
+            type: 'state',
+            common: {
+                name: 'Subwoofer Two Level Down',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        }).then(() => {
+            adapter.log.debug('[INFO] <== Created subwoofer two states');
+            resolve();
+        });
+    });
 } // endCreateSubTwo
 
-function createLfcAudyseey(cb) {
-
-    adapter.setObjectNotExists('settings.audysseyLfc', {
-        type: 'state',
-        common: {
-            name: 'Audyssey Low Frequency Containment',
-            role: 'switch',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('settings.containmentAmount', {
-        type: 'state',
-        common: {
-            name: 'Audyssey Low Frequency Containment Amount',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: 1,
-            max: 7
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('settings.containmentAmountUp', {
-        type: 'state',
-        common: {
-            name: 'Containment Amount Up',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.setObjectNotExists('settings.containmentAmountDown', {
-        type: 'state',
-        common: {
-            name: 'Containment Amount Down',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    });
-
-    adapter.log.debug('[INFO] <== Created Audyssey LFC states');
-
+function createLfcAudyseey() {
     audysseyLfc = true;
+    return new Promise(resolve => {
+        adapter.setObjectNotExists('settings.audysseyLfc', {
+            type: 'state',
+            common: {
+                name: 'Audyssey Low Frequency Containment',
+                role: 'switch',
+                type: 'boolean',
+                write: true,
+                read: true
+            },
+            native: {}
+        });
 
-    if (cb && typeof(cb) === 'function') return cb();
+        adapter.setObjectNotExists('settings.containmentAmount', {
+            type: 'state',
+            common: {
+                name: 'Audyssey Low Frequency Containment Amount',
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: 1,
+                max: 7
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('settings.containmentAmountUp', {
+            type: 'state',
+            common: {
+                name: 'Containment Amount Up',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExistsAsync('settings.containmentAmountDown', {
+            type: 'state',
+            common: {
+                name: 'Containment Amount Down',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        }).then(() => {
+            adapter.log.debug('[INFO] <== Created Audyssey LFC states');
+            resolve();
+        });
+    });
 } // endCreateLfcAudyssey
 
-function createPictureMode(cb) {
-
-    adapter.setObjectNotExists('settings.pictureMode', {
-        type: 'state',
-        common: {
-            name: 'Picture Mode Direct Change',
-            role: 'media.pictureMode',
-            type: 'string',
-            write: true,
-            read: false,
-            states: {
-                'OFF': 'Off',
-                'STD': 'Standard',
-                'MOV': 'Movie',
-                'VVD': 'Vivid',
-                'STM': 'Stream',
-                'CTM': 'Custom',
-                'DAY': 'ISF Day',
-                'NGT': 'ISF Night'
-            }
-        },
-        native: {}
-    }, () => {
-        pictureModeAbility = true;
-        if (cb && typeof(cb) === 'function') return cb();
+function createPictureMode() {
+    pictureModeAbility = true;
+    return new Promise(resolve => {
+        adapter.setObjectNotExistsAsync('settings.pictureMode', {
+            type: 'state',
+            common: {
+                name: 'Picture Mode Direct Change',
+                role: 'media.pictureMode',
+                type: 'string',
+                write: true,
+                read: false,
+                states: {
+                    'OFF': 'Off',
+                    'STD': 'Standard',
+                    'MOV': 'Movie',
+                    'VVD': 'Vivid',
+                    'STM': 'Stream',
+                    'CTM': 'Custom',
+                    'DAY': 'ISF Day',
+                    'NGT': 'ISF Night'
+                }
+            },
+            native: {}
+        }).then(() => {
+            resolve();
+        });
     });
-
 } // endCreatePictureMode
+
