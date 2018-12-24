@@ -1111,7 +1111,6 @@ function checkVolumeDB(db) {
 } // endCreateVolumeDB
 
 function createZone(zone) {
-    zonesCreated[zone] = true;
     return new Promise(resolve => {
         adapter.setObjectNotExists('zone' + zone, {
             type: 'channel',
@@ -1346,14 +1345,14 @@ function createZone(zone) {
             },
             native: {}
         }).then(() => {
-            adapter.log.debug('[INFO] <== Zone ' + zone + ' detected');
+            if (!zonesCreated[zone]) adapter.log.debug('[INFO] <== Zone ' + zone + ' detected');
+            zonesCreated[zone] = true;
             resolve();
         });
     });
 } // endCreateZone
 
 function createDisplayAndHttp() {
-    displayAbility = true;
     return new Promise(resolve => {
         adapter.setObjectNotExists('display.displayContent0', {
             type: 'state',
@@ -1466,15 +1465,17 @@ function createDisplayAndHttp() {
             },
             native: {}
         }).then(() => {
-            adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
-            adapter.log.debug('[INFO] <== Display Content created');
+            if (!displayAbility) {
+                adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
+                adapter.log.debug('[INFO] <== Display Content created');
+            } // endIf
+            displayAbility = true;
             resolve();
         });
     });
 } // endCreateDisplayAndHttp
 
 function createMonitorState() {
-    multiMonitor = true;
     return new Promise(resolve => {
         adapter.setObjectNotExists('settings.outputMonitor', {
             type: 'state',
@@ -1509,7 +1510,8 @@ function createMonitorState() {
             },
             native: {}
         }).then(() => {
-            adapter.log.debug('[INFO] <== Created monitor states');
+            if (!multiMonitor) adapter.log.debug('[INFO] <== Created monitor states');
+            multiMonitor = true;
             resolve();
         });
     });
@@ -1517,7 +1519,6 @@ function createMonitorState() {
 } // endCreateMonitorState
 
 function createSubTwo() {
-    subTwo = true;
     return new Promise(resolve => {
         adapter.setObjectNotExists('settings.subwooferTwoLevel', {
             type: 'state',
@@ -1557,14 +1558,14 @@ function createSubTwo() {
             },
             native: {}
         }).then(() => {
-            adapter.log.debug('[INFO] <== Created subwoofer two states');
+            if (!subTwo) adapter.log.debug('[INFO] <== Created subwoofer two states');
+            subTwo = true;
             resolve();
         });
     });
 } // endCreateSubTwo
 
 function createLfcAudyseey() {
-    audysseyLfc = true;
     return new Promise(resolve => {
         adapter.setObjectNotExists('settings.audysseyLfc', {
             type: 'state',
@@ -1615,14 +1616,14 @@ function createLfcAudyseey() {
             },
             native: {}
         }).then(() => {
-            adapter.log.debug('[INFO] <== Created Audyssey LFC states');
+            if (!audysseyLfc) adapter.log.debug('[INFO] <== Created Audyssey LFC states');
+            audysseyLfc = true;
             resolve();
         });
     });
 } // endCreateLfcAudyssey
 
 function createPictureMode() {
-    pictureModeAbility = true;
     return new Promise(resolve => {
         adapter.setObjectNotExistsAsync('settings.pictureMode', {
             type: 'state',
@@ -1645,6 +1646,7 @@ function createPictureMode() {
             },
             native: {}
         }).then(() => {
+            pictureModeAbility = true;
             resolve();
         });
     });
