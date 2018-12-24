@@ -6,14 +6,13 @@
 /*jslint node: true */
 'use strict';
 
-// you have to require the utils module and call adapter function
-const utils = require('@iobroker/adapter-core'); // Get common adapter utils
-const net = require('net'); // import net
-const client = new net.Socket();
-
+const utils = require('@iobroker/adapter-core');
+const net = require('net');
+const helper = require(__dirname + '/lib/utils');
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.denon.0
 const adapter = new utils.Adapter('denon');
 const ssdpScan = require('./lib/upnp').ssdpScan;
+const client = new net.Socket();
 
 // Constants & Variables
 let host;
@@ -179,7 +178,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'zoneMain.volume':
             if (state < 0) state = 0;
-            if ((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
             if (state < 10) {
                 leadingZero = '0';
             } else leadingZero = '';
@@ -190,7 +189,7 @@ adapter.on('stateChange', (id, state) => {
         case 'zoneMain.volumeDB':
             state += 80; // convert to Vol
             if (state < 0) state = 0;
-            if ((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
             if (state < 10) {
                 leadingZero = '0';
             } else leadingZero = '';
@@ -239,7 +238,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'zoneMain.selectInput':
             adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
-                sendRequest('SI' + decodeState(obj.common.states, state).toUpperCase());
+                sendRequest('SI' + helper.decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'zoneMain.quickSelect':
@@ -258,11 +257,11 @@ adapter.on('stateChange', (id, state) => {
             sendRequest('PSTRE DOWN');
             break;
         case 'zoneMain.equalizerBass':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('PSBAS ' + state);
             break;
         case 'zoneMain.equalizerTreble':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('PSTRE ' + state);
             break;
         case 'settings.powerSystem':
@@ -278,7 +277,7 @@ adapter.on('stateChange', (id, state) => {
             } else sendRequest('PSDYNEQ OFF');
             break;
         case 'settings.subwooferLevel':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('PSSWL ' + state);
             break;
         case 'settings.subwooferLevelDown':
@@ -293,7 +292,7 @@ adapter.on('stateChange', (id, state) => {
             } else sendRequest('PSSWL OFF');
             break;
         case 'settings.subwooferTwoLevel':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('PSSWL2 ' + state);
             break;
         case 'settings.subwooferTwoLevelDown':
@@ -318,12 +317,12 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'settings.multEq':
             adapter.getObjectAsync('settings.multEq').then((obj) => {
-                sendRequest('PSMULTEQ:' + decodeState(obj.common.states, state).toUpperCase());
+                sendRequest('PSMULTEQ:' + helper.decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'settings.dynamicVolume':
             adapter.getObjectAsync('settings.dynamicVolume').then((obj) => {
-                sendRequest('PSDYNVOL ' + decodeState(obj.common.states, state).toUpperCase());
+                sendRequest('PSDYNVOL ' + helper.decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'settings.referenceLevelOffset':
@@ -331,7 +330,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'settings.surroundMode':
             adapter.getObjectAsync('settings.surroundMode').then((obj) => {
-                sendRequest('MS' + decodeState(obj.common.states, state).toUpperCase());
+                sendRequest('MS' + helper.decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'settings.expertCommand': { // Sending custom commands
@@ -349,7 +348,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'display.brightness':
             adapter.getObjectAsync('display.brightness').then((obj) => {
-                sendRequest('DIM ' + decodeState(obj.common.states, state).toUpperCase().slice(0, 3));
+                sendRequest('DIM ' + helper.decodeState(obj.common.states, state).toUpperCase().slice(0, 3));
             });
             break;
         case 'zone2.powerZone':
@@ -385,7 +384,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'zone2.volume':
             if (state < 0) state = 0;
-            if ((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
             if (state < 10) {
                 leadingZero = '0';
             } else leadingZero = '';
@@ -395,7 +394,7 @@ adapter.on('stateChange', (id, state) => {
         case 'zone2.volumeDB':
             state += 80; // Convert to Vol
             if (state < 0) state = 0;
-            if ((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
             if (state < 10) {
                 leadingZero = '0';
             } else leadingZero = '';
@@ -404,7 +403,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'zone2.selectInput':
             adapter.getObjectAsync('zone2.selectInput').then((obj) => {
-                sendRequest('Z2' + decodeState(obj.common.states, state).toUpperCase());
+                sendRequest('Z2' + helper.decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'zone2.quickSelect':
@@ -423,11 +422,11 @@ adapter.on('stateChange', (id, state) => {
             sendRequest('Z2PSTRE DOWN');
             break;
         case 'zone2.equalizerBass':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('Z2PSBAS ' + state);
             break;
         case 'zone2.equalizerTreble':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('Z2PSTRE ' + state);
             break;
         case 'zone3.powerZone':
@@ -452,7 +451,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'zone3.volume':
             if (state < 0) state = 0;
-            if ((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
             if (state < 10) {
                 leadingZero = '0';
             } else leadingZero = '';
@@ -462,7 +461,7 @@ adapter.on('stateChange', (id, state) => {
         case 'zone3.volumeDB':
             state += 80; // Convert to Vol
             if (state < 0) state = 0;
-            if ((state % 0.5) != 0) state = Math.round(state * 2) / 2;
+            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
             if (state < 10) {
                 leadingZero = '0';
             } else leadingZero = '';
@@ -471,7 +470,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'zone3.selectInput':
             adapter.getObjectAsync('zone3.selectInput').then((obj) => {
-                sendRequest('Z3' + decodeState(obj.common.states, state).toUpperCase());
+                sendRequest('Z3' + helper.decodeState(obj.common.states, state).toUpperCase());
             });
             break;
         case 'zone3.quickSelect':
@@ -489,11 +488,11 @@ adapter.on('stateChange', (id, state) => {
             } // endElseIf
             break;
         case 'zone3.equalizerBass':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('Z3PSBAS ' + state);
             break;
         case 'zone3.equalizerTreble':
-            state = dbToAscii(state);
+            state = helper.dbToVol(state);
             sendRequest('Z3PSTRE ' + state);
             break;
         case 'zone3.equalizerBassUp':
@@ -539,7 +538,7 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'settings.outputMonitor':
             adapter.getObjectAsync('settings.outputMonitor').then((obj) => {
-                sendRequest('VSMONI' + decodeState(obj.common.states, state));
+                sendRequest('VSMONI' + helper.decodeState(obj.common.states, state));
             });
             break;
         case 'settings.centerSpread':
@@ -548,26 +547,26 @@ adapter.on('stateChange', (id, state) => {
             break;
         case 'settings.videoProcessingMode':
             adapter.getObjectAsync('settings.videoProcessingMode').then((obj) => {
-                sendRequest('VSVPM' + decodeState(obj.common.states, state));
+                sendRequest('VSVPM' + helper.decodeState(obj.common.states, state));
             });
             break;
         case 'settings.pictureMode':
             sendRequest('PV' + state);
             break;
         case 'zoneMain.channelVolumeFrontLeft':
-            sendRequest('CVFL ' + dbToAscii(state));
+            sendRequest('CVFL ' + helper.dbToVol(state));
             break;
         case 'zoneMain.channelVolumeFrontRight':
-            sendRequest('CVFR ' + dbToAscii(state));
+            sendRequest('CVFR ' + helper.dbToVol(state));
             break;
         case 'zoneMain.channelVolumeCenter':
-            sendRequest('CVC ' + dbToAscii(state));
+            sendRequest('CVC ' + helper.dbToVol(state));
             break;
         case 'zoneMain.channelVolumeSurroundRight':
-            sendRequest('CVSR ' + dbToAscii(state));
+            sendRequest('CVSR ' + helper.dbToVol(state));
             break;
         case 'zoneMain.channelVolumeSurroundLeft':
-            sendRequest('CVSL ' + dbToAscii(state));
+            sendRequest('CVSL ' + helper.dbToVol(state));
             break;
         case 'settings.loadPreset': {
             let loadPresetState;
@@ -708,7 +707,7 @@ function handleResponse(data) {
                 let zoneSi = data.substring(2);
                 zoneSi = zoneSi.replace(' ', ''); // Remove blanks
                 for (let j = 0; j < 22; j++) { // Check if command contains one of the possible Select Inputs
-                    if (decodeState(obj.common.states, j) === zoneSi) {
+                    if (helper.decodeState(obj.common.states, j) === zoneSi) {
                         adapter.setState('zone' + zoneNumber + '.selectInput', zoneSi, true);
                         return;
                     } // endIf
@@ -724,7 +723,7 @@ function handleResponse(data) {
             let bright = data.substring(4);
             bright = bright.replace(' ', ''); // Remove blanks
             for (let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
-                if (decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
+                if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
                     adapter.setState('display.brightness', obj.common.states[j], true);
                 } // endIf
             } // endFor
@@ -735,7 +734,7 @@ function handleResponse(data) {
         siCommand = siCommand.replace(' ', ''); // Remove blanks
         adapter.setState('zoneMain.selectInput', siCommand, true);
         return;
-    } else if (command.startsWith('MS') && command != 'MSQUICK' && command != 'MSSMART') { // Handle Surround mode
+    } else if (command.startsWith('MS') && command !== 'MSQUICK' && command !== 'MSSMART') { // Handle Surround mode
         const msCommand = command.substring(2);
         adapter.setState('settings.surroundMode', msCommand, true);
         return;
@@ -946,7 +945,7 @@ function handleResponse(data) {
         case 'PSSWL': {// Handle Subwoofer Level for first and second SW
             command = data.split(' ')[0];
             let state = data.split(' ')[1];
-            state = asciiToDb(state);
+            state = helper.volToDb(state);
             if (command === 'PSSWL') { // Check if PSSWL or PSSWL2
                 adapter.setState('settings.subwooferLevel', parseFloat(state), true);
             } else {
@@ -995,13 +994,13 @@ function handleResponse(data) {
         }
         case 'PSBAS': {
             let state = data.split(' ')[1];
-            state = asciiToDb(state);
+            state = helper.volToDb(state);
             adapter.setState('zoneMain.equalizerBass', state, true);
             break;
         }
         case 'PSTRE': {
             let state = data.split(' ')[1];
-            state = asciiToDb(state);
+            state = helper.volToDb(state);
             adapter.setState('zoneMain.equalizerTreble', state, true);
             break;
         }
@@ -1047,53 +1046,33 @@ function handleResponse(data) {
             break;
         case 'CVFL': {
             const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontLeft', asciiToDb(channelVolume), true);
+            adapter.setState('zoneMain.channelVolumeFrontLeft', helper.volToDb(channelVolume), true);
             break;
         }
         case 'CVFR': {
             const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontRight', asciiToDb(channelVolume), true);
+            adapter.setState('zoneMain.channelVolumeFrontRight', helper.volToDb(channelVolume), true);
             break;
         }
         case 'CVC': {
             const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeCenter', asciiToDb(channelVolume), true);
+            adapter.setState('zoneMain.channelVolumeCenter', helper.volToDb(channelVolume), true);
             break;
         }
         case 'CVSR': {
             const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundRight', asciiToDb(channelVolume), true);
+            adapter.setState('zoneMain.channelVolumeSurroundRight', helper.volToDb(channelVolume), true);
             break;
         }
         case 'CVSL': {
             const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundLeft', asciiToDb(channelVolume), true);
+            adapter.setState('zoneMain.channelVolumeSurroundLeft', helper.volToDb(channelVolume), true);
             break;
         }
         default:
             adapter.log.debug('[INFO] <== Unhandled command ' + command);
     } // endSwitch
 } // endHandleResponse
-
-function decodeState(stateNames, state) { // decoding for e. g. selectInput --> Input: Key (when ascending integer) or Value Output: Value
-    const stateArray = Object.keys(stateNames).map(key => stateNames[key]); // returns stateNames[key]
-    for (const i in stateArray) {
-        if (state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) return stateArray[i];
-    } // endFor
-    return '';
-} // endDecodeState
-
-function asciiToDb(vol) {
-    if (vol.length === 3) vol = vol / 10;
-    vol -= 50; // Vol to dB
-    return vol;
-} // endAsciiToDb
-
-function dbToAscii(vol) {
-    vol += 50; // dB to vol
-    vol = vol.toString().replace('.', '');
-    return vol;
-} // endDbToAscii
 
 function checkVolumeDB(db) {
     return new Promise(resolve => {
@@ -1670,4 +1649,3 @@ function createPictureMode() {
         });
     });
 } // endCreatePictureMode
-
