@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.2.6",
+        "version": "1.2.7",
         "news": {
+            "1.2.7": {
+                "en": "made sure states are never set before creation and minor fixes and improvements",
+                "de": "Es wurde sichergestellt, dass States vor der Erstellung nie gesetzt werden und kleinere Korrekturen und Verbesserungen wurden vorgenommen",
+                "ru": "убедитесь, что состояния никогда не устанавливаются перед созданием и незначительными исправлениями и улучшениями",
+                "pt": "fez com que os estados nunca fossem definidos antes da criação e pequenas correções e melhorias",
+                "nl": "ervoor gezorgd dat staten nooit zijn ingesteld vóór het maken en kleine verbeteringen en verbeteringen",
+                "fr": "fait en sorte que les états ne sont jamais définis avant la création et les corrections et améliorations mineures",
+                "it": "assicurato che gli stati non siano mai impostati prima della creazione e correzioni e miglioramenti minori",
+                "es": "Asegúrese de que los estados nunca se establezcan antes de la creación y correcciones menores y mejoras",
+                "pl": "upewniałem się, że stany nigdy nie są ustawione przed stworzeniem oraz drobne poprawki i ulepszenia"
+            },
             "1.2.6": {
                 "en": "only updating some states when changed, promises and minor improvements",
                 "de": "Einige Zustände werden nur bei Änderungen aktualisiert, Promises und geringfügigen Verbesserungen",

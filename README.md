@@ -697,6 +697,10 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.2.7
+* (foxriver76) make sure states are never set before creation
+* (foxriver76) minor fixes and improvements
+
 ### 1.2.6
 * (foxriver76) only updating sleep timer and quick select on change
 * (foxriver76) using promises wherever possible

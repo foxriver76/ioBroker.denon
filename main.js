@@ -100,9 +100,7 @@ client.on('timeout', () => {
 
 // Connection handling
 client.on('error', error => {
-    if (error.code === previousError) {
-        verboseConnection = false;
-    } else verboseConnection = true;
+    verboseConnection = error.code !== previousError;
     if (connectingVar) return;
     previousError = error.code;
     if (verboseConnection) {
@@ -696,18 +694,17 @@ function handleResponse(data) {
             const quickNr = parseInt(data.slice(-1));
             adapter.getStateAsync('zone' + zoneNumber + '.quickSelect').then((state) => {
                 if (state.val === quickNr && state.ack) return;
-                adapter.setState('zone' + zoneNumber + '.quickSelect', parseFloat(quickNr), true);
-                return;
+                adapter.setState('zone' + zoneNumber + '.quickSelect', quickNr, true);
             }).catch(() => {
-                adapter.setState('zone' + zoneNumber + '.quickSelect', parseFloat(quickNr), true);
-                return;
+                adapter.setState('zone' + zoneNumber + '.quickSelect', quickNr, true);
             });
+            return;
         } else if (/^Z\d.*/g.test(command)) { // Encode Input Source
             adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
                 let zoneSi = data.substring(2);
                 zoneSi = zoneSi.replace(' ', ''); // Remove blanks
                 for (let j = 0; j < 22; j++) { // Check if command contains one of the possible Select Inputs
-                    if (helper.decodeState(obj.common.states, j) === zoneSi) {
+                    if (helper.decodeState(obj.common.states, j.toString()) === zoneSi) {
                         adapter.setState('zone' + zoneNumber + '.selectInput', zoneSi, true);
                         return;
                     } // endIf
@@ -742,12 +739,11 @@ function handleResponse(data) {
         const quickNr = parseInt(data.slice(-1));
         adapter.getStateAsync('zoneMain.quickSelect').then((state) => {
             if (state.val === quickNr && state.ack) return;
-            adapter.setState('zoneMain.quickSelect', parseFloat(quickNr), true);
-            return;
+            adapter.setState('zoneMain.quickSelect', quickNr, true);
         }).catch(() => {
-            adapter.setState('zoneMain.quickSelect', parseFloat(quickNr), true);
-            return;
+            adapter.setState('zoneMain.quickSelect', quickNr, true);
         });
+        return;
     } else if (command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
         const displayCont = data.substring(4).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
         const dispContNr = data.slice(3, 4);
@@ -1077,7 +1073,9 @@ function handleResponse(data) {
 function checkVolumeDB(db) {
     return new Promise(resolve => {
         if (db) { // create dB States
-            adapter.setObjectNotExists('zoneMain.volumeDB', {
+            const promises = [];
+
+            promises.push(adapter.setObjectNotExistsAsync('zoneMain.volumeDB', {
                 type: 'state',
                 common: {
                     name: 'Main Volume DB',
@@ -1089,9 +1087,9 @@ function checkVolumeDB(db) {
                     max: 18,
                     unit: 'dB'
                 }
-            });
+            }));
 
-            adapter.setObjectNotExistsAsync('zoneMain.maximumVolumeDB', {
+            promises.push(adapter.setObjectNotExistsAsync('zoneMain.maximumVolumeDB', {
                 type: 'state',
                 common: {
                     name: 'Maximum Volume DB',
@@ -1101,7 +1099,9 @@ function checkVolumeDB(db) {
                     read: true,
                     unit: 'dB'
                 }
-            }).then(() => resolve());
+            }));
+
+            Promise.all(promises).then(() => resolve());
         } else { // delete dB States
             adapter.delObject('zoneMain.volumeDB');
             adapter.delObject('zoneMain.maximumVolumeDB');
@@ -1112,15 +1112,17 @@ function checkVolumeDB(db) {
 
 function createZone(zone) {
     return new Promise(resolve => {
-        adapter.setObjectNotExists('zone' + zone, {
+        const promises = [];
+
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone, {
             type: 'channel',
             common: {
                 name: 'Zone ' + zone
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.powerZone', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.powerZone', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Power State',
@@ -1130,9 +1132,9 @@ function createZone(zone) {
                 read: true
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.volume', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.volume', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Volume',
@@ -1144,12 +1146,12 @@ function createZone(zone) {
                 max: 98
             },
             native: {}
-        });
+        }));
 
         if (!volumeInDB) {
             adapter.delObject('zone' + zone + '.volumeDB');
         } else {
-            adapter.setObjectNotExists('zone' + zone + '.volumeDB', {
+            promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.volumeDB', {
                 type: 'state',
                 common: {
                     name: 'Zone ' + zone + ' VolumeDB',
@@ -1162,10 +1164,10 @@ function createZone(zone) {
                     max: 18
                 },
                 native: {}
-            });
-        }
+            }));
+        } // endElse
 
-        adapter.setObjectNotExists('zone' + zone + '.volumeUp', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.volumeUp', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Volume Up',
@@ -1175,9 +1177,9 @@ function createZone(zone) {
                 read: false
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.volumeDown', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.volumeDown', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Volume Down',
@@ -1187,9 +1189,9 @@ function createZone(zone) {
                 read: false
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.selectInput', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.selectInput', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Select input',
@@ -1225,9 +1227,9 @@ function createZone(zone) {
                 }
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.muteIndicator', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.muteIndicator', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Muted',
@@ -1237,9 +1239,9 @@ function createZone(zone) {
                 read: true
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.quickSelect', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.quickSelect', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Quick select',
@@ -1251,9 +1253,9 @@ function createZone(zone) {
                 max: 5
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.sleepTimer', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.sleepTimer', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Sleep Timer',
@@ -1266,9 +1268,9 @@ function createZone(zone) {
                 max: 120
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.equalizerBass', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerBass', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Bass Level',
@@ -1281,9 +1283,9 @@ function createZone(zone) {
                 max: 6
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.equalizerBassUp', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerBassUp', {
             type: 'state',
             common: {
                 'name': 'Zone ' + zone + ' Bass Up',
@@ -1293,9 +1295,9 @@ function createZone(zone) {
                 'read': false
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.equalizerBassDown', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerBassDown', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Bass Down',
@@ -1305,9 +1307,9 @@ function createZone(zone) {
                 read: false
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.equalizerTreble', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerTreble', {
             type: 'state',
             common: {
                 name: 'Zone ' + zone + ' Treble',
@@ -1320,9 +1322,9 @@ function createZone(zone) {
                 max: 6
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('zone' + zone + '.equalizerTrebleUp', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerTrebleUp', {
             type: 'state',
             common: {
                 'name': 'Zone ' + zone + ' Treble Up',
@@ -1332,9 +1334,9 @@ function createZone(zone) {
                 'read': false
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerTrebleDown', {
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.equalizerTrebleDown', {
             type: 'state',
             common: {
                 'name': 'Zone ' + zone + ' Treble Down',
@@ -1344,7 +1346,9 @@ function createZone(zone) {
                 'read': false
             },
             native: {}
-        }).then(() => {
+        }));
+
+        Promise.all(promises).then(() => {
             if (!zonesCreated[zone]) adapter.log.debug('[INFO] <== Zone ' + zone + ' detected');
             zonesCreated[zone] = true;
             resolve();
@@ -1354,7 +1358,9 @@ function createZone(zone) {
 
 function createDisplayAndHttp() {
     return new Promise(resolve => {
-        adapter.setObjectNotExists('display.displayContent0', {
+        const promises = [];
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent0', {
             type: 'state',
             common: {
                 'name': 'Display content 0',
@@ -1364,8 +1370,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent1', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent1', {
             type: 'state',
             common: {
                 'name': 'Display content 1',
@@ -1375,8 +1382,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent2', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent2', {
             type: 'state',
             common: {
                 'name': 'Display content 2',
@@ -1386,8 +1394,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent3', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent3', {
             type: 'state',
             common: {
                 'name': 'Display content 3',
@@ -1397,8 +1406,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent4', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent4', {
             type: 'state',
             common: {
                 'name': 'Display content 4',
@@ -1408,8 +1418,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent5', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent5', {
             type: 'state',
             common: {
                 'name': 'Display content 5',
@@ -1419,8 +1430,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent6', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent6', {
             type: 'state',
             common: {
                 'name': 'Display content 6',
@@ -1430,8 +1442,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent7', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent7', {
             type: 'state',
             common: {
                 'name': 'Display content 7',
@@ -1441,8 +1454,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
-        adapter.setObjectNotExists('display.displayContent8', {
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync('display.displayContent8', {
             type: 'state',
             common: {
                 'name': 'Display content 8',
@@ -1452,9 +1466,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExistsAsync('zoneMain.iconURL', {
+        promises.push(adapter.setObjectNotExistsAsync('zoneMain.iconURL', {
             type: 'state',
             common: {
                 'name': 'Cover',
@@ -1464,7 +1478,9 @@ function createDisplayAndHttp() {
                 'read': true
             },
             native: {}
-        }).then(() => {
+        }));
+
+        Promise.all(promises).then(() => {
             if (!displayAbility) {
                 adapter.setState('zoneMain.iconURL', 'http://' + host + '/NetAudio/art.asp-jpg', true);
                 adapter.log.debug('[INFO] <== Display Content created');
@@ -1477,7 +1493,9 @@ function createDisplayAndHttp() {
 
 function createMonitorState() {
     return new Promise(resolve => {
-        adapter.setObjectNotExists('settings.outputMonitor', {
+        const promises = [];
+
+        promises.push(adapter.setObjectNotExistsAsync('settings.outputMonitor', {
             type: 'state',
             common: {
                 name: 'Output monitor',
@@ -1492,9 +1510,9 @@ function createMonitorState() {
                 }
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExistsAsync('settings.videoProcessingMode', {
+        promises.push(adapter.setObjectNotExistsAsync('settings.videoProcessingMode', {
             type: 'state',
             common: {
                 name: 'Video processing mode',
@@ -1509,7 +1527,9 @@ function createMonitorState() {
                 }
             },
             native: {}
-        }).then(() => {
+        }));
+
+        Promise.all(promises).then(() => {
             if (!multiMonitor) adapter.log.debug('[INFO] <== Created monitor states');
             multiMonitor = true;
             resolve();
@@ -1520,7 +1540,9 @@ function createMonitorState() {
 
 function createSubTwo() {
     return new Promise(resolve => {
-        adapter.setObjectNotExists('settings.subwooferTwoLevel', {
+        const promises = [];
+
+        promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevel', {
             type: 'state',
             common: {
                 name: 'Second Subwoofer Level',
@@ -1533,9 +1555,9 @@ function createSubTwo() {
                 unit: 'dB'
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('settings.subwooferTwoLevelUp', {
+        promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelUp', {
             type: 'state',
             common: {
                 name: 'Subwoofer Two Level Up',
@@ -1545,9 +1567,9 @@ function createSubTwo() {
                 read: false
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelDown', {
+        promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelDown', {
             type: 'state',
             common: {
                 name: 'Subwoofer Two Level Down',
@@ -1557,7 +1579,9 @@ function createSubTwo() {
                 read: false
             },
             native: {}
-        }).then(() => {
+        }));
+
+        Promise.all(promises).then(() => {
             if (!subTwo) adapter.log.debug('[INFO] <== Created subwoofer two states');
             subTwo = true;
             resolve();
@@ -1567,7 +1591,9 @@ function createSubTwo() {
 
 function createLfcAudyseey() {
     return new Promise(resolve => {
-        adapter.setObjectNotExists('settings.audysseyLfc', {
+        const promises = [];
+
+        promises.push(adapter.setObjectNotExistsAsync('settings.audysseyLfc', {
             type: 'state',
             common: {
                 name: 'Audyssey Low Frequency Containment',
@@ -1577,9 +1603,9 @@ function createLfcAudyseey() {
                 read: true
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('settings.containmentAmount', {
+        promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmount', {
             type: 'state',
             common: {
                 name: 'Audyssey Low Frequency Containment Amount',
@@ -1591,9 +1617,9 @@ function createLfcAudyseey() {
                 max: 7
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExists('settings.containmentAmountUp', {
+        promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountUp', {
             type: 'state',
             common: {
                 name: 'Containment Amount Up',
@@ -1603,9 +1629,9 @@ function createLfcAudyseey() {
                 read: false
             },
             native: {}
-        });
+        }));
 
-        adapter.setObjectNotExistsAsync('settings.containmentAmountDown', {
+        promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountDown', {
             type: 'state',
             common: {
                 name: 'Containment Amount Down',
@@ -1615,7 +1641,9 @@ function createLfcAudyseey() {
                 read: false
             },
             native: {}
-        }).then(() => {
+        }));
+
+        Promise.all(promises).then(() => {
             if (!audysseyLfc) adapter.log.debug('[INFO] <== Created Audyssey LFC states');
             audysseyLfc = true;
             resolve();
