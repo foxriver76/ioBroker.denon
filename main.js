@@ -9,12 +9,11 @@
 const utils = require('@iobroker/adapter-core');
 const net = require('net');
 const helper = require(__dirname + '/lib/utils');
-// adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.denon.0
-const adapter = new utils.Adapter('denon');
 const ssdpScan = require('./lib/upnp').ssdpScan;
 const client = new net.Socket();
 
 // Constants & Variables
+let adapter;
 let host;
 let volumeInDB;
 let pollInterval;
@@ -31,57 +30,510 @@ let subTwo = false;
 let audysseyLfc = false;
 let pictureModeAbility = false;
 
-// is called when adapter shuts down - callback has to be called under any circumstances!
-adapter.on('unload', callback => {
-    try {
-        adapter.log.info('[END] Stopping Denon AVR adapter...');
-        adapter.setState('info.connection', false, true);
-        client.destroy(); // kill connection
-        client.unref();	// kill connection
-        callback();
-    } catch (e) {
-        callback();
-    } // endTryCatch
-});
+function startAdapter(options) {
+    options = options || {};
+    Object.assign(options, {
+        name: 'denon'
+    });
 
-// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-adapter.on('message', obj => {
-    if (typeof obj === 'object') {
-        if (obj.command === 'browse') {
-            // e.g. send email or pushover or whatever
-            if (obj.callback) {
-                adapter.log.info('start browse');
-                ssdpScan(
-                    'M-SEARCH * HTTP/1.1\r\n' +
-                    'HOST: 239.255.255.250:1900\r\n' +
-                    'ST: ssdp:all\r\n' +
-                    'MAN: "ssdp:discover"\r\n' +
-                    'MX: 3\r\n' +
-                    '\r\n', true, 4000, (err, result) => {
-                        if (result) {
-                            result = result.filter(dev => dev.manufacturer && (dev.manufacturer.toLowerCase() === 'marantz' || dev.manufacturer.toLowerCase() === 'denon')).map(dev => {
-                                return {ip: dev.ip, name: dev.name};
-                            });
-                        } // endIf
-                        adapter.sendTo(obj.from, obj.command, {error: err, list: result}, obj.callback);
-                    });
+    adapter = new utils.Adapter(options);
+
+    adapter.on('unload', callback => {
+        try {
+            adapter.log.info('[END] Stopping Denon AVR adapter...');
+            adapter.setState('info.connection', false, true);
+            client.destroy(); // kill connection
+            client.unref();	// kill connection
+            callback();
+        } catch (e) {
+            callback();
+        } // endTryCatch
+    });
+
+    adapter.on('message', obj => {
+        if (typeof obj === 'object') {
+            if (obj.command === 'browse') {
+                // e.g. send email or pushover or whatever
+                if (obj.callback) {
+                    adapter.log.info('start browse');
+                    ssdpScan(
+                        'M-SEARCH * HTTP/1.1\r\n' +
+                        'HOST: 239.255.255.250:1900\r\n' +
+                        'ST: ssdp:all\r\n' +
+                        'MAN: "ssdp:discover"\r\n' +
+                        'MX: 3\r\n' +
+                        '\r\n', true, 4000, (err, result) => {
+                            if (result) {
+                                result = result.filter(dev => dev.manufacturer && (dev.manufacturer.toLowerCase() === 'marantz' || dev.manufacturer.toLowerCase() === 'denon')).map(dev => {
+                                    return {ip: dev.ip, name: dev.name};
+                                });
+                            } // endIf
+                            adapter.sendTo(obj.from, obj.command, {error: err, list: result}, obj.callback);
+                        });
+                } // endIf
             } // endIf
         } // endIf
-    } // endIf
-});
+    });
 
-adapter.on('ready', () => {
-    if (adapter.config.ip) {
+    adapter.on('ready', () => {
+        if (adapter.config.ip) {
 
-        adapter.log.info('[START] Starting DENON AVR adapter');
-        host = adapter.config.ip;
-        volumeInDB = adapter.config.volumeInDB;
-        pollInterval = adapter.config.pollInterval || 7000;
-        requestInterval = adapter.config.requestInterval || 100;
-        main();
+            adapter.log.info('[START] Starting DENON AVR adapter');
+            host = adapter.config.ip;
+            volumeInDB = adapter.config.volumeInDB;
+            pollInterval = adapter.config.pollInterval || 7000;
+            requestInterval = adapter.config.requestInterval || 100;
 
-    } else adapter.log.warn('No IP-address set');
-});
+            adapter.getForeignObjectAsync(adapter.namespace).then((obj) => { // create device namespace
+                if (!obj) {
+                    adapter.setForeignObject(adapter.namespace, {
+                        type: 'device',
+                        common: {
+                            name: 'DENON device'
+                        }
+                    });
+                } // endIf
+            });
+
+            main();
+
+        } else adapter.log.warn('No IP-address set');
+    });
+
+    // Handle state changes
+    adapter.on('stateChange', (id, state) => {
+        if (!id || !state || state.ack) return; // Ignore acknowledged state changes or error states
+
+        id = id.substring(adapter.namespace.length + 1); // remove instance name and id
+        state = state.val; // only get state value
+
+        adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
+
+        let leadingZero;
+
+        switch (id) {
+            case 'zoneMain.powerZone':
+                if (state === true) {
+                    sendRequest('ZMON');
+                } else sendRequest('ZMOFF');
+                break;
+            case 'zoneMain.volume':
+                if (state < 0) state = 0;
+                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 10) {
+                    leadingZero = '0';
+                } else leadingZero = '';
+                state = state.toString().replace('.', ''); // remove points
+                sendRequest('MV' + leadingZero + state);
+                adapter.log.debug('[INFO] <== Changed mainVolume to ' + state);
+                break;
+            case 'zoneMain.volumeDB':
+                state += 80; // convert to Vol
+                if (state < 0) state = 0;
+                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 10) {
+                    leadingZero = '0';
+                } else leadingZero = '';
+                state = state.toString().replace('.', ''); // remove points
+                sendRequest('MV' + leadingZero + state);
+                adapter.log.debug('[INFO] <== Changed mainVolume to ' + state);
+                break;
+            case 'zoneMain.sleepTimer':
+                if (!state) { // state === 0
+                    sendRequest('SLPOFF');
+                } else if (state < 10) {
+                    sendRequest('SLP' + '00' + state);
+                } else if (state < 100) {
+                    sendRequest('SLP' + '0' + state);
+                } else if (state <= 120) {
+                    sendRequest('SLP' + state);
+                } // endElseIf
+                break;
+            case 'zoneMain.volumeUp':
+                sendRequest('MVUP');
+                break;
+            case 'zoneMain.volumeDown':
+                sendRequest('MVDOWN');
+                break;
+            case 'zoneMain.muteIndicator':
+                if (state === true) {
+                    sendRequest('MUON');
+                } else {
+                    sendRequest('MUOFF');
+                } // endElseIf
+                break;
+            case 'zoneMain.playPause':
+                sendRequest('NS94');
+                break;
+            case 'zoneMain.play':
+                sendRequest('NS9A');
+                break;
+            case 'zoneMain.pause':
+                sendRequest('NS9B');
+                break;
+            case 'zoneMain.skipMinus':
+                sendRequest('NS9E');
+                break;
+            case 'zoneMain.skipPlus':
+                sendRequest('NS9D');
+                break;
+            case 'zoneMain.selectInput':
+                adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
+                    sendRequest('SI' + helper.decodeState(obj.common.states, state).toUpperCase());
+                });
+                break;
+            case 'zoneMain.quickSelect':
+                sendRequest('MSQUICK' + state).then(() => sendRequest('MSSMART' + state));
+                break;
+            case 'zoneMain.equalizerBassUp':
+                sendRequest('PSBAS UP');
+                break;
+            case 'zoneMain.equalizerBassDown':
+                sendRequest('PSBAS DOWN');
+                break;
+            case 'zoneMain.equalizerTrebleUp':
+                sendRequest('PSTRE UP');
+                break;
+            case 'zoneMain.equalizerTrebleDown':
+                sendRequest('PSTRE DOWN');
+                break;
+            case 'zoneMain.equalizerBass':
+                state = helper.dbToVol(state);
+                sendRequest('PSBAS ' + state);
+                break;
+            case 'zoneMain.equalizerTreble':
+                state = helper.dbToVol(state);
+                sendRequest('PSTRE ' + state);
+                break;
+            case 'settings.powerSystem':
+                if (state === true) {
+                    sendRequest('PWON');
+                } else {
+                    sendRequest('PWSTANDBY');
+                } // endElseIf
+                break;
+            case 'settings.dynamicEq':
+                if (state) {
+                    sendRequest('PSDYNEQ ON');
+                } else sendRequest('PSDYNEQ OFF');
+                break;
+            case 'settings.subwooferLevel':
+                state = helper.dbToVol(state);
+                sendRequest('PSSWL ' + state);
+                break;
+            case 'settings.subwooferLevelDown':
+                sendRequest('PSSWL DOWN');
+                break;
+            case 'settings.subwooferLevelUp':
+                sendRequest('PSSWL UP');
+                break;
+            case 'settings.subwooferLevelState':
+                if (state) {
+                    sendRequest('PSSWL ON');
+                } else sendRequest('PSSWL OFF');
+                break;
+            case 'settings.subwooferTwoLevel':
+                state = helper.dbToVol(state);
+                sendRequest('PSSWL2 ' + state);
+                break;
+            case 'settings.subwooferTwoLevelDown':
+                sendRequest('PSSWL2 DOWN');
+                break;
+            case 'settings.subwooferTwoLevelUp':
+                sendRequest('PSSWL2 UP');
+                break;
+            case 'settings.audysseyLfc':
+                if (state) {
+                    sendRequest('PSLFC ON');
+                } else sendRequest('PSLFC OFF');
+                break;
+            case 'settings.containmentAmountDown':
+                sendRequest('PSCNTAMT DOWN');
+                break;
+            case 'settings.containmentAmountUp':
+                sendRequest('PSCNTAMT UP');
+                break;
+            case 'settings.containmentAmount':
+                sendRequest('PSCNTAMT 0' + state);
+                break;
+            case 'settings.multEq':
+                adapter.getObjectAsync('settings.multEq').then((obj) => {
+                    sendRequest('PSMULTEQ:' + helper.decodeState(obj.common.states, state).toUpperCase());
+                });
+                break;
+            case 'settings.dynamicVolume':
+                adapter.getObjectAsync('settings.dynamicVolume').then((obj) => {
+                    sendRequest('PSDYNVOL ' + helper.decodeState(obj.common.states, state).toUpperCase());
+                });
+                break;
+            case 'settings.referenceLevelOffset':
+                sendRequest('PSREFLEV ' + state);
+                break;
+            case 'settings.surroundMode':
+                adapter.getObjectAsync('settings.surroundMode').then((obj) => {
+                    sendRequest('MS' + helper.decodeState(obj.common.states, state).toUpperCase());
+                });
+                break;
+            case 'settings.expertCommand': { // Sending custom commands
+                const expertState = state;
+                sendRequest(state);
+                adapter.getStateAsync('info.connection').then((state) => {
+                    if (state.val === true) adapter.setState('settings.expertCommand', expertState, true);
+                });
+                break;
+            }
+            case 'settings.toneControl':
+                if (state) {
+                    sendRequest('PSTONE CTRL ON');
+                } else sendRequest('PSTONE CTRL OFF');
+                break;
+            case 'display.brightness':
+                adapter.getObjectAsync('display.brightness').then((obj) => {
+                    sendRequest('DIM ' + helper.decodeState(obj.common.states, state).toUpperCase().slice(0, 3));
+                });
+                break;
+            case 'zone2.powerZone':
+                if (state === true) {
+                    sendRequest('Z2ON');
+                } else {
+                    sendRequest('Z2OFF');
+                } // endElseIf
+                break;
+            case 'zone2.muteIndicator':
+                if (state === true) {
+                    sendRequest('Z2MUON');
+                } else {
+                    sendRequest('Z2MUOFF');
+                } // endElseIf
+                break;
+            case 'zone2.sleepTimer':
+                if (!state) { // state === 0
+                    sendRequest('Z2SLPOFF');
+                } else if (state < 10) {
+                    sendRequest('Z2SLP' + '00' + state);
+                } else if (state < 100) {
+                    sendRequest('Z2SLP' + '0' + state);
+                } else if (state <= 120) {
+                    sendRequest('Z2SLP' + state);
+                } // endElseIf
+                break;
+            case 'zone2.volumeUp':
+                sendRequest('Z2UP');
+                break;
+            case 'zone2.volumeDown':
+                sendRequest('Z2DOWN');
+                break;
+            case 'zone2.volume':
+                if (state < 0) state = 0;
+                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 10) {
+                    leadingZero = '0';
+                } else leadingZero = '';
+                state = state.toString().replace('.', ''); // remove points
+                sendRequest('Z2' + leadingZero + state);
+                break;
+            case 'zone2.volumeDB':
+                state += 80; // Convert to Vol
+                if (state < 0) state = 0;
+                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 10) {
+                    leadingZero = '0';
+                } else leadingZero = '';
+                state = state.toString().replace('.', ''); // remove points
+                sendRequest('Z2' + leadingZero + state);
+                break;
+            case 'zone2.selectInput':
+                adapter.getObjectAsync('zone2.selectInput').then((obj) => {
+                    sendRequest('Z2' + helper.decodeState(obj.common.states, state).toUpperCase());
+                });
+                break;
+            case 'zone2.quickSelect':
+                sendRequest('Z2QUICK' + state).then(() => sendRequest('Z2SMART' + state));
+                break;
+            case 'zone2.equalizerBassUp':
+                sendRequest('Z2PSBAS UP');
+                break;
+            case 'zone2.equalizerBassDown':
+                sendRequest('Z2PSBAS DOWN');
+                break;
+            case 'zone2.equalizerTrebleUp':
+                sendRequest('Z2PSTRE UP');
+                break;
+            case 'zone2.equalizerTrebleDown':
+                sendRequest('Z2PSTRE DOWN');
+                break;
+            case 'zone2.equalizerBass':
+                state = helper.dbToVol(state);
+                sendRequest('Z2PSBAS ' + state);
+                break;
+            case 'zone2.equalizerTreble':
+                state = helper.dbToVol(state);
+                sendRequest('Z2PSTRE ' + state);
+                break;
+            case 'zone3.powerZone':
+                if (state === true) {
+                    sendRequest('Z3ON');
+                } else {
+                    sendRequest('Z3OFF');
+                } // endElseIf
+                break;
+            case 'zone3.muteIndicator':
+                if (state === true) {
+                    sendRequest('Z3MUON');
+                } else {
+                    sendRequest('Z3MUOFF');
+                } // endElseIf
+                break;
+            case 'zone3.volumeUp':
+                sendRequest('Z3UP');
+                break;
+            case 'zone3.volumeDown':
+                sendRequest('Z3DOWN');
+                break;
+            case 'zone3.volume':
+                if (state < 0) state = 0;
+                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 10) {
+                    leadingZero = '0';
+                } else leadingZero = '';
+                state = state.toString().replace('.', ''); // remove points
+                sendRequest('Z3' + leadingZero + state);
+                break;
+            case 'zone3.volumeDB':
+                state += 80; // Convert to Vol
+                if (state < 0) state = 0;
+                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 10) {
+                    leadingZero = '0';
+                } else leadingZero = '';
+                state = state.toString().replace('.', ''); // remove points
+                sendRequest('Z3' + leadingZero + state);
+                break;
+            case 'zone3.selectInput':
+                adapter.getObjectAsync('zone3.selectInput').then((obj) => {
+                    sendRequest('Z3' + helper.decodeState(obj.common.states, state).toUpperCase());
+                });
+                break;
+            case 'zone3.quickSelect':
+                sendRequest('Z3QUICK' + state).then(() => sendRequest('Z3SMART' + state));
+                break;
+            case 'zone3.sleepTimer':
+                if (!state) { // state === 0
+                    sendRequest('Z3SLPOFF');
+                } else if (state < 10) {
+                    sendRequest('Z3SLP' + '00' + state);
+                } else if (state < 100) {
+                    sendRequest('Z3SLP' + '0' + state);
+                } else if (state <= 120) {
+                    sendRequest('Z3SLP' + state);
+                } // endElseIf
+                break;
+            case 'zone3.equalizerBass':
+                state = helper.dbToVol(state);
+                sendRequest('Z3PSBAS ' + state);
+                break;
+            case 'zone3.equalizerTreble':
+                state = helper.dbToVol(state);
+                sendRequest('Z3PSTRE ' + state);
+                break;
+            case 'zone3.equalizerBassUp':
+                sendRequest('Z3PSBAS UP');
+                break;
+            case 'zone3.equalizerBassDown':
+                sendRequest('Z3PSBAS DOWN');
+                break;
+            case 'zone3.equalizerTrebleUp':
+                sendRequest('Z3PSTRE UP');
+                break;
+            case 'zone3.equalizerTrebleDown':
+                sendRequest('Z3PSTRE DOWN');
+                break;
+            case 'settings.cursorUp':
+                sendRequest('MNCUP');
+                break;
+            case 'settings.cursorDown':
+                sendRequest('MNCDN');
+                break;
+            case 'settings.cursorRight':
+                sendRequest('MNCRT');
+                break;
+            case 'settings.cursorLeft':
+                sendRequest('MNCLT');
+                break;
+            case 'settings.enter':
+                sendRequest('MNENT');
+                break;
+            case 'settings.return':
+                sendRequest('MNRTN');
+                break;
+            case 'settings.option':
+                sendRequest('MNOPT');
+                break;
+            case 'settings.info':
+                sendRequest('MNINF');
+                break;
+            case 'settings.setupMenu':
+                if (state) {
+                    sendRequest('MNMEN ON');
+                } else sendRequest('MNMEN OFF');
+                break;
+            case 'settings.outputMonitor':
+                adapter.getObjectAsync('settings.outputMonitor').then((obj) => {
+                    sendRequest('VSMONI' + helper.decodeState(obj.common.states, state));
+                });
+                break;
+            case 'settings.centerSpread':
+                if (state) sendRequest('PSCES ON');
+                else sendRequest('PSCES OFF');
+                break;
+            case 'settings.videoProcessingMode':
+                adapter.getObjectAsync('settings.videoProcessingMode').then((obj) => {
+                    sendRequest('VSVPM' + helper.decodeState(obj.common.states, state));
+                });
+                break;
+            case 'settings.pictureMode':
+                sendRequest('PV' + state);
+                break;
+            case 'zoneMain.channelVolumeFrontLeft':
+                sendRequest('CVFL ' + helper.dbToVol(state));
+                break;
+            case 'zoneMain.channelVolumeFrontRight':
+                sendRequest('CVFR ' + helper.dbToVol(state));
+                break;
+            case 'zoneMain.channelVolumeCenter':
+                sendRequest('CVC ' + helper.dbToVol(state));
+                break;
+            case 'zoneMain.channelVolumeSurroundRight':
+                sendRequest('CVSR ' + helper.dbToVol(state));
+                break;
+            case 'zoneMain.channelVolumeSurroundLeft':
+                sendRequest('CVSL ' + helper.dbToVol(state));
+                break;
+            case 'settings.loadPreset': {
+                let loadPresetState;
+                if (parseFloat(state) < 10)
+                    loadPresetState = '0' + state;
+                else loadPresetState = state;
+                adapter.log.warn(loadPresetState);
+                sendRequest('NSB' + loadPresetState);
+                break;
+            }
+            case 'settings.savePreset': {
+                let savePresetState;
+                if (parseFloat(state) < 10)
+                    savePresetState = '0' + state;
+                else savePresetState = state;
+                sendRequest('NSC' + savePresetState).then(() => sendRequest('NSH'));
+                break;
+            }
+            default:
+                adapter.log.error('[COMMAND] ' + id + ' is not a valid state');
+        } // endSwitch
+    }); // endOnStateChange
+
+    return adapter;
+} // endStartAdapter
+
 
 function main() {
     adapter.subscribeStates('*');
@@ -155,448 +607,6 @@ client.on('data', data => {
             handleResponse(dataArr[i]);
         } // endIf
     } // endFor
-});
-
-// Handle state changes
-adapter.on('stateChange', (id, state) => {
-    if (!id || !state || state.ack) return; // Ignore acknowledged state changes or error states
-
-    id = id.substring(adapter.namespace.length + 1); // remove instance name and id
-    state = state.val; // only get state value
-
-    adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
-
-    let leadingZero;
-
-    switch (id) {
-        case 'zoneMain.powerZone':
-            if (state === true) {
-                sendRequest('ZMON');
-            } else sendRequest('ZMOFF');
-            break;
-        case 'zoneMain.volume':
-            if (state < 0) state = 0;
-            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
-            if (state < 10) {
-                leadingZero = '0';
-            } else leadingZero = '';
-            state = state.toString().replace('.', ''); // remove points
-            sendRequest('MV' + leadingZero + state);
-            adapter.log.debug('[INFO] <== Changed mainVolume to ' + state);
-            break;
-        case 'zoneMain.volumeDB':
-            state += 80; // convert to Vol
-            if (state < 0) state = 0;
-            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
-            if (state < 10) {
-                leadingZero = '0';
-            } else leadingZero = '';
-            state = state.toString().replace('.', ''); // remove points
-            sendRequest('MV' + leadingZero + state);
-            adapter.log.debug('[INFO] <== Changed mainVolume to ' + state);
-            break;
-        case 'zoneMain.sleepTimer':
-            if (!state) { // state === 0
-                sendRequest('SLPOFF');
-            } else if (state < 10) {
-                sendRequest('SLP' + '00' + state);
-            } else if (state < 100) {
-                sendRequest('SLP' + '0' + state);
-            } else if (state <= 120) {
-                sendRequest('SLP' + state);
-            } // endElseIf
-            break;
-        case 'zoneMain.volumeUp':
-            sendRequest('MVUP');
-            break;
-        case 'zoneMain.volumeDown':
-            sendRequest('MVDOWN');
-            break;
-        case 'zoneMain.muteIndicator':
-            if (state === true) {
-                sendRequest('MUON');
-            } else {
-                sendRequest('MUOFF');
-            } // endElseIf
-            break;
-        case 'zoneMain.playPause':
-            sendRequest('NS94');
-            break;
-        case 'zoneMain.play':
-            sendRequest('NS9A');
-            break;
-        case 'zoneMain.pause':
-            sendRequest('NS9B');
-            break;
-        case 'zoneMain.skipMinus':
-            sendRequest('NS9E');
-            break;
-        case 'zoneMain.skipPlus':
-            sendRequest('NS9D');
-            break;
-        case 'zoneMain.selectInput':
-            adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
-                sendRequest('SI' + helper.decodeState(obj.common.states, state).toUpperCase());
-            });
-            break;
-        case 'zoneMain.quickSelect':
-            sendRequest('MSQUICK' + state).then(() => sendRequest('MSSMART' + state));
-            break;
-        case 'zoneMain.equalizerBassUp':
-            sendRequest('PSBAS UP');
-            break;
-        case 'zoneMain.equalizerBassDown':
-            sendRequest('PSBAS DOWN');
-            break;
-        case 'zoneMain.equalizerTrebleUp':
-            sendRequest('PSTRE UP');
-            break;
-        case 'zoneMain.equalizerTrebleDown':
-            sendRequest('PSTRE DOWN');
-            break;
-        case 'zoneMain.equalizerBass':
-            state = helper.dbToVol(state);
-            sendRequest('PSBAS ' + state);
-            break;
-        case 'zoneMain.equalizerTreble':
-            state = helper.dbToVol(state);
-            sendRequest('PSTRE ' + state);
-            break;
-        case 'settings.powerSystem':
-            if (state === true) {
-                sendRequest('PWON');
-            } else {
-                sendRequest('PWSTANDBY');
-            } // endElseIf
-            break;
-        case 'settings.dynamicEq':
-            if (state) {
-                sendRequest('PSDYNEQ ON');
-            } else sendRequest('PSDYNEQ OFF');
-            break;
-        case 'settings.subwooferLevel':
-            state = helper.dbToVol(state);
-            sendRequest('PSSWL ' + state);
-            break;
-        case 'settings.subwooferLevelDown':
-            sendRequest('PSSWL DOWN');
-            break;
-        case 'settings.subwooferLevelUp':
-            sendRequest('PSSWL UP');
-            break;
-        case 'settings.subwooferLevelState':
-            if (state) {
-                sendRequest('PSSWL ON');
-            } else sendRequest('PSSWL OFF');
-            break;
-        case 'settings.subwooferTwoLevel':
-            state = helper.dbToVol(state);
-            sendRequest('PSSWL2 ' + state);
-            break;
-        case 'settings.subwooferTwoLevelDown':
-            sendRequest('PSSWL2 DOWN');
-            break;
-        case 'settings.subwooferTwoLevelUp':
-            sendRequest('PSSWL2 UP');
-            break;
-        case 'settings.audysseyLfc':
-            if (state) {
-                sendRequest('PSLFC ON');
-            } else sendRequest('PSLFC OFF');
-            break;
-        case 'settings.containmentAmountDown':
-            sendRequest('PSCNTAMT DOWN');
-            break;
-        case 'settings.containmentAmountUp':
-            sendRequest('PSCNTAMT UP');
-            break;
-        case 'settings.containmentAmount':
-            sendRequest('PSCNTAMT 0' + state);
-            break;
-        case 'settings.multEq':
-            adapter.getObjectAsync('settings.multEq').then((obj) => {
-                sendRequest('PSMULTEQ:' + helper.decodeState(obj.common.states, state).toUpperCase());
-            });
-            break;
-        case 'settings.dynamicVolume':
-            adapter.getObjectAsync('settings.dynamicVolume').then((obj) => {
-                sendRequest('PSDYNVOL ' + helper.decodeState(obj.common.states, state).toUpperCase());
-            });
-            break;
-        case 'settings.referenceLevelOffset':
-            sendRequest('PSREFLEV ' + state);
-            break;
-        case 'settings.surroundMode':
-            adapter.getObjectAsync('settings.surroundMode').then((obj) => {
-                sendRequest('MS' + helper.decodeState(obj.common.states, state).toUpperCase());
-            });
-            break;
-        case 'settings.expertCommand': { // Sending custom commands
-            const expertState = state;
-            sendRequest(state);
-            adapter.getStateAsync('info.connection').then((state) => {
-                if (state.val === true) adapter.setState('settings.expertCommand', expertState, true);
-            });
-            break;
-        }
-        case 'settings.toneControl':
-            if (state) {
-                sendRequest('PSTONE CTRL ON');
-            } else sendRequest('PSTONE CTRL OFF');
-            break;
-        case 'display.brightness':
-            adapter.getObjectAsync('display.brightness').then((obj) => {
-                sendRequest('DIM ' + helper.decodeState(obj.common.states, state).toUpperCase().slice(0, 3));
-            });
-            break;
-        case 'zone2.powerZone':
-            if (state === true) {
-                sendRequest('Z2ON');
-            } else {
-                sendRequest('Z2OFF');
-            } // endElseIf
-            break;
-        case 'zone2.muteIndicator':
-            if (state === true) {
-                sendRequest('Z2MUON');
-            } else {
-                sendRequest('Z2MUOFF');
-            } // endElseIf
-            break;
-        case 'zone2.sleepTimer':
-            if (!state) { // state === 0
-                sendRequest('Z2SLPOFF');
-            } else if (state < 10) {
-                sendRequest('Z2SLP' + '00' + state);
-            } else if (state < 100) {
-                sendRequest('Z2SLP' + '0' + state);
-            } else if (state <= 120) {
-                sendRequest('Z2SLP' + state);
-            } // endElseIf
-            break;
-        case 'zone2.volumeUp':
-            sendRequest('Z2UP');
-            break;
-        case 'zone2.volumeDown':
-            sendRequest('Z2DOWN');
-            break;
-        case 'zone2.volume':
-            if (state < 0) state = 0;
-            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
-            if (state < 10) {
-                leadingZero = '0';
-            } else leadingZero = '';
-            state = state.toString().replace('.', ''); // remove points
-            sendRequest('Z2' + leadingZero + state);
-            break;
-        case 'zone2.volumeDB':
-            state += 80; // Convert to Vol
-            if (state < 0) state = 0;
-            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
-            if (state < 10) {
-                leadingZero = '0';
-            } else leadingZero = '';
-            state = state.toString().replace('.', ''); // remove points
-            sendRequest('Z2' + leadingZero + state);
-            break;
-        case 'zone2.selectInput':
-            adapter.getObjectAsync('zone2.selectInput').then((obj) => {
-                sendRequest('Z2' + helper.decodeState(obj.common.states, state).toUpperCase());
-            });
-            break;
-        case 'zone2.quickSelect':
-            sendRequest('Z2QUICK' + state).then(() => sendRequest('Z2SMART' + state));
-            break;
-        case 'zone2.equalizerBassUp':
-            sendRequest('Z2PSBAS UP');
-            break;
-        case 'zone2.equalizerBassDown':
-            sendRequest('Z2PSBAS DOWN');
-            break;
-        case 'zone2.equalizerTrebleUp':
-            sendRequest('Z2PSTRE UP');
-            break;
-        case 'zone2.equalizerTrebleDown':
-            sendRequest('Z2PSTRE DOWN');
-            break;
-        case 'zone2.equalizerBass':
-            state = helper.dbToVol(state);
-            sendRequest('Z2PSBAS ' + state);
-            break;
-        case 'zone2.equalizerTreble':
-            state = helper.dbToVol(state);
-            sendRequest('Z2PSTRE ' + state);
-            break;
-        case 'zone3.powerZone':
-            if (state === true) {
-                sendRequest('Z3ON');
-            } else {
-                sendRequest('Z3OFF');
-            } // endElseIf
-            break;
-        case 'zone3.muteIndicator':
-            if (state === true) {
-                sendRequest('Z3MUON');
-            } else {
-                sendRequest('Z3MUOFF');
-            } // endElseIf
-            break;
-        case 'zone3.volumeUp':
-            sendRequest('Z3UP');
-            break;
-        case 'zone3.volumeDown':
-            sendRequest('Z3DOWN');
-            break;
-        case 'zone3.volume':
-            if (state < 0) state = 0;
-            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
-            if (state < 10) {
-                leadingZero = '0';
-            } else leadingZero = '';
-            state = state.toString().replace('.', ''); // remove points
-            sendRequest('Z3' + leadingZero + state);
-            break;
-        case 'zone3.volumeDB':
-            state += 80; // Convert to Vol
-            if (state < 0) state = 0;
-            if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
-            if (state < 10) {
-                leadingZero = '0';
-            } else leadingZero = '';
-            state = state.toString().replace('.', ''); // remove points
-            sendRequest('Z3' + leadingZero + state);
-            break;
-        case 'zone3.selectInput':
-            adapter.getObjectAsync('zone3.selectInput').then((obj) => {
-                sendRequest('Z3' + helper.decodeState(obj.common.states, state).toUpperCase());
-            });
-            break;
-        case 'zone3.quickSelect':
-            sendRequest('Z3QUICK' + state).then(() => sendRequest('Z3SMART' + state));
-            break;
-        case 'zone3.sleepTimer':
-            if (!state) { // state === 0
-                sendRequest('Z3SLPOFF');
-            } else if (state < 10) {
-                sendRequest('Z3SLP' + '00' + state);
-            } else if (state < 100) {
-                sendRequest('Z3SLP' + '0' + state);
-            } else if (state <= 120) {
-                sendRequest('Z3SLP' + state);
-            } // endElseIf
-            break;
-        case 'zone3.equalizerBass':
-            state = helper.dbToVol(state);
-            sendRequest('Z3PSBAS ' + state);
-            break;
-        case 'zone3.equalizerTreble':
-            state = helper.dbToVol(state);
-            sendRequest('Z3PSTRE ' + state);
-            break;
-        case 'zone3.equalizerBassUp':
-            sendRequest('Z3PSBAS UP');
-            break;
-        case 'zone3.equalizerBassDown':
-            sendRequest('Z3PSBAS DOWN');
-            break;
-        case 'zone3.equalizerTrebleUp':
-            sendRequest('Z3PSTRE UP');
-            break;
-        case 'zone3.equalizerTrebleDown':
-            sendRequest('Z3PSTRE DOWN');
-            break;
-        case 'settings.cursorUp':
-            sendRequest('MNCUP');
-            break;
-        case 'settings.cursorDown':
-            sendRequest('MNCDN');
-            break;
-        case 'settings.cursorRight':
-            sendRequest('MNCRT');
-            break;
-        case 'settings.cursorLeft':
-            sendRequest('MNCLT');
-            break;
-        case 'settings.enter':
-            sendRequest('MNENT');
-            break;
-        case 'settings.return':
-            sendRequest('MNRTN');
-            break;
-        case 'settings.option':
-            sendRequest('MNOPT');
-            break;
-        case 'settings.info':
-            sendRequest('MNINF');
-            break;
-        case 'settings.setupMenu':
-            if (state) {
-                sendRequest('MNMEN ON');
-            } else sendRequest('MNMEN OFF');
-            break;
-        case 'settings.outputMonitor':
-            adapter.getObjectAsync('settings.outputMonitor').then((obj) => {
-                sendRequest('VSMONI' + helper.decodeState(obj.common.states, state));
-            });
-            break;
-        case 'settings.centerSpread':
-            if (state) sendRequest('PSCES ON');
-            else sendRequest('PSCES OFF');
-            break;
-        case 'settings.videoProcessingMode':
-            adapter.getObjectAsync('settings.videoProcessingMode').then((obj) => {
-                sendRequest('VSVPM' + helper.decodeState(obj.common.states, state));
-            });
-            break;
-        case 'settings.pictureMode':
-            sendRequest('PV' + state);
-            break;
-        case 'zoneMain.channelVolumeFrontLeft':
-            sendRequest('CVFL ' + helper.dbToVol(state));
-            break;
-        case 'zoneMain.channelVolumeFrontRight':
-            sendRequest('CVFR ' + helper.dbToVol(state));
-            break;
-        case 'zoneMain.channelVolumeCenter':
-            sendRequest('CVC ' + helper.dbToVol(state));
-            break;
-        case 'zoneMain.channelVolumeSurroundRight':
-            sendRequest('CVSR ' + helper.dbToVol(state));
-            break;
-        case 'zoneMain.channelVolumeSurroundLeft':
-            sendRequest('CVSL ' + helper.dbToVol(state));
-            break;
-        case 'settings.loadPreset': {
-            let loadPresetState;
-            if (parseFloat(state) < 10)
-                loadPresetState = '0' + state;
-            else loadPresetState = state;
-            adapter.log.warn(loadPresetState);
-            sendRequest('NSB' + loadPresetState);
-            break;
-        }
-        case 'settings.savePreset': {
-            let savePresetState;
-            if (parseFloat(state) < 10)
-                savePresetState = '0' + state;
-            else savePresetState = state;
-            sendRequest('NSC' + savePresetState).then(() => sendRequest('NSH'));
-            break;
-        }
-        default:
-            adapter.log.error('[COMMAND] ' + id + ' is not a valid state');
-    } // endSwitch
-}); // endOnStateChange
-
-adapter.getForeignObjectAsync(adapter.namespace).then((obj) => { // create device namespace
-    if (!obj) {
-        adapter.setForeignObject(adapter.namespace, {
-            type: 'device',
-            common: {
-                name: 'DENON device'
-            }
-        });
-    } // endIf
 });
 
 /**
@@ -1679,3 +1689,10 @@ function createPictureMode() {
         });
     });
 } // endCreatePictureMode
+
+if (module && module.parent) {
+    module.exports = startAdapter;
+} else {
+    // or start the instance directly
+    startAdapter();
+}

@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.2.7",
+        "version": "1.3.0",
         "news": {
+            "1.3.0": {
+                "en": "compact mode compatibility added",
+                "de": "Kompaktmodus-Kompatibilität hinzugefügt",
+                "ru": "добавлена ​​совместимость с компактным режимом",
+                "pt": "compatibilidade de modo compacto adicionada",
+                "nl": "compatibiliteit met compacte modus toegevoegd",
+                "fr": "Compatibilité en mode compact ajoutée",
+                "it": "aggiunta la compatibilità in modalità compatta",
+                "es": "compatibilidad de modo compacto agregado",
+                "pl": "Dodano kompatybilność w trybie kompaktowym"
+            },
             "1.2.7": {
                 "en": "made sure states are never set before creation and minor fixes and improvements",
                 "de": "Es wurde sichergestellt, dass States vor der Erstellung nie gesetzt werden und kleinere Korrekturen und Verbesserungen wurden vorgenommen",
@@ -239,6 +250,7 @@
         "pollInterval": 7000,
         "requestInterval": 100
     },
+    "compact": true,
     "objects": [],
     "instanceObjects": [
         {
