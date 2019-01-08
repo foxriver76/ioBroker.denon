@@ -2,7 +2,6 @@
     "common": {
         "name": "denon",
         "version": "1.3.2",
-        "compact": true,
         "news": {
             "1.3.2": {
                 "en": "compact mode compatibility added",
@@ -229,6 +228,7 @@
         "icon": "denon.png",
         "materialize": true,
         "enabled": true,
+        "compact": true,
         "messagebox": true,
         "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.denon/master/admin/denon.png",
         "keywords": [
