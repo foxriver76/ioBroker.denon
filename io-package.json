@@ -2,8 +2,9 @@
     "common": {
         "name": "denon",
         "version": "1.3.0",
+        "compact": true,
         "news": {
-            "1.3.0": {
+            "1.3.1": {
                 "en": "compact mode compatibility added",
                 "de": "Kompaktmodus-Kompatibilität hinzugefügt",
                 "ru": "добавлена ​​совместимость с компактным режимом",
@@ -250,7 +251,6 @@
         "pollInterval": 7000,
         "requestInterval": 100
     },
-    "compact": true,
     "objects": [],
     "instanceObjects": [
         {
