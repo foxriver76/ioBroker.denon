@@ -697,7 +697,7 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
-### 1.3.1
+### 1.3.2
 * (foxriver76) compact mode compatibility added
 
 ### 1.2.7
