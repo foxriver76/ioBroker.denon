@@ -330,7 +330,7 @@ function startAdapter(options) {
                 if (state < 10) {
                     leadingZero = '0';
                 } else leadingZero = '';
-                state = state.toString().replace('.', ''); // remove points
+                state = state.toString().replace('.', ''); // remove dot
                 sendRequest('Z2' + leadingZero + state);
                 break;
             case 'zone2.volumeDB':
@@ -340,7 +340,7 @@ function startAdapter(options) {
                 if (state < 10) {
                     leadingZero = '0';
                 } else leadingZero = '';
-                state = state.toString().replace('.', ''); // remove points
+                state = state.toString().replace('.', ''); // remove dot
                 sendRequest('Z2' + leadingZero + state);
                 break;
             case 'zone2.selectInput':
@@ -512,7 +512,7 @@ function startAdapter(options) {
                 break;
             case 'settings.loadPreset': {
                 let loadPresetState;
-                if (parseFloat(state) < 10)
+                if (parseInt(state) < 10)
                     loadPresetState = '0' + state;
                 else loadPresetState = state;
                 adapter.log.warn(loadPresetState);
@@ -521,7 +521,7 @@ function startAdapter(options) {
             }
             case 'settings.savePreset': {
                 let savePresetState;
-                if (parseFloat(state) < 10)
+                if (parseInt(state) < 10)
                     savePresetState = '0' + state;
                 else savePresetState = state;
                 sendRequest('NSC' + savePresetState).then(() => sendRequest('NSH'));
@@ -710,7 +710,7 @@ function handleResponse(data) {
                 });
             } // endElse
         } else return; // return if remote command received before response to SV
-    } else if (receiverType === 'US') handleUsResponse(data);
+    } else if (receiverType === 'US') return handleUsResponse(data);
 
     // get command out of String
     let command;
@@ -819,12 +819,12 @@ function handleResponse(data) {
             createMonitorState().then(() => {
                 if (state === 'AUTO') {
                     adapter.setState('settings.outputMonitor', 0, true);
-                } else adapter.setState('settings.outputMonitor', parseFloat(state), true);
+                } else adapter.setState('settings.outputMonitor', parseInt(state), true);
             });
         } else {
             if (state === 'AUTO') {
                 adapter.setState('settings.outputMonitor', 0, true);
-            } else adapter.setState('settings.outputMonitor', parseFloat(state), true);
+            } else adapter.setState('settings.outputMonitor', parseInt(state), true);
         } // endElse
 
         return;
@@ -856,7 +856,7 @@ function handleResponse(data) {
         } // endElse
         return;
     } else if (command.startsWith('NSH')) {
-        const presetNumber = parseFloat(data.slice(3, 5));
+        const presetNumber = parseInt(data.slice(3, 5));
         adapter.getStateAsync('info.onlinePresets').then((state) => {
             let knownPresets;
             if (!state || !state.val) knownPresets = [];
