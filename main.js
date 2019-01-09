@@ -110,6 +110,8 @@ function startAdapter(options) {
 
         adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
 
+        if (receiverType === 'US') return handleUsStateChange(id, state);
+
         let leadingZero;
 
         switch (id) {
@@ -646,7 +648,8 @@ const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
     'PV?', 'CV?', 'MSQUICK ?',
     'Z2QUICK ?', 'Z3QUICK ?',
     'MSSMART ?', 'Z2SMART ?',
-    'Z3SMART ?', 'NSH'
+    'Z3SMART ?', 'NSH',
+    'PW00?'
 ];
 
 function updateStates() {
@@ -686,7 +689,47 @@ function sendRequest(req) {
 function handleUsResponse(data) {
     adapter.log.warn('[INFO] US command to handle is ' + data);
     // TODO: implement logic
+
+    if (data.startsWith('SD00')) { // Handle display brightness
+        adapter.getObjectAsync('display.brightness').then((obj) => {
+            const bright = data.substring(4);
+            for (let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
+                if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
+                    adapter.setState('display.brightness', obj.common.states[j], true);
+                } // endIf
+            } // endFor
+        });
+        return;
+    } // endIf
+
+    switch (data) {
+        case 'PW00ON':
+            adapter.setState('settings.powerSystem', true, true);
+            break;
+        case  'PW00STANDBY':
+            adapter.setState('settings.powerSystem', false, true);
+            break;
+    } // endSwitch
 } // endHandleUsResponse
+
+function handleUsStateChange(id, stateVal) {
+    // TODO: implement logic
+    switch (id) {
+        case 'settings.powerSystem':
+            if (stateVal === true) {
+                sendRequest('PW00ON');
+            } else {
+                sendRequest('PW00STANDBY');
+            } // endElseIf
+            break;
+        case 'display.brightness':
+            adapter.getObjectAsync('display.brightness').then((obj) => {
+                sendRequest('DIM ' + helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3));
+            });
+            break;
+    } // endSwitch
+
+} // endHandleUsStateChange
 
 function handleResponse(data) {
     if (!pollingVar) { // Keep connection alive & poll states
@@ -743,7 +786,7 @@ function handleResponse(data) {
         } else if (/^Z\d.*/g.test(command)) { // Encode Input Source
             adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
                 let zoneSi = data.substring(2);
-                zoneSi = zoneSi.replace(' ', ''); // Remove blanks
+                zoneSi = zoneSi.replace(' ', ''); // Remove blank
                 for (let j = 0; j < 22; j++) { // Check if command contains one of the possible Select Inputs
                     if (helper.decodeState(obj.common.states, j.toString()) === zoneSi) {
                         adapter.setState('zone' + zoneNumber + '.selectInput', zoneSi, true);
@@ -758,8 +801,7 @@ function handleResponse(data) {
 
     if (command.startsWith('DIM')) { // Handle display brightness
         adapter.getObjectAsync('display.brightness').then((obj) => {
-            let bright = data.substring(4);
-            bright = bright.replace(' ', ''); // Remove blanks
+            const bright = data.substring(4);
             for (let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
                 if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
                     adapter.setState('display.brightness', obj.common.states[j], true);
