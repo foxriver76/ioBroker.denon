@@ -319,6 +319,18 @@
                 "read": true
             },
             "native": {}
+        },
+        {
+            "_id": "settings.expertCommand",
+            "type": "state",
+            "common": {
+                "name": "Expert Command",
+                "role": "state",
+                "type": "string",
+                "write": true,
+                "read": true
+            },
+            "native": {}
         }
     ]
 }

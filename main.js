@@ -278,10 +278,9 @@ function startAdapter(options) {
                 });
                 break;
             case 'settings.expertCommand': { // Sending custom commands
-                const expertState = state;
                 sendRequest(state);
-                adapter.getStateAsync('info.connection').then((state) => {
-                    if (state.val === true) adapter.setState('settings.expertCommand', expertState, true);
+                adapter.getStateAsync('info.connection').then((_state) => {
+                    if (_state.val === true) adapter.setState('settings.expertCommand', state, true);
                 });
                 break;
             }
@@ -727,6 +726,13 @@ function handleUsStateChange(id, stateVal) {
                 sendRequest('SD00' + helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3));
             });
             break;
+        case 'settings.expertCommand': { // Sending custom commands
+            sendRequest(stateVal);
+            adapter.getStateAsync('info.connection').then((state) => {
+                if (state.val === true) adapter.setState('settings.expertCommand', stateVal, true);
+            });
+            break;
+        }
     } // endSwitch
 
 } // endHandleUsStateChange
