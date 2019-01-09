@@ -259,8 +259,7 @@
             "common": {
                 "name": "Information"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "info.connection",
@@ -273,8 +272,7 @@
                 "write": false,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "display",
@@ -282,8 +280,7 @@
             "common": {
                 "name": "Display Information"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "display.brightness",
@@ -301,8 +298,7 @@
                     "3": "Bright"
                 }
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "settings",
@@ -310,8 +306,7 @@
             "common": {
                 "name": "Settings and device commands"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "settings.powerSystem",
@@ -323,8 +318,7 @@
                 "write": true,
                 "read": true
             },
-            "native": {
-            }
+            "native": {}
         }
     ]
 }
