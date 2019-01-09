@@ -1777,14 +1777,14 @@ function createStandardStates(type) {
                 adapter.log.debug('[INFO] DE states created');
                 resolve();
             });
-        } else if (type === 'EN') {
+        } else if (type === 'US') {
             for (const obj of helper.usCommands) {
                 const id = obj._id;
                 delete obj._id;
                 promises.push(adapter.setObjectNotExistsAsync(id, obj));
             } // endFor
             Promise.all(promises).then(() => {
-                receiverType = 'EN';
+                receiverType = 'US';
                 adapter.log.debug('[INFO] US states created');
                 resolve();
             });
