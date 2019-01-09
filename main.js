@@ -29,6 +29,7 @@ let connectingVar = null;
 let subTwo = false;
 let audysseyLfc = false;
 let pictureModeAbility = false;
+let receiverType;
 
 function startAdapter(options) {
     options = options || {};
@@ -594,8 +595,12 @@ client.on('connect', () => { // Successfull connected
     verboseConnection = true;
     adapter.setState('info.connection', true, true);
     adapter.log.info('[CONNECT] Adapter connected to DENON-AVR: ' + host + ':23');
-    adapter.log.debug('[CONNECT] Connected --> updating states on start');
-    updateStates(); // Update states when connected
+    adapter.log.debug('[CONNECT] Connected --> Check receiver type');
+    if (!receiverType) sendRequest('SV?');
+    else {
+        adapter.log.debug('[CONNECT] Connected --> updating states on start');
+        updateStates(); // Update states when connected
+    } // endElse
 });
 
 client.on('data', data => {
@@ -677,11 +682,36 @@ function sendRequest(req) {
     });
 } // endSendRequest
 
+function handleUsResponse(data) {
+    adapter.log.warn('[INFO] US command to handle is ' + data);
+    // TODO: implement logic
+} // endHandleUsResponse
+
 function handleResponse(data) {
     if (!pollingVar) { // Keep connection alive & poll states
         pollingVar = true;
         setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
     } // endIf
+
+    // Detect receiver type --> first poll is SV?
+    if (!receiverType) {
+        if (data.startsWith('SV')) {
+            if (/^SV[\d]+/g.test(data)) {
+                return createStandardStates('US').then(() => {
+                    adapter.log.debug('[UPDATE] Updating states');
+                    updateStates(); // Update states when connected
+                    handleResponse(data);
+                });
+            } else {
+                return createStandardStates('DE').then(() => {
+                    adapter.log.debug('[UPDATE] Updating states');
+                    updateStates();
+                    handleResponse(data);
+                });
+            } // endElse
+        } else return; // return if remote command received before response to SV
+    } else if (receiverType === 'US') handleUsResponse(data);
+
     // get command out of String
     let command;
 
@@ -1689,6 +1719,35 @@ function createPictureMode() {
         });
     });
 } // endCreatePictureMode
+
+function createStandardStates(type) {
+    return new Promise((resolve, reject) => {
+        const promises = [];
+        if (type === 'DE') {
+            for (const obj of helper.commonCommands) {
+                const id = obj._id;
+                delete obj._id;
+                promises.push(adapter.setObjectNotExistsAsync(id, obj));
+            } // endFor
+            Promise.all(promises).then(() => {
+                receiverType = 'DE';
+                adapter.log.debug('[INFO] DE states created');
+                resolve();
+            });
+        } else if (type === 'EN') {
+            for (const obj of helper.usCommands) {
+                const id = obj._id;
+                delete obj._id;
+                promises.push(adapter.setObjectNotExistsAsync(id, obj));
+            } // endFor
+            Promise.all(promises).then(() => {
+                receiverType = 'EN';
+                adapter.log.debug('[INFO] US states created');
+                resolve();
+            });
+        } else reject(new Error('Unknown receiver type'));
+    });
+} // endCreateStandardStates
 
 if (module && module.parent) {
     module.exports = startAdapter;
