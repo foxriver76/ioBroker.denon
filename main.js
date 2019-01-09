@@ -649,7 +649,7 @@ const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
     'Z2QUICK ?', 'Z3QUICK ?',
     'MSSMART ?', 'Z2SMART ?',
     'Z3SMART ?', 'NSH',
-    'PW00?'
+    'PW00?', 'SD00?'
 ];
 
 function updateStates() {
