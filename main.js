@@ -599,7 +599,7 @@ client.on('connect', () => { // Successfull connected
     adapter.log.info('[CONNECT] Adapter connected to DENON-AVR: ' + host + ':23');
     if (!receiverType) {
         adapter.log.debug('[CONNECT] Connected --> Check receiver type');
-        sendRequest('SV?');
+        sendRequest('SV?').then(() => sendRequest('SV01?'));
     } else {
         adapter.log.debug('[CONNECT] Connected --> updating states on start');
         updateStates(); // Update states when connected
