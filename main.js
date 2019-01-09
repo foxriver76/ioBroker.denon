@@ -706,7 +706,7 @@ function handleUsResponse(data) {
         case 'PW00ON':
             adapter.setState('settings.powerSystem', true, true);
             break;
-        case  'PW00STANDBY':
+        case 'PW00STANDBY':
             adapter.setState('settings.powerSystem', false, true);
             break;
     } // endSwitch
@@ -724,7 +724,7 @@ function handleUsStateChange(id, stateVal) {
             break;
         case 'display.brightness':
             adapter.getObjectAsync('display.brightness').then((obj) => {
-                sendRequest('DIM ' + helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3));
+                sendRequest('SD00' + helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3));
             });
             break;
     } // endSwitch
