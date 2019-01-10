@@ -648,7 +648,34 @@ const updateCommands = ['NSET1 ?', 'NSFRN ?', 'ZM?',
     'Z2QUICK ?', 'Z3QUICK ?',
     'MSSMART ?', 'Z2SMART ?',
     'Z3SMART ?', 'NSH',
-    'PW00?', 'SD00?'
+    'PW00?', 'SD00?',
+    'SV01?', 'SV02?', 'SV03?',
+    'SV04?', 'SV05?', 'SV06?',
+    'SV07?', 'SV08?', 'SV09?',
+    'SV10?', 'SV11?', 'SV12?',
+    'SO02?', 'SO04?', 'SO06?',
+    'SO08?', 'SO10?', 'SO12?',
+    'SF01?', 'SF02?', 'SF03?',
+    'SF04?', 'SF05?', 'SF06?',
+    'SF07?', 'SF08?', 'SF09?',
+    'SF10?', 'SF11?', 'SF12?',
+    'SI01?', 'SI02?', 'SI03?',
+    'SI04?', 'SI05?', 'SI06?',
+    'SI07?', 'SI08?', 'SI09?',
+    'SI10?', 'SI11?', 'SI12?',
+    'ST00?',
+    'ST02?', 'ST04?', 'ST06?',
+    'ST08?', 'ST10?', 'ST12?',
+    'TI00?',
+    'TI02?', 'TI04?', 'TI06?',
+    'TI08?', 'TI10?', 'TI12?',
+    'AI02?', 'AI04?', 'AI06?',
+    'AI08?', 'AI10?', 'AI12?',
+    'PR00TR?', 'PR00IN?', 'PR00TM?',
+    'PR02PR?', 'PR04PR?', 'PR06PR?',
+    'PR08PR?', 'PR10PR?', 'PR12PR?',
+    'PR02OH?', 'PR04OH?', 'PR06OH?',
+    'PR08OH?', 'PR10OH?', 'PR12OH?'
 ];
 
 function updateStates() {
@@ -662,7 +689,7 @@ function updateStates() {
 
 const pollCommands = ['NSE', 'SLP?',
     'Z2SLP?', 'Z3SLP?', 'MSQUICK ?',
-    'MSSMART ?',
+    'MSSMART ?', 'PR00TR?',
     'Z2QUICK ?', 'Z3QUICK ?',
     'Z2SMART ?', 'Z3SMART ?'
 ]; // Request Display State, Sleep Timer & Quick Select
@@ -743,7 +770,7 @@ function handleResponse(data) {
         setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
     } // endIf
 
-    // Detect receiver type --> first poll is SV?
+    // Detect receiver type --> first poll is SV? and SV00?
     if (!receiverType) {
         if (data.startsWith('SV')) {
             if (/^SV[\d]+/g.test(data)) {
@@ -1789,12 +1816,30 @@ function createStandardStates(type) {
                 delete obj._id;
                 promises.push(adapter.setObjectNotExistsAsync(id, obj));
             } // endFor
-            Promise.all(promises).then(() => {
-                receiverType = 'US';
-                adapter.log.debug('[INFO] US states created');
-                resolve();
-            });
+
+            for (let i = 1; i < 6; i++) { // iterate over zones
+                const zoneNumber = i * 2;
+                promises.push(adapter.setObjectNotExistsAsync('zone' + zone, {
+                    type: 'channel',
+                    common: {
+                        name: 'Settings and device commands'
+                    },
+                    native: {}
+                }));
+
+                for (const obj of helper.usCommandsZone) {
+                    const id = 'zone' + zoneNumber + '.' + obj._id;
+                    delete obj._id;
+                    promises.push(adapter.setObjectNotExistsAsync(id, obj));
+                } // endFor
+            } // endFor
         } else reject(new Error('Unknown receiver type'));
+
+        Promise.all(promises).then(() => {
+            receiverType = 'US';
+            adapter.log.debug('[INFO] US states created');
+            resolve();
+        });
     });
 } // endCreateStandardStates
 
