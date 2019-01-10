@@ -1819,7 +1819,7 @@ function createStandardStates(type) {
 
             for (let i = 1; i < 6; i++) { // iterate over zones
                 const zoneNumber = i * 2;
-                promises.push(adapter.setObjectNotExistsAsync('zone' + zone, {
+                promises.push(adapter.setObjectNotExistsAsync('zone' + zoneNumber, {
                     type: 'channel',
                     common: {
                         name: 'Settings and device commands'
