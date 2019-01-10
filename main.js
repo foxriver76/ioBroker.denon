@@ -774,6 +774,7 @@ function handleResponse(data) {
     if (!receiverType) {
         if (data.startsWith('SV')) {
             if (/^SV[\d]+/g.test(data)) {
+                adapter.log.error(data);//test
                 return createStandardStates('US').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates(); // Update states when connected
@@ -1833,13 +1834,12 @@ function createStandardStates(type) {
                     promises.push(adapter.setObjectNotExistsAsync(id, obj));
                 } // endFor
             } // endFor
+            Promise.all(promises).then(() => {
+                receiverType = 'US';
+                adapter.log.debug('[INFO] US states created');
+                resolve();
+            });
         } else reject(new Error('Unknown receiver type'));
-
-        Promise.all(promises).then(() => {
-            receiverType = 'US';
-            adapter.log.debug('[INFO] US states created');
-            resolve();
-        });
     });
 } // endCreateStandardStates
 
