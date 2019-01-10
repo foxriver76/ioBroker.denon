@@ -781,7 +781,7 @@ function handleResponse(data) {
                     handleResponse(data);
                 });
             } else {
-                return createStandardStates('DE').then(() => {
+                return createStandardStates('US').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates();
                     handleResponse(data);
@@ -1818,7 +1818,7 @@ function createStandardStates(type) {
                 promises.push(adapter.setObjectNotExistsAsync(id, obj));
             } // endFor
 
-            for (let i = 1; i < 6; i++) { // iterate over zones
+            for (let i = 1; i <= 6; i++) { // iterate over zones
                 const zoneNumber = i * 2;
                 promises.push(adapter.setObjectNotExistsAsync('zone' + zoneNumber, {
                     type: 'channel',
@@ -1829,9 +1829,13 @@ function createStandardStates(type) {
                 }));
 
                 for (const obj of helper.usCommandsZone) {
+                    adapter.log.warn(obj._id)
                     const id = 'zone' + zoneNumber + '.' + obj._id;
-                    delete obj._id;
-                    promises.push(adapter.setObjectNotExistsAsync(id, obj));
+                    promises.push(adapter.setObjectNotExistsAsync(id, {
+                        type: obj.type,
+                        common: obj.common,
+                        native: obj.native
+                    }));
                 } // endFor
             } // endFor
             Promise.all(promises).then(() => {
