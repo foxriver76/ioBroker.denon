@@ -781,7 +781,7 @@ function handleResponse(data) {
                     handleResponse(data);
                 });
             } else {
-                return createStandardStates('US').then(() => {
+                return createStandardStates('DE').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates();
                     handleResponse(data);
@@ -1829,7 +1829,6 @@ function createStandardStates(type) {
                 }));
 
                 for (const obj of helper.usCommandsZone) {
-                    adapter.log.warn(obj._id)
                     const id = 'zone' + zoneNumber + '.' + obj._id;
                     promises.push(adapter.setObjectNotExistsAsync(id, {
                         type: obj.type,
