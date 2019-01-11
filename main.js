@@ -137,7 +137,7 @@ function startAdapter(options) {
                 if (state < 10) {
                     leadingZero = '0';
                 } else leadingZero = '';
-                state = state.toString().replace('.', ''); // remove points
+                state = state.toString().replace('.', ''); // remove dot
                 sendRequest('MV' + leadingZero + state);
                 adapter.log.debug('[INFO] <== Changed mainVolume to ' + state);
                 break;
@@ -713,8 +713,8 @@ function sendRequest(req) {
 } // endSendRequest
 
 function handleUsResponse(data) {
-    adapter.log.warn('[INFO] US command to handle is ' + data);
-    // TODO: implement logic
+
+    adapter.log.debug('[INFO] US command to handle is ' + data);
 
     if (data.startsWith('SD00')) { // Handle display brightness
         adapter.getObjectAsync('display.brightness').then((obj) => {
@@ -726,7 +726,28 @@ function handleUsResponse(data) {
             } // endFor
         });
         return;
-    } // endIf
+    } else if (!data.startsWith('ST00') && /ST\d\d.+/g.test(data)) {
+        const zoneNumber = parseInt(data.slice(2, 4));
+        const command = data.substring(4);
+        if (command === 'CONT') adapter.setState('zone' + zoneNumber + '.zoneTurnOnModeChange', 'Constant', true);
+        else if (command === 'TRIG') adapter.setState('zone' + zoneNumber + '.zoneTurnOnModeChange', 'Trigger in', true);
+        else if (command === 'ASIG') adapter.setState('zone' + zoneNumber + '.zoneTurnOnModeChange', 'Audio signal', true);
+        else if (command === 'OFF') adapter.setState('zone' + zoneNumber + '.zoneTurnOnModeChange', 'Off', true);
+        return;
+    } else if (/SV[0-9]+/g.test(data)) {
+        const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
+        const volume = parseFloat(data.slice(4, 6) + '.' + data.slice(6, 7));
+        adapter.getStateAsync('zone' + zoneNumber + '.operationMode').then(state => {
+            if (state.val === '0' || state.val === 'NORMAL') {
+                const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'speakerTwo' : 'speakerOne';
+                adapter.setState('zone' + zoneNumber + '.' + speaker + 'Volume', volume, true);
+            } else {
+                adapter.setState('zone' + zoneNumber + '.speakerOneVolume', volume, true);
+                adapter.setState('zone' + zoneNumber + '.speakerTwoVolume', volume, true);
+            } // endElse
+        });
+        return;
+    }
 
     switch (data) {
         case 'PW00ON':
@@ -735,11 +756,32 @@ function handleUsResponse(data) {
         case 'PW00STANDBY':
             adapter.setState('settings.powerSystem', false, true);
             break;
+        case 'TI00YES':
+            adapter.setState('settings.masterTriggerInput', true, true);
+            break;
+        case 'TI00NO':
+            adapter.setState('settings.masterTriggerInput', false, true);
+            break;
+        case 'ST00PBTN':
+            adapter.setState('powerConfigurationChange', 'Power Button', true);
+            break;
+        case 'ST00TRIG':
+            adapter.setState('powerConfigurationChange', 'Master Trigger', true);
+            break;
+        case 'ST00ONLI':
+            adapter.setState('powerConfigurationChange', 'On Line', true);
+            break;
+        default:
+            adapter.log.debug('[INFO] <== Unhandled US command ' + data);
     } // endSwitch
 } // endHandleUsResponse
 
 function handleUsStateChange(id, stateVal) {
-    // TODO: implement logic
+    let zone;
+    if (id.startsWith('zone')) {
+        zone = id.split('.').shift();
+        id = id.split('.').pop();
+    }
     switch (id) {
         case 'settings.powerSystem':
             if (stateVal === true) {
@@ -753,15 +795,24 @@ function handleUsStateChange(id, stateVal) {
                 sendRequest('SD00' + helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3));
             });
             break;
-        case 'settings.expertCommand': { // Sending custom commands
+        case 'settings.expertCommand':  // Sending custom commands
             sendRequest(stateVal);
             adapter.getStateAsync('info.connection').then((state) => {
                 if (state.val === true) adapter.setState('settings.expertCommand', stateVal, true);
             });
             break;
-        }
+        case 'settings.powerConfigurationChange':
+            if (stateVal.toUpperCase() === 'POWER BUTTON' || stateVal === '0') sendRequest('ST00PBTN');
+            else if (stateVal.toUpperCase() === 'MASTER TRIGGER' || stateVal === '1') sendRequest('ST00TRIG');
+            else if (stateVal.toUpperCase() === 'ON LINE' || stateVal === '2') sendRequest('ST00ONLI');
+            break;
+        case 'settings.masterTriggerInput':
+            if (stateVal) sendRequest('TI00YES');
+            else sendRequest('TI00NO');
+            break;
+        default:
+            adapter.log.error('[COMMAND] ' + id + ' is not a valid US state');
     } // endSwitch
-
 } // endHandleUsStateChange
 
 function handleResponse(data) {
