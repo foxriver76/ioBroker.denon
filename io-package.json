@@ -247,7 +247,6 @@
     },
     "native": {
         "ip": "",
-        "volumeInDB": false,
         "pollInterval": 7000,
         "requestInterval": 100
     },

@@ -16,7 +16,7 @@ You can either install the adapter via the ioBroker web interface or on your loc
 2. Click on Tab "Adapters"
 3. Type "Denon" in the Filter
 4. Click on the three points and then on the "+" symbol of the DENON AVR adapter
-![Add Adapter](/docs/en/img/plusAddAdapter.png)
+![Add Adapter](/docs/en/media/plusAddAdapter.png)
 
 ### Local machine
 Navigate into your iobroker folder and execute the following command: 
@@ -31,11 +31,15 @@ Additional to the adapter installation you have to make sure that your AVR is co
 1. Open your ioBroker interface in a browser (eg: 192.168.1.33:8081)
 2. Navigate to Tab "Adapters"
 3. Click on the three points and then on the "+" symbol of the DENON AVR adapter
-![Add Adapter](/docs/en/img/plusAddAdapter.png)
-4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search icon to find AVRs in your network (via UPnP)
-![Adapter Configuration](/docs/en/img/fillInIp.png)
-5. If you also want to handle the volume states in dB or adjust the request/poll interval, make sure to click on the "Advanced Settings" Tab. By decreasing the Poll Interval the adapter will decrease the time between updating the display contents. By decreasing the request interval the time between sending commands will be decreased. The default settings should fit well for the most users.
-![Advanced Settings](/docs/en/img/advancedSettings.png) 
+![Add Adapter](/docs/en/media/plusAddAdapter.png)
+4. Now you can see the adapter configuration page --> type in the ip-address of your DENON AVR or click on the search 
+icon to find AVRs in your network (via UPnP)
+![Adapter Configuration](/docs/en/media/fillInIp.png)
+5. If you also want to adjust the request/poll interval, make sure to click on the "Advanced Settings" Tab. 
+By decreasing the Poll Interval the adapter will decrease the time between updating the display contents. 
+By decreasing the request interval the time between sending commands will be decreased. 
+The default settings should fit well for the most users.
+![Advanced Settings](/docs/en/media/advancedSettings.png) 
 6. Click on Save & Close
 
 ### Network Setup of AV Receiver
@@ -202,7 +206,8 @@ Following states will be created by the adapter:
     |:---:|:---:|
     |number|R/W|
 
-   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. When Volume in dB is set to true, the state is represented in dB too in separate states, e. g. mainVolumeDB*
+   *Number value which represents the current Main Zone / Zone2 / Zone 3 volume of your AVR. You can also set the volume here. 
+   The volume is represented in dB too in separate states, e. g. mainVolumeDB*
    
    *Range is from 0 to 98 (maybe lower due to maximumVolume), where 80 = 0 dB*
    
@@ -218,7 +223,7 @@ Following states will be created by the adapter:
     |:---:|:---:|
     |number|R|
 
-   *Read-only number which represents the maximum possible volume, where 80 = 0 dB. When Volume in dB is set to true, the state is represented in dB in the maximumVolumeDB state too.*
+   *Read-only number which represents the maximum possible volume, where 80 = 0 dB. The volume is also set in dB in the maximumVolumeDB state.*
    
 * zoneMain.muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 

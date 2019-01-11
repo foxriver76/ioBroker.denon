@@ -72,7 +72,6 @@ Nach Abschluss der Installation einer Adapterinstanz öffnet sich automatisch ei
 |:-------------|:-------------|
 |Abrufintervall|Hiermit kann festgelegt werden, wie oft der Adapter manche Objekte aktualisiert. Die meisten Objekte werden bei einer Änderung automatisch aktualisiert. Der voreingestellte Wert hat sich als geeignet erwiesen.|
 |Intervall zwischen Befehlen|Hier kann festgelegt werden, wie lange der Adapter zwischen Befehlen wartet. Sollte ein älterer AV-Receiver genutzt werden und Probleme mit dem Adapter auftreten, kann es sinnvoll sein, diesen Wert zu erhöhen (z. B. auf 200 ms).|
-|Lautstärke in dB|Die AV-Receiver bieten zwei Möglichkeiten die Lautstärke darzustellen: dB und Volume. Sollte es gewünscht sein, den AV-Receiver in dB zu regeln, sollte diese Checkbox aktiviert werden. Es werden automatisch zusätzliche Objekte erzeugt um die Lautstärke in dB zu verwalten.|
 
 Nach Abschluss der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
 Dadurch efolgt im Anschluß ein Neustart des Adapters.
@@ -245,8 +244,7 @@ Die folgenden States werden vom Adapter angelegt:
 
    *Number Wert der die derzeitige Lautstärke der jeweiligen Zone (Main Zone / Zone2 / Zone 3 )repsäentiert. 
    Durch beschreiben des Wertes wird der AVR auf die jeweilige Lautstärke gestellt. 
-   Wenn "Volume in dB" in den erweiterten Einstellungen angehakt wurde gibt es einen zusätzlichen State pro Zone, 
-   z. B. zoneMain.VolumeDB*
+   Es existiert ein zusätzlicher State pro Zone, der den dB Wert enthält z. B. zoneMain.VolumeDB*
    
    *Der Bereich reicht von 0 zu 98 (eventuell niedriger durch die konfigurierte maximumVolume), wobei 80 = 0 dB*
    
@@ -263,8 +261,7 @@ Die folgenden States werden vom Adapter angelegt:
     |number|R|
 
    *Nur lesbarer Wert, der die maximal mögliche Lautstärke repräsentiert, wobei 80 = 0 dB. 
-   Wenn Volume in dB in den erweiterten Einstellungen aktiviert wurde, existiert ein zusätlicher State maximumVolumeDB,
-   welcher die maximal mögliche Laustärle in dB darstellt.*
+   Es existiert ein zusätlicher State maximumVolumeDB, welcher die maximal mögliche Laustärle in dB darstellt.*
    
 * zoneMain.muteIndicator / zone2.muteIndicator / zone3.muteIndicator
 

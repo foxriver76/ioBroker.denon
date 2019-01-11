@@ -12,10 +12,8 @@ const helper = require(__dirname + '/lib/utils');
 const ssdpScan = require('./lib/upnp').ssdpScan;
 const client = new net.Socket();
 
-// Constants & Variables
 let adapter;
 let host;
-let volumeInDB;
 let pollInterval;
 let requestInterval;
 let verboseConnection = true;
@@ -81,7 +79,6 @@ function startAdapter(options) {
 
             adapter.log.info('[START] Starting DENON AVR adapter');
             host = adapter.config.ip;
-            volumeInDB = adapter.config.volumeInDB;
             pollInterval = adapter.config.pollInterval || 7000;
             requestInterval = adapter.config.requestInterval || 100;
 
@@ -540,7 +537,7 @@ function startAdapter(options) {
 function main() {
     adapter.subscribeStates('*');
 
-    checkVolumeDB(volumeInDB).then(() => connect()); // Connect on start
+    connect();
 } // endMain
 
 client.on('timeout', () => {
@@ -853,7 +850,7 @@ function handleResponse(data) {
             let vol = data.substring(2).replace(/\s|[A-Z]/g, '');
             vol = vol.slice(0, 2) + '.' + vol.slice(2, 4); // Slice volume from string
             adapter.setState('zone' + zoneNumber + '.volume', parseFloat(vol), true);
-            if (volumeInDB) adapter.setState('zone' + zoneNumber + '.volumeDB', parseFloat(vol) - 80, true);
+            adapter.setState('zone' + zoneNumber + '.volumeDB', parseFloat(vol) - 80, true);
             return;
         } else {
             command = 'Z' + zoneNumber + command.slice(1, command.length);
@@ -1012,12 +1009,12 @@ function handleResponse(data) {
         case 'MV':
             data = data.slice(2, 4) + '.' + data.slice(4, 5); // Slice volume from string
             adapter.setState('zoneMain.volume', parseFloat(data), true);
-            if (volumeInDB) adapter.setState('zoneMain.volumeDB', parseFloat(data) - 80, true);
+            adapter.setState('zoneMain.volumeDB', parseFloat(data) - 80, true);
             break;
         case 'MVMAX':
             data = data.slice(6, 8) + '.' + data.slice(8, 9);
             adapter.setState('zoneMain.maximumVolume', parseFloat(data), true);
-            if (volumeInDB) adapter.setState('zoneMain.maximumVolumeDB', parseFloat(data) - 80, true);
+            adapter.setState('zoneMain.maximumVolumeDB', parseFloat(data) - 80, true);
             break;
         case 'MUON':
             adapter.setState('zoneMain.muteIndicator', true, true);
@@ -1238,46 +1235,6 @@ function handleResponse(data) {
     } // endSwitch
 } // endHandleResponse
 
-function checkVolumeDB(db) {
-    return new Promise(resolve => {
-        if (db) { // create dB States
-            const promises = [];
-
-            promises.push(adapter.setObjectNotExistsAsync('zoneMain.volumeDB', {
-                type: 'state',
-                common: {
-                    name: 'Main Volume DB',
-                    role: 'level.volume.main',
-                    type: 'number',
-                    read: true,
-                    write: true,
-                    min: -80,
-                    max: 18,
-                    unit: 'dB'
-                }
-            }));
-
-            promises.push(adapter.setObjectNotExistsAsync('zoneMain.maximumVolumeDB', {
-                type: 'state',
-                common: {
-                    name: 'Maximum Volume DB',
-                    role: 'state',
-                    type: 'number',
-                    write: false,
-                    read: true,
-                    unit: 'dB'
-                }
-            }));
-
-            Promise.all(promises).then(() => resolve());
-        } else { // delete dB States
-            adapter.delObject('zoneMain.volumeDB');
-            adapter.delObject('zoneMain.maximumVolumeDB');
-            resolve();
-        } // endElseIf
-    });
-} // endCreateVolumeDB
-
 function createZone(zone) {
     return new Promise(resolve => {
         const promises = [];
@@ -1316,24 +1273,20 @@ function createZone(zone) {
             native: {}
         }));
 
-        if (!volumeInDB) {
-            adapter.delObject('zone' + zone + '.volumeDB');
-        } else {
-            promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.volumeDB', {
-                type: 'state',
-                common: {
-                    name: 'Zone ' + zone + ' VolumeDB',
-                    role: 'level.volume',
-                    type: 'number',
-                    unit: 'dB',
-                    read: true,
-                    write: true,
-                    min: -80,
-                    max: 18
-                },
-                native: {}
-            }));
-        } // endElse
+        promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.volumeDB', {
+            type: 'state',
+            common: {
+                name: 'Zone ' + zone + ' VolumeDB',
+                role: 'level.volume',
+                type: 'number',
+                unit: 'dB',
+                read: true,
+                write: true,
+                min: -80,
+                max: 18
+            },
+            native: {}
+        }));
 
         promises.push(adapter.setObjectNotExistsAsync('zone' + zone + '.volumeUp', {
             type: 'state',
