@@ -908,7 +908,6 @@ function handleResponse(data) {
     if (!receiverType) {
         if (data.startsWith('SV')) {
             if (/^SV[\d]+/g.test(data)) {
-                adapter.log.error(data);//test
                 return createStandardStates('US').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates(); // Update states when connected
