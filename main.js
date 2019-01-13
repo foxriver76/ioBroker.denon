@@ -838,11 +838,13 @@ function handleUsResponse(data) {
 } // endHandleUsResponse
 
 function handleUsStateChange(id, stateVal) {
-    let zone;
+    let zoneNumber;
     if (id.startsWith('zone')) {
-        zone = id.split('.').shift();
+        zoneNumber = id.split('.').shift().substring(4);
+        zoneNumber = (parseInt(zoneNumber) < 10) ? '0' + zoneNumber : zoneNumber;
         id = id.split('.').pop();
-    }
+    } // endIf
+
     switch (id) {
         case 'settings.powerSystem':
             if (stateVal === true) {
@@ -870,6 +872,26 @@ function handleUsStateChange(id, stateVal) {
         case 'settings.masterTriggerInput':
             if (stateVal) sendRequest('TI00YES');
             else sendRequest('TI00NO');
+            break;
+        case 'audioSignalInput':
+            break;
+        case 'lowCutFilterSpeakerOne':
+            break;
+        case 'lowCutFilterSpeakerTwo':
+            break;
+        case 'operationMode':
+            break;
+        case 'selectInputOne':
+            break;
+        case 'selectInputTwo':
+            break;
+        case 'speakerOneVolume':
+            break;
+        case 'speakerTwoVolume':
+            break;
+        case 'triggerInput':
+            break;
+        case 'zoneTurnOnModeChange':
             break;
         default:
             adapter.log.error('[COMMAND] ' + id + ' is not a valid US state');
