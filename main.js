@@ -744,7 +744,71 @@ function handleUsResponse(data) {
             } // endElse
         });
         return;
-    }
+    } else if (/SO\d\d.+/g.test(data)) {
+        const zoneNumber = parseInt(data.slice(2, 4));
+        const command = data.substring(4);
+        if (command === 'NOR') adapter.setState('zone' + zoneNumber + '.operationMode', 'NORMAL', true);
+        else if (command === 'BRI') adapter.setState('zone' + zoneNumber + '.operationMode', 'BRIDGED', true);
+        return;
+    } else if (/SF\d\d.+/g.test(data)) {
+        const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
+        const command = data.substring(4);
+        adapter.getStateAsync('zone' + zoneNumber + '.operationMode').then(state => {
+            if (state.val === '0' || state.val === 'NORMAL') {
+                const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'SpeakerTwo' : 'SpeakerOne';
+                if (command === 'OFF') adapter.setState('zone' + zoneNumber + '.lowCutFilter' + speaker, false, true);
+                else if (command === 'ON') adapter.setState('zone' + zoneNumber + '.lowCutFilter' + speaker, true, true);
+            } else {
+                if (command === 'ON') {
+                    adapter.setState('zone' + zoneNumber + '.lowCutFilterSpeakerOne', true, true);
+                    adapter.setState('zone' + zoneNumber + '.lowCutFilterSpeakerTwo', true, true);
+                } else if (command === 'OFF') {
+                    adapter.setState('zone' + zoneNumber + '.lowCutFilterSpeakerOne', false, true);
+                    adapter.setState('zone' + zoneNumber + '.lowCutFilterSpeakerTwo', false, true);
+                } // endElseIf
+            } // endElse
+        });
+        return;
+    } else if (/SI\d\d.+/g.test(data)) {
+        const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
+        const command = data.substring(4);
+        adapter.getStateAsync('zone' + zoneNumber + '.operationMode').then(state => {
+
+            if (state.val === '0' || state.val === 'NORMAL') {
+                const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'Two' : 'One';
+
+                adapter.getObjectAsync('zone' + zoneNumber + '.selectInputOne').then((obj) => {
+                    for (let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
+                        if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
+                            adapter.setState('zone' + zoneNumber + '.selectInput' + speaker, obj.common.states[j], true);
+                        } // endIf
+                    } // endFor
+                });
+            } else {
+                adapter.getObjectAsync('zone' + zoneNumber + '.selectInputOne').then((obj) => {
+                    for (let j = 0; j < 4; j++) { // Check if command contains one of the possible brightness states
+                        if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
+                            adapter.setState('zone' + zoneNumber + '.selectInputOne', obj.common.states[j], true);
+                            adapter.setState('zone' + zoneNumber + '.selectInputTwo', obj.common.states[j], true);
+                        } // endIf
+                    } // endFor
+                });
+            } // endElse
+        });
+        return;
+    } else if (/TI\d\d.+/g.test(data)) {
+        const zoneNumber = parseInt(data.slice(2, 4));
+        const command = data.substring(4);
+        if (command === 'YES') adapter.setState('zone' + zoneNumber + '.triggerInput', true, true);
+        else if (command === 'NO') adapter.setState('zone' + zoneNumber + '.operationMode', false, true);
+        return;
+    } else if (/AI\d\d.+/g.test(data)) {
+        const zoneNumber = parseInt(data.slice(2, 4));
+        const command = data.substring(4);
+        if (command === 'YES') adapter.setState('zone' + zoneNumber + '.audioSignalInput', true, true);
+        else if (command === 'NO') adapter.setState('zone' + zoneNumber + '.audioSignalInput', false, true);
+        return;
+    } // endElseIf
 
     switch (data) {
         case 'PW00ON':
