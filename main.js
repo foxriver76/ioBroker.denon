@@ -799,7 +799,7 @@ function handleUsResponse(data) {
         const zoneNumber = parseInt(data.slice(2, 4));
         const command = data.substring(4);
         if (command === 'YES') adapter.setState('zone' + zoneNumber + '.triggerInput', true, true);
-        else if (command === 'NO') adapter.setState('zone' + zoneNumber + '.operationMode', false, true);
+        else if (command === 'NO') adapter.setState('zone' + zoneNumber + '.triggerInput', false, true);
         return;
     } else if (/AI\d\d.+/g.test(data)) {
         const zoneNumber = parseInt(data.slice(2, 4));
