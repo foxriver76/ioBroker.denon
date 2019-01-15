@@ -753,3 +753,95 @@ Die folgenden States werden vom Adapter angelegt:
    *Number Wert, welcher auf eine in info.onlinePresets enthaltene Id gesetzt werden kann.
    Hierdurch wird der entsprechende Favoriten-Sender wiedergegeben.
    Dieser State erhält kein acknowledge, selbst dann nicht, wenn er erfolgreich durchgeführt wurde.*
+   
+ ### Weitere States
+Da manche AV-Receiver, wie z. B. der DENON POA-3012CI eine andere Logik nutzen, gibt es für diese unterschiedliche States.
+Die folgenden States sind äquivalent zu den oben genannten: settings.powerSystem, settings.expertCommand, display.brightness
+und info.connection. Zusätzlich werden die folgenden States für jede Zone 2-12 (gerade) erstellt:
+ 
+ * zoneX.speakerOneVolume / zoneX.speakerTwoVolume
+ 
+     |Data type|Permission|
+     |:---:|:---:|
+     |number|R/W|
+     
+     *Number Wert, welcher die Lautstärke des AVR's repräsentiert. Wenn der operationMode auf 'BRIDGED' steht,
+     werden die Speaker abhängig voneinander gesteuert.
+     
+ * zoneX.selectInputOne / zoneX.selectInputTwo
+ 
+     |Data type|Permission|
+     |:---:|:---:|
+     |string|R/W|
+     
+     *Key value Paar, welche den Eingangskanal des jeweiligen Speakers repräsentiert. 
+     Wenn der operationMode auf 'BRIDGED' steht, werden die Speaker abhängig voneinander gesteuert.*
+     
+     *Die folgenden States sind möglich:*
+     
+     *'0': 'BUS L'*
+     
+     *'1': 'BUS R'*
+     
+     *'2': 'BUS M'*
+     
+     *'3': 'AUX'*
+     
+ * zoneX.operationMode
+ 
+     |Data type|Permission|
+     |:---:|:---:|
+     |string|R/W|
+     
+     *Key value Paar, welches den Operation Mode des AVR's darstellt. 
+     Wenn der operationMode auf 'BRIDGED' steht, werden die Speaker abhängig voneinander gesteuert.*
+     
+     *Die folgenden States sind möglich:*
+         
+     *'0': 'NORMAL'*
+         
+     *'1': 'BRIDGED'*
+     
+ * zoneX.lowCutFilterSpeakerOne / zoneX.lowCutFilterSpeakerTwo
+ 
+     |Data type|Permission|
+     |:---:|:---:|
+     |boolean|R/W|
+     
+     *Boolscher Wert, welcher aussagt, ob der Low Cut Filter für den Speaker eingeschaltet ist. 
+     Wenn der operationMode auf 'BRIDGED' steht, werden die Speaker abhängig voneinander gesteuert.*
+     
+ * zoneX.zoneTurnOnModeChange
+ 
+     |Data type|Permission|
+     |:---:|:---:|
+     |string|R/W|
+     
+     *Key value Paar, welcher den Zone Turn On Mode des AVR's darstellt. Der AVR kann durch diesen
+     State gesteuert werden.
+     
+     *Die folgenden States sind möglich:*
+     
+     *'0': 'Constant'*
+     
+     *'1': 'Trigger in'*
+     
+     *'2': 'Audio signal'*
+     
+     *'3': 'Off'*
+     
+ * zoneX.triggerInput
+     
+     |Data type|Permission|
+     |:---:|:---:|
+     |boolean|R/W|
+     
+     *Boolscher Wert um den Trigger Input der Zone zu aktivieren oder zu deaktivieren.*
+     
+ * zoneX.audioSignalInput
+ 
+     |Data type|Permission|
+     |:---:|:---:|
+     |boolean|R/W|
+     
+     *Boolscher Wert um den Audio Signal Input der jeweiligen Zone zu aktivieren oder zu deaktivieren.*  

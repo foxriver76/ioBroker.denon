@@ -696,6 +696,98 @@ Following states will be created by the adapter:
    *Number value, which can be set to a value of info.onlinePresets. This will load the related channel.
    This state will not get an acknowledge, no matter the command has been successful or not.*
    
+### Other States
+Due to the fact that some AVRs like the DENON POA-3012CI use another logic there are some differences in the states.
+The states which are equal to the ones listed above are: settings.powerSystem, settings.expertCommand, display.brightness
+and info.connection. Additional the following states are created for each zone 2-12 (even):
+
+* zoneX.speakerOneVolume / zoneX.speakerTwoVolume
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |number|R/W|
+    
+    *Number value, which represents the volume of the AVR's speaker. If operationMode is set to 'BRIDGED' 
+    the speakers cannot independently controlled and the control of one also controls the other ones volume.*
+    
+* zoneX.selectInputOne / zoneX.selectInputTwo
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R/W|
+    
+    *Key value pair, which represents the selected input of the AVR's speaker. If operationMode is set to 'BRIDGED' 
+    the speakers cannot independently controlled and the control of one also controls the other ones input.*
+    
+    *The following values are possible:*
+    
+    *'0': 'BUS L'*
+    
+    *'1': 'BUS R'*
+    
+    *'2': 'BUS M'*
+    
+    *'3': 'AUX'*
+    
+* zoneX.operationMode
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R/W|
+    
+    *Key value pair, which represents the operationMode of the AVR. If operationMode is set to 'BRIDGED' 
+    the speakers cannot independently controlled and controlling speaker one also controls speaker two.*
+    
+    *The following values are possible:*
+        
+    *'0': 'NORMAL'*
+        
+    *'1': 'BRIDGED'*
+    
+* zoneX.lowCutFilterSpeakerOne / zoneX.lowCutFilterSpeakerTwo
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |boolean|R/W|
+    
+    *Boolean value, which indicates if the low cut filter for the speaker is enabled or disabled. In bridged mode
+    both speakers will depend on each other.*
+    
+* zoneX.zoneTurnOnModeChange
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R/W|
+    
+    *Key value pair, which represents the zone turn on mode change of the zone. You can also control your 
+    AVR with this state.*
+    
+    *The following values are possible:*
+    
+    *'0': 'Constant'*
+    
+    *'1': 'Trigger in'*
+    
+    *'2': 'Audio signal'*
+    
+    *'3': 'Off'*
+    
+* zoneX.triggerInput
+    
+    |Data type|Permission|
+    |:---:|:---:|
+    |boolean|R/W|
+    
+    *Turn trigger input on or off with this boolean value.*
+    
+* zoneX.audioSignalInput
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |boolean|R/W|
+    
+    *Boolean value which indicates and controls the audio signal input of your AVR.*  
+   
 ## Missing functions & bugs
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 

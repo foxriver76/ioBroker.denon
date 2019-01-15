@@ -734,7 +734,7 @@ function handleUsResponse(data) {
         const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
         const volume = parseFloat(data.slice(4, 6) + '.' + data.slice(6, 7));
         adapter.getStateAsync('zone' + zoneNumber + '.operationMode').then(state => {
-            if (state.val === '0' || state.val === 'NORMAL') {
+            if (state.val.toString() === '0' || state.val === 'NORMAL') {
                 const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'speakerTwo' : 'speakerOne';
                 adapter.setState('zone' + zoneNumber + '.' + speaker + 'Volume', volume, true);
             } else {
@@ -753,7 +753,7 @@ function handleUsResponse(data) {
         const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
         const command = data.substring(4);
         adapter.getStateAsync('zone' + zoneNumber + '.operationMode').then(state => {
-            if (state.val === '0' || state.val === 'NORMAL') {
+            if (state.val.toString() === '0' || state.val === 'NORMAL') {
                 const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'SpeakerTwo' : 'SpeakerOne';
                 if (command === 'OFF') adapter.setState('zone' + zoneNumber + '.lowCutFilter' + speaker, false, true);
                 else if (command === 'ON') adapter.setState('zone' + zoneNumber + '.lowCutFilter' + speaker, true, true);
@@ -878,7 +878,7 @@ function handleUsStateChange(id, stateVal) {
             break;
         case 'lowCutFilterSpeakerOne':
             adapter.getStateAsync('zone' + parseInt(zoneNumber) + '.operationMode').then((state) => {
-                if (state.val === '0' || 'NORMAL') {
+                if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = (parseInt(zoneNumber) < 10) ? '0' + zoneNumber : zoneNumber;
                 } // endIf
@@ -896,7 +896,7 @@ function handleUsStateChange(id, stateVal) {
             break;
         case 'selectInputOne':
             adapter.getStateAsync('zone' + parseInt(zoneNumber) + '.operationMode').then((state) => {
-                if (state.val === '0' || 'NORMAL') {
+                if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = (parseInt(zoneNumber) < 10) ? '0' + zoneNumber : zoneNumber;
                 } // endIf
@@ -909,7 +909,7 @@ function handleUsStateChange(id, stateVal) {
         case 'speakerOneVolume':
             adapter.getStateAsync('zone' + parseInt(zoneNumber) + '.operationMode').then((state) => {
                 let leadingZero;
-                if (state.val === '0' || 'NORMAL') {
+                if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = (parseInt(zoneNumber) < 10) ? '0' + zoneNumber : zoneNumber;
                 } // endIf
@@ -936,8 +936,14 @@ function handleUsStateChange(id, stateVal) {
             break;
         }
         case 'triggerInput':
+            if (stateVal) sendRequest('TI' + zoneNumber + 'YES');
+            else sendRequest('TI' + zoneNumber + 'NO');
             break;
         case 'zoneTurnOnModeChange':
+            if(stateVal.toString() === '0' || stateVal.toUpperCase() === 'CONSTANT') sendRequest('ST' + zoneNumber + 'CONT');
+            else if(stateVal.toString() === '1' || stateVal.toUpperCase() === 'TRIGGER IN') sendRequest('ST' + zoneNumber + 'TRIG');
+            else if(stateVal.toString() === '2' || stateVal.toUpperCase() === 'AUDIO SIGNAL') sendRequest('ST' + zoneNumber + 'ASIG');
+            else if(stateVal.toString() === '3' || stateVal.toUpperCase() === 'OFF') sendRequest('ST' + zoneNumber + 'OFF');
             break;
         default:
             adapter.log.error('[COMMAND] ' + id + ' is not a valid US state');
