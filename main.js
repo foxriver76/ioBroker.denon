@@ -123,7 +123,7 @@ function startAdapter(options) {
                 if (state < 10) {
                     leadingZero = '0';
                 } else leadingZero = '';
-                state = state.toString().replace('.', ''); // remove points
+                state = state.toString().replace('.', ''); // remove dot
                 sendRequest('MV' + leadingZero + state);
                 adapter.log.debug('[INFO] <== Changed mainVolume to ' + state);
                 break;
@@ -136,7 +136,6 @@ function startAdapter(options) {
                 } else leadingZero = '';
                 state = state.toString().replace('.', ''); // remove dot
                 sendRequest('MV' + leadingZero + state);
-                adapter.log.debug('[INFO] <== Changed mainVolume to ' + state);
                 break;
             case 'zoneMain.sleepTimer':
                 if (!state) { // state === 0
@@ -874,21 +873,68 @@ function handleUsStateChange(id, stateVal) {
             else sendRequest('TI00NO');
             break;
         case 'audioSignalInput':
+            if (stateVal) sendRequest('AI' + zoneNumber + 'YES');
+            else sendRequest('AI' + zoneNumber + 'NO');
             break;
         case 'lowCutFilterSpeakerOne':
+            adapter.getStateAsync('zone' + parseInt(zoneNumber) + '.operationMode').then((state) => {
+                if (state.val === '0' || 'NORMAL') {
+                    zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
+                    zoneNumber = (parseInt(zoneNumber) < 10) ? '0' + zoneNumber : zoneNumber;
+                } // endIf
+                if (stateVal) sendRequest('SF' + zoneNumber + 'ON');
+                else sendRequest('SF' + zoneNumber + 'OFF');
+            });
             break;
         case 'lowCutFilterSpeakerTwo':
+            if (stateVal) sendRequest('SF' + zoneNumber + 'ON');
+            else sendRequest('SF' + zoneNumber + 'OFF');
             break;
         case 'operationMode':
+            if (stateVal === 0 || stateVal === 'NORMAL') sendRequest('SO' + zoneNumber + 'NOR');
+            else sendRequest('SO' + zoneNumber + 'BRI');
             break;
         case 'selectInputOne':
+            adapter.getStateAsync('zone' + parseInt(zoneNumber) + '.operationMode').then((state) => {
+                if (state.val === '0' || 'NORMAL') {
+                    zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
+                    zoneNumber = (parseInt(zoneNumber) < 10) ? '0' + zoneNumber : zoneNumber;
+                } // endIf
+                sendRequest('SI' + zoneNumber + stateVal.replace(' ', ''));
+            });
             break;
         case 'selectInputTwo':
+            sendRequest('SI' + zoneNumber + stateVal.replace(' ', ''));
             break;
         case 'speakerOneVolume':
+            adapter.getStateAsync('zone' + parseInt(zoneNumber) + '.operationMode').then((state) => {
+                let leadingZero;
+                if (state.val === '0' || 'NORMAL') {
+                    zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
+                    zoneNumber = (parseInt(zoneNumber) < 10) ? '0' + zoneNumber : zoneNumber;
+                } // endIf
+                if (stateVal < 0) stateVal = 0;
+                if ((stateVal % 0.5) !== 0) stateVal = Math.round(stateVal * 2) / 2;
+                if (stateVal < 10) {
+                    leadingZero = '0';
+                } else leadingZero = '';
+                stateVal = stateVal.toString().replace('.', ''); // remove dot
+                sendRequest('SV' + leadingZero + stateVal);
+                adapter.log.debug('[INFO] <== Changed mainVolume to ' + stateVal);
+            });
             break;
-        case 'speakerTwoVolume':
+        case 'speakerTwoVolume': {
+            let leadingZero;
+            if (stateVal < 0) stateVal = 0;
+            if ((stateVal % 0.5) !== 0) stateVal = Math.round(stateVal * 2) / 2;
+            if (stateVal < 10) {
+                leadingZero = '0';
+            } else leadingZero = '';
+            stateVal = stateVal.toString().replace('.', ''); // remove dot
+            sendRequest('SV' + leadingZero + stateVal);
+            adapter.log.debug('[INFO] <== Changed mainVolume to ' + stateVal);
             break;
+        }
         case 'triggerInput':
             break;
         case 'zoneTurnOnModeChange':
