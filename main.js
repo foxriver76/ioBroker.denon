@@ -919,7 +919,7 @@ function handleUsStateChange(id, stateVal) {
                     leadingZero = '0';
                 } else leadingZero = '';
                 stateVal = stateVal.toString().replace('.', ''); // remove dot
-                sendRequest('SV' + leadingZero + stateVal);
+                sendRequest('SV' + zoneNumber + leadingZero + stateVal);
                 adapter.log.debug('[INFO] <== Changed mainVolume to ' + stateVal);
             });
             break;
@@ -931,7 +931,7 @@ function handleUsStateChange(id, stateVal) {
                 leadingZero = '0';
             } else leadingZero = '';
             stateVal = stateVal.toString().replace('.', ''); // remove dot
-            sendRequest('SV' + leadingZero + stateVal);
+            sendRequest('SV' + zoneNumber + leadingZero + stateVal);
             adapter.log.debug('[INFO] <== Changed mainVolume to ' + stateVal);
             break;
         }
