@@ -795,6 +795,10 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.4.0
+* (foxriver76) support of DENON POA-3012CI and similar AVRs
+* (foxriver76) create db volumes everytime
+
 ### 1.3.2
 * (foxriver76) compact mode compatibility added
 

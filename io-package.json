@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.3.2",
+        "version": "1.4.0",
         "news": {
+            "1.4.0": {
+                "en": "support of DENON POA-3012CI and similar AVRs and create db volumes everytime",
+                "de": "Unterstützung von DENON POA-3012CI und ähnlichen AVRs und erstelle immer db Volumes",
+                "ru": "поддержка DENON POA-3012CI и аналогичных AVR и создание томов БД каждый раз",
+                "pt": "suporte de DENON POA-3012CI e AVRs similares e criar volumes de db toda vez",
+                "nl": "ondersteuning van DENON POA-3012CI en vergelijkbare AVR's en maak db-volumes altijd aan",
+                "fr": "prise en charge de DENON POA-3012CI et d’AVR similaires et création de volumes de base de données à chaque fois",
+                "it": "supporto di DENON POA-3012CI e AVR simili e creazione di volumi db ogni volta",
+                "es": "soporte de DENON POA-3012CI y AVR similares y crear volúmenes db cada vez",
+                "pl": "obsługa DENON POA-3012CI i podobnych AVR i tworzenie woluminów baz danych za każdym razem",
+                "zh-cn": "支持DENON POA-3012CI和类似的AVR，并且每次都创建数据库卷"
+            },
             "1.3.2": {
                 "en": "compact mode compatibility added",
                 "de": "Kompaktmodus-Kompatibilität hinzugefügt",
