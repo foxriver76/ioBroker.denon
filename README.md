@@ -798,8 +798,6 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 ### 1.5.0
 * (foxriver76) added channel volumes for zone2 + 3
 * (foxriver76) other optimizations
-
-### 1.4.0
 * (foxriver76) support of DENON POA-3012CI and similar AVRs
 * (foxriver76) create db volumes everytime
 
