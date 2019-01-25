@@ -356,7 +356,7 @@ Following states will be created by the adapter:
    
    *Bass and treble settings can be adjusted when Dyn EQ is set to OFF and Tone Control is on*
    
-* zoneMain.channelVolumeFrontLeft / ...
+* zoneMain.channelVolumeFrontLeft / zone2.channelVolumeFrontLeft / zone3.channelVolumeFrontLeft / ...
 
    |Data type|Permission|                                                                       
    |:---:|:---:|
@@ -794,6 +794,10 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+
+### 1.5.0
+* (foxriver76) added channel volumes for zone2 + 3
+* (foxriver76) other optimizations
 
 ### 1.4.0
 * (foxriver76) support of DENON POA-3012CI and similar AVRs

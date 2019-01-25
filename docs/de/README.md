@@ -398,7 +398,7 @@ Die folgenden States werden vom Adapter angelegt:
    *Bass und Treble Einstellungen können nur vorgenommen werden, wenn "Dyn EQ" ausgeschaltet sowie "Tone Control"
     eingeschaltet ist.*
     
-* zoneMain.channelVolumeFrontLeft / ...
+* zoneMain.channelVolumeFrontLeft / zone2.channelVolumeFrontLeft / zone3.channelVolumeFrontLeft / ...
 
    |Data type|Permission|                                                                       
    |:---:|:---:|
