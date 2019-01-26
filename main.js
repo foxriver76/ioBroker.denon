@@ -1115,6 +1115,12 @@ function handleResponse(data) {
         case 'ZMUOFF':
             adapter.setState('zone' + zoneNumber + '.muteIndicator', false, true);
             break;
+        case 'ZMON':
+            adapter.setState('zoneMain.powerZone', true, true);
+            break;
+        case 'ZMOFF':
+            adapter.setState('zoneMain.powerZone', false, true);
+            break;
         case 'SLP':
             data = data.slice(3, data.length);
             adapter.getStateAsync('zoneMain.sleepTimer').then(state => {
