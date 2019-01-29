@@ -123,10 +123,16 @@ Der Adapter erstellt die folgenden Buttons:
 * zoneMain.skipMinus
 
    *Springe zum nächsten Titel.*
+   
+   *Hinweis: Dieser State ist auf HEOS-fähigen Geräten nicht voll funktionsfähig.*
+
 
 * zoneMain.skipPlus
 
    *Springe zum vorherigen Titel.*
+   
+   *Hinweis: Dieser State ist auf HEOS-fähigen Geräten nicht voll funktionsfähig.*
+
 
 * zoneMain.volumeDown / zone2.volumeDown / zone3.volumeDown
 

@@ -91,10 +91,14 @@ The adapter creates the following buttons:
 * zoneMain.skipMinus
 
    *Skip to previous title.*
+   
+   *NOT FULLY SUPPORTED FOR HEOS AVR'S*
 
 * zoneMain.skipPlus
 
    *Skip to next title.*
+   
+   *NOT FULLY SUPPORTED FOR HEOS AVR'S*
 
 * zoneMain.volumeDown / zone2.volumeDown / zone3.volumeDown
 
