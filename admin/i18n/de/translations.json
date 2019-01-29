@@ -1,9 +1,12 @@
 {
-  "Auto": "Auto",
-  "Manual": "Manual",
-  "My select": "Mein Auswahl",
-  "on save adapter restarts with new config immediately": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
-  "template adapter settings": "Beispiel",
-  "test1": "Test 1",
-  "test2": "Test 2"
+    "Advanced settings": "Erweiterte Einstellungen",
+    "Be sure your device is not in standby mode.": "Stellen Sie sicher, dass sich Ihr Gerät nicht im Standby-Modus befindet.",
+    "Found devices": "Gefundene Geräte",
+    "IP-Address": "IP Adresse",
+    "IP-Address of your AVR": "IP-Adresse Ihres AVRs",
+    "Interval between commands (ms)": "Intervall zwischen Befehlen (ms)",
+    "Nothing found": "Kein Gerät gefunden",
+    "Poll interval (ms)": "Abrufintervall (ms)",
+    "Search": "Suche",
+    "Select one": "Wähle ein Gerät"
 }

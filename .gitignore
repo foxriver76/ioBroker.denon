@@ -13,4 +13,3 @@ admin/i18n/*/flat.txt
 *.launch
 .settings/
 *.sublime-workspace
-/package-lock.json

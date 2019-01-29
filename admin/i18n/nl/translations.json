@@ -1,9 +1,12 @@
 {
-  "Auto": "Auto",
-  "Manual": "Met de hand",
-  "My select": "Mijn select",
-  "on save adapter restarts with new config immediately": "on save-adapter wordt onmiddellijk opnieuw opgestart met nieuwe config",
-  "template adapter settings": "sjabloon-adapterinstellingen",
-  "test1": "Test 1",
-  "test2": "Test 2"
+    "Advanced settings": "Geavanceerde instellingen",
+    "Be sure your device is not in standby mode.": "Zorg ervoor dat uw apparaat niet in de standby-modus staat.",
+    "Found devices": "Gevonden apparaten",
+    "IP-Address": "IP adres",
+    "IP-Address of your AVR": "IP-adres van uw AVR",
+    "Interval between commands (ms)": "Interval tussen opdrachten (ms)",
+    "Nothing found": "Niets gevonden",
+    "Poll interval (ms)": "Poll-interval (ms)",
+    "Search": "Zoeken",
+    "Select one": "Kies een"
 }
