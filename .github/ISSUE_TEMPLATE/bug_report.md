@@ -25,7 +25,8 @@ If applicable, add screenshots and logfiles to help explain your problem.
 
 **Versions:**
  - Adapter version: <adapter-version>
- - JS-Controller version: <version-number>
+ - JS-Controller version: <js-controller-version>
+ - Node version: <node-version>
  - Operating system: <os-name>
  - AVR model: <avr-model>
 
