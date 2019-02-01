@@ -24,10 +24,10 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots and logfiles to help explain your problem.
 
 **Versions:**
- - Adapter version: X.X
- - JS-Controller version: X.X
- - Operating system: os-name
-- AVR model
+ - Adapter version: <adapter-version>
+ - JS-Controller version: <version-number>
+ - Operating system: <os-name>
+ - AVR model: <avr-model>
 
 **Additional context**
 Add any other context about the problem here.
