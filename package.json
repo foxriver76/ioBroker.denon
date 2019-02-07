@@ -37,11 +37,14 @@
 		"mocha": "^5.2.0",
 		"chai": "^4.1.2",
 		"eslint": "^5.9.0",
-		"axios": "^0.18.0"
+		"axios": "^0.18.0",
+		"@iobroker/testing": "^1.0.4"
 	},
 	"main": "main.js",
 	"scripts": {
-		"test": "node node_modules/mocha/bin/mocha --exit"
+		"test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
+		"test:package": "node_modules/.bin/mocha test/packageFiles --exit",
+		"test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit"
 	},
 	"bugs": {
 		"url": "https://github.com/foxriver76/ioBroker.denon/issues"
