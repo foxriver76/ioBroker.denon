@@ -10,3 +10,4 @@ test
 appveyor.yml
 *.pdf
 .eslintrc.json
+.github
