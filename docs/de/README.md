@@ -90,9 +90,9 @@ Ob der Adapter aktiviert oder mit dem AV-Receiver verbunden ist, wird mit der Fa
 Instanz verdeutlicht. Zeigt der Mauszeiger auf das Symbol, werden weitere Detailinformationen dargestellt. 
 
 ## Objekte des Adapters
-Im Bereich `Objekte` werden in einer Baumstruktur alle vom Adapter im Hub 
-erkannten Geräte und Aktivitäten aufgelistet. Zusätzlich wird auch noch 
-darüber informiert, ob die Kommunikation mit dem Hub reibungslos erfolgt.
+Im Bereich `Objekte` werden in einer Baumstruktur alle vom Adapter im AVR erkannten
+Funktionalitäten aufgelistet. Zusätzlich wird auch noch 
+darüber informiert, ob die Kommunikation mit dem AVR reibungslos erfolgt.
 
 ![Objekte](media/objects.png "DENON Objekte")<span style="color:grey">  
 *Objekte des DENON Adapters*</span>
