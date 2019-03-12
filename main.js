@@ -52,7 +52,7 @@ function startAdapter(options) {
     adapter.on('message', obj => {
         if (typeof obj === 'object') {
             if (obj.command === 'browse') {
-                // e.g. send email or pushover or whatever
+                // frontend will call browse
                 if (obj.callback) {
                     adapter.log.info('start browse');
                     ssdpScan(
