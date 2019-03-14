@@ -529,7 +529,7 @@ client.on('connect', () => { // Successfull connected
     adapter.log.info('[CONNECT] Adapter connected to DENON-AVR: ' + host + ':23');
     if (!receiverType) {
         adapter.log.debug('[CONNECT] Connected --> Check receiver type');
-        sendRequest('SV?').then(() => sendRequest('SV01?'));
+        sendRequest('SV?').then(() => sendRequest('SV01?')).then(() => sendRequest('PSSDI ?'));
     } else {
         adapter.log.debug('[CONNECT] Connected --> updating states on start');
         updateStates(); // Update states when connected
@@ -909,7 +909,14 @@ function handleResponse(data) {
                     handleResponse(data);
                 });
             } // endElse
-        } else return; // return if remote command received before response to SV
+        } else if (data.startsWith('PSSDI')) {
+            // DENON Ceol Piccool protocol detected, but we handle it as DE
+            return createStandardStates('DE').then(() => {
+                adapter.log.debug('[UPDATE] Updating states');
+                updateStates();
+                handleResponse(data);
+            });
+        } else return; // return if remote command received before response to SV (receiverCheck)
     } else if (receiverType === 'US') return handleUsResponse(data);
 
     // get command out of String

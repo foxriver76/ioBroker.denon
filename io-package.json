@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.5.0",
+        "version": "1.5.1",
         "news": {
+            "1.5.1": {
+                "en": "fix to detect DENON Ceol",
+                "de": "Fix zum Erkennen von DENON Ceol",
+                "ru": "исправить обнаружение DENON Ceol",
+                "pt": "correção para detectar DENON Ceol",
+                "nl": "fix om DENON Ceol te detecteren",
+                "fr": "correctif pour détecter DENON Ceol",
+                "it": "correzione per rilevare DENON Ceol",
+                "es": "corregir para detectar DENON Ceol",
+                "pl": "naprawić, aby wykryć DENON Ceol",
+                "zh-cn": "修复以检测DENON Ceol"
+            },
             "1.5.0": {
                 "en": "support of DENON POA-3012CI and similar AVRs and create db volumes everytime and added channel volume for zone 2 and zone 3 and other optimizations",
                 "de": "Unterstützung von DENON POA-3012CI und ähnlichen AVRs und erstelle jedes Mal dB-Volumes sowie zusätzliches Kanalvolumen für Zone 2 und Zone 3 und andere Optimierungen",

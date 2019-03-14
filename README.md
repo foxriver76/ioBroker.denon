@@ -799,6 +799,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
 
+### 1.5.1
+* (foxriver76) fix to detect DENON Ceol
+
 ### 1.5.0
 * (foxriver76) added channel volumes for zone2 + 3
 * (foxriver76) other optimizations
