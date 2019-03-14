@@ -529,7 +529,7 @@ client.on('connect', () => { // Successfull connected
     adapter.log.info('[CONNECT] Adapter connected to DENON-AVR: ' + host + ':23');
     if (!receiverType) {
         adapter.log.debug('[CONNECT] Connected --> Check receiver type');
-        sendRequest('SV?').then(() => sendRequest('SV01?')).then(() => sendRequest('PSSDI ?'));
+        sendRequest('SV?').then(() => sendRequest('SV01?')).then(() => sendRequest('BDSTATUS?'));
     } else {
         adapter.log.debug('[CONNECT] Connected --> updating states on start');
         updateStates(); // Update states when connected
@@ -539,10 +539,10 @@ client.on('connect', () => { // Successfull connected
 client.on('data', data => {
     // split data by <cr>
     const dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
-    for (let i = 0; i < dataArr.length; i++) {
-        if (dataArr[i]) { // dataArr[i] contains element
-            adapter.log.debug('[DATA] <== Incoming data: ' + dataArr[i]);
-            handleResponse(dataArr[i]);
+    for (const data of dataArr) {
+        if (data) { // data not empty
+            adapter.log.debug('[DATA] <== Incoming data: ' + data);
+            handleResponse(data);
         } // endIf
     } // endFor
 });
@@ -909,7 +909,7 @@ function handleResponse(data) {
                     handleResponse(data);
                 });
             } // endElse
-        } else if (data.startsWith('PSSDI')) {
+        } else if (data.startsWith('BDSTATUS')) {
             // DENON Ceol Piccool protocol detected, but we handle it as DE
             return createStandardStates('DE').then(() => {
                 adapter.log.debug('[UPDATE] Updating states');
