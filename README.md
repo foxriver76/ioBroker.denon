@@ -3,7 +3,7 @@
 ===========================
 
 [![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.denon.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.denon)[![Build status](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n/branch/master?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-denon/branch/master)
-[![NPM version](http://img.shields.io/npm/v/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
+![Number of Installations](http://iobroker.live/badges/denon-installed.svg) ![Number of Installations](http://iobroker.live/badges/denon-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.denon.svg)](https://www.npmjs.com/package/iobroker.denon)
 [![Greenkeeper badge](https://badges.greenkeeper.io/foxriver76/ioBroker.denon.svg)](https://greenkeeper.io/)
 
