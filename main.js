@@ -624,7 +624,8 @@ const pollCommands = [
     'Z2SLP?', 'Z3SLP?', 'MSQUICK ?',
     'MSSMART ?', 'PR00TR?',
     'Z2QUICK ?', 'Z3QUICK ?',
-    'Z2SMART ?', 'Z3SMART ?'
+    'Z2SMART ?', 'Z3SMART ?',
+    'BDSTATUS?'
 ]; // Request Display State, Sleep Timer & Quick Select
 
 function pollStates() { // Polls states
