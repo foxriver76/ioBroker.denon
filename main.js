@@ -911,7 +911,7 @@ function handleResponse(data) {
                 });
             } // endElse
         } else if (data.startsWith('BDSTATUS')) {
-            // DENON Ceol Piccool protocol detected, but we handle it as DE
+            // DENON Ceol Piccolo protocol detected, but we handle it as DE
             return createStandardStates('DE').then(() => {
                 adapter.log.debug('[UPDATE] Updating states');
                 updateStates();
