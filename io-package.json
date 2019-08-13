@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.5.1",
+        "version": "1.6.0",
         "news": {
+            "1.6.0": {
+                "en": "added new state settings.lfeAmount",
+                "de": "neuen state settings.lfeAmount hinzugefügt",
+                "ru": "добавлено новое состояние settings.lfeAmount",
+                "pt": "adicionou novo estado settings.lfeAmount",
+                "nl": "nieuwe statusinstellingen toegevoegd. lfeAmount",
+                "fr": "ajout du nouvel état settings.lfeAmount",
+                "it": "aggiunto nuovo stato settings.lfeAmount",
+                "es": "Se agregó una nueva configuración de estado.",
+                "pl": "dodano nowe ustawienia stanu",
+                "zh-cn": "添加了新的状态settings.lfeAmount"
+            },
             "1.5.1": {
                 "en": "fix to detect DENON Ceol",
                 "de": "Fix zum Erkennen von DENON Ceol",
@@ -110,18 +122,6 @@
                 "es": "info.onlinePresets convertido a JSON array para que funcione correctamente con los widgets",
                 "pl": "informacje.onlinePresets przekształcić w JSON-tablica do pracy z widgetami",
                 "zh-cn": "信息。onlinePresets转换叉列正常工作与部件"
-            },
-            "1.2.0": {
-                "en": "added info.onlinePresets and functionality to load and save Presets",
-                "de": "info.onlinePresets mit Favoriten hinzugefügt sowie laden und speichern der Presets ermöglicht",
-                "ru": "добавлена информация.onlinePresets и функциональность для загрузки и сохранения пресетов",
-                "pt": "adicionadas informações.onlinePresets e funcionalidade para carregar e salvar Predefinições",
-                "nl": "extra info.onlinePresets en functionaliteit voor het laden en opslaan van Presets",
-                "fr": "informations ajoutées.onlinePresets et la fonctionnalité de charger et de sauvegarder des Presets",
-                "it": "info aggiunto.onlinePresets e funzionalità per caricare e salvare i Preset",
-                "es": "info añadido.onlinePresets y la funcionalidad para cargar y guardar Presets",
-                "pl": "dodano informacje.onlinePresets i funkcjonalność pobierania i zapisywania presetów",
-                "zh-cn": "添加信息。onlinePresets和功能的装载和保存预设"
             }
         },
         "title": "DENON AVR",
