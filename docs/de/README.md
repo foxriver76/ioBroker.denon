@@ -514,7 +514,15 @@ Die folgenden States werden vom Adapter angelegt:
    ```javascript
    setState('denon.0.settings.surroundMode', '3'); // Setze Multi Channel Stereo als Surround Mode
    ```
-   
+* settings.lfeAmount
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |number|R/W|
+
+    *Höhe deszusätzlichen  Subwoofer Signals das an die Speaker weitergeleitet wird in dB. 
+    Bereich von 0 dB bis -10 dB möglich. Wobei 10 = -10 dB.*
+    
 * settings.expertCommand
 
     |Datentyp|Berechtigung|                                                                       

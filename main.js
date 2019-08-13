@@ -358,7 +358,6 @@ function startAdapter(options) {
                 if (parseInt(state) < 10)
                     loadPresetState = '0' + state;
                 else loadPresetState = state;
-                adapter.log.warn(loadPresetState);
                 sendRequest('NSB' + loadPresetState);
                 break;
             }
@@ -458,6 +457,9 @@ function startAdapter(options) {
                 break;
             case 'zone.channelVolumeFrontRight':
                 sendRequest('CVZ' + zoneNumber + 'FR ' + helper.dbToVol(state));
+                break;
+            case 'settings.lfeAmount':
+                sendRequest(`PSLFE ${state < 10 ? `0${state}` : 10}`);
                 break;
             default:
                 adapter.log.error('[COMMAND] ' + id + ' is not a valid state');
@@ -580,7 +582,7 @@ const updateCommands = [
     'Z2QUICK ?', 'Z3QUICK ?',
     'MSSMART ?', 'Z2SMART ?',
     'Z3SMART ?', 'NSH', 'Z2CV?',
-    'Z3CV?',
+    'Z3CV?', 'PSLFE ?',
     'PW00?', 'SD00?',
     'SV01?', 'SV02?', 'SV03?',
     'SV04?', 'SV05?', 'SV06?',
@@ -1271,9 +1273,12 @@ function handleResponse(data) {
         case 'PSDRCOFF':
             // Dynamic Compression direct change is off
             break;
-        case 'PSLFE':
+        case 'PSLFE': {
             // LFE --> amount of subwoofer signal additional directed to speakers
+            const lfeAmount = parseInt(data.split(' ')[1]);
+            adapter.setState('settings.lfeAmount', lfeAmount, true);
             break;
+        }
         case 'CVFL': {
             const channelVolume = data.split(' ')[1];
             adapter.setState('zoneMain.channelVolumeFrontLeft', helper.volToDb(channelVolume), true);
