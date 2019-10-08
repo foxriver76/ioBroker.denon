@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.6.0",
+        "version": "1.6.1",
         "news": {
+            "1.6.1": {
+                "en": "fixed bug with selectInput for zone2 and 3",
+                "de": "Fehler mit SelectInput für Zone2 und 3 behoben",
+                "ru": "исправлена ​​ошибка с selectInput для zone2 и 3",
+                "pt": "bug corrigido com selectInput para as zonas 2 e 3",
+                "nl": "bug opgelost met selectInput voor zone2 en 3",
+                "fr": "bug corrigé avec selectInput pour zone2 et 3",
+                "it": "bug risolto con selectInput per zone2 e 3",
+                "es": "error corregido con selectInput para zone2 y 3",
+                "pl": "naprawiony błąd z selectInput dla strefy 2 i 3",
+                "zh-cn": "修复了针对zone2和3的selectInput的错误"
+            },
             "1.6.0": {
                 "en": "added new state settings.lfeAmount",
                 "de": "neuen state settings.lfeAmount hinzugefügt",
@@ -110,18 +122,6 @@
                 "es": "utilice el adaptador de núcleo",
                 "pl": "użyj adapter",
                 "zh-cn": "使用的适配器核心"
-            },
-            "1.2.1": {
-                "en": "info.onlinePresets converted to JSON array to work properly with widgets",
-                "de": "info.onlinePresets in ein JSON Array umgewandelt, um die Funktionalität mit Widgets zu ermöglichen",
-                "ru": "информация.onlinePresets преобразовать в JSON-массив для работы с виджетами",
-                "pt": "informações.onlinePresets convertido para JSON matriz para trabalhar corretamente com widgets",
-                "nl": "info.onlinePresets omgezet naar JSON array om goed te kunnen werken met widgets",
-                "fr": "info.onlinePresets converti tableau JSON pour fonctionner correctement avec des widgets",
-                "it": "info.onlinePresets convertito in JSON matrice di lavorare correttamente con i widget",
-                "es": "info.onlinePresets convertido a JSON array para que funcione correctamente con los widgets",
-                "pl": "informacje.onlinePresets przekształcić w JSON-tablica do pracy z widgetami",
-                "zh-cn": "信息。onlinePresets转换叉列正常工作与部件"
             }
         },
         "title": "DENON AVR",
