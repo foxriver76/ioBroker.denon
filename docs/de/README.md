@@ -537,6 +537,30 @@ Die folgenden States werden vom Adapter angelegt:
     ```javascript
     setState('denon.0.settings.expertCommand', 'ECOON'); // Schaltet den ECO Mode für die Main Zone ein 
     ```
+  
+* settings.expertReadingPattern
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+    
+    *Wenn spezielle Daten des AVR's abgegeriffen werden sollen und in `settings.expertReadingResult` gespeichert werden sollen,
+    muss in diesen State eine Regex übergeben werden. Die Regex wird einem Regex Konstruktor übergeben und sollte keine 
+    `/` am Anfang oder Ende enthalten. Es wird empfohlen die Regex mit einem geeigneten [Regex tester](https://regexr.com/)
+    zu validieren.*
+    
+    *Beispiel:*
+    
+    ```javascript
+    setState('denon.0.settings.expertReadingPatter', '(MV.+)|(SSINFAISFSV.+)');
+
+* settings.expertReadingResult
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |string|R|
+    
+    *Eingehende Daten, die der Regex in `settings.expertReadingPattern` entsprechen, werden in diesen State geschrieben.*
 
 * settings.outputMonitor
 

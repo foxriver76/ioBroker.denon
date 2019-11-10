@@ -492,6 +492,29 @@ Following states will be created by the adapter:
     ```javascript
     setState('denon.0.settings.expertCommand', 'ECOON'); // Turns Main Zone ECO mode on
     ```
+  
+* settings.expertReadingPattern
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+    
+    *If you want to get specific answers stored in `settings.expertReadingResult` you have to set a regex to this state.
+    Regex has to be set, so that a RegEx Constructor can use it. It is recommended to use a [Regex tester](https://regexr.com/).
+    Do not set `/` at the beginning or end of the regex.*
+    
+    *Example:*
+    
+    ```javascript
+    setState('denon.0.settings.expertReadingPatter', '(MV.+)|(SSINFAISFSV.+)');
+
+* settings.expertReadingResult
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R|
+    
+    *Incoming data, which matches the Regex of `settings.expertReadingPattern` will be set to this state.*
 
 * settings.outputMonitor
 
@@ -807,6 +830,9 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
+### 1.7.0 (2019-11-10)
+* (foxriver76) added ability to read desired data by expertReading states
+
 ### 1.6.1 (2019-10-08)
 * (foxriver76) fixed bug with selectInput for zone2 and 3
 

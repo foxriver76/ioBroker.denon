@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.6.1",
+        "version": "1.7.0",
         "news": {
+            "1.7.0": {
+                "en": "added ability to read desired data by 'expertReading' states",
+                "de": "Möglichkeit hinzugefügt, gewünschte Daten durch 'expertReading'-Zustände zu lesen",
+                "ru": "добавлена ​​возможность читать нужные данные по состояниям expertReading",
+                "pt": "capacidade adicional de ler os dados desejados pelos estados 'expertReading'",
+                "nl": "toegevoegd vermogen om gewenste gegevens te lezen door 'expertReading' staten",
+                "fr": "possibilité supplémentaire de lire les données souhaitées par les états 'expertReading'",
+                "it": "aggiunta capacità di leggere i dati desiderati dagli stati \"expertReading\"",
+                "es": "capacidad adicional para leer los datos deseados por los estados 'expertReading'",
+                "pl": "dodano możliwość odczytu pożądanych danych przez stany „expertReading”",
+                "zh-cn": "通过“ expertReading”状态增加了读取所需数据的能力"
+            },
             "1.6.1": {
                 "en": "fixed bug with selectInput for zone2 and 3",
                 "de": "Fehler mit SelectInput für Zone2 und 3 behoben",
@@ -110,18 +122,6 @@
                 "es": "añadir la falta de usb a selectInput para todas las zonas",
                 "pl": "dodaj brakujące USB do selectInput dla wszystkich stref",
                 "zh-cn": "添加缺少usb selectInput所有区域"
-            },
-            "1.2.2": {
-                "en": "use adapter core",
-                "de": "Nutzung von Adapter-Core",
-                "ru": "используйте адаптер сердечника",
-                "pt": "use o adaptador de núcleo",
-                "nl": "gebruik de adapter core",
-                "fr": "utilisation de l'adaptateur de base",
-                "it": "utilizzare l'adattatore core",
-                "es": "utilice el adaptador de núcleo",
-                "pl": "użyj adapter",
-                "zh-cn": "使用的适配器核心"
             }
         },
         "title": "DENON AVR",
@@ -243,6 +243,30 @@
             "common": {
                 "name": "Expert Command",
                 "role": "state",
+                "type": "string",
+                "write": true,
+                "read": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "settings.expertReadingResult",
+            "type": "state",
+            "common": {
+                "name": "Expert Reading Result",
+                "role": "state",
+                "type": "string",
+                "write": false,
+                "read": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "settings.expertReadingPattern",
+            "type": "state",
+            "common": {
+                "name": "Expert Reading Pattern",
+                "role": "regex",
                 "type": "string",
                 "write": true,
                 "read": true

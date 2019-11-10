@@ -295,6 +295,14 @@ function startAdapter(options) {
                     sendRequest(`MS${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 });
                 break;
+            case 'settings.expertReadingPattern':
+                try {
+                    new RegExp(state);
+                    adapter.setState('settings.expertReadingPattern', state, true);
+                } catch (e) {
+                    adapter.log.warn(`[COMMAND] Cannot update expert reading pattern: ${e}`);
+                }
+                break;
             case 'settings.expertCommand': { // Sending custom commands
                 sendRequest(state);
                 adapter.getStateAsync('info.connection').then(_state => {
@@ -792,6 +800,14 @@ function handleUsStateChange(id, stateVal) {
                 sendRequest('PW00STANDBY');
             } // endElseIf
             break;
+        case 'settings.expertReadingPattern':
+            try {
+                new RegExp(stateVal);
+                adapter.setState('settings.expertReadingPattern', stateVal, true);
+            } catch (e) {
+                adapter.log.warn(`[COMMAND] Cannot update expert reading pattern: ${e}`);
+            }
+            break;
         case 'display.brightness':
             adapter.getObjectAsync('display.brightness').then((obj) => {
                 sendRequest(`SD00${helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3)}`);
@@ -890,11 +906,23 @@ function handleUsStateChange(id, stateVal) {
     } // endSwitch
 } // endHandleUsStateChange
 
-function handleResponse(data) {
+async function handleResponse(data) {
     if (!pollingVar) { // Keep connection alive & poll states
         pollingVar = true;
         setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
     } // endIf
+
+    // independent from receiver we handle the expert pattern
+    const expertPattern = await adapter.getStateAsync('settings.expertReadingPattern');
+    // if ack is false, it was not a valid regex
+    if (expertPattern.val && expertPattern.ack === true) {
+        const expertRegex = new RegExp(expertPattern.val);
+        if (expertRegex.test(data)) {
+            adapter.setState('settings.expertReadingResult', data, true);
+        } // endIf
+    } // endIf
+
+
 
     // Detect receiver type --> first poll is SV? and SV00?
     if (!receiverType) {
