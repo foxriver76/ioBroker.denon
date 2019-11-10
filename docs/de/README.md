@@ -545,14 +545,14 @@ Die folgenden States werden vom Adapter angelegt:
     |string|R/W|
     
     *Wenn spezielle Daten des AVR's abgegeriffen werden sollen und in `settings.expertReadingResult` gespeichert werden sollen,
-    muss in diesen State eine Regex übergeben werden. Die Regex wird einem Regex Konstruktor übergeben und sollte keine 
-    `/` am Anfang oder Ende enthalten. Es wird empfohlen die Regex mit einem geeigneten [Regex tester](https://regexr.com/)
+    muss in diesen State eine Regex übergeben werden. Die RegEx wird einem RegEx Konstruktor übergeben und sollte keine 
+    `/` am Anfang oder Ende enthalten. Es wird empfohlen die RegEx mit einem geeigneten [RegEx tester](https://regexr.com/)
     zu validieren.*
     
     *Beispiel:*
     
     ```javascript
-    setState('denon.0.settings.expertReadingPatter', '(MV.+)|(SSINFAISFSV.+)');
+    setState('denon.0.settings.expertReadingPattern', '(MV.+)|(SSINFAISFSV.+)');
 
 * settings.expertReadingResult
 
@@ -560,7 +560,7 @@ Die folgenden States werden vom Adapter angelegt:
     |:---:|:---:|
     |string|R|
     
-    *Eingehende Daten, die der Regex in `settings.expertReadingPattern` entsprechen, werden in diesen State geschrieben.*
+    *Eingehende Daten, die der RegEx in `settings.expertReadingPattern` entsprechen, werden in diesen State geschrieben.*
 
 * settings.outputMonitor
 

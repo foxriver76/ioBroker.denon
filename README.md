@@ -499,14 +499,14 @@ Following states will be created by the adapter:
     |:---:|:---:|
     |string|R/W|
     
-    *If you want to get specific answers stored in `settings.expertReadingResult` you have to set a regex to this state.
-    Regex has to be set, so that a RegEx Constructor can use it. It is recommended to use a [Regex tester](https://regexr.com/).
-    Do not set `/` at the beginning or end of the regex.*
+    *If you want to get specific answers stored in `settings.expertReadingResult` you have to set a RegEx to this state.
+    RegEx has to be set, so that a RegEx Constructor can use it. It is recommended to use a [RegEx tester](https://regexr.com/).
+    Do not set `/` at the beginning or end of the RegEx.*
     
     *Example:*
     
     ```javascript
-    setState('denon.0.settings.expertReadingPatter', '(MV.+)|(SSINFAISFSV.+)');
+    setState('denon.0.settings.expertReadingPattern', '(MV.+)|(SSINFAISFSV.+)');
 
 * settings.expertReadingResult
 
@@ -514,7 +514,7 @@ Following states will be created by the adapter:
     |:---:|:---:|
     |string|R|
     
-    *Incoming data, which matches the Regex of `settings.expertReadingPattern` will be set to this state.*
+    *Incoming data, which matches the RegEx of `settings.expertReadingPattern` will be set to this state.*
 
 * settings.outputMonitor
 
