@@ -830,7 +830,7 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
    
 ## Changelog
-### 1.7.0 (2019-11-10)
+### 1.7.1 (2019-11-19)
 * (foxriver76) added ability to read desired data by expertReading states
 
 ### 1.6.1 (2019-10-08)

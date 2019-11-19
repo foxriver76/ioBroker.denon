@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.0",
+        "version": "1.7.1",
         "news": {
-            "1.7.0": {
+            "1.7.1": {
                 "en": "added ability to read desired data by 'expertReading' states",
                 "de": "Möglichkeit hinzugefügt, gewünschte Daten durch 'expertReading'-Zustände zu lesen",
                 "ru": "добавлена ​​возможность читать нужные данные по состояниям expertReading",

@@ -915,14 +915,12 @@ async function handleResponse(data) {
     // independent from receiver we handle the expert pattern
     const expertPattern = await adapter.getStateAsync('settings.expertReadingPattern');
     // if ack is false, it was not a valid regex
-    if (expertPattern.val && expertPattern.ack === true) {
+    if (expertPattern && expertPattern.val && expertPattern.ack === true) {
         const expertRegex = new RegExp(expertPattern.val);
         if (expertRegex.test(data)) {
             adapter.setState('settings.expertReadingResult', data, true);
         } // endIf
     } // endIf
-
-
 
     // Detect receiver type --> first poll is SV? and SV00?
     if (!receiverType) {
