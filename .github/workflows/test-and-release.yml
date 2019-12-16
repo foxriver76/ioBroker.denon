@@ -30,11 +30,10 @@ jobs:
 
       - name: Install package
         run: npm i
+
       - name: Install Dependencies
         run: npm ci
 
-      - name: Lint source code
-        run: npm run lint
       - name: Test package files
         run: npm run test:package
 
