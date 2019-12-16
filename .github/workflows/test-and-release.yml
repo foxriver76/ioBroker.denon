@@ -12,7 +12,7 @@ on:
 
 jobs:
   # Performs quick checks before the expensive test runs
-  check-and-lint:
+  check-package:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
   adapter-tests:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
-    needs: [check-and-lint]
+    needs: [check-package]
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -58,6 +58,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Install package
+        run: npm i
 
       - name: Install Dependencies
         run: npm ci
