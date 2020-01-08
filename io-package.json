@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.1",
+        "version": "1.7.2",
         "news": {
+            "1.7.2": {
+                "en": "another fix for 'DENON Picool'",
+                "de": "ein weiterer Fix für 'DENON Picool'",
+                "ru": "еще одно исправление для «DENON Picool»",
+                "pt": "outra correção para 'DENON Picool'",
+                "nl": "nog een oplossing voor 'DENON Picool'",
+                "fr": "un autre correctif pour 'DENON Picool'",
+                "it": "un'altra correzione per 'DENON Picool'",
+                "es": "otra solución para 'DENON Picool'",
+                "pl": "kolejna poprawka dla „DENON Picool”",
+                "zh-cn": "'DENON Picool'的另一个修复"
+            },
             "1.7.1": {
                 "en": "added ability to read desired data by 'expertReading' states",
                 "de": "Möglichkeit hinzugefügt, gewünschte Daten durch 'expertReading'-Zustände zu lesen",
@@ -110,18 +122,6 @@
                 "es": "arregle el registro detallado, siempre que el error de conexión permanezca igual, el registro ocurre en el nivel de depuración",
                 "pl": "naprawiaj szczegółowe rejestrowanie, o ile błąd połączenia pozostaje ten sam, rejestracja odbywa się na poziomie debugowania",
                 "zh-cn": "修复详细记录的，只要连接的错误保持相同，记录发生在调试一级"
-            },
-            "1.2.3": {
-                "en": "add missing usb to selectInput for all zones",
-                "de": "fehlender USB Eingangskanal wurde hinzugefügt für alle Zonen",
-                "ru": "добавить недостающие USB к selectInput для всех зон",
-                "pt": "adicionar falta de usb para selectInput para todas as zonas",
-                "nl": "het toevoegen van ontbrekende usb naar selectInput voor alle zones",
-                "fr": "ajouter manquant usb pour selectInput pour toutes les zones",
-                "it": "aggiungere mancanti usb per selectInput per tutte le zone",
-                "es": "añadir la falta de usb a selectInput para todas las zonas",
-                "pl": "dodaj brakujące USB do selectInput dla wszystkich stref",
-                "zh-cn": "添加缺少usb selectInput所有区域"
             }
         },
         "title": "DENON AVR",

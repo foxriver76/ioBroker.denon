@@ -618,7 +618,8 @@ const updateCommands = [
     'PR02PR?', 'PR04PR?', 'PR06PR?',
     'PR08PR?', 'PR10PR?', 'PR12PR?',
     'PR02OH?', 'PR04OH?', 'PR06OH?',
-    'PR08OH?', 'PR10OH?', 'PR12OH?'
+    'PR08OH?', 'PR10OH?', 'PR12OH?',
+    'BDSTATUS?'
 ];
 
 function updateStates() {
