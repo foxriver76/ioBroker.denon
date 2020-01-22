@@ -158,7 +158,8 @@
         ],
         "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
         "loglevel": "info",
-        "type": "multimedia"
+        "type": "multimedia",
+        "connectionType": "local push"
     },
     "docs": {
         "de": "docs/de/README.md"
