@@ -934,8 +934,8 @@ async function handleResponse(data) {
 
     // Detect receiver type --> first poll is SV? and SV00?
     if (!receiverType) {
-        if (data.startsWith('SV') || data.startsWith('MV')) {
-            if (/^SV[\d]+/g.test(data) || /^MV\d+/g.test(data)) {
+        if (data.startsWith('SV') || /^MV\d+/g.test(data)) {
+            if (/^SV[\d]+/g.test(data)) {
                 return createStandardStates('US').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates(); // Update states when connected

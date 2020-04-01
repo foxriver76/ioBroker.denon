@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.3",
+        "version": "1.7.4",
         "news": {
-            "1.7.3": {
+            "1.7.4": {
                 "en": "fixed potential timeout issues",
                 "de": "potenzielle Timeout-Probleme behoben",
                 "ru": "исправлены потенциальные проблемы тайм-аута",
