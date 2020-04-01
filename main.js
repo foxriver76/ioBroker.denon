@@ -39,6 +39,14 @@ function startAdapter(options) {
 
     adapter.on('unload', callback => {
         try {
+            if (connectingVar) {
+                clearTimeout(connectingVar);
+            } // endIf
+
+            if (pollingVar) {
+                clearTimeout(pollingVar);
+            } // endIf
+
             adapter.log.info('[END] Stopping Denon AVR adapter...');
             adapter.setState('info.connection', false, true);
             client.destroy(); // kill connection
@@ -485,12 +493,14 @@ function main() {
 } // endMain
 
 client.on('timeout', () => {
-    pollingVar = false;
+    pollingVar = null;
     adapter.log.warn('AVR timed out due to no response');
     adapter.setState('info.connection', false, true);
     client.destroy();
     client.unref();
-    setTimeout(() => connect(), 30000); // Connect again in 30 seconds
+    if (!connectingVar) {
+        connectingVar = setTimeout(() => connect(), 30000); // Connect again in 30 seconds
+    } // endIf
 });
 
 // Connection handling
@@ -510,7 +520,7 @@ client.on('error', error => {
         else adapter.log.warn(`Connection closed: ${error}`);
     }
 
-    pollingVar = false;
+    pollingVar = null;
     adapter.setState('info.connection', false, true);
     if (!connectingVar) {
         client.destroy();
@@ -539,7 +549,7 @@ client.on('connect', () => { // Successfull connected
     adapter.log.info(`[CONNECT] Adapter connected to DENON-AVR: ${host}:23`);
     if (!receiverType) {
         adapter.log.debug('[CONNECT] Connected --> Check receiver type');
-        sendRequest('SV?').then(() => sendRequest('SV01?')).then(() => sendRequest('BDSTATUS?'));
+        sendRequest('SV?').then(() => sendRequest('SV01?')).then(() => sendRequest('BDSTATUS?')).then(() => sendRequest('MV?'));
     } else {
         adapter.log.debug('[CONNECT] Connected --> updating states on start');
         updateStates(); // Update states when connected
@@ -641,7 +651,7 @@ const pollCommands = [
 
 function pollStates() { // Polls states
     let i = 0;
-    pollingVar = false;
+    pollingVar = null;
     const intervalVar = setInterval(() => {
         sendRequest(pollCommands[i]);
         i++;
@@ -909,8 +919,7 @@ function handleUsStateChange(id, stateVal) {
 
 async function handleResponse(data) {
     if (!pollingVar) { // Keep connection alive & poll states
-        pollingVar = true;
-        setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
+        pollingVar = setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
     } // endIf
 
     // independent from receiver we handle the expert pattern
@@ -925,8 +934,8 @@ async function handleResponse(data) {
 
     // Detect receiver type --> first poll is SV? and SV00?
     if (!receiverType) {
-        if (data.startsWith('SV')) {
-            if (/^SV[\d]+/g.test(data)) {
+        if (data.startsWith('SV') || data.startsWith('MV')) {
+            if (/^SV[\d]+/g.test(data) || /^MV\d+/g.test(data)) {
                 return createStandardStates('US').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates(); // Update states when connected
@@ -940,7 +949,7 @@ async function handleResponse(data) {
                 });
             } // endElse
         } else if (data.startsWith('BDSTATUS')) {
-            // DENON Ceol Piccolo protocol detected, but we handle it as DE
+            // DENON Ceol Piccolo protocol detected , but we handle it as DE
             return createStandardStates('DE').then(() => {
                 adapter.log.debug('[UPDATE] Updating states');
                 updateStates();

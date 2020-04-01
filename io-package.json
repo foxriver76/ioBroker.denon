@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.2",
+        "version": "1.7.3",
         "news": {
+            "1.7.3": {
+                "en": "fixed potential timeout issues",
+                "de": "potenzielle Timeout-Probleme behoben",
+                "ru": "исправлены потенциальные проблемы тайм-аута",
+                "pt": "possíveis problemas de tempo limite corrigidos",
+                "nl": "mogelijke time-outproblemen opgelost",
+                "fr": "Correction de problèmes potentiels de délai d'attente",
+                "it": "risolti potenziali problemi di timeout",
+                "es": "posibles problemas de tiempo de espera corregidos",
+                "pl": "naprawiono potencjalne problemy z przekroczeniem limitu czasu",
+                "zh-cn": "解决了潜在的超时问题"
+            },
             "1.7.2": {
                 "en": "another fix for 'DENON Picool'",
                 "de": "ein weiterer Fix für 'DENON Picool'",
@@ -110,18 +122,6 @@
                 "es": "Solo se actualizan algunos estados cuando se cambian, promesas y mejoras menores.",
                 "pl": "aktualizuje tylko niektóre stany po zmianie, obietnice i drobne poprawki",
                 "zh-cn": "仅更新一些国家在更改承诺以及小的改进"
-            },
-            "1.2.4": {
-                "en": "fix verbose logging, as long as connection error stays the same, logging happens on debug level",
-                "de": "Verbose Protokollierung behoben, solange der Verbindungsfehler gleich bleibt, erfolgt die Protokollierung auf Debug-Ebene",
-                "ru": "исправить подробное ведение журнала, пока ошибка соединения остается той же, ведение журнала происходит на уровне отладки",
-                "pt": "consertar o registro detalhado, contanto que o erro de conexão permaneça o mesmo, o registro ocorrerá no nível de depuração",
-                "nl": "fix uitgebreide logging, zolang de verbindingsfout gelijk blijft, gebeurt het loggen op foutopsporingsniveau",
-                "fr": "correction de la journalisation prolixe, tant que l'erreur de connexion reste la même, la journalisation a lieu au niveau débogage",
-                "it": "correggi la registrazione dettagliata, purché l'errore di connessione rimanga lo stesso, la registrazione avviene a livello di debug",
-                "es": "arregle el registro detallado, siempre que el error de conexión permanezca igual, el registro ocurre en el nivel de depuración",
-                "pl": "naprawiaj szczegółowe rejestrowanie, o ile błąd połączenia pozostaje ten sam, rejestracja odbywa się na poziomie debugowania",
-                "zh-cn": "修复详细记录的，只要连接的错误保持相同，记录发生在调试一级"
             }
         },
         "title": "DENON AVR",
