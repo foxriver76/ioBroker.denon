@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.4",
+        "version": "1.7.5",
         "news": {
+            "1.7.5": {
+                "en": "better error handling",
+                "de": "bessere Fehlerbehandlung",
+                "ru": "лучшая обработка ошибок",
+                "pt": "melhor tratamento de erros",
+                "nl": "betere foutafhandeling",
+                "fr": "meilleure gestion des erreurs",
+                "it": "migliore gestione degli errori",
+                "es": "mejor manejo de errores",
+                "pl": "lepsza obsługa błędów",
+                "zh-cn": "更好的错误处理"
+            },
             "1.7.4": {
                 "en": "fixed potential timeout issues",
                 "de": "potenzielle Timeout-Probleme behoben",

@@ -540,7 +540,7 @@ client.on('end', () => { // Denon has closed the connection
     } // endIf
 });
 
-client.on('connect', () => { // Successfull connected
+client.on('connect', () => { // Successfully connected
     clearTimeout(connectingVar);
     connectingVar = null;
     previousError = null;
@@ -1345,649 +1345,648 @@ async function handleResponse(data) {
     } // endSwitch
 } // endHandleResponse
 
-function createZone(zone) {
-    return new Promise(resolve => {
-        const promises = [];
+async function createZone(zone) {
+    const promises = [];
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}`, {
-            type: 'channel',
-            common: {
-                name: `Zone ${zone}`
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}`, {
+        type: 'channel',
+        common: {
+            name: `Zone ${zone}`
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.powerZone`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Power State`,
-                role: 'switch.power.zone',
-                type: 'boolean',
-                write: true,
-                read: true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.powerZone`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Power State`,
+            role: 'switch.power.zone',
+            type: 'boolean',
+            write: true,
+            read: true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volume`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Volume`,
-                role: 'level.volume.zone',
-                type: 'number',
-                read: true,
-                write: true,
-                min: 0,
-                max: 98
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volume`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Volume`,
+            role: 'level.volume.zone',
+            type: 'number',
+            read: true,
+            write: true,
+            min: 0,
+            max: 98
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeDB`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} VolumeDB`,
-                role: 'level.volume',
-                type: 'number',
-                unit: 'dB',
-                read: true,
-                write: true,
-                min: -80,
-                max: 18
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeDB`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} VolumeDB`,
+            role: 'level.volume',
+            type: 'number',
+            unit: 'dB',
+            read: true,
+            write: true,
+            min: -80,
+            max: 18
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeUp`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Volume Up`,
-                role: 'button',
-                type: 'boolean',
-                write: true,
-                read: false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeUp`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Volume Up`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeDown`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Volume Down`,
-                role: 'button',
-                type: 'boolean',
-                write: true,
-                read: false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeDown`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Volume Down`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.selectInput`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Select input`,
-                role: 'media.input',
-                type: 'number',
-                write: true,
-                read: true,
-                states: {
-                    '0': 'PHONO',
-                    '1': 'CD',
-                    '2': 'TUNER',
-                    '3': 'DVD',
-                    '4': 'BD',
-                    '5': 'TV',
-                    '6': 'SAT/CBL',
-                    '7': 'MPLAY',
-                    '8': 'GAME',
-                    '9': 'NET',
-                    '10': 'SPOTIFY',
-                    '11': 'LASTFM',
-                    '12': 'IRADIO',
-                    '13': 'SERVER',
-                    '14': 'FAVORITES',
-                    '15': 'AUX1',
-                    '16': 'AUX2',
-                    '17': 'AUX3',
-                    '18': 'AUX4',
-                    '19': 'AUX5',
-                    '20': 'AUX6',
-                    '21': 'AUX7',
-                    '22': 'BT',
-                    '23': 'USB'
-                }
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.selectInput`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Select input`,
+            role: 'media.input',
+            type: 'number',
+            write: true,
+            read: true,
+            states: {
+                '0': 'PHONO',
+                '1': 'CD',
+                '2': 'TUNER',
+                '3': 'DVD',
+                '4': 'BD',
+                '5': 'TV',
+                '6': 'SAT/CBL',
+                '7': 'MPLAY',
+                '8': 'GAME',
+                '9': 'NET',
+                '10': 'SPOTIFY',
+                '11': 'LASTFM',
+                '12': 'IRADIO',
+                '13': 'SERVER',
+                '14': 'FAVORITES',
+                '15': 'AUX1',
+                '16': 'AUX2',
+                '17': 'AUX3',
+                '18': 'AUX4',
+                '19': 'AUX5',
+                '20': 'AUX6',
+                '21': 'AUX7',
+                '22': 'BT',
+                '23': 'USB'
+            }
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.muteIndicator`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Muted`,
-                role: 'media.mute',
-                type: 'boolean',
-                write: true,
-                read: true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.muteIndicator`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Muted`,
+            role: 'media.mute',
+            type: 'boolean',
+            write: true,
+            read: true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.quickSelect`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Quick select`,
-                role: 'media.quickSelect',
-                type: 'number',
-                write: true,
-                read: true,
-                min: 1,
-                max: 5
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.quickSelect`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Quick select`,
+            role: 'media.quickSelect',
+            type: 'number',
+            write: true,
+            read: true,
+            min: 1,
+            max: 5
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.sleepTimer`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Sleep Timer`,
-                role: 'media.timer.sleep',
-                unit: 'min',
-                type: 'number',
-                write: true,
-                read: true,
-                min: 0,
-                max: 120
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.sleepTimer`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Sleep Timer`,
+            role: 'media.timer.sleep',
+            unit: 'min',
+            type: 'number',
+            write: true,
+            read: true,
+            min: 0,
+            max: 120
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBass`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Bass Level`,
-                role: 'level.bass',
-                type: 'number',
-                write: true,
-                read: true,
-                unit: 'dB',
-                min: -6,
-                max: 6
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBass`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Bass Level`,
+            role: 'level.bass',
+            type: 'number',
+            write: true,
+            read: true,
+            unit: 'dB',
+            min: -6,
+            max: 6
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassUp`, {
-            type: 'state',
-            common: {
-                'name': `Zone ${zone} Bass Up`,
-                'role': 'button',
-                'type': 'boolean',
-                'write': true,
-                'read': false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassUp`, {
+        type: 'state',
+        common: {
+            'name': `Zone ${zone} Bass Up`,
+            'role': 'button',
+            'type': 'boolean',
+            'write': true,
+            'read': false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassDown`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Bass Down`,
-                role: 'button',
-                type: 'boolean',
-                write: true,
-                read: false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassDown`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Bass Down`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTreble`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Treble`,
-                role: 'level.treble',
-                type: 'number',
-                write: true,
-                read: true,
-                unit: 'dB',
-                min: -6,
-                max: 6
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTreble`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Treble`,
+            role: 'level.treble',
+            type: 'number',
+            write: true,
+            read: true,
+            unit: 'dB',
+            min: -6,
+            max: 6
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleUp`, {
-            type: 'state',
-            common: {
-                'name': `Zone ${zone} Treble Up`,
-                'role': 'button',
-                'type': 'boolean',
-                'write': true,
-                'read': false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleUp`, {
+        type: 'state',
+        common: {
+            'name': `Zone ${zone} Treble Up`,
+            'role': 'button',
+            'type': 'boolean',
+            'write': true,
+            'read': false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleDown`, {
-            type: 'state',
-            common: {
-                'name': `Zone ${zone} Treble Down`,
-                'role': 'button',
-                'type': 'boolean',
-                'write': true,
-                'read': false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleDown`, {
+        type: 'state',
+        common: {
+            'name': `Zone ${zone} Treble Down`,
+            'role': 'button',
+            'type': 'boolean',
+            'write': true,
+            'read': false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontRight`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Channel Volume Front Right`,
-                role: 'level',
-                type: 'number',
-                write: true,
-                read: true,
-                min: -12,
-                max: 12,
-                unit: 'dB'
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontRight`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Channel Volume Front Right`,
+            role: 'level',
+            type: 'number',
+            write: true,
+            read: true,
+            min: -12,
+            max: 12,
+            unit: 'dB'
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontLeft`, {
-            type: 'state',
-            common: {
-                name: `Zone ${zone} Channel Volume Front Left`,
-                role: 'level',
-                type: 'number',
-                write: true,
-                read: true,
-                unit: 'dB',
-                min: -12,
-                max: 12
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontLeft`, {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Channel Volume Front Left`,
+            role: 'level',
+            type: 'number',
+            write: true,
+            read: true,
+            unit: 'dB',
+            min: -12,
+            max: 12
+        },
+        native: {}
+    }));
 
-        Promise.all(promises).then(() => {
-            if (!zonesCreated[zone]) adapter.log.debug(`[INFO] <== Zone ${zone} detected`);
-            zonesCreated[zone] = true;
-            resolve();
-        });
-    });
+    try {
+        await Promise.all(promises);
+        if (!zonesCreated[zone]) adapter.log.debug(`[INFO] <== Zone ${zone} detected`);
+        zonesCreated[zone] = true;
+    } catch (e) {
+        adapter.log.warn(`Could not create zone ${zone}: ${e}`);
+    }
+
 } // endCreateZone
 
-function createDisplayAndHttp() {
-    return new Promise(resolve => {
-        const promises = [];
+async function createDisplayAndHttp() {
+    const promises = [];
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent0', {
-            type: 'state',
-            common: {
-                'name': 'Display content 0',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent0', {
+        type: 'state',
+        common: {
+            'name': 'Display content 0',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent1', {
-            type: 'state',
-            common: {
-                'name': 'Display content 1',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent1', {
+        type: 'state',
+        common: {
+            'name': 'Display content 1',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent2', {
-            type: 'state',
-            common: {
-                'name': 'Display content 2',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent2', {
+        type: 'state',
+        common: {
+            'name': 'Display content 2',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent3', {
-            type: 'state',
-            common: {
-                'name': 'Display content 3',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent3', {
+        type: 'state',
+        common: {
+            'name': 'Display content 3',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent4', {
-            type: 'state',
-            common: {
-                'name': 'Display content 4',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent4', {
+        type: 'state',
+        common: {
+            'name': 'Display content 4',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent5', {
-            type: 'state',
-            common: {
-                'name': 'Display content 5',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent5', {
+        type: 'state',
+        common: {
+            'name': 'Display content 5',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent6', {
-            type: 'state',
-            common: {
-                'name': 'Display content 6',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent6', {
+        type: 'state',
+        common: {
+            'name': 'Display content 6',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent7', {
-            type: 'state',
-            common: {
-                'name': 'Display content 7',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent7', {
+        type: 'state',
+        common: {
+            'name': 'Display content 7',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('display.displayContent8', {
-            type: 'state',
-            common: {
-                'name': 'Display content 8',
-                'role': 'info.display',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('display.displayContent8', {
+        type: 'state',
+        common: {
+            'name': 'Display content 8',
+            'role': 'info.display',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('zoneMain.iconURL', {
-            type: 'state',
-            common: {
-                'name': 'Cover',
-                'role': 'media.cover',
-                'type': 'string',
-                'write': false,
-                'read': true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('zoneMain.iconURL', {
+        type: 'state',
+        common: {
+            'name': 'Cover',
+            'role': 'media.cover',
+            'type': 'string',
+            'write': false,
+            'read': true
+        },
+        native: {}
+    }));
 
-        Promise.all(promises).then(() => {
-            if (!displayAbility) {
-                adapter.setState('zoneMain.iconURL', `http://${host}/NetAudio/art.asp-jpg`, true);
-                adapter.log.debug('[INFO] <== Display Content created');
-            } // endIf
-            displayAbility = true;
-            resolve();
-        });
-    });
+    try {
+        await Promise.all(promises);
+        if (!displayAbility) {
+            adapter.setState('zoneMain.iconURL', `http://${host}/NetAudio/art.asp-jpg`, true);
+            adapter.log.debug('[INFO] <== Display Content created');
+        } // endIf
+        displayAbility = true;
+    } catch (e) {
+        adapter.log.error(`Could not create Display Content states: ${e}`);
+    }
 } // endCreateDisplayAndHttp
 
-function createMonitorState() {
-    return new Promise(resolve => {
-        const promises = [];
+async function createMonitorState() {
+    const promises = [];
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.outputMonitor', {
-            type: 'state',
-            common: {
-                name: 'Output monitor',
-                role: 'video.output',
-                type: 'number',
-                write: true,
-                read: true,
-                states: {
-                    '0': 'AUTO',
-                    '1': '1',
-                    '2': '2'
-                }
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.outputMonitor', {
+        type: 'state',
+        common: {
+            name: 'Output monitor',
+            role: 'video.output',
+            type: 'number',
+            write: true,
+            read: true,
+            states: {
+                '0': 'AUTO',
+                '1': '1',
+                '2': '2'
+            }
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.videoProcessingMode', {
-            type: 'state',
-            common: {
-                name: 'Video processing mode',
-                role: 'video.processingMode',
-                type: 'number',
-                write: true,
-                read: true,
-                states: {
-                    '0': 'AUTO',
-                    '1': 'GAME',
-                    '2': 'MOVIE'
-                }
-            },
-            native: {}
-        }));
-
-        Promise.all(promises).then(() => {
-            if (!multiMonitor) adapter.log.debug('[INFO] <== Created monitor states');
-            multiMonitor = true;
-            resolve();
-        });
-    });
-
+    promises.push(adapter.setObjectNotExistsAsync('settings.videoProcessingMode', {
+        type: 'state',
+        common: {
+            name: 'Video processing mode',
+            role: 'video.processingMode',
+            type: 'number',
+            write: true,
+            read: true,
+            states: {
+                '0': 'AUTO',
+                '1': 'GAME',
+                '2': 'MOVIE'
+            }
+        },
+        native: {}
+    }));
+    try {
+        await Promise.all(promises);
+        if (!multiMonitor) adapter.log.debug('[INFO] <== Created monitor states');
+        multiMonitor = true;
+    } catch (e) {
+        adapter.log.error(`Could not create monitor states: ${e}`);
+    }
 } // endCreateMonitorState
 
-function createSubTwo() {
-    return new Promise(resolve => {
-        const promises = [];
+async function createSubTwo() {
+    const promises = [];
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevel', {
-            type: 'state',
-            common: {
-                name: 'Second Subwoofer Level',
-                role: 'level',
-                type: 'number',
-                write: true,
-                read: true,
-                min: -12,
-                max: 12,
-                unit: 'dB'
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevel', {
+        type: 'state',
+        common: {
+            name: 'Second Subwoofer Level',
+            role: 'level',
+            type: 'number',
+            write: true,
+            read: true,
+            min: -12,
+            max: 12,
+            unit: 'dB'
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelUp', {
-            type: 'state',
-            common: {
-                name: 'Subwoofer Two Level Up',
-                role: 'button',
-                type: 'boolean',
-                write: true,
-                read: false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelUp', {
+        type: 'state',
+        common: {
+            name: 'Subwoofer Two Level Up',
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelDown', {
-            type: 'state',
-            common: {
-                name: 'Subwoofer Two Level Down',
-                role: 'button',
-                type: 'boolean',
-                write: true,
-                read: false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelDown', {
+        type: 'state',
+        common: {
+            name: 'Subwoofer Two Level Down',
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    }));
 
-        Promise.all(promises).then(() => {
-            if (!subTwo) adapter.log.debug('[INFO] <== Created subwoofer two states');
-            subTwo = true;
-            resolve();
-        });
-    });
+    try {
+        await Promise.all(promises);
+        if (!subTwo) adapter.log.debug('[INFO] <== Created subwoofer two states');
+        subTwo = true;
+    } catch (e) {
+        adapter.log.error(`Could not create subwoofer two states: ${e}`);
+    }
 } // endCreateSubTwo
 
-function createLfcAudyseey() {
-    return new Promise(resolve => {
-        const promises = [];
+async function createLfcAudyseey() {
+    const promises = [];
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.audysseyLfc', {
-            type: 'state',
-            common: {
-                name: 'Audyssey Low Frequency Containment',
-                role: 'switch',
-                type: 'boolean',
-                write: true,
-                read: true
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.audysseyLfc', {
+        type: 'state',
+        common: {
+            name: 'Audyssey Low Frequency Containment',
+            role: 'switch',
+            type: 'boolean',
+            write: true,
+            read: true
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmount', {
-            type: 'state',
-            common: {
-                name: 'Audyssey Low Frequency Containment Amount',
-                role: 'level',
-                type: 'number',
-                write: true,
-                read: true,
-                min: 1,
-                max: 7
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmount', {
+        type: 'state',
+        common: {
+            name: 'Audyssey Low Frequency Containment Amount',
+            role: 'level',
+            type: 'number',
+            write: true,
+            read: true,
+            min: 1,
+            max: 7
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountUp', {
-            type: 'state',
-            common: {
-                name: 'Containment Amount Up',
-                role: 'button',
-                type: 'boolean',
-                write: true,
-                read: false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountUp', {
+        type: 'state',
+        common: {
+            name: 'Containment Amount Up',
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    }));
 
-        promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountDown', {
-            type: 'state',
-            common: {
-                name: 'Containment Amount Down',
-                role: 'button',
-                type: 'boolean',
-                write: true,
-                read: false
-            },
-            native: {}
-        }));
+    promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountDown', {
+        type: 'state',
+        common: {
+            name: 'Containment Amount Down',
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    }));
 
-        Promise.all(promises).then(() => {
-            if (!audysseyLfc) adapter.log.debug('[INFO] <== Created Audyssey LFC states');
-            audysseyLfc = true;
-            resolve();
-        });
-    });
+    try {
+        Promise.all(promises);
+        if (!audysseyLfc) adapter.log.debug('[INFO] <== Created Audyssey LFC states');
+        audysseyLfc = true;
+    } catch (e) {
+        adapter.log.error(`Could not create Audyssey LFC states: ${e}`);
+    }
 } // endCreateLfcAudyssey
 
-function createPictureMode() {
-    return new Promise(resolve => {
-        adapter.setObjectNotExistsAsync('settings.pictureMode', {
-            type: 'state',
-            common: {
-                name: 'Picture Mode Direct Change',
-                role: 'media.pictureMode',
-                type: 'string',
-                write: true,
-                read: false,
-                states: {
-                    'OFF': 'Off',
-                    'STD': 'Standard',
-                    'MOV': 'Movie',
-                    'VVD': 'Vivid',
-                    'STM': 'Stream',
-                    'CTM': 'Custom',
-                    'DAY': 'ISF Day',
-                    'NGT': 'ISF Night'
-                }
-            },
-            native: {}
-        }).then(() => {
-            pictureModeAbility = true;
-            resolve();
-        });
+async function createPictureMode() {
+    await adapter.setObjectNotExistsAsync('settings.pictureMode', {
+        type: 'state',
+        common: {
+            name: 'Picture Mode Direct Change',
+            role: 'media.pictureMode',
+            type: 'string',
+            write: true,
+            read: false,
+            states: {
+                'OFF': 'Off',
+                'STD': 'Standard',
+                'MOV': 'Movie',
+                'VVD': 'Vivid',
+                'STM': 'Stream',
+                'CTM': 'Custom',
+                'DAY': 'ISF Day',
+                'NGT': 'ISF Night'
+            }
+        },
+        native: {}
     });
+    pictureModeAbility = true;
 } // endCreatePictureMode
 
-function createStandardStates(type) {
-    return new Promise((resolve, reject) => {
-        const promises = [];
-        if (type === 'DE') {
-            for (const obj of helper.commonCommands) {
-                const id = obj._id;
-                delete obj._id;
-                promises.push(adapter.setObjectNotExistsAsync(id, obj));
-            } // endFor
-            Promise.all(promises).then(() => {
-                receiverType = 'DE';
-                adapter.log.debug('[INFO] DE states created');
-                resolve();
-            });
-        } else if (type === 'US') {
-            for (const obj of helper.usCommands) {
-                const id = obj._id;
-                delete obj._id;
-                promises.push(adapter.setObjectNotExistsAsync(id, obj));
-            } // endFor
+async function createStandardStates(type) {
+    const promises = [];
+    if (type === 'DE') {
+        for (const obj of helper.commonCommands) {
+            const id = obj._id;
+            delete obj._id;
+            promises.push(adapter.setObjectNotExistsAsync(id, obj));
+        } // endFor
+        try {
+            await Promise.all(promises);
+            receiverType = 'DE';
+            adapter.log.debug('[INFO] DE states created');
+        } catch (e) {
+            adapter.log.error(`Could not create DE states: ${e}`);
+        }
+    } else if (type === 'US') {
+        for (const obj of helper.usCommands) {
+            const id = obj._id;
+            delete obj._id;
+            promises.push(adapter.setObjectNotExistsAsync(id, obj));
+        } // endFor
 
-            for (let i = 1; i <= 6; i++) { // iterate over zones
-                const zoneNumber = i * 2;
-                promises.push(adapter.setObjectNotExistsAsync(`zone${zoneNumber}`, {
-                    type: 'channel',
-                    common: {
-                        name: 'Settings and device commands'
-                    },
-                    native: {}
+        for (let i = 1; i <= 6; i++) { // iterate over zones
+            const zoneNumber = i * 2;
+            promises.push(adapter.setObjectNotExistsAsync(`zone${zoneNumber}`, {
+                type: 'channel',
+                common: {
+                    name: 'Settings and device commands'
+                },
+                native: {}
+            }));
+
+            for (const obj of helper.usCommandsZone) {
+                const id = `zone${zoneNumber}.${obj._id}`;
+                promises.push(adapter.setObjectNotExistsAsync(id, {
+                    type: obj.type,
+                    common: obj.common,
+                    native: obj.native
                 }));
-
-                for (const obj of helper.usCommandsZone) {
-                    const id = `zone${zoneNumber}.${obj._id}`;
-                    promises.push(adapter.setObjectNotExistsAsync(id, {
-                        type: obj.type,
-                        common: obj.common,
-                        native: obj.native
-                    }));
-                } // endFor
             } // endFor
-            Promise.all(promises).then(() => {
-                receiverType = 'US';
-                adapter.log.debug('[INFO] US states created');
-                resolve();
-            });
-        } else reject(new Error('Unknown receiver type'));
-    });
+        } // endFor
+        try {
+            await Promise.all(promises);
+            receiverType = 'US';
+            adapter.log.debug('[INFO] US states created');
+        } catch (e) {
+            adapter.log.error(`Could not create US states: ${e}`);
+        }
+    } else {
+        return Promise.reject(new Error('Unknown receiver type'));
+    }
 } // endCreateStandardStates
 
 if (module && module.parent) {
