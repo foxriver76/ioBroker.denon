@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.5",
+        "version": "1.7.6",
         "news": {
+            "1.7.6": {
+                "en": "fixed timing issue which could lead to state creation procedure triggered more than once",
+                "de": "Problem mit dem Timing behoben, das dazu führen konnte, dass der Statuserstellungsvorgang mehr als einmal ausgelöst wurde",
+                "ru": "исправлена ошибка синхронизации, которая могла приводить к тому, что процедура создания состояния запускалась более одного раза",
+                "pt": "problema de tempo fixo que poderia levar ao procedimento de criação de estado acionado mais de uma vez",
+                "nl": "Probleem met timing opgelost dat ertoe kon leiden dat de procedure voor het aanmaken van staten meer dan eens werd geactiveerd",
+                "fr": "Correction d'un problème de synchronisation pouvant entraîner le déclenchement de la procédure de création d'état plus d'une fois",
+                "it": "risolto problema di temporizzazione che poteva portare alla procedura di creazione dello stato innescata più di una volta",
+                "es": "Se corrigió el problema de tiempo que podría conducir al procedimiento de creación de estado activado más de una vez",
+                "pl": "naprawiono problem z synchronizacją, który mógł prowadzić do procedury tworzenia stanu uruchamianej więcej niż raz",
+                "zh-cn": "修复了可能导致状态创建过程触发多次的定时问题"
+            },
             "1.7.5": {
                 "en": "better error handling",
                 "de": "bessere Fehlerbehandlung",

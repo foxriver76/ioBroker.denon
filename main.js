@@ -936,12 +936,14 @@ async function handleResponse(data) {
     if (!receiverType) {
         if (data.startsWith('SV') || /^MV\d+/g.test(data)) {
             if (/^SV[\d]+/g.test(data)) {
+                receiverType = 'DE';
                 return createStandardStates('US').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates(); // Update states when connected
                     handleResponse(data);
                 });
             } else {
+                receiverType = 'US';
                 return createStandardStates('DE').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates();
@@ -950,6 +952,7 @@ async function handleResponse(data) {
             } // endElse
         } else if (data.startsWith('BDSTATUS')) {
             // DENON Ceol Piccolo protocol detected , but we handle it as DE
+            receiverType = 'DE';
             return createStandardStates('DE').then(() => {
                 adapter.log.debug('[UPDATE] Updating states');
                 updateStates();
@@ -1946,7 +1949,6 @@ async function createStandardStates(type) {
         } // endFor
         try {
             await Promise.all(promises);
-            receiverType = 'DE';
             adapter.log.debug('[INFO] DE states created');
         } catch (e) {
             adapter.log.error(`Could not create DE states: ${e}`);
@@ -1979,7 +1981,6 @@ async function createStandardStates(type) {
         } // endFor
         try {
             await Promise.all(promises);
-            receiverType = 'US';
             adapter.log.debug('[INFO] US states created');
         } catch (e) {
             adapter.log.error(`Could not create US states: ${e}`);
