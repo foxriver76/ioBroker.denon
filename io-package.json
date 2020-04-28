@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.6",
+        "version": "1.7.7",
         "news": {
-            "1.7.6": {
+            "1.7.7": {
                 "en": "fixed timing issue which could lead to state creation procedure triggered more than once",
                 "de": "Problem mit dem Timing behoben, das dazu führen konnte, dass der Statuserstellungsvorgang mehr als einmal ausgelöst wurde",
                 "ru": "исправлена ошибка синхронизации, которая могла приводить к тому, что процедура создания состояния запускалась более одного раза",

@@ -936,14 +936,14 @@ async function handleResponse(data) {
     if (!receiverType) {
         if (data.startsWith('SV') || /^MV\d+/g.test(data)) {
             if (/^SV[\d]+/g.test(data)) {
-                receiverType = 'DE';
+                receiverType = 'US';
                 return createStandardStates('US').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates(); // Update states when connected
                     handleResponse(data);
                 });
             } else {
-                receiverType = 'US';
+                receiverType = 'DE';
                 return createStandardStates('DE').then(() => {
                     adapter.log.debug('[UPDATE] Updating states');
                     updateStates();
