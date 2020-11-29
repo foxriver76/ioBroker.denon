@@ -90,7 +90,7 @@ function startAdapter(options) {
             pollInterval = adapter.config.pollInterval || 7000;
             requestInterval = adapter.config.requestInterval || 100;
 
-            adapter.getForeignObjectAsync(adapter.namespace).then((obj) => { // create device namespace
+            adapter.getForeignObjectAsync(adapter.namespace).then(obj => { // create device namespace
                 if (!obj) {
                     adapter.setForeignObject(adapter.namespace, {
                         type: 'device',
@@ -103,12 +103,16 @@ function startAdapter(options) {
 
             main();
 
-        } else adapter.log.warn('No IP-address set');
+        } else {
+            adapter.log.warn('No IP-address set');
+        }
     });
 
     // Handle state changes
     adapter.on('stateChange', (id, state) => {
-        if (!id || !state || state.ack) return; // Ignore acknowledged state changes or error states
+        if (!id || !state || state.ack) {
+            return;
+        } // Ignore acknowledged state changes or error states
 
         id = id.substring(adapter.namespace.length + 1); // remove instance name and id
         state = state.val; // only get state value
@@ -122,7 +126,9 @@ function startAdapter(options) {
 
         adapter.log.debug(`[COMMAND] State Change - ID: ${id}; State: ${state}`);
 
-        if (receiverType === 'US') return handleUsStateChange(id, state);
+        if (receiverType === 'US') {
+            return handleUsStateChange(id, state);
+        }
 
         let leadingZero;
 
@@ -130,25 +136,39 @@ function startAdapter(options) {
             case 'zoneMain.powerZone':
                 if (state === true) {
                     sendRequest('ZMON');
-                } else sendRequest('ZMOFF');
+                } else {
+                    sendRequest('ZMOFF');
+                }
                 break;
             case 'zoneMain.volume':
-                if (state < 0) state = 0;
-                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 0) {
+                    state = 0;
+                }
+                if ((state % 0.5) !== 0) {
+                    state = Math.round(state * 2) / 2;
+                }
                 if (state < 10) {
                     leadingZero = '0';
-                } else leadingZero = '';
+                } else {
+                    leadingZero = '';
+                }
                 state = state.toString().replace('.', ''); // remove dot
                 sendRequest(`MV${leadingZero}${state}`);
                 adapter.log.debug(`[INFO] <== Changed mainVolume to ${state}`);
                 break;
             case 'zoneMain.volumeDB':
                 state += 80; // convert to Vol
-                if (state < 0) state = 0;
-                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 0) {
+                    state = 0;
+                }
+                if ((state % 0.5) !== 0) {
+                    state = Math.round(state * 2) / 2;
+                }
                 if (state < 10) {
                     leadingZero = '0';
-                } else leadingZero = '';
+                } else {
+                    leadingZero = '';
+                }
                 state = state.toString().replace('.', ''); // remove dot
                 sendRequest(`MV${leadingZero}${state}`);
                 break;
@@ -192,7 +212,7 @@ function startAdapter(options) {
                 sendRequest('NS9D');
                 break;
             case 'zoneMain.selectInput':
-                adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
+                adapter.getObjectAsync('zoneMain.selectInput').then(obj => {
                     sendRequest(`SI${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 });
                 break;
@@ -246,6 +266,18 @@ function startAdapter(options) {
             case 'zoneMain.channelVolumeFrontDolbyRight':
                 sendRequest(`CVFDR ${helper.dbToVol(state)}`);
                 break;
+            case 'zoneMain.channelVolumeFrontHeightLeft':
+                sendRequest(`CVFHL ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeFrontHeightRight':
+                sendRequest(`CVFHR ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeSurroundHeightRight':
+                sendRequest(`CVSHR ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeSurroundHeightLeft':
+                sendRequest(`CVSHL ${helper.dbToVol(state)}`);
+                break;
             case 'settings.powerSystem':
                 if (state === true) {
                     sendRequest('PWON');
@@ -256,7 +288,9 @@ function startAdapter(options) {
             case 'settings.dynamicEq':
                 if (state) {
                     sendRequest('PSDYNEQ ON');
-                } else sendRequest('PSDYNEQ OFF');
+                } else {
+                    sendRequest('PSDYNEQ OFF');
+                }
                 break;
             case 'settings.subwooferLevel':
                 state = helper.dbToVol(state);
@@ -271,7 +305,9 @@ function startAdapter(options) {
             case 'settings.subwooferLevelState':
                 if (state) {
                     sendRequest('PSSWL ON');
-                } else sendRequest('PSSWL OFF');
+                } else {
+                    sendRequest('PSSWL OFF');
+                }
                 break;
             case 'settings.subwooferTwoLevel':
                 state = helper.dbToVol(state);
@@ -286,7 +322,9 @@ function startAdapter(options) {
             case 'settings.audysseyLfc':
                 if (state) {
                     sendRequest('PSLFC ON');
-                } else sendRequest('PSLFC OFF');
+                } else {
+                    sendRequest('PSLFC OFF');
+                }
                 break;
             case 'settings.containmentAmountDown':
                 sendRequest('PSCNTAMT DOWN');
@@ -326,14 +364,18 @@ function startAdapter(options) {
             case 'settings.expertCommand': { // Sending custom commands
                 sendRequest(state);
                 adapter.getStateAsync('info.connection').then(_state => {
-                    if (_state.val === true) adapter.setState('settings.expertCommand', state, true);
+                    if (_state.val === true) {
+                        adapter.setState('settings.expertCommand', state, true);
+                    }
                 });
                 break;
             }
             case 'settings.toneControl':
                 if (state) {
                     sendRequest('PSTONE CTRL ON');
-                } else sendRequest('PSTONE CTRL OFF');
+                } else {
+                    sendRequest('PSTONE CTRL OFF');
+                }
                 break;
             case 'settings.cursorUp':
                 sendRequest('MNCUP');
@@ -362,19 +404,24 @@ function startAdapter(options) {
             case 'settings.setupMenu':
                 if (state) {
                     sendRequest('MNMEN ON');
-                } else sendRequest('MNMEN OFF');
+                } else {
+                    sendRequest('MNMEN OFF');
+                }
                 break;
             case 'settings.outputMonitor':
-                adapter.getObjectAsync('settings.outputMonitor').then((obj) => {
+                adapter.getObjectAsync('settings.outputMonitor').then(obj => {
                     sendRequest(`VSMONI${helper.decodeState(obj.common.states, state)}`);
                 });
                 break;
             case 'settings.centerSpread':
-                if (state) sendRequest('PSCES ON');
-                else sendRequest('PSCES OFF');
+                if (state) {
+                    sendRequest('PSCES ON');
+                } else {
+                    sendRequest('PSCES OFF');
+                }
                 break;
             case 'settings.videoProcessingMode':
-                adapter.getObjectAsync('settings.videoProcessingMode').then((obj) => {
+                adapter.getObjectAsync('settings.videoProcessingMode').then(obj => {
                     sendRequest(`VSVPM${helper.decodeState(obj.common.states, state)}`);
                 });
                 break;
@@ -383,17 +430,21 @@ function startAdapter(options) {
                 break;
             case 'settings.loadPreset': {
                 let loadPresetState;
-                if (parseInt(state) < 10)
+                if (parseInt(state) < 10) {
                     loadPresetState = `0${state}`;
-                else loadPresetState = state;
+                } else {
+                    loadPresetState = state;
+                }
                 sendRequest(`NSB${loadPresetState}`);
                 break;
             }
             case 'settings.savePreset': {
                 let savePresetState;
-                if (parseInt(state) < 10)
+                if (parseInt(state) < 10) {
                     savePresetState = `0${state}`;
-                else savePresetState = state;
+                } else {
+                    savePresetState = state;
+                }
                 sendRequest(`NSC${savePresetState}`).then(() => sendRequest('NSH'));
                 break;
             }
@@ -434,21 +485,33 @@ function startAdapter(options) {
                 sendRequest(`Z${zoneNumber}DOWN`);
                 break;
             case 'zone.volume':
-                if (state < 0) state = 0;
-                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 0) {
+                    state = 0;
+                }
+                if ((state % 0.5) !== 0) {
+                    state = Math.round(state * 2) / 2;
+                }
                 if (state < 10) {
                     leadingZero = '0';
-                } else leadingZero = '';
+                } else {
+                    leadingZero = '';
+                }
                 state = state.toString().replace('.', ''); // remove dot
                 sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
                 break;
             case 'zone.volumeDB':
                 state += 80; // Convert to Vol
-                if (state < 0) state = 0;
-                if ((state % 0.5) !== 0) state = Math.round(state * 2) / 2;
+                if (state < 0) {
+                    state = 0;
+                }
+                if ((state % 0.5) !== 0) {
+                    state = Math.round(state * 2) / 2;
+                }
                 if (state < 10) {
                     leadingZero = '0';
-                } else leadingZero = '';
+                } else {
+                    leadingZero = '';
+                }
                 state = state.toString().replace('.', ''); // remove dot
                 sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
                 break;
@@ -497,7 +560,6 @@ function startAdapter(options) {
     return adapter;
 } // endStartAdapter
 
-
 function main() {
     adapter.subscribeStates('*');
 
@@ -518,18 +580,30 @@ client.on('timeout', () => {
 // Connection handling
 client.on('error', error => {
     verboseConnection = error.code !== previousError;
-    if (connectingVar) return;
+    if (connectingVar) {
+        return;
+    }
     previousError = error.code;
     if (verboseConnection) {
-        if (error.code === 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
-        else if (error.code === 'EHOSTUNREACH') adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
-        else if (error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
-        else adapter.log.warn(`Connection closed: ${error}`);
+        if (error.code === 'ECONNREFUSED') {
+            adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
+        } else if (error.code === 'EHOSTUNREACH') {
+            adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
+        } else if (error.code === 'EALREADY' || error.code === 'EISCONN') {
+            return adapter.log.warn('Adapter is already connecting/connected');
+        } else {
+            adapter.log.warn(`Connection closed: ${error}`);
+        }
     } else {
-        if (error.code === 'ECONNREFUSED') adapter.log.debug('Connection refused, make sure that there is no other Telnet connection');
-        else if (error.code === 'EHOSTUNREACH') adapter.log.debug('AVR unreachable, check the Network Config of your AVR');
-        else if (error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.debug('Adapter is already connecting/connected');
-        else adapter.log.warn(`Connection closed: ${error}`);
+        if (error.code === 'ECONNREFUSED') {
+            adapter.log.debug('Connection refused, make sure that there is no other Telnet connection');
+        } else if (error.code === 'EHOSTUNREACH') {
+            adapter.log.debug('AVR unreachable, check the Network Config of your AVR');
+        } else if (error.code === 'EALREADY' || error.code === 'EISCONN') {
+            return adapter.log.debug('Adapter is already connecting/connected');
+        } else {
+            adapter.log.warn(`Connection closed: ${error}`);
+        }
     }
 
     pollingVar = null;
@@ -585,9 +659,11 @@ client.on('data', data => {
 function connect() {
     client.setEncoding('utf8');
     client.setTimeout(35000);
-    if (verboseConnection)
+    if (verboseConnection) {
         adapter.log.info(`[CONNECT] Trying to connect to ${host}:23`);
-    else adapter.log.debug(`[CONNECT] Trying to connect to ${host}:23`);
+    } else {
+        adapter.log.debug(`[CONNECT] Trying to connect to ${host}:23`);
+    }
     connectingVar = null;
     client.connect({port: 23, host: host});
 } // endConnect
@@ -648,7 +724,9 @@ function updateStates() {
     let i = 0;
     const intervalVar = setInterval(() => {
         sendRequest(updateCommands[i]);
-        if (++i === updateCommands.length) clearInterval(intervalVar);
+        if (++i === updateCommands.length) {
+            clearInterval(intervalVar);
+        }
     }, requestInterval);
 } // endUpdateStates
 
@@ -667,7 +745,9 @@ function pollStates() { // Polls states
     const intervalVar = setInterval(() => {
         sendRequest(pollCommands[i]);
         i++;
-        if (i === pollCommands.length) clearInterval(intervalVar);
+        if (i === pollCommands.length) {
+            clearInterval(intervalVar);
+        }
     }, requestInterval);
 } // endPollStates
 
@@ -684,7 +764,7 @@ function handleUsResponse(data) {
     adapter.log.debug(`[INFO] US command to handle is ${data}`);
 
     if (data.startsWith('SD00')) { // Handle display brightness
-        adapter.getObjectAsync('display.brightness').then((obj) => {
+        adapter.getObjectAsync('display.brightness').then(obj => {
             const bright = data.substring(4);
             for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                 if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
@@ -696,10 +776,15 @@ function handleUsResponse(data) {
     } else if (!data.startsWith('ST00') && /ST\d\d.+/g.test(data)) {
         const zoneNumber = parseInt(data.slice(2, 4));
         const command = data.substring(4);
-        if (command === 'CONT') adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Constant', true);
-        else if (command === 'TRIG') adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Trigger in', true);
-        else if (command === 'ASIG') adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Audio signal', true);
-        else if (command === 'OFF') adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Off', true);
+        if (command === 'CONT') {
+            adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Constant', true);
+        } else if (command === 'TRIG') {
+            adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Trigger in', true);
+        } else if (command === 'ASIG') {
+            adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Audio signal', true);
+        } else if (command === 'OFF') {
+            adapter.setState(`zone${zoneNumber}.zoneTurnOnModeChange`, 'Off', true);
+        }
         return;
     } else if (/SV[0-9]+/g.test(data)) {
         const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
@@ -717,8 +802,11 @@ function handleUsResponse(data) {
     } else if (/SO\d\d.+/g.test(data)) {
         const zoneNumber = parseInt(data.slice(2, 4));
         const command = data.substring(4);
-        if (command === 'NOR') adapter.setState(`zone${zoneNumber}.operationMode`, 'NORMAL', true);
-        else if (command === 'BRI') adapter.setState(`zone${zoneNumber}.operationMode`, 'BRIDGED', true);
+        if (command === 'NOR') {
+            adapter.setState(`zone${zoneNumber}.operationMode`, 'NORMAL', true);
+        } else if (command === 'BRI') {
+            adapter.setState(`zone${zoneNumber}.operationMode`, 'BRIDGED', true);
+        }
         return;
     } else if (/SF\d\d.+/g.test(data)) {
         const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
@@ -726,8 +814,11 @@ function handleUsResponse(data) {
         adapter.getStateAsync(`zone${zoneNumber}.operationMode`).then(state => {
             if (state.val.toString() === '0' || state.val === 'NORMAL') {
                 const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'SpeakerTwo' : 'SpeakerOne';
-                if (command === 'OFF') adapter.setState(`zone${zoneNumber}.lowCutFilter${speaker}`, false, true);
-                else if (command === 'ON') adapter.setState(`zone${zoneNumber}.lowCutFilter${speaker}`, true, true);
+                if (command === 'OFF') {
+                    adapter.setState(`zone${zoneNumber}.lowCutFilter${speaker}`, false, true);
+                } else if (command === 'ON') {
+                    adapter.setState(`zone${zoneNumber}.lowCutFilter${speaker}`, true, true);
+                }
             } else {
                 if (command === 'ON') {
                     adapter.setState(`zone${zoneNumber}.lowCutFilterSpeakerOne`, true, true);
@@ -747,7 +838,7 @@ function handleUsResponse(data) {
             if (state.val === '0' || state.val === 'NORMAL') {
                 const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'Two' : 'One';
 
-                adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then((obj) => {
+                adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then(obj => {
                     for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                         if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
                             adapter.setState(`zone${zoneNumber}.selectInput${speaker}`, obj.common.states[j], true);
@@ -755,7 +846,7 @@ function handleUsResponse(data) {
                     } // endFor
                 });
             } else {
-                adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then((obj) => {
+                adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then(obj => {
                     for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                         if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
                             adapter.setState(`zone${zoneNumber}.selectInputOne`, obj.common.states[j], true);
@@ -769,14 +860,20 @@ function handleUsResponse(data) {
     } else if (/TI\d\d.+/g.test(data)) {
         const zoneNumber = parseInt(data.slice(2, 4));
         const command = data.substring(4);
-        if (command === 'YES') adapter.setState(`zone${zoneNumber}.triggerInput`, true, true);
-        else if (command === 'NO') adapter.setState(`zone${zoneNumber}.triggerInput`, false, true);
+        if (command === 'YES') {
+            adapter.setState(`zone${zoneNumber}.triggerInput`, true, true);
+        } else if (command === 'NO') {
+            adapter.setState(`zone${zoneNumber}.triggerInput`, false, true);
+        }
         return;
     } else if (/AI\d\d.+/g.test(data)) {
         const zoneNumber = parseInt(data.slice(2, 4));
         const command = data.substring(4);
-        if (command === 'YES') adapter.setState(`zone${zoneNumber}.audioSignalInput`, true, true);
-        else if (command === 'NO') adapter.setState(`zone${zoneNumber}.audioSignalInput`, false, true);
+        if (command === 'YES') {
+            adapter.setState(`zone${zoneNumber}.audioSignalInput`, true, true);
+        } else if (command === 'NO') {
+            adapter.setState(`zone${zoneNumber}.audioSignalInput`, false, true);
+        }
         return;
     } // endElseIf
 
@@ -832,49 +929,70 @@ function handleUsStateChange(id, stateVal) {
             }
             break;
         case 'display.brightness':
-            adapter.getObjectAsync('display.brightness').then((obj) => {
+            adapter.getObjectAsync('display.brightness').then(obj => {
                 sendRequest(`SD00${helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3)}`);
             });
             break;
         case 'settings.expertCommand':  // Sending custom commands
             sendRequest(stateVal);
-            adapter.getStateAsync('info.connection').then((state) => {
-                if (state.val === true) adapter.setState('settings.expertCommand', stateVal, true);
+            adapter.getStateAsync('info.connection').then(state => {
+                if (state.val === true) {
+                    adapter.setState('settings.expertCommand', stateVal, true);
+                }
             });
             break;
         case 'settings.powerConfigurationChange':
-            if (stateVal.toUpperCase() === 'POWER BUTTON' || stateVal === '0') sendRequest('ST00PBTN');
-            else if (stateVal.toUpperCase() === 'MASTER TRIGGER' || stateVal === '1') sendRequest('ST00TRIG');
-            else if (stateVal.toUpperCase() === 'ON LINE' || stateVal === '2') sendRequest('ST00ONLI');
+            if (stateVal.toUpperCase() === 'POWER BUTTON' || stateVal === '0') {
+                sendRequest('ST00PBTN');
+            } else if (stateVal.toUpperCase() === 'MASTER TRIGGER' || stateVal === '1') {
+                sendRequest('ST00TRIG');
+            } else if (stateVal.toUpperCase() === 'ON LINE' || stateVal === '2') {
+                sendRequest('ST00ONLI');
+            }
             break;
         case 'settings.masterTriggerInput':
-            if (stateVal) sendRequest('TI00YES');
-            else sendRequest('TI00NO');
+            if (stateVal) {
+                sendRequest('TI00YES');
+            } else {
+                sendRequest('TI00NO');
+            }
             break;
         case 'audioSignalInput':
-            if (stateVal) sendRequest(`AI${zoneNumber}YES`);
-            else sendRequest(`AI${zoneNumber}NO`);
+            if (stateVal) {
+                sendRequest(`AI${zoneNumber}YES`);
+            } else {
+                sendRequest(`AI${zoneNumber}NO`);
+            }
             break;
         case 'lowCutFilterSpeakerOne':
-            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then((state) => {
+            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(state => {
                 if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
                 } // endIf
-                if (stateVal) sendRequest(`SF${zoneNumber}ON`);
-                else sendRequest(`SF${zoneNumber}OFF`);
+                if (stateVal) {
+                    sendRequest(`SF${zoneNumber}ON`);
+                } else {
+                    sendRequest(`SF${zoneNumber}OFF`);
+                }
             });
             break;
         case 'lowCutFilterSpeakerTwo':
-            if (stateVal) sendRequest(`SF${zoneNumber}ON`);
-            else sendRequest(`SF${zoneNumber}OFF`);
+            if (stateVal) {
+                sendRequest(`SF${zoneNumber}ON`);
+            } else {
+                sendRequest(`SF${zoneNumber}OFF`);
+            }
             break;
         case 'operationMode':
-            if (stateVal === 0 || stateVal === 'NORMAL') sendRequest(`SO${zoneNumber}NOR`);
-            else sendRequest(`SO${zoneNumber}BRI`);
+            if (stateVal === 0 || stateVal === 'NORMAL') {
+                sendRequest(`SO${zoneNumber}NOR`);
+            } else {
+                sendRequest(`SO${zoneNumber}BRI`);
+            }
             break;
         case 'selectInputOne':
-            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then((state) => {
+            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(state => {
                 if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
@@ -886,17 +1004,23 @@ function handleUsStateChange(id, stateVal) {
             sendRequest(`SI${zoneNumber}${stateVal.replace(' ', '')}`);
             break;
         case 'speakerOneVolume':
-            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then((state) => {
+            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(state => {
                 let leadingZero;
                 if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
                 } // endIf
-                if (stateVal < 0) stateVal = 0;
-                if ((stateVal % 0.5) !== 0) stateVal = Math.round(stateVal * 2) / 2;
+                if (stateVal < 0) {
+                    stateVal = 0;
+                }
+                if ((stateVal % 0.5) !== 0) {
+                    stateVal = Math.round(stateVal * 2) / 2;
+                }
                 if (stateVal < 10) {
                     leadingZero = '0';
-                } else leadingZero = '';
+                } else {
+                    leadingZero = '';
+                }
                 stateVal = stateVal.toString().replace('.', ''); // remove dot
                 sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
                 adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
@@ -904,25 +1028,39 @@ function handleUsStateChange(id, stateVal) {
             break;
         case 'speakerTwoVolume': {
             let leadingZero;
-            if (stateVal < 0) stateVal = 0;
-            if ((stateVal % 0.5) !== 0) stateVal = Math.round(stateVal * 2) / 2;
+            if (stateVal < 0) {
+                stateVal = 0;
+            }
+            if ((stateVal % 0.5) !== 0) {
+                stateVal = Math.round(stateVal * 2) / 2;
+            }
             if (stateVal < 10) {
                 leadingZero = '0';
-            } else leadingZero = '';
+            } else {
+                leadingZero = '';
+            }
             stateVal = stateVal.toString().replace('.', ''); // remove dot
             sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
             adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
             break;
         }
         case 'triggerInput':
-            if (stateVal) sendRequest(`TI${zoneNumber}YES`);
-            else sendRequest(`TI${zoneNumber}NO`);
+            if (stateVal) {
+                sendRequest(`TI${zoneNumber}YES`);
+            } else {
+                sendRequest(`TI${zoneNumber}NO`);
+            }
             break;
         case 'zoneTurnOnModeChange':
-            if (stateVal.toString() === '0' || stateVal.toUpperCase() === 'CONSTANT') sendRequest(`ST${zoneNumber}CONT`);
-            else if (stateVal.toString() === '1' || stateVal.toUpperCase() === 'TRIGGER IN') sendRequest(`ST${zoneNumber}TRIG`);
-            else if (stateVal.toString() === '2' || stateVal.toUpperCase() === 'AUDIO SIGNAL') sendRequest(`ST${zoneNumber}ASIG`);
-            else if (stateVal.toString() === '3' || stateVal.toUpperCase() === 'OFF') sendRequest(`ST${zoneNumber}OFF`);
+            if (stateVal.toString() === '0' || stateVal.toUpperCase() === 'CONSTANT') {
+                sendRequest(`ST${zoneNumber}CONT`);
+            } else if (stateVal.toString() === '1' || stateVal.toUpperCase() === 'TRIGGER IN') {
+                sendRequest(`ST${zoneNumber}TRIG`);
+            } else if (stateVal.toString() === '2' || stateVal.toUpperCase() === 'AUDIO SIGNAL') {
+                sendRequest(`ST${zoneNumber}ASIG`);
+            } else if (stateVal.toString() === '3' || stateVal.toUpperCase() === 'OFF') {
+                sendRequest(`ST${zoneNumber}OFF`);
+            }
             break;
         default:
             adapter.log.error(`[COMMAND] ${id} is not a valid US state`);
@@ -970,15 +1108,21 @@ async function handleResponse(data) {
                 updateStates();
                 handleResponse(data);
             });
-        } else return; // return if remote command received before response to SV (receiverCheck)
-    } else if (receiverType === 'US') return handleUsResponse(data);
+        } else {
+            return;
+        } // return if remote command received before response to SV (receiverCheck)
+    } else if (receiverType === 'US') {
+        return handleUsResponse(data);
+    }
 
     // get command out of String
     let command;
 
     if (/^Z\d.*/g.test(data)) { // Transformation for Zone2+ commands
         const zoneNumber = parseInt(data.slice(1, 2));
-        if (!zonesCreated[zoneNumber]) createZone(zoneNumber); // Create Zone2+ states if not done yet
+        if (!zonesCreated[zoneNumber]) {
+            createZone(zoneNumber);
+        } // Create Zone2+ states if not done yet
         command = data.replace(/\s+|\d+/g, '');
 
         if (command === 'Z') { // If everything is removed except Z --> Volume
@@ -993,8 +1137,10 @@ async function handleResponse(data) {
 
         if (/^Z\dQUICK.*/g.test(data) || /^Z\dSMART.*/g.test(data)) {
             const quickNr = parseInt(data.slice(-1));
-            adapter.getStateAsync(`zone${zoneNumber}.quickSelect`).then((state) => {
-                if (state.val === quickNr && state.ack) return;
+            adapter.getStateAsync(`zone${zoneNumber}.quickSelect`).then(state => {
+                if (state.val === quickNr && state.ack) {
+                    return;
+                }
                 adapter.setState(`zone${zoneNumber}.quickSelect`, quickNr, true);
             }).catch(() => {
                 adapter.setState(`zone${zoneNumber}.quickSelect`, quickNr, true);
@@ -1016,7 +1162,7 @@ async function handleResponse(data) {
     } // endElse
 
     if (command.startsWith('DIM')) { // Handle display brightness
-        adapter.getObjectAsync('display.brightness').then((obj) => {
+        adapter.getObjectAsync('display.brightness').then(obj => {
             const bright = data.substring(4);
             for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                 if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
@@ -1036,8 +1182,10 @@ async function handleResponse(data) {
         return;
     } else if (command === 'MSQUICK' || command === 'MSSMART') {
         const quickNr = parseInt(data.slice(-1));
-        adapter.getStateAsync('zoneMain.quickSelect').then((state) => {
-            if (state.val === quickNr && state.ack) return;
+        adapter.getStateAsync('zoneMain.quickSelect').then(state => {
+            if (state.val === quickNr && state.ack) {
+                return;
+            }
             adapter.setState('zoneMain.quickSelect', quickNr, true);
         }).catch(() => {
             adapter.setState('zoneMain.quickSelect', quickNr, true);
@@ -1051,8 +1199,9 @@ async function handleResponse(data) {
             createDisplayAndHttp().then(() => {
                 adapter.setState(`display.displayContent${dispContNr}`, displayCont, true);
             });
-        } else
+        } else {
             adapter.setState(`display.displayContent${dispContNr}`, displayCont, true);
+        }
         return;
     } else if (command.startsWith('NSET')) {
         // Network settings info
@@ -1078,12 +1227,16 @@ async function handleResponse(data) {
             createMonitorState().then(() => {
                 if (state === 'AUTO') {
                     adapter.setState('settings.outputMonitor', 0, true);
-                } else adapter.setState('settings.outputMonitor', parseInt(state), true);
+                } else {
+                    adapter.setState('settings.outputMonitor', parseInt(state), true);
+                }
             });
         } else {
             if (state === 'AUTO') {
                 adapter.setState('settings.outputMonitor', 0, true);
-            } else adapter.setState('settings.outputMonitor', parseInt(state), true);
+            } else {
+                adapter.setState('settings.outputMonitor', parseInt(state), true);
+            }
         } // endElse
 
         return;
@@ -1118,8 +1271,11 @@ async function handleResponse(data) {
         const presetNumber = parseInt(data.slice(3, 5));
         adapter.getStateAsync('info.onlinePresets').then(state => {
             let knownPresets;
-            if (!state || !state.val) knownPresets = [];
-            else knownPresets = JSON.parse(state.val);
+            if (!state || !state.val) {
+                knownPresets = [];
+            } else {
+                knownPresets = JSON.parse(state.val);
+            }
             knownPresets[presetNumber] = {
                 id: presetNumber,
                 channel: data.substring(5).replace(/\s\s+/g, '')
@@ -1184,27 +1340,31 @@ async function handleResponse(data) {
         case 'SLP':
             data = data.slice(3, data.length);
             adapter.getStateAsync('zoneMain.sleepTimer').then(state => {
-                if (state.val !== parseInt(data) || !state.ack)
+                if (state.val !== parseInt(data) || !state.ack) {
                     adapter.setState('zoneMain.sleepTimer', parseFloat(data), true);
+                }
             }).catch(() => adapter.setState('zoneMain.sleepTimer', parseFloat(data), true));
             break;
         case 'SLPOFF':
             adapter.getStateAsync('zoneMain.sleepTimer').then(state => {
-                if (state.val !== 0 || !state.ack)
+                if (state.val !== 0 || !state.ack) {
                     adapter.setState('zoneMain.sleepTimer', 0, true);
+                }
             }).catch(() => adapter.setState('zoneMain.sleepTimer', 0, true));
             break;
         case 'ZSLP':
             data = data.slice(5, data.length);
             adapter.getStateAsync(`zone${zoneNumber}.sleepTimer`).then(state => {
-                if (state.val !== parseInt(data) || !state.ack)
+                if (state.val !== parseInt(data) || !state.ack) {
                     adapter.setState(`zone${zoneNumber}.sleepTimer`, parseFloat(data), true);
+                }
             }).catch(() => adapter.setState(`zone${zoneNumber}.sleepTimer`, parseFloat(data), true));
             break;
         case 'ZSLPOFF':
             adapter.getStateAsync(`zone${zoneNumber}.sleepTimer`).then(state => {
-                if (state.val !== 0 || !state.ack)
+                if (state.val !== 0 || !state.ack) {
                     adapter.setState(`zone${zoneNumber}.sleepTimer`, 0, true);
+                }
             }).catch(() => adapter.setState(`zone${zoneNumber}.sleepTimer`, 0, true));
             break;
         case 'PSDYNEQON':
@@ -1230,8 +1390,9 @@ async function handleResponse(data) {
                     createSubTwo().then(() => {
                         adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
                     });
-                } else
+                } else {
                     adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
+                }
             } // endElse
             break;
         }
@@ -1240,8 +1401,9 @@ async function handleResponse(data) {
                 createLfcAudyseey().then(() => {
                     adapter.setState('settings.audysseyLfc', true, true);
                 });
-            } else
+            } else {
                 adapter.setState('settings.audysseyLfc', true, true);
+            }
 
             break;
         case 'PSLFCOFF':
@@ -1249,8 +1411,9 @@ async function handleResponse(data) {
                 createLfcAudyseey().then(() => {
                     adapter.setState('settings.audysseyLfc', false, true);
                 });
-            } else
+            } else {
                 adapter.setState('settings.audysseyLfc', false, true);
+            }
 
             break;
         case 'PSCNTAMT': {
@@ -1259,8 +1422,9 @@ async function handleResponse(data) {
                 createLfcAudyseey().then(() => {
                     adapter.setState('settings.containmentAmount', parseFloat(state), true);
                 });
-            } else
+            } else {
                 adapter.setState('settings.containmentAmount', parseFloat(state), true);
+            }
 
             break;
         }
@@ -1374,6 +1538,27 @@ async function handleResponse(data) {
             adapter.setState('zoneMain.channelVolumeFrontDolbyRight', helper.volToDb(channelVolume), true);
             break;
         }
+        case 'CVSHL': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSurroundHeightLeft', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVSHR': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSurroundHeightRight', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVFHR': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeFrontHeightRight', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVFHL': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeFrontHeightLeft', helper.volToDb(channelVolume), true);
+            break;
+        }
+
         default:
             adapter.log.debug(`[INFO] <== Unhandled command ${command}`);
     } // endSwitch
@@ -1644,7 +1829,9 @@ async function createZone(zone) {
 
     try {
         await Promise.all(promises);
-        if (!zonesCreated[zone]) adapter.log.debug(`[INFO] <== Zone ${zone} detected`);
+        if (!zonesCreated[zone]) {
+            adapter.log.debug(`[INFO] <== Zone ${zone} detected`);
+        }
         zonesCreated[zone] = true;
     } catch (e) {
         adapter.log.warn(`Could not create zone ${zone}: ${e}`);
@@ -1824,7 +2011,9 @@ async function createMonitorState() {
     }));
     try {
         await Promise.all(promises);
-        if (!multiMonitor) adapter.log.debug('[INFO] <== Created monitor states');
+        if (!multiMonitor) {
+            adapter.log.debug('[INFO] <== Created monitor states');
+        }
         multiMonitor = true;
     } catch (e) {
         adapter.log.error(`Could not create monitor states: ${e}`);
@@ -1875,7 +2064,9 @@ async function createSubTwo() {
 
     try {
         await Promise.all(promises);
-        if (!subTwo) adapter.log.debug('[INFO] <== Created subwoofer two states');
+        if (!subTwo) {
+            adapter.log.debug('[INFO] <== Created subwoofer two states');
+        }
         subTwo = true;
     } catch (e) {
         adapter.log.error(`Could not create subwoofer two states: ${e}`);
@@ -1937,7 +2128,9 @@ async function createLfcAudyseey() {
 
     try {
         Promise.all(promises);
-        if (!audysseyLfc) adapter.log.debug('[INFO] <== Created Audyssey LFC states');
+        if (!audysseyLfc) {
+            adapter.log.debug('[INFO] <== Created Audyssey LFC states');
+        }
         audysseyLfc = true;
     } catch (e) {
         adapter.log.error(`Could not create Audyssey LFC states: ${e}`);

@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.8.0",
+        "version": "1.8.1",
         "news": {
-            "1.8.0": {
+            "1.8.1": {
                 "en": "channelVolume states added for atmos speakers",
                 "de": "channelVolume-Zustände für atmos-Lautsprecher hinzugefügt",
                 "ru": "ChannelVolume добавлены состояния для динамиков atmos",
