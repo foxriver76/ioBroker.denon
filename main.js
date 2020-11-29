@@ -234,6 +234,18 @@ function startAdapter(options) {
             case 'zoneMain.channelVolumeSurroundLeft':
                 sendRequest(`CVSL ${helper.dbToVol(state)}`);
                 break;
+            case 'zoneMain.channelVolumeSurroundDolbyLeft':
+                sendRequest(`CVSDL ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeSurroundDolbyRight':
+                sendRequest(`CVSDR ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeFrontDolbyLeft':
+                sendRequest(`CVFDL ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeFrontDolbyRight':
+                sendRequest(`CVFDR ${helper.dbToVol(state)}`);
+                break;
             case 'settings.powerSystem':
                 if (state === true) {
                     sendRequest('PWON');
@@ -469,10 +481,10 @@ function startAdapter(options) {
                 sendRequest(`Z${zoneNumber}PSTRE ${state}`);
                 break;
             case 'zone.channelVolumeFrontLeft':
-                sendRequest(`CVZ${zoneNumber}FL ${helper.dbToVol(state)}`);
+                sendRequest(`Z${zoneNumber}CVFL ${helper.dbToVol(state)}`);
                 break;
             case 'zone.channelVolumeFrontRight':
-                sendRequest(`CVZ${zoneNumber}FR ${helper.dbToVol(state)}`);
+                sendRequest(`Z${zoneNumber}CVFR ${helper.dbToVol(state)}`);
                 break;
             case 'settings.lfeAmount':
                 sendRequest(`PSLFE ${state < 10 ? `0${state}` : 10}`);
@@ -674,7 +686,7 @@ function handleUsResponse(data) {
     if (data.startsWith('SD00')) { // Handle display brightness
         adapter.getObjectAsync('display.brightness').then((obj) => {
             const bright = data.substring(4);
-            for (const j in obj.common.states) { // Check if command contains one of the possible brightness states
+            for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                 if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
                     adapter.setState('display.brightness', obj.common.states[j], true);
                 } // endIf
@@ -736,7 +748,7 @@ function handleUsResponse(data) {
                 const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'Two' : 'One';
 
                 adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then((obj) => {
-                    for (const j in obj.common.states) { // Check if command contains one of the possible brightness states
+                    for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                         if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
                             adapter.setState(`zone${zoneNumber}.selectInput${speaker}`, obj.common.states[j], true);
                         } // endIf
@@ -744,7 +756,7 @@ function handleUsResponse(data) {
                 });
             } else {
                 adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then((obj) => {
-                    for (const j in obj.common.states) { // Check if command contains one of the possible brightness states
+                    for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                         if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
                             adapter.setState(`zone${zoneNumber}.selectInputOne`, obj.common.states[j], true);
                             adapter.setState(`zone${zoneNumber}.selectInputTwo`, obj.common.states[j], true);
@@ -989,16 +1001,15 @@ async function handleResponse(data) {
             });
             return;
         } else if (/^Z\d.*/g.test(command)) { // Encode Input Source
-            adapter.getObjectAsync('zoneMain.selectInput').then((obj) => {
-                let zoneSi = data.substring(2);
-                zoneSi = zoneSi.replace(' ', ''); // Remove blank
-                for (const j in obj.common.states) { // Check if command contains one of the possible Select Inputs
-                    if (helper.decodeState(obj.common.states, j.toString()) === zoneSi) {
-                        adapter.setState(`zone${zoneNumber}.selectInput`, zoneSi, true);
-                        return;
-                    } // endIf
-                } // endFor
-            });
+            const obj = await adapter.getObjectAsync('zoneMain.selectInput');
+            let zoneSi = data.substring(2);
+            zoneSi = zoneSi.replace(' ', ''); // Remove blank
+            for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible Select Inputs
+                if (helper.decodeState(obj.common.states, j.toString()) === zoneSi) {
+                    adapter.setState(`zone${zoneNumber}.selectInput`, zoneSi, true);
+                    return;
+                } // endIf
+            } // endFor
         } // endIf
     } else { // Transformation for normal commands
         command = data.replace(/\s+|\d+/g, '');
@@ -1007,7 +1018,7 @@ async function handleResponse(data) {
     if (command.startsWith('DIM')) { // Handle display brightness
         adapter.getObjectAsync('display.brightness').then((obj) => {
             const bright = data.substring(4);
-            for (const j in obj.common.states) { // Check if command contains one of the possible brightness states
+            for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
                 if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
                     adapter.setState('display.brightness', obj.common.states[j], true);
                 } // endIf
@@ -1343,6 +1354,26 @@ async function handleResponse(data) {
             adapter.setState('zoneMain.channelVolumeSurroundLeft', helper.volToDb(channelVolume), true);
             break;
         }
+        case 'CVSDL': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSurroundDolbyLeft', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVSDR': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSurroundDolbyRight', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVFDL': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeFrontDolbyLeft', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVFDR': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeFrontDolbyRight', helper.volToDb(channelVolume), true);
+            break;
+        }
         default:
             adapter.log.debug(`[INFO] <== Unhandled command ${command}`);
     } // endSwitch
@@ -1618,7 +1649,6 @@ async function createZone(zone) {
     } catch (e) {
         adapter.log.warn(`Could not create zone ${zone}: ${e}`);
     }
-
 } // endCreateZone
 
 async function createDisplayAndHttp() {
@@ -1990,7 +2020,7 @@ async function createStandardStates(type) {
     }
 } // endCreateStandardStates
 
-if (module && module.parent) {
+if (module.parent) {
     module.exports = startAdapter;
 } else {
     // or start the instance directly

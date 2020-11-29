@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.7.7",
+        "version": "1.8.0",
         "news": {
+            "1.8.0": {
+                "en": "channelVolume states added for atmos speakers",
+                "de": "channelVolume-Zustände für atmos-Lautsprecher hinzugefügt",
+                "ru": "ChannelVolume добавлены состояния для динамиков atmos",
+                "pt": "estados channelVolume adicionados para alto-falantes atmosféricos",
+                "nl": "kanaalVolumestaten toegevoegd voor atmos-luidsprekers",
+                "fr": "channelVolume états ajoutés pour les enceintes atmos",
+                "it": "stati aggiunti channelVolume per i diffusori atmos",
+                "es": "ChannelVolume estados agregados para los altavoces atmosféricos",
+                "pl": "Dodano stany channelVolume dla głośników Atmos",
+                "zh-cn": "为atmos扬声器添加了channelVolume状态"
+            },
             "1.7.7": {
                 "en": "fixed timing issue which could lead to state creation procedure triggered more than once",
                 "de": "Problem mit dem Timing behoben, das dazu führen konnte, dass der Statuserstellungsvorgang mehr als einmal ausgelöst wurde",
