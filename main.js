@@ -24,6 +24,8 @@ let displayAbility = false;
 let multiMonitor = false;
 let pollingVar = null;
 let connectingVar = null;
+let intervalUpdateVar = null;
+let intervalPollVar = null;
 let subTwo = false;
 let audysseyLfc = false;
 let pictureModeAbility = false;
@@ -46,6 +48,14 @@ function startAdapter(options) {
             if (pollingVar) {
                 clearTimeout(pollingVar);
             } // endIf
+
+            if (intervalPollVar) {
+                clearInterval(intervalPollVar);
+            }
+
+            if (intervalUpdateVar) {
+                clearInterval(intervalUpdateVar);
+            }
 
             adapter.log.info('[END] Stopping Denon AVR adapter...');
             adapter.setState('info.connection', false, true);
@@ -82,7 +92,7 @@ function startAdapter(options) {
         } // endIf
     });
 
-    adapter.on('ready', () => {
+    adapter.on('ready', async () => {
         if (adapter.config.ip) {
 
             adapter.log.info('[START] Starting DENON AVR adapter');
@@ -90,16 +100,16 @@ function startAdapter(options) {
             pollInterval = adapter.config.pollInterval || 7000;
             requestInterval = adapter.config.requestInterval || 100;
 
-            adapter.getForeignObjectAsync(adapter.namespace).then(obj => { // create device namespace
-                if (!obj) {
-                    adapter.setForeignObject(adapter.namespace, {
-                        type: 'device',
-                        common: {
-                            name: 'DENON device'
-                        }
-                    });
-                } // endIf
-            });
+            const obj = await adapter.getForeignObjectAsync(adapter.namespace);
+            // create device namespace
+            if (!obj) {
+                adapter.setForeignObject(adapter.namespace, {
+                    type: 'device',
+                    common: {
+                        name: 'DENON device'
+                    }
+                });
+            } // endIf
 
             main();
 
@@ -109,7 +119,7 @@ function startAdapter(options) {
     });
 
     // Handle state changes
-    adapter.on('stateChange', (id, state) => {
+    adapter.on('stateChange', async (id, state) => {
         if (!id || !state || state.ack) {
             return;
         } // Ignore acknowledged state changes or error states
@@ -211,13 +221,14 @@ function startAdapter(options) {
             case 'zoneMain.skipPlus':
                 sendRequest('NS9D');
                 break;
-            case 'zoneMain.selectInput':
-                adapter.getObjectAsync('zoneMain.selectInput').then(obj => {
-                    sendRequest(`SI${helper.decodeState(obj.common.states, state).toUpperCase()}`);
-                });
+            case 'zoneMain.selectInput': {
+                const obj = await adapter.getObjectAsync('zoneMain.selectInput');
+                sendRequest(`SI${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
+            }
             case 'zoneMain.quickSelect':
-                sendRequest(`MSQUICK${state}`).then(() => sendRequest(`MSSMART${state}`));
+                sendRequest(`MSQUICK${state}`);
+                sendRequest(`MSSMART${state}`);
                 break;
             case 'zoneMain.equalizerBassUp':
                 sendRequest('PSBAS UP');
@@ -278,6 +289,12 @@ function startAdapter(options) {
             case 'zoneMain.channelVolumeSurroundHeightLeft':
                 sendRequest(`CVSHL ${helper.dbToVol(state)}`);
                 break;
+            case 'zoneMain.channelVolumeSubwoofer':
+                sendRequest(`CVSW ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeSubwooferTwo':
+                sendRequest(`CVSW2 ${helper.dbToVol(state)}`);
+                break;
             case 'settings.powerSystem':
                 if (state === true) {
                     sendRequest('PWON');
@@ -335,26 +352,27 @@ function startAdapter(options) {
             case 'settings.containmentAmount':
                 sendRequest(`PSCNTAMT 0${state}`);
                 break;
-            case 'settings.multEq':
-                adapter.getObjectAsync('settings.multEq').then(obj => {
-                    sendRequest(`PSMULTEQ:${helper.decodeState(obj.common.states, state).toUpperCase()}`);
-                });
+            case 'settings.multEq': {
+                const obj = await adapter.getObjectAsync('settings.multEq');
+                sendRequest(`PSMULTEQ:${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
-            case 'settings.dynamicVolume':
-                adapter.getObjectAsync('settings.dynamicVolume').then(obj => {
-                    sendRequest(`PSDYNVOL ${helper.decodeState(obj.common.states, state).toUpperCase()}`);
-                });
+            }
+            case 'settings.dynamicVolume': {
+                const obj = await adapter.getObjectAsync('settings.dynamicVolume');
+                sendRequest(`PSDYNVOL ${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
+            }
             case 'settings.referenceLevelOffset':
                 sendRequest(`PSREFLEV ${state}`);
                 break;
-            case 'settings.surroundMode':
-                adapter.getObjectAsync('settings.surroundMode').then(obj => {
-                    sendRequest(`MS${helper.decodeState(obj.common.states, state).toUpperCase()}`);
-                });
+            case 'settings.surroundMode': {
+                const obj = await adapter.getObjectAsync('settings.surroundMode');
+                sendRequest(`MS${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
+            }
             case 'settings.expertReadingPattern':
                 try {
+                    // check if its a valid RegExp
                     new RegExp(state);
                     adapter.setState('settings.expertReadingPattern', state, true);
                 } catch (e) {
@@ -363,11 +381,11 @@ function startAdapter(options) {
                 break;
             case 'settings.expertCommand': { // Sending custom commands
                 sendRequest(state);
-                adapter.getStateAsync('info.connection').then(_state => {
-                    if (_state.val === true) {
-                        adapter.setState('settings.expertCommand', state, true);
-                    }
-                });
+                const connectionState = adapter.getStateAsync('info.connection');
+                // acknowledge when connection is true, thats all we can do here
+                if (connectionState.val === true) {
+                    adapter.setState('settings.expertCommand', state, true);
+                }
                 break;
             }
             case 'settings.toneControl':
@@ -408,11 +426,11 @@ function startAdapter(options) {
                     sendRequest('MNMEN OFF');
                 }
                 break;
-            case 'settings.outputMonitor':
-                adapter.getObjectAsync('settings.outputMonitor').then(obj => {
-                    sendRequest(`VSMONI${helper.decodeState(obj.common.states, state)}`);
-                });
+            case 'settings.outputMonitor': {
+                const obj = await adapter.getObjectAsync('settings.outputMonitor');
+                sendRequest(`VSMONI${helper.decodeState(obj.common.states, state)}`);
                 break;
+            }
             case 'settings.centerSpread':
                 if (state) {
                     sendRequest('PSCES ON');
@@ -420,11 +438,11 @@ function startAdapter(options) {
                     sendRequest('PSCES OFF');
                 }
                 break;
-            case 'settings.videoProcessingMode':
-                adapter.getObjectAsync('settings.videoProcessingMode').then(obj => {
-                    sendRequest(`VSVPM${helper.decodeState(obj.common.states, state)}`);
-                });
+            case 'settings.videoProcessingMode': {
+                const obj = await adapter.getObjectAsync('settings.videoProcessingMode');
+                sendRequest(`VSVPM${helper.decodeState(obj.common.states, state)}`);
                 break;
+            }
             case 'settings.pictureMode':
                 sendRequest(`PV${state}`);
                 break;
@@ -445,14 +463,15 @@ function startAdapter(options) {
                 } else {
                     savePresetState = state;
                 }
-                sendRequest(`NSC${savePresetState}`).then(() => sendRequest('NSH'));
+                sendRequest(`NSC${savePresetState}`);
+                sendRequest('NSH');
                 break;
             }
-            case 'display.brightness':
-                adapter.getObjectAsync('display.brightness').then(obj => {
-                    sendRequest(`DIM ${helper.decodeState(obj.common.states, state).toUpperCase().slice(0, 3)}`);
-                });
+            case 'display.brightness': {
+                const obj = await adapter.getObjectAsync('display.brightness');
+                sendRequest(`DIM ${helper.decodeState(obj.common.states, state).toUpperCase().slice(0, 3)}`);
                 break;
+            }
             case 'zone.powerZone':
                 if (state === true) {
                     sendRequest(`Z${zoneNumber}ON`);
@@ -515,13 +534,14 @@ function startAdapter(options) {
                 state = state.toString().replace('.', ''); // remove dot
                 sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
                 break;
-            case 'zone.selectInput':
-                adapter.getObjectAsync(`zone${zoneNumber}.selectInput`).then(obj => {
-                    sendRequest(`Z${zoneNumber}${helper.decodeState(obj.common.states, state).toUpperCase()}`);
-                });
+            case 'zone.selectInput': {
+                const obj = await adapter.getObjectAsync(`zone${zoneNumber}.selectInput`);
+                sendRequest(`Z${zoneNumber}${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
+            }
             case 'zone.quickSelect':
-                sendRequest(`Z${zoneNumber}QUICK${state}`).then(() => sendRequest(`Z${zoneNumber}SMART${state}`));
+                sendRequest(`Z${zoneNumber}QUICK${state}`);
+                sendRequest(`Z${zoneNumber}SMART${state}`);
                 break;
             case 'zone.equalizerBassUp':
                 sendRequest(`Z${zoneNumber}PSBAS UP`);
@@ -635,7 +655,10 @@ client.on('connect', () => { // Successfully connected
     adapter.log.info(`[CONNECT] Adapter connected to DENON-AVR: ${host}:23`);
     if (!receiverType) {
         adapter.log.debug('[CONNECT] Connected --> Check receiver type');
-        sendRequest('SV?').then(() => sendRequest('SV01?')).then(() => sendRequest('BDSTATUS?')).then(() => sendRequest('MV?'));
+        sendRequest('SV?');
+        sendRequest('SV01?');
+        sendRequest('BDSTATUS?');
+        sendRequest('MV?');
     } else {
         adapter.log.debug('[CONNECT] Connected --> updating states on start');
         updateStates(); // Update states when connected
@@ -658,6 +681,7 @@ client.on('data', data => {
  */
 function connect() {
     client.setEncoding('utf8');
+    // given the connection a timeout after being idle for 35 seconds
     client.setTimeout(35000);
     if (verboseConnection) {
         adapter.log.info(`[CONNECT] Trying to connect to ${host}:23`);
@@ -720,12 +744,15 @@ const updateCommands = [
     'BDSTATUS?'
 ];
 
+/**
+ * Update all states by sending the defined updateCommands
+ */
 function updateStates() {
     let i = 0;
-    const intervalVar = setInterval(() => {
+    intervalUpdateVar = setInterval(() => {
         sendRequest(updateCommands[i]);
         if (++i === updateCommands.length) {
-            clearInterval(intervalVar);
+            clearInterval(intervalUpdateVar);
         }
     }, requestInterval);
 } // endUpdateStates
@@ -742,21 +769,18 @@ const pollCommands = [
 function pollStates() { // Polls states
     let i = 0;
     pollingVar = null;
-    const intervalVar = setInterval(() => {
+    intervalPollVar = setInterval(() => {
         sendRequest(pollCommands[i]);
         i++;
         if (i === pollCommands.length) {
-            clearInterval(intervalVar);
+            clearInterval(intervalPollVar);
         }
     }, requestInterval);
 } // endPollStates
 
 function sendRequest(req) {
-    return new Promise(resolve => {
-        client.write(`${req}\r`);
-        adapter.log.debug(`[INFO] ==> Message sent: ${req}`);
-        resolve();
-    });
+    client.write(`${req}\r`);
+    adapter.log.debug(`[INFO] ==> Message sent: ${req}`);
 } // endSendRequest
 
 function handleUsResponse(data) {
@@ -904,7 +928,7 @@ function handleUsResponse(data) {
     } // endSwitch
 } // endHandleUsResponse
 
-function handleUsStateChange(id, stateVal) {
+async function handleUsStateChange(id, stateVal) {
     let zoneNumber;
     if (id.startsWith('zone')) {
         zoneNumber = id.split('.').shift().substring(4);
@@ -1003,29 +1027,29 @@ function handleUsStateChange(id, stateVal) {
         case 'selectInputTwo':
             sendRequest(`SI${zoneNumber}${stateVal.replace(' ', '')}`);
             break;
-        case 'speakerOneVolume':
-            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(state => {
-                let leadingZero;
-                if (state.val.toString() === '0' || state.val === 'NORMAL') {
-                    zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
-                    zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
-                } // endIf
-                if (stateVal < 0) {
-                    stateVal = 0;
-                }
-                if ((stateVal % 0.5) !== 0) {
-                    stateVal = Math.round(stateVal * 2) / 2;
-                }
-                if (stateVal < 10) {
-                    leadingZero = '0';
-                } else {
-                    leadingZero = '';
-                }
-                stateVal = stateVal.toString().replace('.', ''); // remove dot
-                sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
-                adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
-            });
+        case 'speakerOneVolume': {
+            const state = await adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`);
+            let leadingZero;
+            if (state.val.toString() === '0' || state.val === 'NORMAL') {
+                zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
+                zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
+            } // endIf
+            if (stateVal < 0) {
+                stateVal = 0;
+            }
+            if ((stateVal % 0.5) !== 0) {
+                stateVal = Math.round(stateVal * 2) / 2;
+            }
+            if (stateVal < 10) {
+                leadingZero = '0';
+            } else {
+                leadingZero = '';
+            }
+            stateVal = stateVal.toString().replace('.', ''); // remove dot
+            sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
+            adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
             break;
+        }
         case 'speakerTwoVolume': {
             let leadingZero;
             if (stateVal < 0) {
@@ -1087,32 +1111,26 @@ async function handleResponse(data) {
         if (data.startsWith('SV') || /^MV\d+/g.test(data)) {
             if (/^SV[\d]+/g.test(data)) {
                 receiverType = 'US';
-                return createStandardStates('US').then(() => {
-                    adapter.log.debug('[UPDATE] Updating states');
-                    updateStates(); // Update states when connected
-                    handleResponse(data);
-                });
+                await createStandardStates('US');
+                adapter.log.debug('[UPDATE] Updating states');
+                return void updateStates(); // Update states when connected
             } else {
                 receiverType = 'DE';
-                return createStandardStates('DE').then(() => {
-                    adapter.log.debug('[UPDATE] Updating states');
-                    updateStates();
-                    handleResponse(data);
-                });
+                await createStandardStates('DE');
+                adapter.log.debug('[UPDATE] Updating states');
+                return void updateStates();
             } // endElse
         } else if (data.startsWith('BDSTATUS')) {
             // DENON Ceol Piccolo protocol detected , but we handle it as DE
             receiverType = 'DE';
-            return createStandardStates('DE').then(() => {
-                adapter.log.debug('[UPDATE] Updating states');
-                updateStates();
-                handleResponse(data);
-            });
+            await createStandardStates('DE');
+            adapter.log.debug('[UPDATE] Updating states');
+            return void updateStates();
         } else {
             return;
         } // return if remote command received before response to SV (receiverCheck)
     } else if (receiverType === 'US') {
-        return handleUsResponse(data);
+        return void await handleUsResponse(data);
     }
 
     // get command out of String
@@ -1121,7 +1139,7 @@ async function handleResponse(data) {
     if (/^Z\d.*/g.test(data)) { // Transformation for Zone2+ commands
         const zoneNumber = parseInt(data.slice(1, 2));
         if (!zonesCreated[zoneNumber]) {
-            createZone(zoneNumber);
+            await createZone(zoneNumber);
         } // Create Zone2+ states if not done yet
         command = data.replace(/\s+|\d+/g, '');
 
@@ -1162,14 +1180,13 @@ async function handleResponse(data) {
     } // endElse
 
     if (command.startsWith('DIM')) { // Handle display brightness
-        adapter.getObjectAsync('display.brightness').then(obj => {
-            const bright = data.substring(4);
-            for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
-                if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
-                    adapter.setState('display.brightness', obj.common.states[j], true);
-                } // endIf
-            } // endFor
-        });
+        const obj = await adapter.getObjectAsync('display.brightness');
+        const bright = data.substring(4);
+        for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
+            if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
+                adapter.setState('display.brightness', obj.common.states[j], true);
+            } // endIf
+        } // endFor
         return;
     } else if (command.startsWith('SI')) { // Handle select input
         let siCommand = data.substring(2); // Get only source name
@@ -1398,34 +1415,22 @@ async function handleResponse(data) {
         }
         case 'PSLFCON':
             if (!audysseyLfc) {
-                createLfcAudyseey().then(() => {
-                    adapter.setState('settings.audysseyLfc', true, true);
-                });
-            } else {
-                adapter.setState('settings.audysseyLfc', true, true);
+                await createLfcAudyssey();
             }
-
+            adapter.setState('settings.audysseyLfc', true, true);
             break;
         case 'PSLFCOFF':
             if (!audysseyLfc) {
-                createLfcAudyseey().then(() => {
-                    adapter.setState('settings.audysseyLfc', false, true);
-                });
-            } else {
-                adapter.setState('settings.audysseyLfc', false, true);
+                await createLfcAudyssey();
             }
-
+            adapter.setState('settings.audysseyLfc', false, true);
             break;
         case 'PSCNTAMT': {
             const state = data.split(' ')[1];
             if (!audysseyLfc) {
-                createLfcAudyseey().then(() => {
-                    adapter.setState('settings.containmentAmount', parseFloat(state), true);
-                });
-            } else {
-                adapter.setState('settings.containmentAmount', parseFloat(state), true);
+                await createLfcAudyssey();
             }
-
+            adapter.setState('settings.containmentAmount', parseFloat(state), true);
             break;
         }
         case 'PSREFLEV': {
@@ -1558,12 +1563,27 @@ async function handleResponse(data) {
             adapter.setState('zoneMain.channelVolumeFrontHeightLeft', helper.volToDb(channelVolume), true);
             break;
         }
-
+        case 'CVSW': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSubwoofer', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVSW2': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeSubwooferTwo', helper.volToDb(channelVolume), true);
+            break;
+        }
         default:
             adapter.log.debug(`[INFO] <== Unhandled command ${command}`);
     } // endSwitch
 } // endHandleResponse
 
+/**
+ * Create all zone specific objects for given zone
+ *
+ * @param {number} zone - zone number to be created
+ * @returns {Promise<void>}
+ */
 async function createZone(zone) {
     const promises = [];
 
@@ -2073,7 +2093,12 @@ async function createSubTwo() {
     }
 } // endCreateSubTwo
 
-async function createLfcAudyseey() {
+/**
+ * Creates th LFC Audyssey objects
+ *
+ * @returns {Promise<void>}
+ */
+async function createLfcAudyssey() {
     const promises = [];
 
     promises.push(adapter.setObjectNotExistsAsync('settings.audysseyLfc', {
@@ -2127,7 +2152,7 @@ async function createLfcAudyseey() {
     }));
 
     try {
-        Promise.all(promises);
+        await Promise.all(promises);
         if (!audysseyLfc) {
             adapter.log.debug('[INFO] <== Created Audyssey LFC states');
         }
@@ -2213,9 +2238,9 @@ async function createStandardStates(type) {
     }
 } // endCreateStandardStates
 
-if (module.parent) {
-    module.exports = startAdapter;
-} else {
-    // or start the instance directly
+if (require.main === module) {
     startAdapter();
+} else {
+    // export for compact mode
+    module.exports = startAdapter;
 }

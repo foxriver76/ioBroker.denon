@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.8.1",
+        "version": "1.9.0",
         "news": {
+            "1.9.0": {
+                "en": "added channel volume for subwoofers, we no longer write in destroyed socket on unload, internal optimizations",
+                "de": "hinzugefügtes Kanalvolumen für Subwoofer, wir schreiben nicht mehr in zerstörten Socket beim Entladen, interne Optimierungen",
+                "ru": "добавлена громкость канала для сабвуферов, мы больше не записываем в разрушенный сокет при выгрузке, внутренняя оптимизация",
+                "pt": "adicionado volume de canal para subwoofers, não gravamos mais no soquete destruído ao descarregar, otimizações internas",
+                "nl": "kanaalvolume toegevoegd voor subwoofers, we schrijven niet langer in vernietigde socket bij het uitladen, interne optimalisaties",
+                "fr": "volume de canal ajouté pour les subwoofers, nous n'écrivons plus dans la prise détruite lors du déchargement, optimisations internes",
+                "it": "aggiunto volume del canale per i subwoofer, non scriviamo più in socket distrutto allo scaricamento, ottimizzazioni interne",
+                "es": "Volumen de canal agregado para subwoofers, ya no escribimos en socket destruido al descargar, optimizaciones internas",
+                "pl": "dodano głośność kanału dla subwooferów, nie zapisujemy już w zniszczonym gnieździe przy rozładowaniu, wewnętrzne optymalizacje",
+                "zh-cn": "增加了低音炮的声道音量，我们不再在卸载时写入损坏的插槽，内部优化"
+            },
             "1.8.1": {
                 "en": "channelVolume states added for atmos speakers",
                 "de": "channelVolume-Zustände für atmos-Lautsprecher hinzugefügt",
