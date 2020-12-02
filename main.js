@@ -1213,12 +1213,9 @@ async function handleResponse(data) {
         const dispContNr = data.slice(3, 4);
 
         if (!displayAbility) {
-            createDisplayAndHttp().then(() => {
-                adapter.setState(`display.displayContent${dispContNr}`, displayCont, true);
-            });
-        } else {
-            adapter.setState(`display.displayContent${dispContNr}`, displayCont, true);
+            await createDisplayAndHttp();
         }
+        adapter.setState(`display.displayContent${dispContNr}`, displayCont, true);
         return;
     } else if (command.startsWith('NSET')) {
         // Network settings info
@@ -1241,67 +1238,48 @@ async function handleResponse(data) {
         const state = data.substring(6);
 
         if (!multiMonitor) { // make sure that state exists
-            createMonitorState().then(() => {
-                if (state === 'AUTO') {
-                    adapter.setState('settings.outputMonitor', 0, true);
-                } else {
-                    adapter.setState('settings.outputMonitor', parseInt(state), true);
-                }
-            });
+            await createMonitorState();
+        }
+        if (state === 'AUTO') {
+            adapter.setState('settings.outputMonitor', 0, true);
         } else {
-            if (state === 'AUTO') {
-                adapter.setState('settings.outputMonitor', 0, true);
-            } else {
-                adapter.setState('settings.outputMonitor', parseInt(state), true);
-            }
-        } // endElse
-
+            adapter.setState('settings.outputMonitor', parseInt(state), true);
+        }
         return;
     } else if (command.startsWith('VSVPM')) {
         const processingMode = data.substring(4);
 
         if (!multiMonitor) { // make sure that state exists
-            createMonitorState().then(() => {
-                adapter.setState('settings.videoProcessingMode', processingMode, true);
-            });
-        } else {
-            adapter.setState('settings.videoProcessingMode', processingMode, true);
-        } // endElse
-
+            await createMonitorState();
+        }
+        adapter.setState('settings.videoProcessingMode', processingMode, true);
         return;
     } else if (command.startsWith('PV')) {
         const pictureMode = data.substring(1);
 
         if (!pictureModeAbility) {
-            createPictureMode().then(() => {
-                adapter.getObjectAsync('settings.pictureMode').then(obj => {
-                    adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
-                });
-            });
-        } else {
-            adapter.getObjectAsync('settings.pictureMode').then(obj => {
-                adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
-            });
-        } // endElse
+            await createPictureMode();
+        }
+        const obj = await adapter.getObjectAsync('settings.pictureMode');
+        adapter.setState('settings.pictureMode', obj.common.states[pictureMode], true);
         return;
     } else if (command.startsWith('NSH')) {
         const presetNumber = parseInt(data.slice(3, 5));
-        adapter.getStateAsync('info.onlinePresets').then(state => {
-            let knownPresets;
-            if (!state || !state.val) {
-                knownPresets = [];
-            } else {
-                knownPresets = JSON.parse(state.val);
-            }
-            knownPresets[presetNumber] = {
-                id: presetNumber,
-                channel: data.substring(5).replace(/\s\s+/g, '')
-            };
+        const state = await adapter.getStateAsync('info.onlinePresets');
+        let knownPresets;
+        if (!state || !state.val) {
+            knownPresets = [];
+        } else {
+            knownPresets = JSON.parse(state.val);
+        }
+        knownPresets[presetNumber] = {
+            id: presetNumber,
+            channel: data.substring(5).replace(/\s\s+/g, '')
+        };
 
-            const sortedPresets = [];
-            Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
-            adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
-        });
+        const sortedPresets = [];
+        Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
+        adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
     } // endElseIf
 
     let zoneNumber;
@@ -1404,12 +1382,9 @@ async function handleResponse(data) {
                 adapter.setState('settings.subwooferLevel', parseFloat(state), true);
             } else {
                 if (!subTwo) { // make sure sub two state exists
-                    createSubTwo().then(() => {
-                        adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
-                    });
-                } else {
-                    adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
+                    await createSubTwo();
                 }
+                adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
             } // endElse
             break;
         }
@@ -1858,6 +1833,11 @@ async function createZone(zone) {
     }
 } // endCreateZone
 
+/**
+ * Creates the display states and more for AVRs which have an http-interface (states still updated via telnet)
+ *
+ * @returns {Promise<void>}
+ */
 async function createDisplayAndHttp() {
     const promises = [];
 
@@ -1993,6 +1973,11 @@ async function createDisplayAndHttp() {
     }
 } // endCreateDisplayAndHttp
 
+/**
+ * Creates the monitor state objects
+ *
+ * @returns {Promise<void>}
+ */
 async function createMonitorState() {
     const promises = [];
 
@@ -2040,6 +2025,11 @@ async function createMonitorState() {
     }
 } // endCreateMonitorState
 
+/**
+ * Creates the subwoofer two objects
+ *
+ * @returns {Promise<void>}
+ */
 async function createSubTwo() {
     const promises = [];
 
@@ -2162,6 +2152,11 @@ async function createLfcAudyssey() {
     }
 } // endCreateLfcAudyssey
 
+/**
+ * Creates the picture mode objects
+ *
+ * @returns {Promise<void>}
+ */
 async function createPictureMode() {
     await adapter.setObjectNotExistsAsync('settings.pictureMode', {
         type: 'state',
@@ -2238,9 +2233,9 @@ async function createStandardStates(type) {
     }
 } // endCreateStandardStates
 
-if (require.main === module) {
-    startAdapter();
-} else {
+if (module.parent) {
     // export for compact mode
     module.exports = startAdapter;
+} else {
+    startAdapter();
 }

@@ -827,7 +827,7 @@ and info.connection. Additional the following states are created for each zone 2
 If you are missing any functions or detected a bug, please open an [issue](https://github.com/foxriver76/ioBroker.denon/issues).
 
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
-   
+
 ## Changelog
 ### 1.9.0 (2020-12-02)
 * (foxriver76) prevent writing in destroyed socket on adapter unload
