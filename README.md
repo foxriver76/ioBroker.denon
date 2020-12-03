@@ -829,7 +829,7 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 
 ## Changelog
-### 1.9.0 (2020-12-02)
+### 1.9.1 (2020-12-03)
 * (foxriver76) prevent writing in destroyed socket on adapter unload
 * (foxriver76) add subwoofer states for main zone
 * (foxriver76) internal optimizations

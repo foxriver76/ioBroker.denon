@@ -991,8 +991,8 @@ async function handleUsStateChange(id, stateVal) {
         case 'lowCutFilterSpeakerOne':
             adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(state => {
                 if (state.val.toString() === '0' || state.val === 'NORMAL') {
-                    zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
-                    zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
+                    zoneNumber = parseInt(zoneNumber) % 2 ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
+                    zoneNumber = parseInt(zoneNumber) < 10 ? `0${zoneNumber}` : zoneNumber;
                 } // endIf
                 if (stateVal) {
                     sendRequest(`SF${zoneNumber}ON`);
@@ -1538,14 +1538,15 @@ async function handleResponse(data) {
             adapter.setState('zoneMain.channelVolumeFrontHeightLeft', helper.volToDb(channelVolume), true);
             break;
         }
-        case 'CVSW': {
+        case 'CVSW': { // can be subwoofer or subwooferTwo
             const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSubwoofer', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSW2': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSubwooferTwo', helper.volToDb(channelVolume), true);
+            command = data.split(' ')[0];
+
+            if (command === 'CVSW') { // Check if CVSW or CVSW2
+                adapter.setState('zoneMain.channelVolumeSubwoofer', helper.volToDb(channelVolume), true);
+            } else {
+                adapter.setState('zoneMain.channelVolumeSubwooferTwo', helper.volToDb(channelVolume), true);
+            } // endElse
             break;
         }
         default:

@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.9.0",
+        "version": "1.9.1",
         "news": {
-            "1.9.0": {
+            "1.9.1": {
                 "en": "added channel volume for subwoofers, we no longer write in destroyed socket on unload, internal optimizations",
                 "de": "hinzugefügtes Kanalvolumen für Subwoofer, wir schreiben nicht mehr in zerstörten Socket beim Entladen, interne Optimierungen",
                 "ru": "добавлена громкость канала для сабвуферов, мы больше не записываем в разрушенный сокет при выгрузке, внутренняя оптимизация",
