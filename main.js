@@ -283,6 +283,12 @@ function startAdapter(options) {
             case 'zoneMain.channelVolumeFrontHeightRight':
                 sendRequest(`CVFHR ${helper.dbToVol(state)}`);
                 break;
+            case 'zoneMain.channelVolumeRearHeightLeft':
+                sendRequest(`CVRHL ${helper.dbToVol(state)}`);
+                break;
+            case 'zoneMain.channelVolumeRearHeightRight':
+                sendRequest(`CVRHR ${helper.dbToVol(state)}`);
+                break;
             case 'zoneMain.channelVolumeSurroundHeightRight':
                 sendRequest(`CVSHR ${helper.dbToVol(state)}`);
                 break;
@@ -1536,6 +1542,16 @@ async function handleResponse(data) {
         case 'CVFHL': {
             const channelVolume = data.split(' ')[1];
             adapter.setState('zoneMain.channelVolumeFrontHeightLeft', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVRHR': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeRearHeightRight', helper.volToDb(channelVolume), true);
+            break;
+        }
+        case 'CVRHL': {
+            const channelVolume = data.split(' ')[1];
+            adapter.setState('zoneMain.channelVolumeRearHeightLeft', helper.volToDb(channelVolume), true);
             break;
         }
         case 'CVSW': { // can be subwoofer or subwooferTwo

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.9.3",
+        "version": "1.9.4",
         "news": {
+            "1.9.4": {
+                "en": "added missing rear height speaker states",
+                "de": "fehlende Lautsprecherzustände in der hinteren Höhe hinzugefügt",
+                "ru": "добавлены отсутствующие состояния заднего верхнего динамика",
+                "pt": "adicionado estados faltantes do alto-falante traseiro",
+                "nl": "toegevoegde ontbrekende achterhoogteluidsprekerstatussen",
+                "fr": "ajout d'états de haut-parleurs arrière manquants",
+                "it": "aggiunti gli stati dell'altoparlante posteriore mancante",
+                "es": "Se agregaron estados de altavoz de altura trasera faltantes",
+                "pl": "dodano brakujące stany głośników tylnych",
+                "zh-cn": "添加了缺少的后置高度扬声器状态"
+            },
             "1.9.3": {
                 "en": "reverted the last added options because they are not working as intended and we now no longer remove digits and spaces from surroundMode response",
                 "de": "Die zuletzt hinzugefügten Optionen wurden zurückgesetzt, da sie nicht wie beabsichtigt funktionieren und wir jetzt keine Ziffern und Leerzeichen mehr aus der SurroundMode-Antwort entfernen",
