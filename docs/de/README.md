@@ -506,6 +506,12 @@ Die folgenden States werden vom Adapter angelegt:
    *19:	MONO MOVIE*
    
    *20:	MATRIX*
+
+   *21: DOLBY D+DS*
+
+   *22: DOLBY D+NEURAL:X*
+
+   *23: DOLBY SURROUND*
    
    *Hinweis: Nicht jeder Surround Mode ist auf jedem Modell verfügbar.*
    
