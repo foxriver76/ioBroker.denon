@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.9.2",
+        "version": "1.9.3",
         "news": {
+            "1.9.3": {
+                "en": "reverted the last added options because they are not working as intended and we now no longer remove digits and spaces from surroundMode response",
+                "de": "Die zuletzt hinzugefügten Optionen wurden zurückgesetzt, da sie nicht wie beabsichtigt funktionieren und wir jetzt keine Ziffern und Leerzeichen mehr aus der SurroundMode-Antwort entfernen",
+                "ru": "отменил последние добавленные параметры, потому что они не работают должным образом, и теперь мы больше не удаляем цифры и пробелы из ответа SurroundMode",
+                "pt": "reverteu as últimas opções adicionadas porque não estão funcionando como pretendido e agora não removemos mais dígitos e espaços da resposta surroundMode",
+                "nl": "hebben de laatst toegevoegde opties teruggedraaid omdat ze niet werken zoals bedoeld en we verwijderen nu geen cijfers en spaties meer uit de surroundMode-respons",
+                "fr": "a annulé les dernières options ajoutées car elles ne fonctionnent pas comme prévu et nous ne supprimons plus les chiffres et les espaces de la réponse surroundMode",
+                "it": "ha ripristinato le ultime opzioni aggiunte perché non funzionano come previsto e ora non rimuoviamo più cifre e spazi dalla risposta surroundMode",
+                "es": "revirtió las últimas opciones agregadas porque no funcionan como se esperaba y ahora ya no eliminamos dígitos y espacios de la respuesta surroundMode",
+                "pl": "cofnęliśmy ostatnio dodane opcje, ponieważ nie działają one zgodnie z przeznaczeniem i nie usuwamy już cyfr i spacji z odpowiedzi surroundMode",
+                "zh-cn": "还原了最后添加的选项，因为它们不能按预期运行，并且我们现在不再从SurroundMode响应中删除数字和空格"
+            },
             "1.9.2": {
                 "en": "added some missing options for surroundMode",
                 "de": "Einige fehlende Optionen für SurroundMode wurden hinzugefügt",
