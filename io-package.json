@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.9.1",
+        "version": "1.9.2",
         "news": {
+            "1.9.2": {
+                "en": "added some missing options for surroundMode",
+                "de": "Einige fehlende Optionen für SurroundMode wurden hinzugefügt",
+                "ru": "добавлены некоторые недостающие параметры для SurroundMode",
+                "pt": "adicionou algumas opções que faltavam para surroundMode",
+                "nl": "enkele ontbrekende opties toegevoegd voor surroundMode",
+                "fr": "ajouté quelques options manquantes pour surroundMode",
+                "it": "aggiunte alcune opzioni mancanti per surroundMode",
+                "es": "agregó algunas opciones faltantes para surroundMode",
+                "pl": "dodano kilka brakujących opcji dla trybu surround",
+                "zh-cn": "为SurroundMode添加了一些缺少的选项"
+            },
             "1.9.1": {
                 "en": "added channel volume for subwoofers, we no longer write in destroyed socket on unload, internal optimizations",
                 "de": "hinzugefügtes Kanalvolumen für Subwoofer, wir schreiben nicht mehr in zerstörten Socket beim Entladen, interne Optimierungen",
