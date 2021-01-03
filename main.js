@@ -1194,7 +1194,7 @@ async function handleResponse(data) {
         adapter.setState('zoneMain.selectInput', siCommand, true);
         return;
     } else if (command.startsWith('MS') && command !== 'MSQUICK' && command !== 'MSSMART') { // Handle Surround mode
-        const msCommand = command.substring(2);
+        const msCommand = data.substring(2); // use data because ms can have digits and spaces
         adapter.setState('settings.surroundMode', msCommand, true);
         return;
     } else if (command === 'MSQUICK' || command === 'MSSMART') {
