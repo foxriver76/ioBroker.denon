@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.9.4",
+        "version": "1.10.0",
         "news": {
+            "1.10.0": {
+                "en": "we now auto-detect used \"select inputs\" and add them to the selection",
+                "de": "Wir erkennen jetzt automatisch verwendete \"Auswahleingänge\" und fügen sie der Auswahl hinzu",
+                "ru": "теперь мы автоматически определяем используемые \"входы выбора\" и добавляем их в выбор",
+                "pt": "agora detectamos automaticamente as \"entradas selecionadas\" e as adicionamos à seleção",
+                "nl": "we detecteren nu automatisch gebruikte \"select inputs\" en voegen ze toe aan de selectie",
+                "fr": "nous détectons maintenant automatiquement les \"entrées de sélection\" utilisées et les ajoutons à la sélection",
+                "it": "ora rileviamo automaticamente gli \"input di selezione\" utilizzati e li aggiungiamo alla selezione",
+                "es": "ahora detectamos automáticamente las \"entradas seleccionadas\" y las agregamos a la selección",
+                "pl": "teraz automatycznie wykrywamy używane „wybierz wejścia” i dodajemy je do zaznaczenia",
+                "zh-cn": "我们现在自动检测使用过的“选择输入”并将其添加到选择中"
+            },
             "1.9.4": {
                 "en": "added missing rear height speaker states",
                 "de": "fehlende Lautsprecherzustände in der hinteren Höhe hinzugefügt",

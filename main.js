@@ -9,6 +9,7 @@
 const utils = require('@iobroker/adapter-core');
 const net = require('net');
 const helper = require(`${__dirname}/lib/utils`);
+const { isObject } = require(`${__dirname}/lib/tools`);
 const ssdpScan = require('./lib/upnp').ssdpScan;
 const client = new net.Socket();
 
@@ -1176,6 +1177,7 @@ async function handleResponse(data) {
             zoneSi = zoneSi.replace(' ', ''); // Remove blank
             for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible Select Inputs
                 if (helper.decodeState(obj.common.states, j.toString()) === zoneSi) {
+                    ensureAttrInStates(`zone${zoneNumber}.selectInput`, zoneSi);
                     adapter.setState(`zone${zoneNumber}.selectInput`, zoneSi, true);
                     return;
                 } // endIf
@@ -1197,6 +1199,7 @@ async function handleResponse(data) {
     } else if (command.startsWith('SI')) { // Handle select input
         let siCommand = data.substring(2); // Get only source name
         siCommand = siCommand.replace(' ', ''); // Remove blanks
+        ensureAttrInStates('zoneMain.selectInput', siCommand);
         adapter.setState('zoneMain.selectInput', siCommand, true);
         return;
     } else if (command.startsWith('MS') && command !== 'MSQUICK' && command !== 'MSSMART') { // Handle Surround mode
@@ -2199,6 +2202,36 @@ async function createPictureMode() {
     pictureModeAbility = true;
 } // endCreatePictureMode
 
+/**
+ * Ensures that the val is part of the state list of given object id
+ *
+ * @param {string} id - object id
+ * @param {string} val - attribute which will be added to the object if not present
+ * @return {Promise<void>}
+ */
+async function ensureAttrInStates(id, val) {
+    try {
+        const obj = await adapter.getObjectAsync(id);
+        if (obj && obj.common && isObject(obj.common.states)) {
+            const values = Object.values(obj.common.states);
+            // check if its already part of the object
+            if (!values.includes(val)) {
+                obj.common.states[values.length] = val;
+                await adapter.setObjectAsync(id, obj);
+                adapter.log.info(`[INFO] Added ${val} to ${id}`);
+            }
+        }
+    } catch (e) {
+        adapter.log.error(`Could not ensure attribute ${val} to be in ${id}: ${e.message}`);
+    }
+}
+
+/**
+ * Create standard state objects
+ *
+ * @param {'DE'|'US'} type
+ * @return {Promise<void>}
+ */
 async function createStandardStates(type) {
     const promises = [];
     if (type === 'DE') {
@@ -2246,13 +2279,13 @@ async function createStandardStates(type) {
             adapter.log.error(`Could not create US states: ${e}`);
         }
     } else {
-        return Promise.reject(new Error('Unknown receiver type'));
+        throw new Error('Unknown receiver type');
     }
 } // endCreateStandardStates
 
-if (module.parent) {
+if (module === require.main) {
+    startAdapter();
+} else {
     // export for compact mode
     module.exports = startAdapter;
-} else {
-    startAdapter();
 }

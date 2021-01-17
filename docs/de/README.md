@@ -343,8 +343,13 @@ Die folgenden States werden vom Adapter angelegt:
    *20:	AUX6*
    
    *21:	AUX7*
+
+   *22: BT*
+
+   *23: USB*
    
-   *Hinweis: Nicht jede Eingangsquelle ist auf jedem Modell verfügbar.*
+   *Hinweis: Nicht jede Eingangsquelle ist auf jedem Modell verfügbar. Falls der AVR über zusätzliche Eingangsquellen
+    verfügt, werden diese der Liste angefügt, sobald diese erkannt wurden.*
    
    *Beispiel:*
    
