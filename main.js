@@ -8,8 +8,7 @@
 
 const utils = require('@iobroker/adapter-core');
 const net = require('net');
-const helper = require(`${__dirname}/lib/utils`);
-const { isObject } = require(`${__dirname}/lib/tools`);
+const helper = require(`./lib/utils`);
 const ssdpScan = require('./lib/upnp').ssdpScan;
 const client = new net.Socket();
 
@@ -2212,7 +2211,7 @@ async function createPictureMode() {
 async function ensureAttrInStates(id, val) {
     try {
         const obj = await adapter.getObjectAsync(id);
-        if (obj && obj.common && isObject(obj.common.states)) {
+        if (obj && obj.common && helper.isObject(obj.common.states)) {
             const values = Object.values(obj.common.states);
             // check if its already part of the object
             if (!values.includes(val)) {

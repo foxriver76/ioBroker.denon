@@ -42,7 +42,6 @@
     },
     "main": "main.js",
     "scripts": {
-        "test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
         "test:package": "node_modules/.bin/mocha test/packageFiles --exit",
         "test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
         "test": "node node_modules/mocha/bin/mocha --exit"
