@@ -253,13 +253,13 @@
             "audio"
         ],
         "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
+        "docs": {
+            "de": "docs/de/README.md"
+        },
         "loglevel": "info",
         "type": "multimedia",
         "connectionType": "local",
         "dataSource": "push"
-    },
-    "docs": {
-        "de": "docs/de/README.md"
     },
     "native": {
         "ip": "",
