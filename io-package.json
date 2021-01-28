@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.10.2",
+        "version": "1.10.3",
         "news": {
+            "1.10.3": {
+                "en": "don't poll whole online presets after change, it is unnecessary load",
+                "de": "Fragen Sie nach der Änderung nicht ganze Online-Voreinstellungen ab, es ist unnötiges Laden",
+                "ru": "не опрашивайте целые онлайн-пресеты после изменения, это ненужная загрузка",
+                "pt": "não pesquise predefinições online inteiras após a alteração, é carga desnecessária",
+                "nl": "controleer niet de hele online presets na wijziging, het is onnodige belasting",
+                "fr": "ne pas interroger les préréglages en ligne entiers après le changement, c'est une charge inutile",
+                "it": "non eseguire il polling di interi preset online dopo la modifica, è un carico non necessario",
+                "es": "no sondear ajustes preestablecidos en línea completos después del cambio, es una carga innecesaria",
+                "pl": "nie sprawdzaj całych presetów online po zmianie, jest to niepotrzebne ładowanie",
+                "zh-cn": "更改后不轮询整个在线预设，这是不必要的负载"
+            },
             "1.10.2": {
                 "en": "return after detecting NSH command\nuse release script",
                 "de": "Rückkehr nach Erkennung des NSH-Befehls\nVerwenden Sie das Release-Skript",
@@ -230,18 +242,6 @@
                 "es": "Asegúrese de que los estados nunca se establezcan antes de la creación y correcciones menores y mejoras",
                 "pl": "upewniałem się, że stany nigdy nie są ustawione przed stworzeniem oraz drobne poprawki i ulepszenia",
                 "zh-cn": "确保各国不设置前创建的和次要的修复和改进"
-            },
-            "1.2.6": {
-                "en": "only updating some states when changed, promises and minor improvements",
-                "de": "Einige Zustände werden nur bei Änderungen aktualisiert, Promises und geringfügigen Verbesserungen",
-                "ru": "Обновление только некоторых состояний при изменении, обещаний и незначительных улучшений",
-                "pt": "apenas atualizando alguns estados quando alterado, promessas e pequenas melhorias",
-                "nl": "alleen het bijwerken van een aantal staten bij verandering, beloftes en kleine verbeteringen",
-                "fr": "mettre à jour seulement certains états lors de modifications, promesses et améliorations mineures",
-                "it": "solo aggiornando alcuni stati quando modificati, promesse e miglioramenti minori",
-                "es": "Solo se actualizan algunos estados cuando se cambian, promesas y mejoras menores.",
-                "pl": "aktualizuje tylko niektóre stany po zmianie, obietnice i drobne poprawki",
-                "zh-cn": "仅更新一些国家在更改承诺以及小的改进"
             }
         },
         "title": "DENON AVR",

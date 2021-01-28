@@ -470,7 +470,6 @@ function startAdapter(options) {
                     savePresetState = state;
                 }
                 sendRequest(`NSC${savePresetState}`);
-                sendRequest('NSH');
                 break;
             }
             case 'display.brightness': {

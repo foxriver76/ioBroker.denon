@@ -837,6 +837,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 	### __WORK IN PROGRESS__
 -->
 
+### 1.10.3 (2021-01-28)
+* (foxriver76) don't poll whole online presets after change, it is unnecessary load
+
 ### 1.10.2 (2021-01-28)
 * (foxriver76) return after detecting NSH command
 * (foxriver76) use release script
