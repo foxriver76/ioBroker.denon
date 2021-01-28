@@ -836,7 +836,8 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### 1.10.1 (2021-01-28)
+
+### 1.10.2 (2021-01-28)
 * (foxriver76) return after detecting NSH command
 * (foxriver76) use release script
 
