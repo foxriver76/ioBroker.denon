@@ -832,6 +832,14 @@ If you are missing any functions or detected a bug, please open an [issue](https
 The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 
 ## Changelog
+<!--
+	Placeholder for the next version (at the beginning of the line):
+	### __WORK IN PROGRESS__
+-->
+### 1.10.1 (2021-01-28)
+* (foxriver76) return after detecting NSH command
+* (foxriver76) use release script
+
 ### 1.10.0 (2021-01-17)
 * (foxriver76) auto-detect selectInput of all zones
 

@@ -1,53 +1,55 @@
 {
-    "name": "iobroker.denon",
-    "version": "1.10.0",
-    "engines": {
-        "node": ">=10.0.0"
-    },
-    "description": "ioBroker DENON/Marantz Adapter",
-    "author": {
-        "name": "Moritz Heusinger",
-        "email": "moritz.heusinger@gmail.com"
-    },
-    "contributors": [
-        {
-            "name": "Moritz Heusinger",
-            "email": "moritz.heusinger@gmail.com"
-        }
-    ],
-    "homepage": "https://github.com/foxriver76/ioBroker.denon",
-    "license": "MIT",
-    "keywords": [
-        "ioBroker",
-        "denon",
-        "marantz",
-        "avr",
-        "Smart Home",
-        "home automation"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/foxriver76/ioBroker.denon"
-    },
-    "dependencies": {
-        "@iobroker/adapter-core": "^2.4.0"
-    },
-    "devDependencies": {
-        "gulp": "^4.0.0",
-        "mocha": "^8.2.1",
-        "chai": "^4.1.2",
-        "eslint": "^7.14.0",
-        "axios": "^0.21.0",
-        "@iobroker/testing": "^2.4.2"
-    },
-    "main": "main.js",
-    "scripts": {
-        "test:package": "node_modules/.bin/mocha test/packageFiles --exit",
-        "test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
-        "test": "node node_modules/mocha/bin/mocha --exit"
-    },
-    "bugs": {
-        "url": "https://github.com/foxriver76/ioBroker.denon/issues"
-    },
-    "readmeFilename": "README.md"
+  "name": "iobroker.denon",
+  "version": "1.10.1",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "description": "ioBroker DENON/Marantz Adapter",
+  "author": {
+    "name": "Moritz Heusinger",
+    "email": "moritz.heusinger@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Moritz Heusinger",
+      "email": "moritz.heusinger@gmail.com"
+    }
+  ],
+  "homepage": "https://github.com/foxriver76/ioBroker.denon",
+  "license": "MIT",
+  "keywords": [
+    "ioBroker",
+    "denon",
+    "marantz",
+    "avr",
+    "Smart Home",
+    "home automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/foxriver76/ioBroker.denon"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^2.4.0"
+  },
+  "devDependencies": {
+    "@alcalzone/release-script": "^1.8.3",
+    "@iobroker/testing": "^2.4.2",
+    "axios": "^0.21.0",
+    "chai": "^4.1.2",
+    "eslint": "^7.14.0",
+    "gulp": "^4.0.0",
+    "mocha": "^8.2.1"
+  },
+  "main": "main.js",
+  "scripts": {
+    "test:package": "node_modules/.bin/mocha test/packageFiles --exit",
+    "test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
+    "test": "node node_modules/mocha/bin/mocha --exit",
+    "release": "release-script"
+  },
+  "bugs": {
+    "url": "https://github.com/foxriver76/ioBroker.denon/issues"
+  },
+  "readmeFilename": "README.md"
 }

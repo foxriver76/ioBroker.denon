@@ -1288,6 +1288,7 @@ async function handleResponse(data) {
         const sortedPresets = [];
         Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
         adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
+        return;
     } // endElseIf
 
     let zoneNumber;

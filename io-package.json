@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.10.0",
+        "version": "1.10.1",
         "news": {
+            "1.10.1": {
+                "en": "return after detecting NSH command\nuse release script",
+                "de": "Rückkehr nach Erkennung des NSH-Befehls\nVerwenden Sie das Release-Skript",
+                "ru": "вернуться после обнаружения команды NSH\nиспользовать сценарий выпуска",
+                "pt": "retornar após detectar o comando NSH\nusar script de lançamento",
+                "nl": "terugkeer na het detecteren van de NSH-opdracht\ngebruik release script",
+                "fr": "retour après détection de la commande NSH\nutiliser le script de publication",
+                "it": "tornare dopo aver rilevato il comando NSH\nusa lo script di rilascio",
+                "es": "volver después de detectar el comando NSH\nusar script de lanzamiento",
+                "pl": "powrót po wykryciu polecenia NSH\nużyj skryptu wydania",
+                "zh-cn": "检测到NSH命令后返回\n使用发布脚本"
+            },
             "1.10.0": {
                 "en": "we now auto-detect used \"select inputs\" and add them to the selection",
                 "de": "Wir erkennen jetzt automatisch verwendete \"Auswahleingänge\" und fügen sie der Auswahl hinzu",
