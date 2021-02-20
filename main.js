@@ -1216,9 +1216,13 @@ async function handleResponse(data) {
         });
         return;
     } else if (command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
+        if (command === 'NSE') {
+            // on older models it sometimes sends just NSE for unknown reasons - ignore it
+            return;
+        }
+
         const displayCont = data.substring(4).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
         const dispContNr = data.slice(3, 4);
-
         if (!displayAbility) {
             await createDisplayAndHttp();
         }

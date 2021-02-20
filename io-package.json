@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.10.3",
+        "version": "1.10.4",
         "news": {
+            "1.10.4": {
+                "en": "if an older model (e.g. AVR 3808) just sends `NSE`, we do not set displayContent state anymore (fixes #112)",
+                "de": "Wenn ein älteres Modell (z. B. AVR 3808) nur \"NSE\" sendet, setzen wir den displayContent-Status nicht mehr (Fixes # 112).",
+                "ru": "если более старая модель (например, AVR 3808) просто отправляет NSE, мы больше не устанавливаем состояние displayContent (исправления # 112)",
+                "pt": "se um modelo mais antigo (por exemplo, AVR 3808) apenas enviar `NSE`, não definimos mais o estado displayContent (correções # 112)",
+                "nl": "als een ouder model (bijv.AVR 3808) gewoon 'NSE' verzendt, stellen we de status displayContent niet meer in (fix # 112)",
+                "fr": "si un modèle plus ancien (par exemple AVR 3808) envoie simplement `NSE`, nous ne définissons plus l'état displayContent (correction n ° 112)",
+                "it": "se un modello più vecchio (ad esempio AVR 3808) invia semplicemente \"NSE\", non impostiamo più lo stato displayContent (correzione # 112)",
+                "es": "si un modelo anterior (por ejemplo, AVR 3808) simplemente envía `NSE`, ya no establecemos el estado de displayContent (arreglos # 112)",
+                "pl": "jeśli starszy model (np. AVR 3808) wysyła tylko „NSE”, nie ustawiamy już stanu displayContent (poprawki # 112)",
+                "zh-cn": "如果较旧的型号（例如AVR 3808）仅发送“ NSE”，则我们不再设置displayContent状态（修复＃112）"
+            },
             "1.10.3": {
                 "en": "don't poll whole online presets after change, it is unnecessary load",
                 "de": "Fragen Sie nach der Änderung nicht ganze Online-Voreinstellungen ab, es ist unnötiges Laden",
@@ -230,18 +242,6 @@
                 "es": "compatibilidad de modo compacto agregado",
                 "pl": "Dodano kompatybilność w trybie kompaktowym",
                 "zh-cn": "紧凑的模式，兼容性增加"
-            },
-            "1.2.7": {
-                "en": "made sure states are never set before creation and minor fixes and improvements",
-                "de": "Es wurde sichergestellt, dass States vor der Erstellung nie gesetzt werden und kleinere Korrekturen und Verbesserungen wurden vorgenommen",
-                "ru": "убедитесь, что состояния никогда не устанавливаются перед созданием и незначительными исправлениями и улучшениями",
-                "pt": "fez com que os estados nunca fossem definidos antes da criação e pequenas correções e melhorias",
-                "nl": "ervoor gezorgd dat staten nooit zijn ingesteld vóór het maken en kleine verbeteringen en verbeteringen",
-                "fr": "fait en sorte que les états ne sont jamais définis avant la création et les corrections et améliorations mineures",
-                "it": "assicurato che gli stati non siano mai impostati prima della creazione e correzioni e miglioramenti minori",
-                "es": "Asegúrese de que los estados nunca se establezcan antes de la creación y correcciones menores y mejoras",
-                "pl": "upewniałem się, że stany nigdy nie są ustawione przed stworzeniem oraz drobne poprawki i ulepszenia",
-                "zh-cn": "确保各国不设置前创建的和次要的修复和改进"
             }
         },
         "title": "DENON AVR",
