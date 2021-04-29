@@ -245,6 +245,10 @@
             }
         },
         "title": "DENON AVR",
+        "titleLang": {
+            "en": "DENON AVR",
+            "de": "DENON AVR"
+        },
         "desc": {
             "en": "Control your DENON or Marantz AV Receiver",
             "de": "Steuern Sie Ihren DENON oder Marantz AV-Receiver",
@@ -278,6 +282,7 @@
         ],
         "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
         "docs": {
+            "en": "README.md",
             "de": "docs/de/README.md"
         },
         "loglevel": "info",
