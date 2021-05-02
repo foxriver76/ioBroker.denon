@@ -1258,14 +1258,18 @@ async function handleResponse(data) {
         }
         return;
     } else if (command.startsWith('VSVPM')) {
-        const processingMode = data.substring(4);
 
         if (!multiMonitor) { // make sure that state exists
             await createMonitorState();
         }
-        adapter.setState('settings.videoProcessingMode', processingMode, true);
+
+        const obj = await adapter.getObjectAsync('settings.videoProcessingMode');
+
+        const processingModeNumber = Object.values(obj.common.states).indexOf(data.substring(4));
+
+        adapter.setState('settings.videoProcessingMode', processingModeNumber, true);
         return;
-    } else if (command.startsWith('PV')) {
+    } else if (command.startsWith('PV') && command.length > 2) {
         const pictureMode = data.substring(1);
 
         if (!pictureModeAbility) {
@@ -1438,13 +1442,12 @@ async function handleResponse(data) {
             break;
         }
         case 'ZPSTRE': {
-            const state = data.split(' ')[1];
+            const state = parseFloat(data.split(' ')[1]);
             adapter.setState(`zone${zoneNumber}.equalizerTreble`, state, true);
             break;
-
         }
         case 'ZPSBAS': {
-            const state = data.split(' ')[1];
+            const state = parseFloat(data.split(' ')[1]);
             adapter.setState(`zone${zoneNumber}.equalizerBass`, state, true);
             break;
         }
@@ -2241,7 +2244,7 @@ async function createStandardStates(type) {
         for (const obj of helper.commonCommands) {
             const id = obj._id;
             delete obj._id;
-            promises.push(adapter.setObjectNotExistsAsync(id, obj));
+            promises.push(adapter.extendObjectAsync(id, obj, {preserve: {common: ['name']}}));
         } // endFor
         try {
             await Promise.all(promises);
@@ -2253,7 +2256,7 @@ async function createStandardStates(type) {
         for (const obj of helper.usCommands) {
             const id = obj._id;
             delete obj._id;
-            promises.push(adapter.setObjectNotExistsAsync(id, obj));
+            promises.push(adapter.extendObjectAsync(id, obj, {preserve: {common: ['name']}}));
         } // endFor
 
         for (let i = 1; i <= 6; i++) { // iterate over zones

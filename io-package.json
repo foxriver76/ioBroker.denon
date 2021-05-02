@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.10.4",
+        "version": "1.10.5",
         "news": {
+            "1.10.5": {
+                "en": "we fixed some datapoints having wrong types or wrong state values set (fixes #130)",
+                "de": "Wir haben einige Datenpunkte mit falschen Typen oder falschen Statuswerten behoben (Fixes # 130).",
+                "ru": "мы исправили некоторые точки данных, имеющие неправильные типы или неверные значения состояния (исправления # 130)",
+                "pt": "corrigimos alguns pontos de dados com tipos errados ou valores de estado incorretos definidos (correções # 130)",
+                "nl": "we hebben enkele datapunten gerepareerd met verkeerde typen of verkeerde statuswaarden ingesteld (fixes # 130)",
+                "fr": "nous avons corrigé certains points de données ayant des types incorrects ou des valeurs d'état incorrectes (correctifs # 130)",
+                "it": "abbiamo corretto alcuni datapoint con tipi errati o valori di stato errati impostati (correzioni # 130)",
+                "es": "arreglamos algunos puntos de datos que tenían tipos incorrectos o valores de estado incorrectos establecidos (arreglos # 130)",
+                "pl": "naprawiliśmy niektóre punkty danych z niewłaściwymi typami lub ustawionymi nieprawidłowymi wartościami stanu (poprawki # 130)",
+                "zh-cn": "我们修复了某些类型错误或状态值设置错误的数据点（修复＃130）"
+            },
             "1.10.4": {
                 "en": "if an older model (e.g. AVR 3808) just sends `NSE`, we do not set displayContent state anymore (fixes #112)",
                 "de": "Wenn ein älteres Modell (z. B. AVR 3808) nur \"NSE\" sendet, setzen wir den displayContent-Status nicht mehr (Fixes # 112).",
@@ -230,18 +242,6 @@
                 "es": "soporte de DENON POA-3012CI y AVR similares y crear volúmenes db cada vez y volumen de canal agregado para las zonas 2 y 3 y otras optimizaciones",
                 "pl": "obsługa DENON POA-3012CI i podobnych AVR-ów oraz tworzenie woluminów bazowych za każdym razem i dodawanie woluminów kanału dla strefy 2 i strefy 3 oraz inne optymalizacje",
                 "zh-cn": "支持DENON POA-3012CI和类似的AVR并每次创建数据库卷并为区域2和区域3以及其他优化添加通道卷"
-            },
-            "1.3.2": {
-                "en": "compact mode compatibility added",
-                "de": "Kompaktmodus-Kompatibilität hinzugefügt",
-                "ru": "добавлена ​​совместимость с компактным режимом",
-                "pt": "compatibilidade de modo compacto adicionada",
-                "nl": "compatibiliteit met compacte modus toegevoegd",
-                "fr": "Compatibilité en mode compact ajoutée",
-                "it": "aggiunta la compatibilità in modalità compatta",
-                "es": "compatibilidad de modo compacto agregado",
-                "pl": "Dodano kompatybilność w trybie kompaktowym",
-                "zh-cn": "紧凑的模式，兼容性增加"
             }
         },
         "title": "DENON AVR",
