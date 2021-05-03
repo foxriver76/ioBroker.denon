@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.10.5",
+        "version": "1.10.6",
         "news": {
+            "1.10.6": {
+                "en": "we fixed some more types",
+                "de": "Wir haben einige weitere Typen behoben",
+                "ru": "мы исправили еще несколько типов",
+                "pt": "nós consertamos mais alguns tipos",
+                "nl": "we hebben nog wat meer soorten gerepareerd",
+                "fr": "nous avons corrigé d'autres types",
+                "it": "abbiamo corretto altri tipi",
+                "es": "arreglamos algunos tipos más",
+                "pl": "naprawiliśmy kilka innych typów",
+                "zh-cn": "我们修复了更多类型"
+            },
             "1.10.5": {
                 "en": "we fixed some datapoints having wrong types or wrong state values set (fixes #130)",
                 "de": "Wir haben einige Datenpunkte mit falschen Typen oder falschen Statuswerten behoben (Fixes # 130).",
@@ -230,18 +242,6 @@
                 "es": "corregir para detectar DENON Ceol",
                 "pl": "naprawić, aby wykryć DENON Ceol",
                 "zh-cn": "修复以检测DENON Ceol"
-            },
-            "1.5.0": {
-                "en": "support of DENON POA-3012CI and similar AVRs and create db volumes everytime and added channel volume for zone 2 and zone 3 and other optimizations",
-                "de": "Unterstützung von DENON POA-3012CI und ähnlichen AVRs und erstelle jedes Mal dB-Volumes sowie zusätzliches Kanalvolumen für Zone 2 und Zone 3 und andere Optimierungen",
-                "ru": "поддержка DENON POA-3012CI и аналогичных AVR и создание томов дБ каждый раз, добавление объема канала для зоны 2 и зоны 3 и другие оптимизации",
-                "pt": "suporte de DENON POA-3012CI e AVRs semelhantes e criar volumes de db toda vez e adicionar volume de canal para zona 2 e zona 3 e outras otimizações",
-                "nl": "ondersteuning van DENON POA-3012CI en vergelijkbare AVR's en creëer dagelijks db-volumes en voegde kanaalvolume toe voor zone 2 en zone 3 en andere optimalisaties",
-                "fr": "prise en charge de DENON POA-3012CI et d’AVR similaires et création permanente de volumes de base de données et d’ajout de volume de canal pour les zones 2 et 3 et autres optimisations",
-                "it": "supporto di DENON POA-3012CI e AVR simili e creazione di volumi db ogni volta e volume del canale aggiunto per zona 2 e zona 3 e altre ottimizzazioni",
-                "es": "soporte de DENON POA-3012CI y AVR similares y crear volúmenes db cada vez y volumen de canal agregado para las zonas 2 y 3 y otras optimizaciones",
-                "pl": "obsługa DENON POA-3012CI i podobnych AVR-ów oraz tworzenie woluminów bazowych za każdym razem i dodawanie woluminów kanału dla strefy 2 i strefy 3 oraz inne optymalizacje",
-                "zh-cn": "支持DENON POA-3012CI和类似的AVR并每次创建数据库卷并为区域2和区域3以及其他优化添加通道卷"
             }
         },
         "title": "DENON AVR",
@@ -332,7 +332,7 @@
             "common": {
                 "name": "Display brightness",
                 "role": "state",
-                "type": "number",
+                "type": "string",
                 "write": true,
                 "read": true,
                 "states": {

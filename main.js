@@ -1258,16 +1258,13 @@ async function handleResponse(data) {
         }
         return;
     } else if (command.startsWith('VSVPM')) {
+        const processingMode = data.substring(4);
 
         if (!multiMonitor) { // make sure that state exists
             await createMonitorState();
         }
 
-        const obj = await adapter.getObjectAsync('settings.videoProcessingMode');
-
-        const processingModeNumber = Object.values(obj.common.states).indexOf(data.substring(4));
-
-        adapter.setState('settings.videoProcessingMode', processingModeNumber, true);
+        adapter.setState('settings.videoProcessingMode', processingMode, true);
         return;
     } else if (command.startsWith('PV') && command.length > 2) {
         const pictureMode = data.substring(1);
@@ -1661,12 +1658,12 @@ async function createZone(zone) {
         native: {}
     }));
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.selectInput`, {
+    promises.push(adapter.extendObjectAsync(`zone${zone}.selectInput`, {
         type: 'state',
         common: {
             name: `Zone ${zone} Select input`,
             role: 'media.input',
-            type: 'number',
+            type: 'string',
             write: true,
             read: true,
             states: {
@@ -1697,7 +1694,7 @@ async function createZone(zone) {
             }
         },
         native: {}
-    }));
+    }, {preserve: {common: ['name']}}));
 
     promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.muteIndicator`, {
         type: 'state',
@@ -2024,12 +2021,12 @@ async function createMonitorState() {
         native: {}
     }));
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.videoProcessingMode', {
+    promises.push(adapter.extendObjectAsync('settings.videoProcessingMode', {
         type: 'state',
         common: {
             name: 'Video processing mode',
             role: 'video.processingMode',
-            type: 'number',
+            type: 'string',
             write: true,
             read: true,
             states: {
@@ -2039,7 +2036,7 @@ async function createMonitorState() {
             }
         },
         native: {}
-    }));
+    }, {preserve: {common: ['name']}}));
     try {
         await Promise.all(promises);
         if (!multiMonitor) {

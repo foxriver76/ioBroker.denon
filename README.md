@@ -837,6 +837,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 	### __WORK IN PROGRESS__
 -->
 
+### 1.10.6 (2021-05-03)
+* (foxriver76) we fixed some more types
+
 ### 1.10.5 (2021-05-02)
 * (foxriver76) we fixed some datapoints having wrong types or wrong state values set (fixes #130)
 
