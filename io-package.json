@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.10.6",
+        "version": "1.10.7",
         "news": {
+            "1.10.7": {
+                "en": "fix missing conversion to db on equalizer states for additional zones (fixes #137)",
+                "de": "Behebung der fehlenden Konvertierung in db bei Equalizer-Zuständen für zusätzliche Zonen (Fixes # 137)",
+                "ru": "исправить отсутствующее преобразование в db в состояниях эквалайзера для дополнительных зон (исправления # 137)",
+                "pt": "corrigir a falta de conversão para db nos estados do equalizador para zonas adicionais (correções # 137)",
+                "nl": "ontbrekende conversie naar db op equalizer-statussen voor extra zones repareren (fix # 137)",
+                "fr": "correction de la conversion manquante en db sur les états de l'égaliseur pour des zones supplémentaires (corrections # 137)",
+                "it": "corretta la conversione mancante in db negli stati dell'equalizzatore per zone aggiuntive (correzioni # 137)",
+                "es": "corrige la conversión faltante a db en los estados del ecualizador para zonas adicionales (arreglos # 137)",
+                "pl": "napraw brakującą konwersję do db w stanach korektora dla dodatkowych stref (poprawki # 137)",
+                "zh-cn": "修复了其他区域的均衡器状态下缺少到db的转换（修复＃137）"
+            },
             "1.10.6": {
                 "en": "we fixed some more types",
                 "de": "Wir haben einige weitere Typen behoben",
@@ -230,18 +242,6 @@
                 "es": "Se agregó una nueva configuración de estado.",
                 "pl": "dodano nowe ustawienia stanu",
                 "zh-cn": "添加了新的状态settings.lfeAmount"
-            },
-            "1.5.1": {
-                "en": "fix to detect DENON Ceol",
-                "de": "Fix zum Erkennen von DENON Ceol",
-                "ru": "исправить обнаружение DENON Ceol",
-                "pt": "correção para detectar DENON Ceol",
-                "nl": "fix om DENON Ceol te detecteren",
-                "fr": "correctif pour détecter DENON Ceol",
-                "it": "correzione per rilevare DENON Ceol",
-                "es": "corregir para detectar DENON Ceol",
-                "pl": "naprawić, aby wykryć DENON Ceol",
-                "zh-cn": "修复以检测DENON Ceol"
             }
         },
         "title": "DENON AVR",

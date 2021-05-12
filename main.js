@@ -1444,7 +1444,7 @@ async function handleResponse(data) {
             break;
         }
         case 'ZPSBAS': {
-            const state = parseFloat(data.split(' ')[1]);
+            const state = helper.volToDb(data.split(' ')[1]);
             adapter.setState(`zone${zoneNumber}.equalizerBass`, state, true);
             break;
         }
