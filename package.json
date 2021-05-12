@@ -33,19 +33,19 @@
     "@iobroker/adapter-core": "^2.4.0"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "^1.9.0",
+    "@alcalzone/release-script": "^1.10.0",
     "@iobroker/testing": "^2.4.4",
     "axios": "^0.21.1",
     "chai": "^4.3.4",
-    "eslint": "^7.25.0",
+    "eslint": "^7.26.0",
     "gulp": "^4.0.2",
-    "mocha": "^8.3.2"
+    "mocha": "^8.4.0"
   },
   "main": "main.js",
   "scripts": {
-    "test:package": "node_modules/.bin/mocha test/packageFiles --exit",
-    "test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
-    "test": "node node_modules/mocha/bin/mocha --exit",
+    "test:package": "mocha test/packageFiles --exit",
+    "test:integration": "mocha test/integrationAdapter --exit",
+    "test": "mocha --exit",
     "release": "release-script"
   },
   "bugs": {
