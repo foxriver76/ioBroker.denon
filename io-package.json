@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.10.7",
+        "version": "1.11.0",
         "news": {
+            "1.11.0": {
+                "en": "implemented dialog level adjustment for DTS content (closes #143)\nnew datapoints are `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+                "de": "implementierte Dialogpegelanpassung für DTS-Inhalte (schließt #143)\nneue Datenpunkte sind `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+                "ru": "реализована настройка уровня диалога для контента DTS (закрывает # 143)\nновые точки данных: settings.dialogLevelAdjust, settings.dialogLevel, settings.dialogControl.",
+                "pt": "implementou ajuste de nível de diálogo para conteúdo DTS (fecha # 143)\nnovos pontos de dados são `settings.dialogLevelAdjust`,` settings.dialogLevel`, `settings.dialogControl`",
+                "nl": "geïmplementeerde aanpassing van het dialoogniveau voor DTS-inhoud (sluit #143)\nnieuwe datapunten zijn `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+                "fr": "ajustement du niveau de dialogue mis en œuvre pour le contenu DTS (ferme #143)\nles nouveaux points de données sont `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+                "it": "implementata la regolazione del livello di dialogo per il contenuto DTS (chiude il numero 143)\ni nuovi punti dati sono `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+                "es": "ajuste de nivel de diálogo implementado para contenido DTS (cierra # 143)\nlos nuevos puntos de datos son `settings.dialogLevelAdjust`,` settings.dialogLevel`, `settings.dialogControl`",
+                "pl": "zaimplementowana regulacja poziomu dialogów dla zawartości DTS (zamyka #143)\nnowe punkty danych to `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+                "zh-cn": "实现了 DTS 内容的对话级别调整（关闭 #143）\n新数据点是`settings.dialogLevelAdjust`、`settings.dialogLevel`、`settings.dialogControl`"
+            },
             "1.10.7": {
                 "en": "fix missing conversion to db on equalizer states for additional zones (fixes #137)",
                 "de": "Behebung der fehlenden Konvertierung in db bei Equalizer-Zuständen für zusätzliche Zonen (Fixes # 137)",
@@ -230,18 +242,6 @@
                 "es": "error corregido con selectInput para zone2 y 3",
                 "pl": "naprawiony błąd z selectInput dla strefy 2 i 3",
                 "zh-cn": "修复了针对zone2和3的selectInput的错误"
-            },
-            "1.6.0": {
-                "en": "added new state settings.lfeAmount",
-                "de": "neuen state settings.lfeAmount hinzugefügt",
-                "ru": "добавлено новое состояние settings.lfeAmount",
-                "pt": "adicionou novo estado settings.lfeAmount",
-                "nl": "nieuwe statusinstellingen toegevoegd. lfeAmount",
-                "fr": "ajout du nouvel état settings.lfeAmount",
-                "it": "aggiunto nuovo stato settings.lfeAmount",
-                "es": "Se agregó una nueva configuración de estado.",
-                "pl": "dodano nowe ustawienia stanu",
-                "zh-cn": "添加了新的状态settings.lfeAmount"
             }
         },
         "title": "DENON AVR",

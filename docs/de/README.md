@@ -567,6 +567,30 @@ Die folgenden States werden vom Adapter angelegt:
     
     *Eingehende Daten, die der RegEx in `settings.expertReadingPattern` entsprechen, werden in diesen State geschrieben.*
 
+* settings.dialogControl
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |number|R/W|
+
+  *Dialogkontrolle, welche zwischen 0 dB und 6 dB konfiguriert werden kann.*
+
+* settings.dialogLevelAdjust
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
+
+    *Erlaubt das Anschalten der Dialoglautstärkenanpassung für DTS Quellen.*
+
+* settings.dialogLevel
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |boolean|R/W|
+
+    *Wenn die Dialogstärkenanpassung aktiv ist, kann diese zwischen -12 dB und +12 dB feinjustiert werden.*
+
 * settings.outputMonitor
 
     |Datentyp|Berechtigung|                                                                       
