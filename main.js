@@ -577,6 +577,15 @@ function startAdapter(options) {
             case 'settings.lfeAmount':
                 sendRequest(`PSLFE ${state < 10 ? `0${state}` : 10}`);
                 break;
+            case 'settings.dialogControl':
+                sendRequest(`PSDIC 0${state}`); // can only be 0 - 6
+                break;
+            case 'settings.dialogLevel':
+                sendRequest(`PSDIL ${helper.dbToVol(state)}`);
+                break;
+            case 'settings.dialogLevelAdjust':
+                sendRequest(`PSDIL ${state ? 'ON' : 'OFF'}`);
+                break;
             default:
                 adapter.log.error(`[COMMAND] ${id} is not a valid state`);
         } // endSwitch
@@ -746,7 +755,7 @@ const updateCommands = [
     'PR08PR?', 'PR10PR?', 'PR12PR?',
     'PR02OH?', 'PR04OH?', 'PR06OH?',
     'PR08OH?', 'PR10OH?', 'PR12OH?',
-    'BDSTATUS?'
+    'BDSTATUS?', 'PSDIL ?', 'PSDIC ?'
 ];
 
 /**
@@ -1569,6 +1578,23 @@ async function handleResponse(data) {
             } else {
                 adapter.setState('zoneMain.channelVolumeSubwooferTwo', helper.volToDb(channelVolume), true);
             } // endElse
+            break;
+        }
+        case 'PSDILON':
+            adapter.setState('settings.dialogLevelAdjust', true, true);
+            break;
+        case 'PSDILOFF':
+            adapter.setState('settings.dialogLevelAdjust', false, true);
+            break;
+        case 'PSDIL': {
+            let level = data.split(' ')[1];
+            level = helper.volToDb(level);
+            adapter.setState('settings.dialogLevel', level, true);
+            break;
+        }
+        case 'PSDIC': {
+            const level = parseInt(data.split(' ')[1]);
+            adapter.setState('settings.dialogControl', level, true);
             break;
         }
         default:
