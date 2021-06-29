@@ -380,9 +380,9 @@ function startAdapter(options) {
                 try {
                     // check if its a valid RegExp
                     new RegExp(state);
-                    adapter.setState('settings.expertReadingPattern', state, true);
+                    await adapter.setStateAsync('settings.expertReadingPattern', state, true);
                 } catch (e) {
-                    adapter.log.warn(`[COMMAND] Cannot update expert reading pattern: ${e}`);
+                    adapter.log.warn(`[COMMAND] Cannot update expert reading pattern: ${e.message}`);
                 }
                 break;
             case 'settings.expertCommand': { // Sending custom commands
@@ -625,6 +625,8 @@ client.on('error', error => {
             adapter.log.warn('AVR unreachable, check the Network Config of your AVR');
         } else if (error.code === 'EALREADY' || error.code === 'EISCONN') {
             return adapter.log.warn('Adapter is already connecting/connected');
+        } else if (error.code === 'ETIMEDOUT') {
+            adapter.log.warn('Connection timed out');
         } else {
             adapter.log.warn(`Connection closed: ${error}`);
         }
@@ -635,6 +637,8 @@ client.on('error', error => {
             adapter.log.debug('AVR unreachable, check the Network Config of your AVR');
         } else if (error.code === 'EALREADY' || error.code === 'EISCONN') {
             return adapter.log.debug('Adapter is already connecting/connected');
+        } else if (error.code === 'ETIMEDOUT') {
+            adapter.log.debug('Connection timed out');
         } else {
             adapter.log.warn(`Connection closed: ${error}`);
         }
@@ -961,9 +965,9 @@ async function handleUsStateChange(id, stateVal) {
         case 'settings.expertReadingPattern':
             try {
                 new RegExp(stateVal);
-                adapter.setState('settings.expertReadingPattern', stateVal, true);
+                await adapter.setStateAsync('settings.expertReadingPattern', stateVal, true);
             } catch (e) {
-                adapter.log.warn(`[COMMAND] Cannot update expert reading pattern: ${e}`);
+                adapter.log.warn(`[COMMAND] Cannot update expert reading pattern: ${e.message}`);
             }
             break;
         case 'display.brightness':
@@ -1878,7 +1882,7 @@ async function createZone(zone) {
         }
         zonesCreated[zone] = true;
     } catch (e) {
-        adapter.log.warn(`Could not create zone ${zone}: ${e}`);
+        adapter.log.warn(`Could not create zone ${zone}: ${e.message}`);
     }
 } // endCreateZone
 
@@ -2018,7 +2022,7 @@ async function createDisplayAndHttp() {
         } // endIf
         displayAbility = true;
     } catch (e) {
-        adapter.log.error(`Could not create Display Content states: ${e}`);
+        adapter.log.error(`Could not create Display Content states: ${e.message}`);
     }
 } // endCreateDisplayAndHttp
 
@@ -2070,7 +2074,7 @@ async function createMonitorState() {
         }
         multiMonitor = true;
     } catch (e) {
-        adapter.log.error(`Could not create monitor states: ${e}`);
+        adapter.log.error(`Could not create monitor states: ${e.message}`);
     }
 } // endCreateMonitorState
 
@@ -2128,7 +2132,7 @@ async function createSubTwo() {
         }
         subTwo = true;
     } catch (e) {
-        adapter.log.error(`Could not create subwoofer two states: ${e}`);
+        adapter.log.error(`Could not create subwoofer two states: ${e.message}`);
     }
 } // endCreateSubTwo
 
@@ -2197,7 +2201,7 @@ async function createLfcAudyssey() {
         }
         audysseyLfc = true;
     } catch (e) {
-        adapter.log.error(`Could not create Audyssey LFC states: ${e}`);
+        adapter.log.error(`Could not create Audyssey LFC states: ${e.message}`);
     }
 } // endCreateLfcAudyssey
 
@@ -2273,7 +2277,7 @@ async function createStandardStates(type) {
             await Promise.all(promises);
             adapter.log.debug('[INFO] DE states created');
         } catch (e) {
-            adapter.log.error(`Could not create DE states: ${e}`);
+            adapter.log.error(`Could not create DE states: ${e.message}`);
         }
     } else if (type === 'US') {
         for (const obj of helper.usCommands) {
@@ -2305,7 +2309,7 @@ async function createStandardStates(type) {
             await Promise.all(promises);
             adapter.log.debug('[INFO] US states created');
         } catch (e) {
-            adapter.log.error(`Could not create US states: ${e}`);
+            adapter.log.error(`Could not create US states: ${e.message}`);
         }
     } else {
         throw new Error('Unknown receiver type');

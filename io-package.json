@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "denon",
-        "version": "1.11.0",
+        "version": "1.11.1",
         "news": {
+            "1.11.1": {
+                "en": "fixes for silent reconnection - if ETIMEDOUT occurs repeately switch to debug, like for other errors (closes #149)",
+                "de": "Korrekturen für stille Wiederverbindung - wenn ETIMEDOUT wiederholt auftritt, wechseln Sie zum Debug, wie bei anderen Fehlern (schließt #149)",
+                "ru": "исправления для тихого переподключения - если ETIMEDOUT происходит повторно, переключитесь на отладку, как и для других ошибок (закрывает # 149)",
+                "pt": "correções para reconexão silenciosa - se ETIMEDOUT ocorrer repetidamente, alterne para depuração, como para outros erros (fecha # 149)",
+                "nl": "oplossingen voor stille herverbinding - als ETIMEDOUT herhaaldelijk optreedt, schakelt u over naar debuggen, zoals voor andere fouten (sluit #149)",
+                "fr": "correctifs pour la reconnexion silencieuse - si ETIMEDOUT se produit à plusieurs reprises, passez au débogage, comme pour d'autres erreurs (ferme #149)",
+                "it": "correzioni per la riconnessione silenziosa - se ETIMEDOUT si verifica ripetutamente passare al debug, come per altri errori (chiude il #149)",
+                "es": "Correcciones para la reconexión silenciosa: si ETIMEDOUT ocurre repetidamente, cambie a depuración, como para otros errores (cierra # 149)",
+                "pl": "poprawki dla cichego ponownego połączenia - jeśli wystąpi ETIMEDOUT, ponownie przełącz się na debugowanie, tak jak w przypadku innych błędów (zamyka #149)",
+                "zh-cn": "修复静默重新连接 - 如果重复发生 ETIMEDOUT 切换到调试，就像其他错误一样（关闭＃149）"
+            },
             "1.11.0": {
                 "en": "implemented dialog level adjustment for DTS content (closes #143)\nnew datapoints are `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
                 "de": "implementierte Dialogpegelanpassung für DTS-Inhalte (schließt #143)\nneue Datenpunkte sind `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
@@ -230,18 +242,6 @@
                 "es": "capacidad adicional para leer los datos deseados por los estados 'expertReading'",
                 "pl": "dodano możliwość odczytu pożądanych danych przez stany „expertReading”",
                 "zh-cn": "通过“ expertReading”状态增加了读取所需数据的能力"
-            },
-            "1.6.1": {
-                "en": "fixed bug with selectInput for zone2 and 3",
-                "de": "Fehler mit SelectInput für Zone2 und 3 behoben",
-                "ru": "исправлена ​​ошибка с selectInput для zone2 и 3",
-                "pt": "bug corrigido com selectInput para as zonas 2 e 3",
-                "nl": "bug opgelost met selectInput voor zone2 en 3",
-                "fr": "bug corrigé avec selectInput pour zone2 et 3",
-                "it": "bug risolto con selectInput per zone2 e 3",
-                "es": "error corregido con selectInput para zone2 y 3",
-                "pl": "naprawiony błąd z selectInput dla strefy 2 i 3",
-                "zh-cn": "修复了针对zone2和3的selectInput的错误"
             }
         },
         "title": "DENON AVR",
