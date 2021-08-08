@@ -1452,7 +1452,7 @@ async function handleResponse(data) {
             break;
         }
         case 'ZPSTRE': {
-            const state = parseFloat(data.split(' ')[1]);
+            const state = helper.volToDb(data.split(' ')[1]);
             adapter.setState(`zone${zoneNumber}.equalizerTreble`, state, true);
             break;
         }
