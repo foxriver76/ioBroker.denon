@@ -52,5 +52,12 @@
   "bugs": {
     "url": "https://github.com/foxriver76/ioBroker.denon/issues"
   },
+  "files": [
+    "main.js",
+    "lib/",
+    "admin/",
+    "io-package.json",
+    "LICENSE"
+  ],
   "readmeFilename": "README.md"
 }

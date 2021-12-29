@@ -24,7 +24,6 @@ let displayAbility = false;
 let multiMonitor = false;
 let pollingVar = null;
 let connectingVar = null;
-let intervalUpdateVar = null;
 let intervalPollVar = null;
 let subTwo = false;
 let audysseyLfc = false;
@@ -51,10 +50,6 @@ function startAdapter(options) {
 
             if (intervalPollVar) {
                 clearInterval(intervalPollVar);
-            }
-
-            if (intervalUpdateVar) {
-                clearInterval(intervalUpdateVar);
             }
 
             adapter.log.info('[END] Stopping Denon AVR adapter...');
@@ -765,14 +760,11 @@ const updateCommands = [
 /**
  * Update all states by sending the defined updateCommands
  */
-function updateStates() {
-    let i = 0;
-    intervalUpdateVar = setInterval(() => {
-        sendRequest(updateCommands[i]);
-        if (++i === updateCommands.length) {
-            clearInterval(intervalUpdateVar);
-        }
-    }, requestInterval);
+async function updateStates() {
+    for (const command of updateCommands) {
+        sendRequest(command);
+        await helper.wait(requestInterval);
+    }
 } // endUpdateStates
 
 const pollCommands = [
@@ -1109,6 +1101,12 @@ async function handleUsStateChange(id, stateVal) {
     } // endSwitch
 } // endHandleUsStateChange
 
+/**
+ * Handle single response from AVR
+ *
+ * @param {string} data
+ * @return {Promise<void>}
+ */
 async function handleResponse(data) {
     if (!pollingVar) { // Keep connection alive & poll states
         pollingVar = setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
@@ -1148,7 +1146,7 @@ async function handleResponse(data) {
             return;
         } // return if remote command received before response to SV (receiverCheck)
     } else if (receiverType === 'US') {
-        return void await handleUsResponse(data);
+        return void handleUsResponse(data);
     }
 
     // get command out of String
