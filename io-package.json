@@ -1,404 +1,248 @@
 {
-    "common": {
-        "name": "denon",
-        "version": "1.11.2",
-        "news": {
-            "1.11.2": {
-                "en": "we fixed missing conversion to db on equalizer treble state for additional zones (fixes #162)",
-                "de": "wir haben die fehlende Konvertierung in db im Equalizer-Höhenzustand für zusätzliche Zonen behoben (Fixes Nr. 162)",
-                "ru": "мы исправили отсутствующее преобразование в db на высоких частотах эквалайзера для дополнительных зон (исправления # 162)",
-                "pt": "corrigimos a falta de conversão para db no estado de agudos do equalizador para zonas adicionais (correções # 162)",
-                "nl": "we hebben de ontbrekende conversie naar db opgelost in de treble-status van de equalizer voor extra zones (fixes #162)",
-                "fr": "nous avons corrigé la conversion manquante en db sur l'état des aigus de l'égaliseur pour les zones supplémentaires (corrections #162)",
-                "it": "abbiamo corretto la conversione mancante in db sullo stato degli alti dell'equalizzatore per zone aggiuntive (correzioni #162)",
-                "es": "arreglamos la conversión faltante a db en el estado de agudos del ecualizador para zonas adicionales (arreglos # 162)",
-                "pl": "naprawiliśmy brakującą konwersję do db na stanie sopranów korektora dla dodatkowych stref (poprawki #162)",
-                "zh-cn": "我们修复了额外区域的均衡器高音状态上缺少的 db 转换（修复 #162）"
-            },
-            "1.11.1": {
-                "en": "fixes for silent reconnection - if ETIMEDOUT occurs repeately switch to debug, like for other errors (closes #149)",
-                "de": "Korrekturen für stille Wiederverbindung - wenn ETIMEDOUT wiederholt auftritt, wechseln Sie zum Debug, wie bei anderen Fehlern (schließt #149)",
-                "ru": "исправления для тихого переподключения - если ETIMEDOUT происходит повторно, переключитесь на отладку, как и для других ошибок (закрывает # 149)",
-                "pt": "correções para reconexão silenciosa - se ETIMEDOUT ocorrer repetidamente, alterne para depuração, como para outros erros (fecha # 149)",
-                "nl": "oplossingen voor stille herverbinding - als ETIMEDOUT herhaaldelijk optreedt, schakelt u over naar debuggen, zoals voor andere fouten (sluit #149)",
-                "fr": "correctifs pour la reconnexion silencieuse - si ETIMEDOUT se produit à plusieurs reprises, passez au débogage, comme pour d'autres erreurs (ferme #149)",
-                "it": "correzioni per la riconnessione silenziosa - se ETIMEDOUT si verifica ripetutamente passare al debug, come per altri errori (chiude il #149)",
-                "es": "Correcciones para la reconexión silenciosa: si ETIMEDOUT ocurre repetidamente, cambie a depuración, como para otros errores (cierra # 149)",
-                "pl": "poprawki dla cichego ponownego połączenia - jeśli wystąpi ETIMEDOUT, ponownie przełącz się na debugowanie, tak jak w przypadku innych błędów (zamyka #149)",
-                "zh-cn": "修复静默重新连接 - 如果重复发生 ETIMEDOUT 切换到调试，就像其他错误一样（关闭＃149）"
-            },
-            "1.11.0": {
-                "en": "implemented dialog level adjustment for DTS content (closes #143)\nnew datapoints are `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
-                "de": "implementierte Dialogpegelanpassung für DTS-Inhalte (schließt #143)\nneue Datenpunkte sind `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
-                "ru": "реализована настройка уровня диалога для контента DTS (закрывает # 143)\nновые точки данных: settings.dialogLevelAdjust, settings.dialogLevel, settings.dialogControl.",
-                "pt": "implementou ajuste de nível de diálogo para conteúdo DTS (fecha # 143)\nnovos pontos de dados são `settings.dialogLevelAdjust`,` settings.dialogLevel`, `settings.dialogControl`",
-                "nl": "geïmplementeerde aanpassing van het dialoogniveau voor DTS-inhoud (sluit #143)\nnieuwe datapunten zijn `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
-                "fr": "ajustement du niveau de dialogue mis en œuvre pour le contenu DTS (ferme #143)\nles nouveaux points de données sont `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
-                "it": "implementata la regolazione del livello di dialogo per il contenuto DTS (chiude il numero 143)\ni nuovi punti dati sono `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
-                "es": "ajuste de nivel de diálogo implementado para contenido DTS (cierra # 143)\nlos nuevos puntos de datos son `settings.dialogLevelAdjust`,` settings.dialogLevel`, `settings.dialogControl`",
-                "pl": "zaimplementowana regulacja poziomu dialogów dla zawartości DTS (zamyka #143)\nnowe punkty danych to `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
-                "zh-cn": "实现了 DTS 内容的对话级别调整（关闭 #143）\n新数据点是`settings.dialogLevelAdjust`、`settings.dialogLevel`、`settings.dialogControl`"
-            },
-            "1.10.7": {
-                "en": "fix missing conversion to db on equalizer states for additional zones (fixes #137)",
-                "de": "Behebung der fehlenden Konvertierung in db bei Equalizer-Zuständen für zusätzliche Zonen (Fixes # 137)",
-                "ru": "исправить отсутствующее преобразование в db в состояниях эквалайзера для дополнительных зон (исправления # 137)",
-                "pt": "corrigir a falta de conversão para db nos estados do equalizador para zonas adicionais (correções # 137)",
-                "nl": "ontbrekende conversie naar db op equalizer-statussen voor extra zones repareren (fix # 137)",
-                "fr": "correction de la conversion manquante en db sur les états de l'égaliseur pour des zones supplémentaires (corrections # 137)",
-                "it": "corretta la conversione mancante in db negli stati dell'equalizzatore per zone aggiuntive (correzioni # 137)",
-                "es": "corrige la conversión faltante a db en los estados del ecualizador para zonas adicionales (arreglos # 137)",
-                "pl": "napraw brakującą konwersję do db w stanach korektora dla dodatkowych stref (poprawki # 137)",
-                "zh-cn": "修复了其他区域的均衡器状态下缺少到db的转换（修复＃137）"
-            },
-            "1.10.6": {
-                "en": "we fixed some more types",
-                "de": "Wir haben einige weitere Typen behoben",
-                "ru": "мы исправили еще несколько типов",
-                "pt": "nós consertamos mais alguns tipos",
-                "nl": "we hebben nog wat meer soorten gerepareerd",
-                "fr": "nous avons corrigé d'autres types",
-                "it": "abbiamo corretto altri tipi",
-                "es": "arreglamos algunos tipos más",
-                "pl": "naprawiliśmy kilka innych typów",
-                "zh-cn": "我们修复了更多类型"
-            },
-            "1.10.5": {
-                "en": "we fixed some datapoints having wrong types or wrong state values set (fixes #130)",
-                "de": "Wir haben einige Datenpunkte mit falschen Typen oder falschen Statuswerten behoben (Fixes # 130).",
-                "ru": "мы исправили некоторые точки данных, имеющие неправильные типы или неверные значения состояния (исправления # 130)",
-                "pt": "corrigimos alguns pontos de dados com tipos errados ou valores de estado incorretos definidos (correções # 130)",
-                "nl": "we hebben enkele datapunten gerepareerd met verkeerde typen of verkeerde statuswaarden ingesteld (fixes # 130)",
-                "fr": "nous avons corrigé certains points de données ayant des types incorrects ou des valeurs d'état incorrectes (correctifs # 130)",
-                "it": "abbiamo corretto alcuni datapoint con tipi errati o valori di stato errati impostati (correzioni # 130)",
-                "es": "arreglamos algunos puntos de datos que tenían tipos incorrectos o valores de estado incorrectos establecidos (arreglos # 130)",
-                "pl": "naprawiliśmy niektóre punkty danych z niewłaściwymi typami lub ustawionymi nieprawidłowymi wartościami stanu (poprawki # 130)",
-                "zh-cn": "我们修复了某些类型错误或状态值设置错误的数据点（修复＃130）"
-            },
-            "1.10.4": {
-                "en": "if an older model (e.g. AVR 3808) just sends `NSE`, we do not set displayContent state anymore (fixes #112)",
-                "de": "Wenn ein älteres Modell (z. B. AVR 3808) nur \"NSE\" sendet, setzen wir den displayContent-Status nicht mehr (Fixes # 112).",
-                "ru": "если более старая модель (например, AVR 3808) просто отправляет NSE, мы больше не устанавливаем состояние displayContent (исправления # 112)",
-                "pt": "se um modelo mais antigo (por exemplo, AVR 3808) apenas enviar `NSE`, não definimos mais o estado displayContent (correções # 112)",
-                "nl": "als een ouder model (bijv.AVR 3808) gewoon 'NSE' verzendt, stellen we de status displayContent niet meer in (fix # 112)",
-                "fr": "si un modèle plus ancien (par exemple AVR 3808) envoie simplement `NSE`, nous ne définissons plus l'état displayContent (correction n ° 112)",
-                "it": "se un modello più vecchio (ad esempio AVR 3808) invia semplicemente \"NSE\", non impostiamo più lo stato displayContent (correzione # 112)",
-                "es": "si un modelo anterior (por ejemplo, AVR 3808) simplemente envía `NSE`, ya no establecemos el estado de displayContent (arreglos # 112)",
-                "pl": "jeśli starszy model (np. AVR 3808) wysyła tylko „NSE”, nie ustawiamy już stanu displayContent (poprawki # 112)",
-                "zh-cn": "如果较旧的型号（例如AVR 3808）仅发送“ NSE”，则我们不再设置displayContent状态（修复＃112）"
-            },
-            "1.10.3": {
-                "en": "don't poll whole online presets after change, it is unnecessary load",
-                "de": "Fragen Sie nach der Änderung nicht ganze Online-Voreinstellungen ab, es ist unnötiges Laden",
-                "ru": "не опрашивайте целые онлайн-пресеты после изменения, это ненужная загрузка",
-                "pt": "não pesquise predefinições online inteiras após a alteração, é carga desnecessária",
-                "nl": "controleer niet de hele online presets na wijziging, het is onnodige belasting",
-                "fr": "ne pas interroger les préréglages en ligne entiers après le changement, c'est une charge inutile",
-                "it": "non eseguire il polling di interi preset online dopo la modifica, è un carico non necessario",
-                "es": "no sondear ajustes preestablecidos en línea completos después del cambio, es una carga innecesaria",
-                "pl": "nie sprawdzaj całych presetów online po zmianie, jest to niepotrzebne ładowanie",
-                "zh-cn": "更改后不轮询整个在线预设，这是不必要的负载"
-            },
-            "1.10.2": {
-                "en": "return after detecting NSH command\nuse release script",
-                "de": "Rückkehr nach Erkennung des NSH-Befehls\nVerwenden Sie das Release-Skript",
-                "ru": "вернуться после обнаружения команды NSH\nиспользовать сценарий выпуска",
-                "pt": "retornar após detectar o comando NSH\nusar script de lançamento",
-                "nl": "terugkeer na het detecteren van de NSH-opdracht\ngebruik release script",
-                "fr": "retour après détection de la commande NSH\nutiliser le script de publication",
-                "it": "tornare dopo aver rilevato il comando NSH\nusa lo script di rilascio",
-                "es": "volver después de detectar el comando NSH\nusar script de lanzamiento",
-                "pl": "powrót po wykryciu polecenia NSH\nużyj skryptu wydania",
-                "zh-cn": "检测到NSH命令后返回\n使用发布脚本"
-            },
-            "1.10.1": {
-                "en": "return after detecting NSH command\nuse release script",
-                "de": "Rückkehr nach Erkennung des NSH-Befehls\nVerwenden Sie das Release-Skript",
-                "ru": "вернуться после обнаружения команды NSH\nиспользовать сценарий выпуска",
-                "pt": "retornar após detectar o comando NSH\nusar script de lançamento",
-                "nl": "terugkeer na het detecteren van de NSH-opdracht\ngebruik release script",
-                "fr": "retour après détection de la commande NSH\nutiliser le script de publication",
-                "it": "tornare dopo aver rilevato il comando NSH\nusa lo script di rilascio",
-                "es": "volver después de detectar el comando NSH\nusar script de lanzamiento",
-                "pl": "powrót po wykryciu polecenia NSH\nużyj skryptu wydania",
-                "zh-cn": "检测到NSH命令后返回\n使用发布脚本"
-            },
-            "1.10.0": {
-                "en": "we now auto-detect used \"select inputs\" and add them to the selection",
-                "de": "Wir erkennen jetzt automatisch verwendete \"Auswahleingänge\" und fügen sie der Auswahl hinzu",
-                "ru": "теперь мы автоматически определяем используемые \"входы выбора\" и добавляем их в выбор",
-                "pt": "agora detectamos automaticamente as \"entradas selecionadas\" e as adicionamos à seleção",
-                "nl": "we detecteren nu automatisch gebruikte \"select inputs\" en voegen ze toe aan de selectie",
-                "fr": "nous détectons maintenant automatiquement les \"entrées de sélection\" utilisées et les ajoutons à la sélection",
-                "it": "ora rileviamo automaticamente gli \"input di selezione\" utilizzati e li aggiungiamo alla selezione",
-                "es": "ahora detectamos automáticamente las \"entradas seleccionadas\" y las agregamos a la selección",
-                "pl": "teraz automatycznie wykrywamy używane „wybierz wejścia” i dodajemy je do zaznaczenia",
-                "zh-cn": "我们现在自动检测使用过的“选择输入”并将其添加到选择中"
-            },
-            "1.9.4": {
-                "en": "added missing rear height speaker states",
-                "de": "fehlende Lautsprecherzustände in der hinteren Höhe hinzugefügt",
-                "ru": "добавлены отсутствующие состояния заднего верхнего динамика",
-                "pt": "adicionado estados faltantes do alto-falante traseiro",
-                "nl": "toegevoegde ontbrekende achterhoogteluidsprekerstatussen",
-                "fr": "ajout d'états de haut-parleurs arrière manquants",
-                "it": "aggiunti gli stati dell'altoparlante posteriore mancante",
-                "es": "Se agregaron estados de altavoz de altura trasera faltantes",
-                "pl": "dodano brakujące stany głośników tylnych",
-                "zh-cn": "添加了缺少的后置高度扬声器状态"
-            },
-            "1.9.3": {
-                "en": "reverted the last added options because they are not working as intended and we now no longer remove digits and spaces from surroundMode response",
-                "de": "Die zuletzt hinzugefügten Optionen wurden zurückgesetzt, da sie nicht wie beabsichtigt funktionieren und wir jetzt keine Ziffern und Leerzeichen mehr aus der SurroundMode-Antwort entfernen",
-                "ru": "отменил последние добавленные параметры, потому что они не работают должным образом, и теперь мы больше не удаляем цифры и пробелы из ответа SurroundMode",
-                "pt": "reverteu as últimas opções adicionadas porque não estão funcionando como pretendido e agora não removemos mais dígitos e espaços da resposta surroundMode",
-                "nl": "hebben de laatst toegevoegde opties teruggedraaid omdat ze niet werken zoals bedoeld en we verwijderen nu geen cijfers en spaties meer uit de surroundMode-respons",
-                "fr": "a annulé les dernières options ajoutées car elles ne fonctionnent pas comme prévu et nous ne supprimons plus les chiffres et les espaces de la réponse surroundMode",
-                "it": "ha ripristinato le ultime opzioni aggiunte perché non funzionano come previsto e ora non rimuoviamo più cifre e spazi dalla risposta surroundMode",
-                "es": "revirtió las últimas opciones agregadas porque no funcionan como se esperaba y ahora ya no eliminamos dígitos y espacios de la respuesta surroundMode",
-                "pl": "cofnęliśmy ostatnio dodane opcje, ponieważ nie działają one zgodnie z przeznaczeniem i nie usuwamy już cyfr i spacji z odpowiedzi surroundMode",
-                "zh-cn": "还原了最后添加的选项，因为它们不能按预期运行，并且我们现在不再从SurroundMode响应中删除数字和空格"
-            },
-            "1.9.2": {
-                "en": "added some missing options for surroundMode",
-                "de": "Einige fehlende Optionen für SurroundMode wurden hinzugefügt",
-                "ru": "добавлены некоторые недостающие параметры для SurroundMode",
-                "pt": "adicionou algumas opções que faltavam para surroundMode",
-                "nl": "enkele ontbrekende opties toegevoegd voor surroundMode",
-                "fr": "ajouté quelques options manquantes pour surroundMode",
-                "it": "aggiunte alcune opzioni mancanti per surroundMode",
-                "es": "agregó algunas opciones faltantes para surroundMode",
-                "pl": "dodano kilka brakujących opcji dla trybu surround",
-                "zh-cn": "为SurroundMode添加了一些缺少的选项"
-            },
-            "1.9.1": {
-                "en": "added channel volume for subwoofers, we no longer write in destroyed socket on unload, internal optimizations",
-                "de": "hinzugefügtes Kanalvolumen für Subwoofer, wir schreiben nicht mehr in zerstörten Socket beim Entladen, interne Optimierungen",
-                "ru": "добавлена громкость канала для сабвуферов, мы больше не записываем в разрушенный сокет при выгрузке, внутренняя оптимизация",
-                "pt": "adicionado volume de canal para subwoofers, não gravamos mais no soquete destruído ao descarregar, otimizações internas",
-                "nl": "kanaalvolume toegevoegd voor subwoofers, we schrijven niet langer in vernietigde socket bij het uitladen, interne optimalisaties",
-                "fr": "volume de canal ajouté pour les subwoofers, nous n'écrivons plus dans la prise détruite lors du déchargement, optimisations internes",
-                "it": "aggiunto volume del canale per i subwoofer, non scriviamo più in socket distrutto allo scaricamento, ottimizzazioni interne",
-                "es": "Volumen de canal agregado para subwoofers, ya no escribimos en socket destruido al descargar, optimizaciones internas",
-                "pl": "dodano głośność kanału dla subwooferów, nie zapisujemy już w zniszczonym gnieździe przy rozładowaniu, wewnętrzne optymalizacje",
-                "zh-cn": "增加了低音炮的声道音量，我们不再在卸载时写入损坏的插槽，内部优化"
-            },
-            "1.8.1": {
-                "en": "channelVolume states added for atmos speakers",
-                "de": "channelVolume-Zustände für atmos-Lautsprecher hinzugefügt",
-                "ru": "ChannelVolume добавлены состояния для динамиков atmos",
-                "pt": "estados channelVolume adicionados para alto-falantes atmosféricos",
-                "nl": "kanaalVolumestaten toegevoegd voor atmos-luidsprekers",
-                "fr": "channelVolume états ajoutés pour les enceintes atmos",
-                "it": "stati aggiunti channelVolume per i diffusori atmos",
-                "es": "ChannelVolume estados agregados para los altavoces atmosféricos",
-                "pl": "Dodano stany channelVolume dla głośników Atmos",
-                "zh-cn": "为atmos扬声器添加了channelVolume状态"
-            },
-            "1.7.7": {
-                "en": "fixed timing issue which could lead to state creation procedure triggered more than once",
-                "de": "Problem mit dem Timing behoben, das dazu führen konnte, dass der Statuserstellungsvorgang mehr als einmal ausgelöst wurde",
-                "ru": "исправлена ошибка синхронизации, которая могла приводить к тому, что процедура создания состояния запускалась более одного раза",
-                "pt": "problema de tempo fixo que poderia levar ao procedimento de criação de estado acionado mais de uma vez",
-                "nl": "Probleem met timing opgelost dat ertoe kon leiden dat de procedure voor het aanmaken van staten meer dan eens werd geactiveerd",
-                "fr": "Correction d'un problème de synchronisation pouvant entraîner le déclenchement de la procédure de création d'état plus d'une fois",
-                "it": "risolto problema di temporizzazione che poteva portare alla procedura di creazione dello stato innescata più di una volta",
-                "es": "Se corrigió el problema de tiempo que podría conducir al procedimiento de creación de estado activado más de una vez",
-                "pl": "naprawiono problem z synchronizacją, który mógł prowadzić do procedury tworzenia stanu uruchamianej więcej niż raz",
-                "zh-cn": "修复了可能导致状态创建过程触发多次的定时问题"
-            },
-            "1.7.5": {
-                "en": "better error handling",
-                "de": "bessere Fehlerbehandlung",
-                "ru": "лучшая обработка ошибок",
-                "pt": "melhor tratamento de erros",
-                "nl": "betere foutafhandeling",
-                "fr": "meilleure gestion des erreurs",
-                "it": "migliore gestione degli errori",
-                "es": "mejor manejo de errores",
-                "pl": "lepsza obsługa błędów",
-                "zh-cn": "更好的错误处理"
-            },
-            "1.7.4": {
-                "en": "fixed potential timeout issues",
-                "de": "potenzielle Timeout-Probleme behoben",
-                "ru": "исправлены потенциальные проблемы тайм-аута",
-                "pt": "possíveis problemas de tempo limite corrigidos",
-                "nl": "mogelijke time-outproblemen opgelost",
-                "fr": "Correction de problèmes potentiels de délai d'attente",
-                "it": "risolti potenziali problemi di timeout",
-                "es": "posibles problemas de tiempo de espera corregidos",
-                "pl": "naprawiono potencjalne problemy z przekroczeniem limitu czasu",
-                "zh-cn": "解决了潜在的超时问题"
-            },
-            "1.7.2": {
-                "en": "another fix for 'DENON Picool'",
-                "de": "ein weiterer Fix für 'DENON Picool'",
-                "ru": "еще одно исправление для «DENON Picool»",
-                "pt": "outra correção para 'DENON Picool'",
-                "nl": "nog een oplossing voor 'DENON Picool'",
-                "fr": "un autre correctif pour 'DENON Picool'",
-                "it": "un'altra correzione per 'DENON Picool'",
-                "es": "otra solución para 'DENON Picool'",
-                "pl": "kolejna poprawka dla „DENON Picool”",
-                "zh-cn": "'DENON Picool'的另一个修复"
-            }
-        },
-        "title": "DENON AVR",
-        "titleLang": {
-            "en": "DENON AVR",
-            "de": "DENON AVR"
-        },
-        "desc": {
-            "en": "Control your DENON or Marantz AV Receiver",
-            "de": "Steuern Sie Ihren DENON oder Marantz AV-Receiver",
-            "ru": "Управляйте своим DENON или приемником Marantz AV",
-            "pt": "Controle o seu receptor AV DENON ou Marantz",
-            "nl": "Bedien uw DENON of Marantz AV-ontvanger",
-            "fr": "Contrôlez votre récepteur AV DENON ou Marantz",
-            "it": "Controlla il tuo ricevitore audio DENON o Marantz",
-            "es": "Controle su receptor AV DENON o Marantz",
-            "pl": "Kontroluj swój odbiornik DENON lub Marantz AV",
-            "zh-cn": "控制你的天龙马兰士或AV接收器"
-        },
-        "authors": [
-            "Moritz Heusinger <moritz.heusinger@gmail.com>"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "denon.png",
-        "materialize": true,
-        "enabled": true,
-        "compact": true,
-        "messagebox": true,
-        "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.denon/master/admin/denon.png",
-        "keywords": [
-            "denon",
-            "marantz",
-            "avr",
-            "harmony",
-            "audio"
-        ],
-        "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
-        "docs": {
-            "en": "README.md",
-            "de": "docs/de/README.md"
-        },
-        "loglevel": "info",
-        "type": "multimedia",
-        "connectionType": "local",
-        "dataSource": "push"
+  "common": {
+    "name": "denon",
+    "version": "1.12.0",
+    "news": {
+      "1.12.0": {
+        "en": "we introduce tuner states\nperformance optimizations",
+        "de": "Wir führen Tuner-Zustände ein\nLeistungsoptimierungen",
+        "ru": "мы вводим состояния тюнера\nоптимизация производительности",
+        "pt": "nós introduzimos estados do sintonizador\notimizações de desempenho",
+        "nl": "we introduceren tunerstatussen\nprestatie-optimalisaties",
+        "fr": "nous introduisons les états du tuner\noptimisations de performances",
+        "it": "introduciamo gli stati del sintonizzatore\nottimizzazioni delle prestazioni",
+        "es": "introducimos estados de sintonizador\noptimizaciones de rendimiento",
+        "pl": "wprowadzamy stany tunera\noptymalizacje wydajności",
+        "zh-cn": "我们介绍调谐器状态\n性能优化"
+      },
+      "1.11.2": {
+        "en": "we fixed missing conversion to db on equalizer treble state for additional zones (fixes #162)",
+        "de": "wir haben die fehlende Konvertierung in db im Equalizer-Höhenzustand für zusätzliche Zonen behoben (Fixes Nr. 162)",
+        "ru": "мы исправили отсутствующее преобразование в db на высоких частотах эквалайзера для дополнительных зон (исправления # 162)",
+        "pt": "corrigimos a falta de conversão para db no estado de agudos do equalizador para zonas adicionais (correções # 162)",
+        "nl": "we hebben de ontbrekende conversie naar db opgelost in de treble-status van de equalizer voor extra zones (fixes #162)",
+        "fr": "nous avons corrigé la conversion manquante en db sur l'état des aigus de l'égaliseur pour les zones supplémentaires (corrections #162)",
+        "it": "abbiamo corretto la conversione mancante in db sullo stato degli alti dell'equalizzatore per zone aggiuntive (correzioni #162)",
+        "es": "arreglamos la conversión faltante a db en el estado de agudos del ecualizador para zonas adicionales (arreglos # 162)",
+        "pl": "naprawiliśmy brakującą konwersję do db na stanie sopranów korektora dla dodatkowych stref (poprawki #162)",
+        "zh-cn": "我们修复了额外区域的均衡器高音状态上缺少的 db 转换（修复 #162）"
+      },
+      "1.11.1": {
+        "en": "fixes for silent reconnection - if ETIMEDOUT occurs repeately switch to debug, like for other errors (closes #149)",
+        "de": "Korrekturen für stille Wiederverbindung - wenn ETIMEDOUT wiederholt auftritt, wechseln Sie zum Debug, wie bei anderen Fehlern (schließt #149)",
+        "ru": "исправления для тихого переподключения - если ETIMEDOUT происходит повторно, переключитесь на отладку, как и для других ошибок (закрывает # 149)",
+        "pt": "correções para reconexão silenciosa - se ETIMEDOUT ocorrer repetidamente, alterne para depuração, como para outros erros (fecha # 149)",
+        "nl": "oplossingen voor stille herverbinding - als ETIMEDOUT herhaaldelijk optreedt, schakelt u over naar debuggen, zoals voor andere fouten (sluit #149)",
+        "fr": "correctifs pour la reconnexion silencieuse - si ETIMEDOUT se produit à plusieurs reprises, passez au débogage, comme pour d'autres erreurs (ferme #149)",
+        "it": "correzioni per la riconnessione silenziosa - se ETIMEDOUT si verifica ripetutamente passare al debug, come per altri errori (chiude il #149)",
+        "es": "Correcciones para la reconexión silenciosa: si ETIMEDOUT ocurre repetidamente, cambie a depuración, como para otros errores (cierra # 149)",
+        "pl": "poprawki dla cichego ponownego połączenia - jeśli wystąpi ETIMEDOUT, ponownie przełącz się na debugowanie, tak jak w przypadku innych błędów (zamyka #149)",
+        "zh-cn": "修复静默重新连接 - 如果重复发生 ETIMEDOUT 切换到调试，就像其他错误一样（关闭＃149）"
+      },
+      "1.11.0": {
+        "en": "implemented dialog level adjustment for DTS content (closes #143)\nnew datapoints are `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+        "de": "implementierte Dialogpegelanpassung für DTS-Inhalte (schließt #143)\nneue Datenpunkte sind `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+        "ru": "реализована настройка уровня диалога для контента DTS (закрывает # 143)\nновые точки данных: settings.dialogLevelAdjust, settings.dialogLevel, settings.dialogControl.",
+        "pt": "implementou ajuste de nível de diálogo para conteúdo DTS (fecha # 143)\nnovos pontos de dados são `settings.dialogLevelAdjust`,` settings.dialogLevel`, `settings.dialogControl`",
+        "nl": "geïmplementeerde aanpassing van het dialoogniveau voor DTS-inhoud (sluit #143)\nnieuwe datapunten zijn `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+        "fr": "ajustement du niveau de dialogue mis en œuvre pour le contenu DTS (ferme #143)\nles nouveaux points de données sont `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+        "it": "implementata la regolazione del livello di dialogo per il contenuto DTS (chiude il numero 143)\ni nuovi punti dati sono `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+        "es": "ajuste de nivel de diálogo implementado para contenido DTS (cierra # 143)\nlos nuevos puntos de datos son `settings.dialogLevelAdjust`,` settings.dialogLevel`, `settings.dialogControl`",
+        "pl": "zaimplementowana regulacja poziomu dialogów dla zawartości DTS (zamyka #143)\nnowe punkty danych to `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
+        "zh-cn": "实现了 DTS 内容的对话级别调整（关闭 #143）\n新数据点是`settings.dialogLevelAdjust`、`settings.dialogLevel`、`settings.dialogControl`"
+      },
+      "1.10.7": {
+        "en": "fix missing conversion to db on equalizer states for additional zones (fixes #137)",
+        "de": "Behebung der fehlenden Konvertierung in db bei Equalizer-Zuständen für zusätzliche Zonen (Fixes # 137)",
+        "ru": "исправить отсутствующее преобразование в db в состояниях эквалайзера для дополнительных зон (исправления # 137)",
+        "pt": "corrigir a falta de conversão para db nos estados do equalizador para zonas adicionais (correções # 137)",
+        "nl": "ontbrekende conversie naar db op equalizer-statussen voor extra zones repareren (fix # 137)",
+        "fr": "correction de la conversion manquante en db sur les états de l'égaliseur pour des zones supplémentaires (corrections # 137)",
+        "it": "corretta la conversione mancante in db negli stati dell'equalizzatore per zone aggiuntive (correzioni # 137)",
+        "es": "corrige la conversión faltante a db en los estados del ecualizador para zonas adicionales (arreglos # 137)",
+        "pl": "napraw brakującą konwersję do db w stanach korektora dla dodatkowych stref (poprawki # 137)",
+        "zh-cn": "修复了其他区域的均衡器状态下缺少到db的转换（修复＃137）"
+      },
+      "1.10.6": {
+        "en": "we fixed some more types",
+        "de": "Wir haben einige weitere Typen behoben",
+        "ru": "мы исправили еще несколько типов",
+        "pt": "nós consertamos mais alguns tipos",
+        "nl": "we hebben nog wat meer soorten gerepareerd",
+        "fr": "nous avons corrigé d'autres types",
+        "it": "abbiamo corretto altri tipi",
+        "es": "arreglamos algunos tipos más",
+        "pl": "naprawiliśmy kilka innych typów",
+        "zh-cn": "我们修复了更多类型"
+      },
+      "1.10.5": {
+        "en": "we fixed some datapoints having wrong types or wrong state values set (fixes #130)",
+        "de": "Wir haben einige Datenpunkte mit falschen Typen oder falschen Statuswerten behoben (Fixes # 130).",
+        "ru": "мы исправили некоторые точки данных, имеющие неправильные типы или неверные значения состояния (исправления # 130)",
+        "pt": "corrigimos alguns pontos de dados com tipos errados ou valores de estado incorretos definidos (correções # 130)",
+        "nl": "we hebben enkele datapunten gerepareerd met verkeerde typen of verkeerde statuswaarden ingesteld (fixes # 130)",
+        "fr": "nous avons corrigé certains points de données ayant des types incorrects ou des valeurs d'état incorrectes (correctifs # 130)",
+        "it": "abbiamo corretto alcuni datapoint con tipi errati o valori di stato errati impostati (correzioni # 130)",
+        "es": "arreglamos algunos puntos de datos que tenían tipos incorrectos o valores de estado incorrectos establecidos (arreglos # 130)",
+        "pl": "naprawiliśmy niektóre punkty danych z niewłaściwymi typami lub ustawionymi nieprawidłowymi wartościami stanu (poprawki # 130)",
+        "zh-cn": "我们修复了某些类型错误或状态值设置错误的数据点（修复＃130）"
+      }
     },
-    "native": {
-        "ip": "",
-        "pollInterval": 7000,
-        "requestInterval": 100
+    "title": "DENON AVR",
+    "titleLang": {
+      "en": "DENON AVR",
+      "de": "DENON AVR"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If connected to AVR",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "display",
-            "type": "channel",
-            "common": {
-                "name": "Display Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "display.brightness",
-            "type": "state",
-            "common": {
-                "name": "Display brightness",
-                "role": "state",
-                "type": "string",
-                "write": true,
-                "read": true,
-                "states": {
-                    "0": "Off",
-                    "1": "Dark",
-                    "2": "Dimmed",
-                    "3": "Bright"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings",
-            "type": "channel",
-            "common": {
-                "name": "Settings and device commands"
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings.powerSystem",
-            "type": "state",
-            "common": {
-                "name": "System Power State",
-                "role": "switch.power",
-                "type": "boolean",
-                "write": true,
-                "read": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings.expertCommand",
-            "type": "state",
-            "common": {
-                "name": "Expert Command",
-                "role": "state",
-                "type": "string",
-                "write": true,
-                "read": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings.expertReadingResult",
-            "type": "state",
-            "common": {
-                "name": "Expert Reading Result",
-                "role": "state",
-                "type": "string",
-                "write": false,
-                "read": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings.expertReadingPattern",
-            "type": "state",
-            "common": {
-                "name": "Expert Reading Pattern",
-                "role": "regex",
-                "type": "string",
-                "write": true,
-                "read": true
-            },
-            "native": {}
+    "desc": {
+      "en": "Control your DENON or Marantz AV Receiver",
+      "de": "Steuern Sie Ihren DENON oder Marantz AV-Receiver",
+      "ru": "Управляйте своим DENON или приемником Marantz AV",
+      "pt": "Controle o seu receptor AV DENON ou Marantz",
+      "nl": "Bedien uw DENON of Marantz AV-ontvanger",
+      "fr": "Contrôlez votre récepteur AV DENON ou Marantz",
+      "it": "Controlla il tuo ricevitore audio DENON o Marantz",
+      "es": "Controle su receptor AV DENON o Marantz",
+      "pl": "Kontroluj swój odbiornik DENON lub Marantz AV",
+      "zh-cn": "控制你的天龙马兰士或AV接收器"
+    },
+    "authors": [
+      "Moritz Heusinger <moritz.heusinger@gmail.com>"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "denon.png",
+    "materialize": true,
+    "enabled": true,
+    "compact": true,
+    "messagebox": true,
+    "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.denon/master/admin/denon.png",
+    "keywords": [
+      "denon",
+      "marantz",
+      "avr",
+      "harmony",
+      "audio"
+    ],
+    "readme": "https://github.com/foxriver76/ioBroker.denon/blob/master/README.md",
+    "docs": {
+      "en": "README.md",
+      "de": "docs/de/README.md"
+    },
+    "loglevel": "info",
+    "type": "multimedia",
+    "connectionType": "local",
+    "dataSource": "push"
+  },
+  "native": {
+    "ip": "",
+    "pollInterval": 7000,
+    "requestInterval": 100
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If connected to AVR",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "display",
+      "type": "channel",
+      "common": {
+        "name": "Display Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "display.brightness",
+      "type": "state",
+      "common": {
+        "name": "Display brightness",
+        "role": "state",
+        "type": "string",
+        "write": true,
+        "read": true,
+        "states": {
+          "0": "Off",
+          "1": "Dark",
+          "2": "Dimmed",
+          "3": "Bright"
         }
-    ]
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings",
+      "type": "channel",
+      "common": {
+        "name": "Settings and device commands"
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.powerSystem",
+      "type": "state",
+      "common": {
+        "name": "System Power State",
+        "role": "switch.power",
+        "type": "boolean",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.expertCommand",
+      "type": "state",
+      "common": {
+        "name": "Expert Command",
+        "role": "state",
+        "type": "string",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.expertReadingResult",
+      "type": "state",
+      "common": {
+        "name": "Expert Reading Result",
+        "role": "state",
+        "type": "string",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.expertReadingPattern",
+      "type": "state",
+      "common": {
+        "name": "Expert Reading Pattern",
+        "role": "regex",
+        "type": "string",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    }
+  ]
 }

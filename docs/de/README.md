@@ -206,6 +206,16 @@ Der Adapter erstellt die folgenden Buttons:
 
    *Simuliert den "Info"-Knopf der Fernbedienung.*
 
+### Channel: tuner
+
+* tuner.frequencyUp
+
+  *Erhöht die Tuner Frequenz.*
+
+* tuner.frequencyDown
+
+  *Senkt die Tuner Frequenz.*
+
 ### States
 Die folgenden States werden vom Adapter angelegt:
 
@@ -415,7 +425,31 @@ Die folgenden States werden vom Adapter angelegt:
    
    *Number wert welcher die derzeitige Kanallautstärke der Box darstellt. Jede Box hat einen separaten State. Die
    Einstellungen sind für den derzeitigen Select Input Modus wirksam und können von -12 dB bis + 12 dB justiert werden.*
-   
+
+#### Channel: tuner
+
+* tuner.stationName
+
+  |Datentyp|Berechtigung|                                                                       
+  |:---:|:---:|
+  |string|R|
+
+  *Nur lesbarer string welcher den Namen der aktuellen Station beinhaltet, falls diese verfügbar ist.*
+
+* tuner.frequency
+
+  |Datentyp|Berechtigung|                                                                       
+  |:---:|:---:|
+  |number|R/W|
+
+  *Number Wert welcher die aktuelle Frequenz darstellt. Mit diesem State kann die Frequenz verändert werden.
+  Werte unter 500 sind auf FM Frequenz und über 500 auf AM Frequenz.*
+
+
+   ```javascript
+   setState('denon.0.tuner.frequency', 106.9); // Set frequency to 106.9 MHz (FM)
+   ```
+
 #### Channel: display
 
 * display.displayContent

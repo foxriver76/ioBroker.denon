@@ -15,7 +15,6 @@ const client = new net.Socket();
 let adapter;
 let host;
 let pollInterval;
-let requestInterval;
 let verboseConnection = true;
 let previousError;
 
@@ -24,7 +23,7 @@ let displayAbility = false;
 let multiMonitor = false;
 let pollingVar = null;
 let connectingVar = null;
-let intervalPollVar = null;
+// let intervalPollVar = null;
 let subTwo = false;
 let audysseyLfc = false;
 let pictureModeAbility = false;
@@ -48,9 +47,11 @@ function startAdapter(options) {
                 clearTimeout(pollingVar);
             } // endIf
 
+            /*
             if (intervalPollVar) {
                 clearInterval(intervalPollVar);
             }
+             */
 
             adapter.log.info('[END] Stopping Denon AVR adapter...');
             adapter.setState('info.connection', false, true);
@@ -93,7 +94,7 @@ function startAdapter(options) {
             adapter.log.info('[START] Starting DENON AVR adapter');
             host = adapter.config.ip;
             pollInterval = adapter.config.pollInterval || 7000;
-            requestInterval = adapter.config.requestInterval || 100;
+            // requestInterval = adapter.config.requestInterval || 100;
 
             const obj = await adapter.getForeignObjectAsync(adapter.namespace);
             // create device namespace
@@ -140,9 +141,9 @@ function startAdapter(options) {
         switch (id) {
             case 'zoneMain.powerZone':
                 if (state === true) {
-                    sendRequest('ZMON');
+                    await sendRequest('ZMON');
                 } else {
-                    sendRequest('ZMOFF');
+                    await sendRequest('ZMOFF');
                 }
                 break;
             case 'zoneMain.volume':
@@ -158,7 +159,7 @@ function startAdapter(options) {
                     leadingZero = '';
                 }
                 state = state.toString().replace('.', ''); // remove dot
-                sendRequest(`MV${leadingZero}${state}`);
+                await sendRequest(`MV${leadingZero}${state}`);
                 adapter.log.debug(`[INFO] <== Changed mainVolume to ${state}`);
                 break;
             case 'zoneMain.volumeDB':
@@ -175,200 +176,200 @@ function startAdapter(options) {
                     leadingZero = '';
                 }
                 state = state.toString().replace('.', ''); // remove dot
-                sendRequest(`MV${leadingZero}${state}`);
+                await sendRequest(`MV${leadingZero}${state}`);
                 break;
             case 'zoneMain.sleepTimer':
                 if (!state) { // state === 0
-                    sendRequest('SLPOFF');
+                    await sendRequest('SLPOFF');
                 } else if (state < 10) {
-                    sendRequest(`SLP00${state}`);
+                    await sendRequest(`SLP00${state}`);
                 } else if (state < 100) {
-                    sendRequest(`SLP0${state}`);
+                    await sendRequest(`SLP0${state}`);
                 } else if (state <= 120) {
-                    sendRequest(`SLP${state}`);
+                    await sendRequest(`SLP${state}`);
                 } // endElseIf
                 break;
             case 'zoneMain.volumeUp':
-                sendRequest('MVUP');
+                await sendRequest('MVUP');
                 break;
             case 'zoneMain.volumeDown':
-                sendRequest('MVDOWN');
+                await sendRequest('MVDOWN');
                 break;
             case 'zoneMain.muteIndicator':
                 if (state === true) {
-                    sendRequest('MUON');
+                    await sendRequest('MUON');
                 } else {
-                    sendRequest('MUOFF');
+                    await sendRequest('MUOFF');
                 } // endElseIf
                 break;
             case 'zoneMain.playPause':
-                sendRequest('NS94');
+                await sendRequest('NS94');
                 break;
             case 'zoneMain.play':
-                sendRequest('NS9A');
+                await sendRequest('NS9A');
                 break;
             case 'zoneMain.pause':
-                sendRequest('NS9B');
+                await sendRequest('NS9B');
                 break;
             case 'zoneMain.skipMinus':
-                sendRequest('NS9E');
+                await sendRequest('NS9E');
                 break;
             case 'zoneMain.skipPlus':
-                sendRequest('NS9D');
+                await sendRequest('NS9D');
                 break;
             case 'zoneMain.selectInput': {
                 const obj = await adapter.getObjectAsync('zoneMain.selectInput');
-                sendRequest(`SI${helper.decodeState(obj.common.states, state).toUpperCase()}`);
+                await sendRequest(`SI${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
             }
             case 'zoneMain.quickSelect':
-                sendRequest(`MSQUICK${state}`);
-                sendRequest(`MSSMART${state}`);
+                await sendRequest(`MSQUICK${state}`);
+                await sendRequest(`MSSMART${state}`);
                 break;
             case 'zoneMain.equalizerBassUp':
-                sendRequest('PSBAS UP');
+                await sendRequest('PSBAS UP');
                 break;
             case 'zoneMain.equalizerBassDown':
-                sendRequest('PSBAS DOWN');
+                await sendRequest('PSBAS DOWN');
                 break;
             case 'zoneMain.equalizerTrebleUp':
-                sendRequest('PSTRE UP');
+                await sendRequest('PSTRE UP');
                 break;
             case 'zoneMain.equalizerTrebleDown':
-                sendRequest('PSTRE DOWN');
+                await sendRequest('PSTRE DOWN');
                 break;
             case 'zoneMain.equalizerBass':
                 state = helper.dbToVol(state);
-                sendRequest(`PSBAS ${state}`);
+                await sendRequest(`PSBAS ${state}`);
                 break;
             case 'zoneMain.equalizerTreble':
                 state = helper.dbToVol(state);
-                sendRequest(`PSTRE ${state}`);
+                await sendRequest(`PSTRE ${state}`);
                 break;
             case 'zoneMain.channelVolumeFrontLeft':
-                sendRequest(`CVFL ${helper.dbToVol(state)}`);
+                await sendRequest(`CVFL ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeFrontRight':
-                sendRequest(`CVFR ${helper.dbToVol(state)}`);
+                await sendRequest(`CVFR ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeCenter':
-                sendRequest(`CVC ${helper.dbToVol(state)}`);
+                await sendRequest(`CVC ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSurroundRight':
-                sendRequest(`CVSR ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSR ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSurroundLeft':
-                sendRequest(`CVSL ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSL ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSurroundDolbyLeft':
-                sendRequest(`CVSDL ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSDL ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSurroundDolbyRight':
-                sendRequest(`CVSDR ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSDR ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeFrontDolbyLeft':
-                sendRequest(`CVFDL ${helper.dbToVol(state)}`);
+                await sendRequest(`CVFDL ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeFrontDolbyRight':
-                sendRequest(`CVFDR ${helper.dbToVol(state)}`);
+                await sendRequest(`CVFDR ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeFrontHeightLeft':
-                sendRequest(`CVFHL ${helper.dbToVol(state)}`);
+                await sendRequest(`CVFHL ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeFrontHeightRight':
-                sendRequest(`CVFHR ${helper.dbToVol(state)}`);
+                await sendRequest(`CVFHR ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeRearHeightLeft':
-                sendRequest(`CVRHL ${helper.dbToVol(state)}`);
+                await sendRequest(`CVRHL ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeRearHeightRight':
-                sendRequest(`CVRHR ${helper.dbToVol(state)}`);
+                await sendRequest(`CVRHR ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSurroundHeightRight':
-                sendRequest(`CVSHR ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSHR ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSurroundHeightLeft':
-                sendRequest(`CVSHL ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSHL ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSubwoofer':
-                sendRequest(`CVSW ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSW ${helper.dbToVol(state)}`);
                 break;
             case 'zoneMain.channelVolumeSubwooferTwo':
-                sendRequest(`CVSW2 ${helper.dbToVol(state)}`);
+                await sendRequest(`CVSW2 ${helper.dbToVol(state)}`);
                 break;
             case 'settings.powerSystem':
                 if (state === true) {
-                    sendRequest('PWON');
+                    await sendRequest('PWON');
                 } else {
-                    sendRequest('PWSTANDBY');
+                    await sendRequest('PWSTANDBY');
                 } // endElseIf
                 break;
             case 'settings.dynamicEq':
                 if (state) {
-                    sendRequest('PSDYNEQ ON');
+                    await sendRequest('PSDYNEQ ON');
                 } else {
-                    sendRequest('PSDYNEQ OFF');
+                    await sendRequest('PSDYNEQ OFF');
                 }
                 break;
             case 'settings.subwooferLevel':
                 state = helper.dbToVol(state);
-                sendRequest(`PSSWL ${state}`);
+                await sendRequest(`PSSWL ${state}`);
                 break;
             case 'settings.subwooferLevelDown':
-                sendRequest('PSSWL DOWN');
+                await sendRequest('PSSWL DOWN');
                 break;
             case 'settings.subwooferLevelUp':
-                sendRequest('PSSWL UP');
+                await sendRequest('PSSWL UP');
                 break;
             case 'settings.subwooferLevelState':
                 if (state) {
-                    sendRequest('PSSWL ON');
+                    await sendRequest('PSSWL ON');
                 } else {
-                    sendRequest('PSSWL OFF');
+                    await sendRequest('PSSWL OFF');
                 }
                 break;
             case 'settings.subwooferTwoLevel':
                 state = helper.dbToVol(state);
-                sendRequest(`PSSWL2 ${state}`);
+                await sendRequest(`PSSWL2 ${state}`);
                 break;
             case 'settings.subwooferTwoLevelDown':
-                sendRequest('PSSWL2 DOWN');
+                await sendRequest('PSSWL2 DOWN');
                 break;
             case 'settings.subwooferTwoLevelUp':
-                sendRequest('PSSWL2 UP');
+                await sendRequest('PSSWL2 UP');
                 break;
             case 'settings.audysseyLfc':
                 if (state) {
-                    sendRequest('PSLFC ON');
+                    await sendRequest('PSLFC ON');
                 } else {
-                    sendRequest('PSLFC OFF');
+                    await sendRequest('PSLFC OFF');
                 }
                 break;
             case 'settings.containmentAmountDown':
-                sendRequest('PSCNTAMT DOWN');
+                await sendRequest('PSCNTAMT DOWN');
                 break;
             case 'settings.containmentAmountUp':
-                sendRequest('PSCNTAMT UP');
+                await sendRequest('PSCNTAMT UP');
                 break;
             case 'settings.containmentAmount':
-                sendRequest(`PSCNTAMT 0${state}`);
+                await sendRequest(`PSCNTAMT 0${state}`);
                 break;
             case 'settings.multEq': {
                 const obj = await adapter.getObjectAsync('settings.multEq');
-                sendRequest(`PSMULTEQ:${helper.decodeState(obj.common.states, state).toUpperCase()}`);
+                await sendRequest(`PSMULTEQ:${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
             }
             case 'settings.dynamicVolume': {
                 const obj = await adapter.getObjectAsync('settings.dynamicVolume');
-                sendRequest(`PSDYNVOL ${helper.decodeState(obj.common.states, state).toUpperCase()}`);
+                await sendRequest(`PSDYNVOL ${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
             }
             case 'settings.referenceLevelOffset':
-                sendRequest(`PSREFLEV ${state}`);
+                await sendRequest(`PSREFLEV ${state}`);
                 break;
             case 'settings.surroundMode': {
                 const obj = await adapter.getObjectAsync('settings.surroundMode');
-                sendRequest(`MS${helper.decodeState(obj.common.states, state).toUpperCase()}`);
+                await sendRequest(`MS${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
             }
             case 'settings.expertReadingPattern':
@@ -381,7 +382,7 @@ function startAdapter(options) {
                 }
                 break;
             case 'settings.expertCommand': { // Sending custom commands
-                sendRequest(state);
+                await sendRequest(state);
                 const connectionState = adapter.getStateAsync('info.connection');
                 // acknowledge when connection is true, thats all we can do here
                 if (connectionState.val === true) {
@@ -391,61 +392,61 @@ function startAdapter(options) {
             }
             case 'settings.toneControl':
                 if (state) {
-                    sendRequest('PSTONE CTRL ON');
+                    await sendRequest('PSTONE CTRL ON');
                 } else {
-                    sendRequest('PSTONE CTRL OFF');
+                    await sendRequest('PSTONE CTRL OFF');
                 }
                 break;
             case 'settings.cursorUp':
-                sendRequest('MNCUP');
+                await sendRequest('MNCUP');
                 break;
             case 'settings.cursorDown':
-                sendRequest('MNCDN');
+                await sendRequest('MNCDN');
                 break;
             case 'settings.cursorRight':
-                sendRequest('MNCRT');
+                await sendRequest('MNCRT');
                 break;
             case 'settings.cursorLeft':
-                sendRequest('MNCLT');
+                await sendRequest('MNCLT');
                 break;
             case 'settings.enter':
-                sendRequest('MNENT');
+                await sendRequest('MNENT');
                 break;
             case 'settings.return':
-                sendRequest('MNRTN');
+                await sendRequest('MNRTN');
                 break;
             case 'settings.option':
-                sendRequest('MNOPT');
+                await sendRequest('MNOPT');
                 break;
             case 'settings.info':
-                sendRequest('MNINF');
+                await sendRequest('MNINF');
                 break;
             case 'settings.setupMenu':
                 if (state) {
-                    sendRequest('MNMEN ON');
+                    await sendRequest('MNMEN ON');
                 } else {
-                    sendRequest('MNMEN OFF');
+                    await sendRequest('MNMEN OFF');
                 }
                 break;
             case 'settings.outputMonitor': {
                 const obj = await adapter.getObjectAsync('settings.outputMonitor');
-                sendRequest(`VSMONI${helper.decodeState(obj.common.states, state)}`);
+                await sendRequest(`VSMONI${helper.decodeState(obj.common.states, state)}`);
                 break;
             }
             case 'settings.centerSpread':
                 if (state) {
-                    sendRequest('PSCES ON');
+                    await sendRequest('PSCES ON');
                 } else {
-                    sendRequest('PSCES OFF');
+                    await sendRequest('PSCES OFF');
                 }
                 break;
             case 'settings.videoProcessingMode': {
                 const obj = await adapter.getObjectAsync('settings.videoProcessingMode');
-                sendRequest(`VSVPM${helper.decodeState(obj.common.states, state)}`);
+                await sendRequest(`VSVPM${helper.decodeState(obj.common.states, state)}`);
                 break;
             }
             case 'settings.pictureMode':
-                sendRequest(`PV${state}`);
+                await sendRequest(`PV${state}`);
                 break;
             case 'settings.loadPreset': {
                 let loadPresetState;
@@ -454,7 +455,7 @@ function startAdapter(options) {
                 } else {
                     loadPresetState = state;
                 }
-                sendRequest(`NSB${loadPresetState}`);
+                await sendRequest(`NSB${loadPresetState}`);
                 break;
             }
             case 'settings.savePreset': {
@@ -464,44 +465,71 @@ function startAdapter(options) {
                 } else {
                     savePresetState = state;
                 }
-                sendRequest(`NSC${savePresetState}`);
+                await sendRequest(`NSC${savePresetState}`);
                 break;
             }
             case 'display.brightness': {
                 const obj = await adapter.getObjectAsync('display.brightness');
-                sendRequest(`DIM ${helper.decodeState(obj.common.states, state).toUpperCase().slice(0, 3)}`);
+                await sendRequest(`DIM ${helper.decodeState(obj.common.states, state).toUpperCase().slice(0, 3)}`);
+                break;
+            }
+            case 'tuner.frequencyUp':
+                await sendRequest('TFANUP');
+                break;
+            case 'tuner.frequencyDown':
+                await sendRequest('TFANDOWN');
+                break;
+            case 'tuner.frequency': {
+                // remove the dot from 106.90
+                let strFreq = state.toString().replace('.', '');
+                if (strFreq.length < 6 && state < 1000) {
+                    // below 1000 we need leading zero
+                    strFreq = `0${strFreq}`;
+
+                    if (state < 100) {
+                        // we need another one
+                        strFreq = `0${strFreq}`;
+                    }
+                }
+
+                // if its still the case, because e.g. 106.00 we add missing zeros
+                while (strFreq.length < 6) {
+                    strFreq = strFreq + '0';
+                }
+
+                await sendRequest(`TFAN${strFreq}`);
                 break;
             }
             case 'zone.powerZone':
                 if (state === true) {
-                    sendRequest(`Z${zoneNumber}ON`);
+                    await sendRequest(`Z${zoneNumber}ON`);
                 } else {
-                    sendRequest(`Z${zoneNumber}OFF`);
+                    await sendRequest(`Z${zoneNumber}OFF`);
                 } // endElseIf
                 break;
             case 'zone.muteIndicator':
                 if (state === true) {
-                    sendRequest(`Z${zoneNumber}MUON`);
+                    await sendRequest(`Z${zoneNumber}MUON`);
                 } else {
-                    sendRequest(`Z${zoneNumber}MUOFF`);
+                    await sendRequest(`Z${zoneNumber}MUOFF`);
                 } // endElseIf
                 break;
             case 'zone.sleepTimer':
                 if (!state) { // state === 0
-                    sendRequest(`Z${zoneNumber}SLPOFF`);
+                    await sendRequest(`Z${zoneNumber}SLPOFF`);
                 } else if (state < 10) {
-                    sendRequest(`Z${zoneNumber}SLP00${state}`);
+                    await sendRequest(`Z${zoneNumber}SLP00${state}`);
                 } else if (state < 100) {
-                    sendRequest(`Z${zoneNumber}SLP0${state}`);
+                    await sendRequest(`Z${zoneNumber}SLP0${state}`);
                 } else if (state <= 120) {
-                    sendRequest(`Z${zoneNumber}SLP${state}`);
+                    await sendRequest(`Z${zoneNumber}SLP${state}`);
                 } // endElseIf
                 break;
             case 'zone.volumeUp':
-                sendRequest(`Z${zoneNumber}UP`);
+                await sendRequest(`Z${zoneNumber}UP`);
                 break;
             case 'zone.volumeDown':
-                sendRequest(`Z${zoneNumber}DOWN`);
+                await sendRequest(`Z${zoneNumber}DOWN`);
                 break;
             case 'zone.volume':
                 if (state < 0) {
@@ -516,7 +544,7 @@ function startAdapter(options) {
                     leadingZero = '';
                 }
                 state = state.toString().replace('.', ''); // remove dot
-                sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
+                await sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
                 break;
             case 'zone.volumeDB':
                 state += 80; // Convert to Vol
@@ -532,54 +560,54 @@ function startAdapter(options) {
                     leadingZero = '';
                 }
                 state = state.toString().replace('.', ''); // remove dot
-                sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
+                await sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
                 break;
             case 'zone.selectInput': {
                 const obj = await adapter.getObjectAsync(`zone${zoneNumber}.selectInput`);
-                sendRequest(`Z${zoneNumber}${helper.decodeState(obj.common.states, state).toUpperCase()}`);
+                await sendRequest(`Z${zoneNumber}${helper.decodeState(obj.common.states, state).toUpperCase()}`);
                 break;
             }
             case 'zone.quickSelect':
-                sendRequest(`Z${zoneNumber}QUICK${state}`);
-                sendRequest(`Z${zoneNumber}SMART${state}`);
+                await sendRequest(`Z${zoneNumber}QUICK${state}`);
+                await sendRequest(`Z${zoneNumber}SMART${state}`);
                 break;
             case 'zone.equalizerBassUp':
-                sendRequest(`Z${zoneNumber}PSBAS UP`);
+                await sendRequest(`Z${zoneNumber}PSBAS UP`);
                 break;
             case 'zone.equalizerBassDown':
-                sendRequest(`Z${zoneNumber}PSBAS DOWN`);
+                await sendRequest(`Z${zoneNumber}PSBAS DOWN`);
                 break;
             case 'zone.equalizerTrebleUp':
-                sendRequest(`Z${zoneNumber}PSTRE UP`);
+                await sendRequest(`Z${zoneNumber}PSTRE UP`);
                 break;
             case 'zone.equalizerTrebleDown':
-                sendRequest(`Z${zoneNumber}PSTRE DOWN`);
+                await sendRequest(`Z${zoneNumber}PSTRE DOWN`);
                 break;
             case 'zone.equalizerBass':
                 state = helper.dbToVol(state);
-                sendRequest(`Z${zoneNumber}PSBAS ${state}`);
+                await sendRequest(`Z${zoneNumber}PSBAS ${state}`);
                 break;
             case 'zone.equalizerTreble':
                 state = helper.dbToVol(state);
-                sendRequest(`Z${zoneNumber}PSTRE ${state}`);
+                await sendRequest(`Z${zoneNumber}PSTRE ${state}`);
                 break;
             case 'zone.channelVolumeFrontLeft':
-                sendRequest(`Z${zoneNumber}CVFL ${helper.dbToVol(state)}`);
+                await sendRequest(`Z${zoneNumber}CVFL ${helper.dbToVol(state)}`);
                 break;
             case 'zone.channelVolumeFrontRight':
-                sendRequest(`Z${zoneNumber}CVFR ${helper.dbToVol(state)}`);
+                await sendRequest(`Z${zoneNumber}CVFR ${helper.dbToVol(state)}`);
                 break;
             case 'settings.lfeAmount':
-                sendRequest(`PSLFE ${state < 10 ? `0${state}` : 10}`);
+                await sendRequest(`PSLFE ${state < 10 ? `0${state}` : 10}`);
                 break;
             case 'settings.dialogControl':
-                sendRequest(`PSDIC 0${state}`); // can only be 0 - 6
+                await sendRequest(`PSDIC 0${state}`); // can only be 0 - 6
                 break;
             case 'settings.dialogLevel':
-                sendRequest(`PSDIL ${helper.dbToVol(state)}`);
+                await sendRequest(`PSDIL ${helper.dbToVol(state)}`);
                 break;
             case 'settings.dialogLevelAdjust':
-                sendRequest(`PSDIL ${state ? 'ON' : 'OFF'}`);
+                await sendRequest(`PSDIL ${state ? 'ON' : 'OFF'}`);
                 break;
             default:
                 adapter.log.error(`[COMMAND] ${id} is not a valid state`);
@@ -659,7 +687,7 @@ client.on('end', () => { // Denon has closed the connection
     } // endIf
 });
 
-client.on('connect', () => { // Successfully connected
+client.on('connect', async () => { // Successfully connected
     clearTimeout(connectingVar);
     connectingVar = null;
     previousError = null;
@@ -668,10 +696,10 @@ client.on('connect', () => { // Successfully connected
     adapter.log.info(`[CONNECT] Adapter connected to DENON-AVR: ${host}:23`);
     if (!receiverType) {
         adapter.log.debug('[CONNECT] Connected --> Check receiver type');
-        sendRequest('SV?');
-        sendRequest('SV01?');
-        sendRequest('BDSTATUS?');
-        sendRequest('MV?');
+        await sendRequest('SV?');
+        await sendRequest('SV01?');
+        await sendRequest('BDSTATUS?');
+        await sendRequest('MV?');
     } else {
         adapter.log.debug('[CONNECT] Connected --> updating states on start');
         updateStates(); // Update states when connected
@@ -754,7 +782,8 @@ const updateCommands = [
     'PR08PR?', 'PR10PR?', 'PR12PR?',
     'PR02OH?', 'PR04OH?', 'PR06OH?',
     'PR08OH?', 'PR10OH?', 'PR12OH?',
-    'BDSTATUS?', 'PSDIL ?', 'PSDIC ?'
+    'BDSTATUS?', 'PSDIL ?', 'PSDIC ?',
+    'TFAN?', 'TFANNAME?'
 ];
 
 /**
@@ -762,8 +791,8 @@ const updateCommands = [
  */
 async function updateStates() {
     for (const command of updateCommands) {
-        sendRequest(command);
-        await helper.wait(requestInterval);
+        await sendRequest(command);
+        //await helper.wait(requestInterval);
     }
 } // endUpdateStates
 
@@ -776,21 +805,28 @@ const pollCommands = [
     'BDSTATUS?'
 ]; // Request Display State, Sleep Timer & Quick Select
 
-function pollStates() { // Polls states
-    let i = 0;
+async function pollStates() { // Polls states
     pollingVar = null;
-    intervalPollVar = setInterval(() => {
-        sendRequest(pollCommands[i]);
-        i++;
-        if (i === pollCommands.length) {
-            clearInterval(intervalPollVar);
-        }
-    }, requestInterval);
+    for (const command of pollCommands) {
+        await sendRequest(command);
+        //await helper.wait(requestInterval);
+    }
+
 } // endPollStates
 
+/**
+ * Send data to socket
+ *
+ * @param {string} req
+ * @return {Promise<void>}
+ */
 function sendRequest(req) {
-    client.write(`${req}\r`);
-    adapter.log.debug(`[INFO] ==> Message sent: ${req}`);
+    return new Promise(resolve => {
+        client.write(`${req}\r`, () => {
+            adapter.log.debug(`[INFO] ==> Message sent: ${req}`);
+            resolve();
+        });
+    });
 } // endSendRequest
 
 function handleUsResponse(data) {
@@ -949,9 +985,9 @@ async function handleUsStateChange(id, stateVal) {
     switch (id) {
         case 'settings.powerSystem':
             if (stateVal === true) {
-                sendRequest('PW00ON');
+                await sendRequest('PW00ON');
             } else {
-                sendRequest('PW00STANDBY');
+                await sendRequest('PW00STANDBY');
             } // endElseIf
             break;
         case 'settings.expertReadingPattern':
@@ -963,12 +999,12 @@ async function handleUsStateChange(id, stateVal) {
             }
             break;
         case 'display.brightness':
-            adapter.getObjectAsync('display.brightness').then(obj => {
-                sendRequest(`SD00${helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3)}`);
+            adapter.getObjectAsync('display.brightness').then(async obj => {
+                await sendRequest(`SD00${helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3)}`);
             });
             break;
         case 'settings.expertCommand':  // Sending custom commands
-            sendRequest(stateVal);
+            await sendRequest(stateVal);
             adapter.getStateAsync('info.connection').then(state => {
                 if (state.val === true) {
                     adapter.setState('settings.expertCommand', stateVal, true);
@@ -977,65 +1013,65 @@ async function handleUsStateChange(id, stateVal) {
             break;
         case 'settings.powerConfigurationChange':
             if (stateVal.toUpperCase() === 'POWER BUTTON' || stateVal === '0') {
-                sendRequest('ST00PBTN');
+                await sendRequest('ST00PBTN');
             } else if (stateVal.toUpperCase() === 'MASTER TRIGGER' || stateVal === '1') {
-                sendRequest('ST00TRIG');
+                await sendRequest('ST00TRIG');
             } else if (stateVal.toUpperCase() === 'ON LINE' || stateVal === '2') {
-                sendRequest('ST00ONLI');
+                await sendRequest('ST00ONLI');
             }
             break;
         case 'settings.masterTriggerInput':
             if (stateVal) {
-                sendRequest('TI00YES');
+                await sendRequest('TI00YES');
             } else {
-                sendRequest('TI00NO');
+                await sendRequest('TI00NO');
             }
             break;
         case 'audioSignalInput':
             if (stateVal) {
-                sendRequest(`AI${zoneNumber}YES`);
+                await sendRequest(`AI${zoneNumber}YES`);
             } else {
-                sendRequest(`AI${zoneNumber}NO`);
+                await sendRequest(`AI${zoneNumber}NO`);
             }
             break;
         case 'lowCutFilterSpeakerOne':
-            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(state => {
+            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(async state => {
                 if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = parseInt(zoneNumber) % 2 ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = parseInt(zoneNumber) < 10 ? `0${zoneNumber}` : zoneNumber;
                 } // endIf
                 if (stateVal) {
-                    sendRequest(`SF${zoneNumber}ON`);
+                    await sendRequest(`SF${zoneNumber}ON`);
                 } else {
-                    sendRequest(`SF${zoneNumber}OFF`);
+                    await sendRequest(`SF${zoneNumber}OFF`);
                 }
             });
             break;
         case 'lowCutFilterSpeakerTwo':
             if (stateVal) {
-                sendRequest(`SF${zoneNumber}ON`);
+                await sendRequest(`SF${zoneNumber}ON`);
             } else {
-                sendRequest(`SF${zoneNumber}OFF`);
+                await sendRequest(`SF${zoneNumber}OFF`);
             }
             break;
         case 'operationMode':
             if (stateVal === 0 || stateVal === 'NORMAL') {
-                sendRequest(`SO${zoneNumber}NOR`);
+                await sendRequest(`SO${zoneNumber}NOR`);
             } else {
-                sendRequest(`SO${zoneNumber}BRI`);
+                await sendRequest(`SO${zoneNumber}BRI`);
             }
             break;
         case 'selectInputOne':
-            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(state => {
+            adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(async state => {
                 if (state.val.toString() === '0' || state.val === 'NORMAL') {
                     zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                     zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
                 } // endIf
-                sendRequest(`SI${zoneNumber}${stateVal.replace(' ', '')}`);
+                await sendRequest(`SI${zoneNumber}${stateVal.replace(' ', '')}`);
             });
             break;
         case 'selectInputTwo':
-            sendRequest(`SI${zoneNumber}${stateVal.replace(' ', '')}`);
+            await sendRequest(`SI${zoneNumber}${stateVal.replace(' ', '')}`);
             break;
         case 'speakerOneVolume': {
             const state = await adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`);
@@ -1056,7 +1092,7 @@ async function handleUsStateChange(id, stateVal) {
                 leadingZero = '';
             }
             stateVal = stateVal.toString().replace('.', ''); // remove dot
-            sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
+            await sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
             adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
             break;
         }
@@ -1074,26 +1110,26 @@ async function handleUsStateChange(id, stateVal) {
                 leadingZero = '';
             }
             stateVal = stateVal.toString().replace('.', ''); // remove dot
-            sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
+            await sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
             adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
             break;
         }
         case 'triggerInput':
             if (stateVal) {
-                sendRequest(`TI${zoneNumber}YES`);
+                await sendRequest(`TI${zoneNumber}YES`);
             } else {
-                sendRequest(`TI${zoneNumber}NO`);
+                await sendRequest(`TI${zoneNumber}NO`);
             }
             break;
         case 'zoneTurnOnModeChange':
             if (stateVal.toString() === '0' || stateVal.toUpperCase() === 'CONSTANT') {
-                sendRequest(`ST${zoneNumber}CONT`);
+                await sendRequest(`ST${zoneNumber}CONT`);
             } else if (stateVal.toString() === '1' || stateVal.toUpperCase() === 'TRIGGER IN') {
-                sendRequest(`ST${zoneNumber}TRIG`);
+                await sendRequest(`ST${zoneNumber}TRIG`);
             } else if (stateVal.toString() === '2' || stateVal.toUpperCase() === 'AUDIO SIGNAL') {
-                sendRequest(`ST${zoneNumber}ASIG`);
+                await sendRequest(`ST${zoneNumber}ASIG`);
             } else if (stateVal.toString() === '3' || stateVal.toUpperCase() === 'OFF') {
-                sendRequest(`ST${zoneNumber}OFF`);
+                await sendRequest(`ST${zoneNumber}OFF`);
             }
             break;
         default:
@@ -1304,14 +1340,25 @@ async function handleResponse(data) {
         Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
         adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
         return;
-    } // endElseIf
+    } else if (command.startsWith('TFANNAME')) {
+        // get name only
+        const stationName = command.substring(8);
+        adapter.setState('tuner.stationName', stationName, true);
+        return;
+    } else if (command === 'TFAN') {
+        // example TFAN010690 -> 106.9 always 6 digits with 2 decimals
+        const freq = parseFloat(`${data.substring(4, 8)}.${data.substring(8)}`);
+        adapter.setState('tuner.frequency', freq, true);
+        return;
+    }
 
     let zoneNumber;
 
     if (/Z\d.+/g.test(command)) {
+        // remove zone number from command and save it
         zoneNumber = command.slice(1, 2);
         command = `Z${command.substring(2)}`;
-    } // endIf
+    }
 
     adapter.log.debug(`[INFO] <== Command to handle is ${command}`);
 
