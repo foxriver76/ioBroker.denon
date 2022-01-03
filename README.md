@@ -900,6 +900,9 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 1.12.1 (2022-01-03)
+* (foxriver76) fixed missing digits in `tuner.stationName`
+
 ### 1.12.0 (2022-01-02)
 * (foxriver76) we introduce tuner states
 * (foxriver76) performance optimizations

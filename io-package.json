@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.12.0",
+    "version": "1.12.1",
     "news": {
+      "1.12.1": {
+        "en": "fixed missing digits in `tuner.stationName`",
+        "de": "Fehlende Ziffern in `tuner.stationName` behoben",
+        "ru": "исправлены пропущенные цифры в `tuner.stationName`",
+        "pt": "corrigiu dígitos ausentes em `tuner.stationName`",
+        "nl": "opgeloste ontbrekende cijfers in `tuner.stationName`",
+        "fr": "correction des chiffres manquants dans `tuner.stationName`",
+        "it": "corrette cifre mancanti in `tuner.stationName`",
+        "es": "Se corrigieron los dígitos faltantes en `tuner.stationName`",
+        "pl": "naprawiono brakujące cyfry w `tuner.stationName`",
+        "zh-cn": "修复了“tuner.stationName”中丢失的数字"
+      },
       "1.12.0": {
         "en": "we introduce tuner states\nperformance optimizations",
         "de": "Wir führen Tuner-Zustände ein\nLeistungsoptimierungen",
@@ -74,18 +86,6 @@
         "es": "arreglamos algunos tipos más",
         "pl": "naprawiliśmy kilka innych typów",
         "zh-cn": "我们修复了更多类型"
-      },
-      "1.10.5": {
-        "en": "we fixed some datapoints having wrong types or wrong state values set (fixes #130)",
-        "de": "Wir haben einige Datenpunkte mit falschen Typen oder falschen Statuswerten behoben (Fixes # 130).",
-        "ru": "мы исправили некоторые точки данных, имеющие неправильные типы или неверные значения состояния (исправления # 130)",
-        "pt": "corrigimos alguns pontos de dados com tipos errados ou valores de estado incorretos definidos (correções # 130)",
-        "nl": "we hebben enkele datapunten gerepareerd met verkeerde typen of verkeerde statuswaarden ingesteld (fixes # 130)",
-        "fr": "nous avons corrigé certains points de données ayant des types incorrects ou des valeurs d'état incorrectes (correctifs # 130)",
-        "it": "abbiamo corretto alcuni datapoint con tipi errati o valori di stato errati impostati (correzioni # 130)",
-        "es": "arreglamos algunos puntos de datos que tenían tipos incorrectos o valores de estado incorrectos establecidos (arreglos # 130)",
-        "pl": "naprawiliśmy niektóre punkty danych z niewłaściwymi typami lub ustawionymi nieprawidłowymi wartościami stanu (poprawki # 130)",
-        "zh-cn": "我们修复了某些类型错误或状态值设置错误的数据点（修复＃130）"
       }
     },
     "title": "DENON AVR",

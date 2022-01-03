@@ -1342,7 +1342,7 @@ async function handleResponse(data) {
         return;
     } else if (command.startsWith('TFANNAME')) {
         // get name only
-        const stationName = command.substring(8);
+        const stationName = data.substring(8);
         adapter.setState('tuner.stationName', stationName, true);
         return;
     } else if (command === 'TFAN') {
