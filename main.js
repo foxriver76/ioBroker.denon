@@ -2,7 +2,7 @@
  * DENON AVR adapter
  */
 
-/* jshint -W097 */// jshint strict:false
+/* jshint -W097 */ // jshint strict:false
 /*jslint node: true */
 'use strict';
 
@@ -56,7 +56,7 @@ function startAdapter(options) {
             adapter.log.info('[END] Stopping Denon AVR adapter...');
             adapter.setState('info.connection', false, true);
             client.destroy(); // kill connection
-            client.unref();	// kill connection
+            client.unref(); // kill connection
             callback();
         } catch (e) {
             callback();
@@ -71,18 +71,29 @@ function startAdapter(options) {
                     adapter.log.info('start browse');
                     ssdpScan(
                         'M-SEARCH * HTTP/1.1\r\n' +
-                        'HOST: 239.255.255.250:1900\r\n' +
-                        'ST: ssdp:all\r\n' +
-                        'MAN: "ssdp:discover"\r\n' +
-                        'MX: 3\r\n' +
-                        '\r\n', true, 4000, (err, result) => {
+                            'HOST: 239.255.255.250:1900\r\n' +
+                            'ST: ssdp:all\r\n' +
+                            'MAN: "ssdp:discover"\r\n' +
+                            'MX: 3\r\n' +
+                            '\r\n',
+                        true,
+                        4000,
+                        (err, result) => {
                             if (result) {
-                                result = result.filter(dev => dev.manufacturer && (dev.manufacturer.toLowerCase() === 'marantz' || dev.manufacturer.toLowerCase() === 'denon')).map(dev => {
-                                    return {ip: dev.ip, name: dev.name};
-                                });
+                                result = result
+                                    .filter(
+                                        dev =>
+                                            dev.manufacturer &&
+                                            (dev.manufacturer.toLowerCase() === 'marantz' ||
+                                                dev.manufacturer.toLowerCase() === 'denon')
+                                    )
+                                    .map(dev => {
+                                        return { ip: dev.ip, name: dev.name };
+                                    });
                             } // endIf
-                            adapter.sendTo(obj.from, obj.command, {error: err, list: result}, obj.callback);
-                        });
+                            adapter.sendTo(obj.from, obj.command, { error: err, list: result }, obj.callback);
+                        }
+                    );
                 } // endIf
             } // endIf
         } // endIf
@@ -90,7 +101,6 @@ function startAdapter(options) {
 
     adapter.on('ready', async () => {
         if (adapter.config.ip) {
-
             adapter.log.info('[START] Starting DENON AVR adapter');
             host = adapter.config.ip;
             pollInterval = adapter.config.pollInterval || 7000;
@@ -108,7 +118,6 @@ function startAdapter(options) {
             } // endIf
 
             main();
-
         } else {
             adapter.log.warn('No IP-address set');
         }
@@ -150,7 +159,7 @@ function startAdapter(options) {
                 if (state < 0) {
                     state = 0;
                 }
-                if ((state % 0.5) !== 0) {
+                if (state % 0.5 !== 0) {
                     state = Math.round(state * 2) / 2;
                 }
                 if (state < 10) {
@@ -167,7 +176,7 @@ function startAdapter(options) {
                 if (state < 0) {
                     state = 0;
                 }
-                if ((state % 0.5) !== 0) {
+                if (state % 0.5 !== 0) {
                     state = Math.round(state * 2) / 2;
                 }
                 if (state < 10) {
@@ -179,7 +188,8 @@ function startAdapter(options) {
                 await sendRequest(`MV${leadingZero}${state}`);
                 break;
             case 'zoneMain.sleepTimer':
-                if (!state) { // state === 0
+                if (!state) {
+                    // state === 0
                     await sendRequest('SLPOFF');
                 } else if (state < 10) {
                     await sendRequest(`SLP00${state}`);
@@ -381,7 +391,8 @@ function startAdapter(options) {
                     adapter.log.warn(`[COMMAND] Cannot update expert reading pattern: ${e.message}`);
                 }
                 break;
-            case 'settings.expertCommand': { // Sending custom commands
+            case 'settings.expertCommand': {
+                // Sending custom commands
                 await sendRequest(state);
                 const connectionState = adapter.getStateAsync('info.connection');
                 // acknowledge when connection is true, thats all we can do here
@@ -515,7 +526,8 @@ function startAdapter(options) {
                 } // endElseIf
                 break;
             case 'zone.sleepTimer':
-                if (!state) { // state === 0
+                if (!state) {
+                    // state === 0
                     await sendRequest(`Z${zoneNumber}SLPOFF`);
                 } else if (state < 10) {
                     await sendRequest(`Z${zoneNumber}SLP00${state}`);
@@ -535,7 +547,7 @@ function startAdapter(options) {
                 if (state < 0) {
                     state = 0;
                 }
-                if ((state % 0.5) !== 0) {
+                if (state % 0.5 !== 0) {
                     state = Math.round(state * 2) / 2;
                 }
                 if (state < 10) {
@@ -551,7 +563,7 @@ function startAdapter(options) {
                 if (state < 0) {
                     state = 0;
                 }
-                if ((state % 0.5) !== 0) {
+                if (state % 0.5 !== 0) {
                     state = Math.round(state * 2) / 2;
                 }
                 if (state < 10) {
@@ -676,7 +688,8 @@ client.on('error', error => {
     } // endIf
 });
 
-client.on('end', () => { // Denon has closed the connection
+client.on('end', () => {
+    // Denon has closed the connection
     adapter.log.warn('Denon AVR has cancelled the connection');
     pollingVar = false;
     adapter.setState('info.connection', false, true);
@@ -687,7 +700,8 @@ client.on('end', () => { // Denon has closed the connection
     } // endIf
 });
 
-client.on('connect', async () => { // Successfully connected
+client.on('connect', async () => {
+    // Successfully connected
     clearTimeout(connectingVar);
     connectingVar = null;
     previousError = null;
@@ -710,7 +724,8 @@ client.on('data', data => {
     // split data by <cr>
     const dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
     for (const data of dataArr) {
-        if (data) { // data not empty
+        if (data) {
+            // data not empty
             adapter.log.debug(`[DATA] <== Incoming data: ${data}`);
             handleResponse(data);
         } // endIf
@@ -730,60 +745,145 @@ function connect() {
         adapter.log.debug(`[CONNECT] Trying to connect to ${host}:23`);
     }
     connectingVar = null;
-    client.connect({port: 23, host: host});
+    client.connect({ port: 23, host: host });
 } // endConnect
 
 const updateCommands = [
-    'NSET1 ?', 'NSFRN ?', 'ZM?',
-    'MU?', 'PW?', 'SI?', 'SV?',
-    'MS?', 'MV?', 'Z2?', 'Z2MU?',
-    'Z3?', 'Z3MU?', 'NSE',
-    'VSSC ?', 'VSASP ?',
-    'VSMONI ?', 'TR?', 'DIM ?',
-    'Z3SLP?', 'Z2SLP?', 'SLP?',
-    'PSDYNEQ ?', 'PSMULTEQ: ?',
-    'PSREFLEV ?', 'PSDYNVOL ?',
-    'PSLFC ?', 'PSCNTAMT ?',
-    'PSSWL ?', 'PSBAS ?',
-    'PSTRE ?', 'Z2PSTRE ?',
-    'Z3PSTRE ?', 'Z2PSBAS ?',
-    'Z3PSBAS ?', 'PSTONE CTRL ?',
-    'MNMEN?', 'PSCES ?', 'VSVPM ?',
-    'PV?', 'CV?', 'MSQUICK ?',
-    'Z2QUICK ?', 'Z3QUICK ?',
-    'MSSMART ?', 'Z2SMART ?',
-    'Z3SMART ?', 'NSH', 'Z2CV?',
-    'Z3CV?', 'PSLFE ?',
-    'PW00?', 'SD00?',
-    'SV01?', 'SV02?', 'SV03?',
-    'SV04?', 'SV05?', 'SV06?',
-    'SV07?', 'SV08?', 'SV09?',
-    'SV10?', 'SV11?', 'SV12?',
-    'SO02?', 'SO04?', 'SO06?',
-    'SO08?', 'SO10?', 'SO12?',
-    'SF01?', 'SF02?', 'SF03?',
-    'SF04?', 'SF05?', 'SF06?',
-    'SF07?', 'SF08?', 'SF09?',
-    'SF10?', 'SF11?', 'SF12?',
-    'SI01?', 'SI02?', 'SI03?',
-    'SI04?', 'SI05?', 'SI06?',
-    'SI07?', 'SI08?', 'SI09?',
-    'SI10?', 'SI11?', 'SI12?',
+    'NSET1 ?',
+    'NSFRN ?',
+    'ZM?',
+    'MU?',
+    'PW?',
+    'SI?',
+    'SV?',
+    'MS?',
+    'MV?',
+    'Z2?',
+    'Z2MU?',
+    'Z3?',
+    'Z3MU?',
+    'NSE',
+    'VSSC ?',
+    'VSASP ?',
+    'VSMONI ?',
+    'TR?',
+    'DIM ?',
+    'Z3SLP?',
+    'Z2SLP?',
+    'SLP?',
+    'PSDYNEQ ?',
+    'PSMULTEQ: ?',
+    'PSREFLEV ?',
+    'PSDYNVOL ?',
+    'PSLFC ?',
+    'PSCNTAMT ?',
+    'PSSWL ?',
+    'PSBAS ?',
+    'PSTRE ?',
+    'Z2PSTRE ?',
+    'Z3PSTRE ?',
+    'Z2PSBAS ?',
+    'Z3PSBAS ?',
+    'PSTONE CTRL ?',
+    'MNMEN?',
+    'PSCES ?',
+    'VSVPM ?',
+    'PV?',
+    'CV?',
+    'MSQUICK ?',
+    'Z2QUICK ?',
+    'Z3QUICK ?',
+    'MSSMART ?',
+    'Z2SMART ?',
+    'Z3SMART ?',
+    'NSH',
+    'Z2CV?',
+    'Z3CV?',
+    'PSLFE ?',
+    'PW00?',
+    'SD00?',
+    'SV01?',
+    'SV02?',
+    'SV03?',
+    'SV04?',
+    'SV05?',
+    'SV06?',
+    'SV07?',
+    'SV08?',
+    'SV09?',
+    'SV10?',
+    'SV11?',
+    'SV12?',
+    'SO02?',
+    'SO04?',
+    'SO06?',
+    'SO08?',
+    'SO10?',
+    'SO12?',
+    'SF01?',
+    'SF02?',
+    'SF03?',
+    'SF04?',
+    'SF05?',
+    'SF06?',
+    'SF07?',
+    'SF08?',
+    'SF09?',
+    'SF10?',
+    'SF11?',
+    'SF12?',
+    'SI01?',
+    'SI02?',
+    'SI03?',
+    'SI04?',
+    'SI05?',
+    'SI06?',
+    'SI07?',
+    'SI08?',
+    'SI09?',
+    'SI10?',
+    'SI11?',
+    'SI12?',
     'ST00?',
-    'ST02?', 'ST04?', 'ST06?',
-    'ST08?', 'ST10?', 'ST12?',
+    'ST02?',
+    'ST04?',
+    'ST06?',
+    'ST08?',
+    'ST10?',
+    'ST12?',
     'TI00?',
-    'TI02?', 'TI04?', 'TI06?',
-    'TI08?', 'TI10?', 'TI12?',
-    'AI02?', 'AI04?', 'AI06?',
-    'AI08?', 'AI10?', 'AI12?',
-    'PR00TR?', 'PR00IN?', 'PR00TM?',
-    'PR02PR?', 'PR04PR?', 'PR06PR?',
-    'PR08PR?', 'PR10PR?', 'PR12PR?',
-    'PR02OH?', 'PR04OH?', 'PR06OH?',
-    'PR08OH?', 'PR10OH?', 'PR12OH?',
-    'BDSTATUS?', 'PSDIL ?', 'PSDIC ?',
-    'TFAN?', 'TFANNAME?'
+    'TI02?',
+    'TI04?',
+    'TI06?',
+    'TI08?',
+    'TI10?',
+    'TI12?',
+    'AI02?',
+    'AI04?',
+    'AI06?',
+    'AI08?',
+    'AI10?',
+    'AI12?',
+    'PR00TR?',
+    'PR00IN?',
+    'PR00TM?',
+    'PR02PR?',
+    'PR04PR?',
+    'PR06PR?',
+    'PR08PR?',
+    'PR10PR?',
+    'PR12PR?',
+    'PR02OH?',
+    'PR04OH?',
+    'PR06OH?',
+    'PR08OH?',
+    'PR10OH?',
+    'PR12OH?',
+    'BDSTATUS?',
+    'PSDIL ?',
+    'PSDIC ?',
+    'TFAN?',
+    'TFANNAME?'
 ];
 
 /**
@@ -797,21 +897,27 @@ async function updateStates() {
 } // endUpdateStates
 
 const pollCommands = [
-    'NSE', 'SLP?',
-    'Z2SLP?', 'Z3SLP?', 'MSQUICK ?',
-    'MSSMART ?', 'PR00TR?',
-    'Z2QUICK ?', 'Z3QUICK ?',
-    'Z2SMART ?', 'Z3SMART ?',
+    'NSE',
+    'SLP?',
+    'Z2SLP?',
+    'Z3SLP?',
+    'MSQUICK ?',
+    'MSSMART ?',
+    'PR00TR?',
+    'Z2QUICK ?',
+    'Z3QUICK ?',
+    'Z2SMART ?',
+    'Z3SMART ?',
     'BDSTATUS?'
 ]; // Request Display State, Sleep Timer & Quick Select
 
-async function pollStates() { // Polls states
+async function pollStates() {
+    // Polls states
     pollingVar = null;
     for (const command of pollCommands) {
         await sendRequest(command);
         //await helper.wait(requestInterval);
     }
-
 } // endPollStates
 
 /**
@@ -830,13 +936,14 @@ function sendRequest(req) {
 } // endSendRequest
 
 function handleUsResponse(data) {
-
     adapter.log.debug(`[INFO] US command to handle is ${data}`);
 
-    if (data.startsWith('SD00')) { // Handle display brightness
+    if (data.startsWith('SD00')) {
+        // Handle display brightness
         adapter.getObjectAsync('display.brightness').then(obj => {
             const bright = data.substring(4);
-            for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
+            for (const j of Object.keys(obj.common.states)) {
+                // Check if command contains one of the possible brightness states
                 if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
                     adapter.setState('display.brightness', obj.common.states[j], true);
                 } // endIf
@@ -861,7 +968,7 @@ function handleUsResponse(data) {
         const volume = parseFloat(`${data.slice(4, 6)}.${data.slice(6, 7)}`);
         adapter.getStateAsync(`zone${zoneNumber}.operationMode`).then(state => {
             if (state.val.toString() === '0' || state.val === 'NORMAL') {
-                const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'speakerTwo' : 'speakerOne';
+                const speaker = parseInt(data.slice(2, 4)) === zoneNumber ? 'speakerTwo' : 'speakerOne';
                 adapter.setState(`zone${zoneNumber}.${speaker}Volume`, volume, true);
             } else {
                 adapter.setState(`zone${zoneNumber}.speakerOneVolume`, volume, true);
@@ -883,7 +990,7 @@ function handleUsResponse(data) {
         const command = data.substring(4);
         adapter.getStateAsync(`zone${zoneNumber}.operationMode`).then(state => {
             if (state.val.toString() === '0' || state.val === 'NORMAL') {
-                const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'SpeakerTwo' : 'SpeakerOne';
+                const speaker = parseInt(data.slice(2, 4)) === zoneNumber ? 'SpeakerTwo' : 'SpeakerOne';
                 if (command === 'OFF') {
                     adapter.setState(`zone${zoneNumber}.lowCutFilter${speaker}`, false, true);
                 } else if (command === 'ON') {
@@ -904,21 +1011,34 @@ function handleUsResponse(data) {
         const zoneNumber = parseInt(data.slice(2, 4)) % 2 ? parseInt(data.slice(2, 4)) + 1 : parseInt(data.slice(2, 4));
         const command = data.substring(4);
         adapter.getStateAsync(`zone${zoneNumber}.operationMode`).then(state => {
-
             if (state.val === '0' || state.val === 'NORMAL') {
-                const speaker = (parseInt(data.slice(2, 4)) === zoneNumber) ? 'Two' : 'One';
+                const speaker = parseInt(data.slice(2, 4)) === zoneNumber ? 'Two' : 'One';
 
                 adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then(obj => {
-                    for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
-                        if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
+                    for (const j of Object.keys(obj.common.states)) {
+                        // Check if command contains one of the possible brightness states
+                        if (
+                            helper
+                                .decodeState(obj.common.states, j)
+                                .replace(' ', '')
+                                .toLowerCase()
+                                .includes(command.toLowerCase())
+                        ) {
                             adapter.setState(`zone${zoneNumber}.selectInput${speaker}`, obj.common.states[j], true);
                         } // endIf
                     } // endFor
                 });
             } else {
                 adapter.getObjectAsync(`zone${zoneNumber}.selectInputOne`).then(obj => {
-                    for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
-                        if (helper.decodeState(obj.common.states, j).replace(' ', '').toLowerCase().includes(command.toLowerCase())) {
+                    for (const j of Object.keys(obj.common.states)) {
+                        // Check if command contains one of the possible brightness states
+                        if (
+                            helper
+                                .decodeState(obj.common.states, j)
+                                .replace(' ', '')
+                                .toLowerCase()
+                                .includes(command.toLowerCase())
+                        ) {
                             adapter.setState(`zone${zoneNumber}.selectInputOne`, obj.common.states[j], true);
                             adapter.setState(`zone${zoneNumber}.selectInputTwo`, obj.common.states[j], true);
                         } // endIf
@@ -978,7 +1098,7 @@ async function handleUsStateChange(id, stateVal) {
     let zoneNumber;
     if (id.startsWith('zone')) {
         zoneNumber = id.split('.').shift().substring(4);
-        zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
+        zoneNumber = parseInt(zoneNumber) < 10 ? `0${zoneNumber}` : zoneNumber;
         id = id.split('.').pop();
     } // endIf
 
@@ -1003,7 +1123,7 @@ async function handleUsStateChange(id, stateVal) {
                 await sendRequest(`SD00${helper.decodeState(obj.common.states, stateVal).toUpperCase().slice(0, 3)}`);
             });
             break;
-        case 'settings.expertCommand':  // Sending custom commands
+        case 'settings.expertCommand': // Sending custom commands
             await sendRequest(stateVal);
             adapter.getStateAsync('info.connection').then(state => {
                 if (state.val === true) {
@@ -1064,8 +1184,8 @@ async function handleUsStateChange(id, stateVal) {
         case 'selectInputOne':
             adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`).then(async state => {
                 if (state.val.toString() === '0' || state.val === 'NORMAL') {
-                    zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
-                    zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
+                    zoneNumber = parseInt(zoneNumber) % 2 ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
+                    zoneNumber = parseInt(zoneNumber) < 10 ? `0${zoneNumber}` : zoneNumber;
                 } // endIf
                 await sendRequest(`SI${zoneNumber}${stateVal.replace(' ', '')}`);
             });
@@ -1077,13 +1197,13 @@ async function handleUsStateChange(id, stateVal) {
             const state = await adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`);
             let leadingZero;
             if (state.val.toString() === '0' || state.val === 'NORMAL') {
-                zoneNumber = (parseInt(zoneNumber) % 2) ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
-                zoneNumber = (parseInt(zoneNumber) < 10) ? `0${zoneNumber}` : zoneNumber;
+                zoneNumber = parseInt(zoneNumber) % 2 ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
+                zoneNumber = parseInt(zoneNumber) < 10 ? `0${zoneNumber}` : zoneNumber;
             } // endIf
             if (stateVal < 0) {
                 stateVal = 0;
             }
-            if ((stateVal % 0.5) !== 0) {
+            if (stateVal % 0.5 !== 0) {
                 stateVal = Math.round(stateVal * 2) / 2;
             }
             if (stateVal < 10) {
@@ -1101,7 +1221,7 @@ async function handleUsStateChange(id, stateVal) {
             if (stateVal < 0) {
                 stateVal = 0;
             }
-            if ((stateVal % 0.5) !== 0) {
+            if (stateVal % 0.5 !== 0) {
                 stateVal = Math.round(stateVal * 2) / 2;
             }
             if (stateVal < 10) {
@@ -1144,7 +1264,8 @@ async function handleUsStateChange(id, stateVal) {
  * @return {Promise<void>}
  */
 async function handleResponse(data) {
-    if (!pollingVar) { // Keep connection alive & poll states
+    if (!pollingVar) {
+        // Keep connection alive & poll states
         pollingVar = setTimeout(() => pollStates(), pollInterval); // Poll states every configured seconds
     } // endIf
 
@@ -1188,14 +1309,16 @@ async function handleResponse(data) {
     // get command out of String
     let command;
 
-    if (/^Z\d.*/g.test(data)) { // Transformation for Zone2+ commands
+    if (/^Z\d.*/g.test(data)) {
+        // Transformation for Zone2+ commands
         const zoneNumber = parseInt(data.slice(1, 2));
         if (!zonesCreated[zoneNumber]) {
             await createZone(zoneNumber);
         } // Create Zone2+ states if not done yet
         command = data.replace(/\s+|\d+/g, '');
 
-        if (command === 'Z') { // If everything is removed except Z --> Volume
+        if (command === 'Z') {
+            // If everything is removed except Z --> Volume
             let vol = data.substring(2).replace(/\s|[A-Z]/g, '');
             vol = `${vol.slice(0, 2)}.${vol.slice(2, 4)}`; // Slice volume from string
             adapter.setState(`zone${zoneNumber}.volume`, parseFloat(vol), true);
@@ -1207,20 +1330,25 @@ async function handleResponse(data) {
 
         if (/^Z\dQUICK.*/g.test(data) || /^Z\dSMART.*/g.test(data)) {
             const quickNr = parseInt(data.slice(-1));
-            adapter.getStateAsync(`zone${zoneNumber}.quickSelect`).then(state => {
-                if (state.val === quickNr && state.ack) {
-                    return;
-                }
-                adapter.setState(`zone${zoneNumber}.quickSelect`, quickNr, true);
-            }).catch(() => {
-                adapter.setState(`zone${zoneNumber}.quickSelect`, quickNr, true);
-            });
+            adapter
+                .getStateAsync(`zone${zoneNumber}.quickSelect`)
+                .then(state => {
+                    if (state.val === quickNr && state.ack) {
+                        return;
+                    }
+                    adapter.setState(`zone${zoneNumber}.quickSelect`, quickNr, true);
+                })
+                .catch(() => {
+                    adapter.setState(`zone${zoneNumber}.quickSelect`, quickNr, true);
+                });
             return;
-        } else if (/^Z\d.*/g.test(command)) { // Encode Input Source
+        } else if (/^Z\d.*/g.test(command)) {
+            // Encode Input Source
             const obj = await adapter.getObjectAsync('zoneMain.selectInput');
             let zoneSi = data.substring(2);
             zoneSi = zoneSi.replace(' ', ''); // Remove blank
-            for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible Select Inputs
+            for (const j of Object.keys(obj.common.states)) {
+                // Check if command contains one of the possible Select Inputs
                 if (helper.decodeState(obj.common.states, j.toString()) === zoneSi) {
                     ensureAttrInStates(`zone${zoneNumber}.selectInput`, zoneSi);
                     adapter.setState(`zone${zoneNumber}.selectInput`, zoneSi, true);
@@ -1228,41 +1356,50 @@ async function handleResponse(data) {
                 } // endIf
             } // endFor
         } // endIf
-    } else { // Transformation for normal commands
+    } else {
+        // Transformation for normal commands
         command = data.replace(/\s+|\d+/g, '');
     } // endElse
 
-    if (command.startsWith('DIM')) { // Handle display brightness
+    if (command.startsWith('DIM')) {
+        // Handle display brightness
         const obj = await adapter.getObjectAsync('display.brightness');
         const bright = data.substring(4);
-        for (const j of Object.keys(obj.common.states)) { // Check if command contains one of the possible brightness states
+        for (const j of Object.keys(obj.common.states)) {
+            // Check if command contains one of the possible brightness states
             if (helper.decodeState(obj.common.states, j).toLowerCase().includes(bright.toLowerCase())) {
                 adapter.setState('display.brightness', obj.common.states[j], true);
             } // endIf
         } // endFor
         return;
-    } else if (command.startsWith('SI')) { // Handle select input
+    } else if (command.startsWith('SI')) {
+        // Handle select input
         let siCommand = data.substring(2); // Get only source name
         siCommand = siCommand.replace(' ', ''); // Remove blanks
         ensureAttrInStates('zoneMain.selectInput', siCommand);
         adapter.setState('zoneMain.selectInput', siCommand, true);
         return;
-    } else if (command.startsWith('MS') && command !== 'MSQUICK' && command !== 'MSSMART') { // Handle Surround mode
+    } else if (command.startsWith('MS') && command !== 'MSQUICK' && command !== 'MSSMART') {
+        // Handle Surround mode
         const msCommand = data.substring(2); // use data because ms can have digits and spaces
         adapter.setState('settings.surroundMode', msCommand, true);
         return;
     } else if (command === 'MSQUICK' || command === 'MSSMART') {
         const quickNr = parseInt(data.slice(-1));
-        adapter.getStateAsync('zoneMain.quickSelect').then(state => {
-            if (state.val === quickNr && state.ack) {
-                return;
-            }
-            adapter.setState('zoneMain.quickSelect', quickNr, true);
-        }).catch(() => {
-            adapter.setState('zoneMain.quickSelect', quickNr, true);
-        });
+        adapter
+            .getStateAsync('zoneMain.quickSelect')
+            .then(state => {
+                if (state.val === quickNr && state.ack) {
+                    return;
+                }
+                adapter.setState('zoneMain.quickSelect', quickNr, true);
+            })
+            .catch(() => {
+                adapter.setState('zoneMain.quickSelect', quickNr, true);
+            });
         return;
-    } else if (command.startsWith('NSE') && !command.startsWith('NSET')) { // Handle display content
+    } else if (command.startsWith('NSE') && !command.startsWith('NSET')) {
+        // Handle display content
         if (command === 'NSE') {
             // on older models it sometimes sends just NSE for unknown reasons - ignore it
             return;
@@ -1281,7 +1418,8 @@ async function handleResponse(data) {
     } else if (command.startsWith('SV')) {
         // Select Video
         return;
-    } else if (command.startsWith('NSFRN')) { // Handle friendly name
+    } else if (command.startsWith('NSFRN')) {
+        // Handle friendly name
         adapter.setState('info.friendlyName', data.substring(6), true);
         return;
     } else if (command.startsWith('PSMULTEQ')) {
@@ -1295,7 +1433,8 @@ async function handleResponse(data) {
     } else if (command.startsWith('VSMONI')) {
         const state = data.substring(6);
 
-        if (!multiMonitor) { // make sure that state exists
+        if (!multiMonitor) {
+            // make sure that state exists
             await createMonitorState();
         }
         if (state === 'AUTO') {
@@ -1307,7 +1446,8 @@ async function handleResponse(data) {
     } else if (command.startsWith('VSVPM')) {
         const processingMode = data.substring(4);
 
-        if (!multiMonitor) { // make sure that state exists
+        if (!multiMonitor) {
+            // make sure that state exists
             await createMonitorState();
         }
 
@@ -1337,7 +1477,9 @@ async function handleResponse(data) {
         };
 
         const sortedPresets = [];
-        Object.keys(knownPresets).sort().forEach(key => sortedPresets[key] = knownPresets[key]);
+        Object.keys(knownPresets)
+            .sort()
+            .forEach(key => (sortedPresets[key] = knownPresets[key]));
         adapter.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
         return;
     } else if (command.startsWith('TFANNAME')) {
@@ -1405,33 +1547,45 @@ async function handleResponse(data) {
             break;
         case 'SLP':
             data = data.slice(3, data.length);
-            adapter.getStateAsync('zoneMain.sleepTimer').then(state => {
-                if (state.val !== parseInt(data) || !state.ack) {
-                    adapter.setState('zoneMain.sleepTimer', parseFloat(data), true);
-                }
-            }).catch(() => adapter.setState('zoneMain.sleepTimer', parseFloat(data), true));
+            adapter
+                .getStateAsync('zoneMain.sleepTimer')
+                .then(state => {
+                    if (state.val !== parseInt(data) || !state.ack) {
+                        adapter.setState('zoneMain.sleepTimer', parseFloat(data), true);
+                    }
+                })
+                .catch(() => adapter.setState('zoneMain.sleepTimer', parseFloat(data), true));
             break;
         case 'SLPOFF':
-            adapter.getStateAsync('zoneMain.sleepTimer').then(state => {
-                if (state.val !== 0 || !state.ack) {
-                    adapter.setState('zoneMain.sleepTimer', 0, true);
-                }
-            }).catch(() => adapter.setState('zoneMain.sleepTimer', 0, true));
+            adapter
+                .getStateAsync('zoneMain.sleepTimer')
+                .then(state => {
+                    if (state.val !== 0 || !state.ack) {
+                        adapter.setState('zoneMain.sleepTimer', 0, true);
+                    }
+                })
+                .catch(() => adapter.setState('zoneMain.sleepTimer', 0, true));
             break;
         case 'ZSLP':
             data = data.slice(5, data.length);
-            adapter.getStateAsync(`zone${zoneNumber}.sleepTimer`).then(state => {
-                if (state.val !== parseInt(data) || !state.ack) {
-                    adapter.setState(`zone${zoneNumber}.sleepTimer`, parseFloat(data), true);
-                }
-            }).catch(() => adapter.setState(`zone${zoneNumber}.sleepTimer`, parseFloat(data), true));
+            adapter
+                .getStateAsync(`zone${zoneNumber}.sleepTimer`)
+                .then(state => {
+                    if (state.val !== parseInt(data) || !state.ack) {
+                        adapter.setState(`zone${zoneNumber}.sleepTimer`, parseFloat(data), true);
+                    }
+                })
+                .catch(() => adapter.setState(`zone${zoneNumber}.sleepTimer`, parseFloat(data), true));
             break;
         case 'ZSLPOFF':
-            adapter.getStateAsync(`zone${zoneNumber}.sleepTimer`).then(state => {
-                if (state.val !== 0 || !state.ack) {
-                    adapter.setState(`zone${zoneNumber}.sleepTimer`, 0, true);
-                }
-            }).catch(() => adapter.setState(`zone${zoneNumber}.sleepTimer`, 0, true));
+            adapter
+                .getStateAsync(`zone${zoneNumber}.sleepTimer`)
+                .then(state => {
+                    if (state.val !== 0 || !state.ack) {
+                        adapter.setState(`zone${zoneNumber}.sleepTimer`, 0, true);
+                    }
+                })
+                .catch(() => adapter.setState(`zone${zoneNumber}.sleepTimer`, 0, true));
             break;
         case 'PSDYNEQON':
             adapter.setState('settings.dynamicEq', true, true);
@@ -1445,14 +1599,17 @@ async function handleResponse(data) {
         case 'PSSWLOFF':
             adapter.setState('settings.subwooferLevelState', false, true);
             break;
-        case 'PSSWL': {// Handle Subwoofer Level for first and second SW
+        case 'PSSWL': {
+            // Handle Subwoofer Level for first and second SW
             command = data.split(' ')[0];
             let state = data.split(' ')[1];
             state = helper.volToDb(state);
-            if (command === 'PSSWL') { // Check if PSSWL or PSSWL2
+            if (command === 'PSSWL') {
+                // Check if PSSWL or PSSWL2
                 adapter.setState('settings.subwooferLevel', parseFloat(state), true);
             } else {
-                if (!subTwo) { // make sure sub two state exists
+                if (!subTwo) {
+                    // make sure sub two state exists
                     await createSubTwo();
                 }
                 adapter.setState('settings.subwooferTwoLevel', parseFloat(state), true);
@@ -1618,11 +1775,13 @@ async function handleResponse(data) {
             adapter.setState('zoneMain.channelVolumeRearHeightLeft', helper.volToDb(channelVolume), true);
             break;
         }
-        case 'CVSW': { // can be subwoofer or subwooferTwo
+        case 'CVSW': {
+            // can be subwoofer or subwooferTwo
             const channelVolume = data.split(' ')[1];
             command = data.split(' ')[0];
 
-            if (command === 'CVSW') { // Check if CVSW or CVSW2
+            if (command === 'CVSW') {
+                // Check if CVSW or CVSW2
                 adapter.setState('zoneMain.channelVolumeSubwoofer', helper.volToDb(channelVolume), true);
             } else {
                 adapter.setState('zoneMain.channelVolumeSubwooferTwo', helper.volToDb(channelVolume), true);
@@ -1660,265 +1819,305 @@ async function handleResponse(data) {
 async function createZone(zone) {
     const promises = [];
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}`, {
-        type: 'channel',
-        common: {
-            name: `Zone ${zone}`
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}`, {
+            type: 'channel',
+            common: {
+                name: `Zone ${zone}`
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.powerZone`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Power State`,
-            role: 'switch.power.zone',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.powerZone`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Power State`,
+                role: 'switch.power.zone',
+                type: 'boolean',
+                write: true,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volume`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Volume`,
-            role: 'level.volume.zone',
-            type: 'number',
-            read: true,
-            write: true,
-            min: 0,
-            max: 98
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.volume`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Volume`,
+                role: 'level.volume.zone',
+                type: 'number',
+                read: true,
+                write: true,
+                min: 0,
+                max: 98
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeDB`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} VolumeDB`,
-            role: 'level.volume',
-            type: 'number',
-            unit: 'dB',
-            read: true,
-            write: true,
-            min: -80,
-            max: 18
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.volumeDB`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} VolumeDB`,
+                role: 'level.volume',
+                type: 'number',
+                unit: 'dB',
+                read: true,
+                write: true,
+                min: -80,
+                max: 18
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeUp`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Volume Up`,
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.volumeUp`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Volume Up`,
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.volumeDown`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Volume Down`,
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.volumeDown`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Volume Down`,
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.extendObjectAsync(`zone${zone}.selectInput`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Select input`,
-            role: 'media.input',
-            type: 'string',
-            write: true,
-            read: true,
-            states: {
-                '0': 'PHONO',
-                '1': 'CD',
-                '2': 'TUNER',
-                '3': 'DVD',
-                '4': 'BD',
-                '5': 'TV',
-                '6': 'SAT/CBL',
-                '7': 'MPLAY',
-                '8': 'GAME',
-                '9': 'NET',
-                '10': 'SPOTIFY',
-                '11': 'LASTFM',
-                '12': 'IRADIO',
-                '13': 'SERVER',
-                '14': 'FAVORITES',
-                '15': 'AUX1',
-                '16': 'AUX2',
-                '17': 'AUX3',
-                '18': 'AUX4',
-                '19': 'AUX5',
-                '20': 'AUX6',
-                '21': 'AUX7',
-                '22': 'BT',
-                '23': 'USB'
-            }
-        },
-        native: {}
-    }, {preserve: {common: ['name']}}));
+    promises.push(
+        adapter.extendObjectAsync(
+            `zone${zone}.selectInput`,
+            {
+                type: 'state',
+                common: {
+                    name: `Zone ${zone} Select input`,
+                    role: 'media.input',
+                    type: 'string',
+                    write: true,
+                    read: true,
+                    states: {
+                        0: 'PHONO',
+                        1: 'CD',
+                        2: 'TUNER',
+                        3: 'DVD',
+                        4: 'BD',
+                        5: 'TV',
+                        6: 'SAT/CBL',
+                        7: 'MPLAY',
+                        8: 'GAME',
+                        9: 'NET',
+                        10: 'SPOTIFY',
+                        11: 'LASTFM',
+                        12: 'IRADIO',
+                        13: 'SERVER',
+                        14: 'FAVORITES',
+                        15: 'AUX1',
+                        16: 'AUX2',
+                        17: 'AUX3',
+                        18: 'AUX4',
+                        19: 'AUX5',
+                        20: 'AUX6',
+                        21: 'AUX7',
+                        22: 'BT',
+                        23: 'USB'
+                    }
+                },
+                native: {}
+            },
+            { preserve: { common: ['name'] } }
+        )
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.muteIndicator`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Muted`,
-            role: 'media.mute',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.muteIndicator`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Muted`,
+                role: 'media.mute',
+                type: 'boolean',
+                write: true,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.quickSelect`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Quick select`,
-            role: 'media.quickSelect',
-            type: 'number',
-            write: true,
-            read: true,
-            min: 1,
-            max: 5
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.quickSelect`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Quick select`,
+                role: 'media.quickSelect',
+                type: 'number',
+                write: true,
+                read: true,
+                min: 1,
+                max: 5
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.sleepTimer`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Sleep Timer`,
-            role: 'media.timer.sleep',
-            unit: 'min',
-            type: 'number',
-            write: true,
-            read: true,
-            min: 0,
-            max: 120
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.sleepTimer`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Sleep Timer`,
+                role: 'media.timer.sleep',
+                unit: 'min',
+                type: 'number',
+                write: true,
+                read: true,
+                min: 0,
+                max: 120
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBass`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Bass Level`,
-            role: 'level.bass',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -6,
-            max: 6
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBass`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Bass Level`,
+                role: 'level.bass',
+                type: 'number',
+                write: true,
+                read: true,
+                unit: 'dB',
+                min: -6,
+                max: 6
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassUp`, {
-        type: 'state',
-        common: {
-            'name': `Zone ${zone} Bass Up`,
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassUp`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Bass Up`,
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassDown`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Bass Down`,
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.equalizerBassDown`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Bass Down`,
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTreble`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Treble`,
-            role: 'level.treble',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -6,
-            max: 6
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTreble`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Treble`,
+                role: 'level.treble',
+                type: 'number',
+                write: true,
+                read: true,
+                unit: 'dB',
+                min: -6,
+                max: 6
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleUp`, {
-        type: 'state',
-        common: {
-            'name': `Zone ${zone} Treble Up`,
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleUp`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Treble Up`,
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleDown`, {
-        type: 'state',
-        common: {
-            'name': `Zone ${zone} Treble Down`,
-            'role': 'button',
-            'type': 'boolean',
-            'write': true,
-            'read': false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.equalizerTrebleDown`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Treble Down`,
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontRight`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Channel Volume Front Right`,
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontRight`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Channel Volume Front Right`,
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: -12,
+                max: 12,
+                unit: 'dB'
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontLeft`, {
-        type: 'state',
-        common: {
-            name: `Zone ${zone} Channel Volume Front Left`,
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -12,
-            max: 12
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync(`zone${zone}.channelVolumeFrontLeft`, {
+            type: 'state',
+            common: {
+                name: `Zone ${zone} Channel Volume Front Left`,
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                unit: 'dB',
+                min: -12,
+                max: 12
+            },
+            native: {}
+        })
+    );
 
     try {
         await Promise.all(promises);
@@ -1939,125 +2138,145 @@ async function createZone(zone) {
 async function createDisplayAndHttp() {
     const promises = [];
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent0', {
-        type: 'state',
-        common: {
-            'name': 'Display content 0',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent0', {
+            type: 'state',
+            common: {
+                name: 'Display content 0',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent1', {
-        type: 'state',
-        common: {
-            'name': 'Display content 1',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent1', {
+            type: 'state',
+            common: {
+                name: 'Display content 1',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent2', {
-        type: 'state',
-        common: {
-            'name': 'Display content 2',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent2', {
+            type: 'state',
+            common: {
+                name: 'Display content 2',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent3', {
-        type: 'state',
-        common: {
-            'name': 'Display content 3',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent3', {
+            type: 'state',
+            common: {
+                name: 'Display content 3',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent4', {
-        type: 'state',
-        common: {
-            'name': 'Display content 4',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent4', {
+            type: 'state',
+            common: {
+                name: 'Display content 4',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent5', {
-        type: 'state',
-        common: {
-            'name': 'Display content 5',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent5', {
+            type: 'state',
+            common: {
+                name: 'Display content 5',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent6', {
-        type: 'state',
-        common: {
-            'name': 'Display content 6',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent6', {
+            type: 'state',
+            common: {
+                name: 'Display content 6',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent7', {
-        type: 'state',
-        common: {
-            'name': 'Display content 7',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent7', {
+            type: 'state',
+            common: {
+                name: 'Display content 7',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('display.displayContent8', {
-        type: 'state',
-        common: {
-            'name': 'Display content 8',
-            'role': 'info.display',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('display.displayContent8', {
+            type: 'state',
+            common: {
+                name: 'Display content 8',
+                role: 'info.display',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('zoneMain.iconURL', {
-        type: 'state',
-        common: {
-            'name': 'Cover',
-            'role': 'media.cover',
-            'type': 'string',
-            'write': false,
-            'read': true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('zoneMain.iconURL', {
+            type: 'state',
+            common: {
+                name: 'Cover',
+                role: 'media.cover',
+                type: 'string',
+                write: false,
+                read: true
+            },
+            native: {}
+        })
+    );
 
     try {
         await Promise.all(promises);
@@ -2079,39 +2298,47 @@ async function createDisplayAndHttp() {
 async function createMonitorState() {
     const promises = [];
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.outputMonitor', {
-        type: 'state',
-        common: {
-            name: 'Output monitor',
-            role: 'video.output',
-            type: 'number',
-            write: true,
-            read: true,
-            states: {
-                '0': 'AUTO',
-                '1': '1',
-                '2': '2'
-            }
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.outputMonitor', {
+            type: 'state',
+            common: {
+                name: 'Output monitor',
+                role: 'video.output',
+                type: 'number',
+                write: true,
+                read: true,
+                states: {
+                    0: 'AUTO',
+                    1: '1',
+                    2: '2'
+                }
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.extendObjectAsync('settings.videoProcessingMode', {
-        type: 'state',
-        common: {
-            name: 'Video processing mode',
-            role: 'video.processingMode',
-            type: 'string',
-            write: true,
-            read: true,
-            states: {
-                '0': 'AUTO',
-                '1': 'GAME',
-                '2': 'MOVIE'
-            }
-        },
-        native: {}
-    }, {preserve: {common: ['name']}}));
+    promises.push(
+        adapter.extendObjectAsync(
+            'settings.videoProcessingMode',
+            {
+                type: 'state',
+                common: {
+                    name: 'Video processing mode',
+                    role: 'video.processingMode',
+                    type: 'string',
+                    write: true,
+                    read: true,
+                    states: {
+                        0: 'AUTO',
+                        1: 'GAME',
+                        2: 'MOVIE'
+                    }
+                },
+                native: {}
+            },
+            { preserve: { common: ['name'] } }
+        )
+    );
     try {
         await Promise.all(promises);
         if (!multiMonitor) {
@@ -2131,44 +2358,50 @@ async function createMonitorState() {
 async function createSubTwo() {
     const promises = [];
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevel', {
-        type: 'state',
-        common: {
-            name: 'Second Subwoofer Level',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.subwooferTwoLevel', {
+            type: 'state',
+            common: {
+                name: 'Second Subwoofer Level',
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: -12,
+                max: 12,
+                unit: 'dB'
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelUp', {
-        type: 'state',
-        common: {
-            name: 'Subwoofer Two Level Up',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelUp', {
+            type: 'state',
+            common: {
+                name: 'Subwoofer Two Level Up',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelDown', {
-        type: 'state',
-        common: {
-            name: 'Subwoofer Two Level Down',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.subwooferTwoLevelDown', {
+            type: 'state',
+            common: {
+                name: 'Subwoofer Two Level Down',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
     try {
         await Promise.all(promises);
@@ -2189,55 +2422,63 @@ async function createSubTwo() {
 async function createLfcAudyssey() {
     const promises = [];
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.audysseyLfc', {
-        type: 'state',
-        common: {
-            name: 'Audyssey Low Frequency Containment',
-            role: 'switch',
-            type: 'boolean',
-            write: true,
-            read: true
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.audysseyLfc', {
+            type: 'state',
+            common: {
+                name: 'Audyssey Low Frequency Containment',
+                role: 'switch',
+                type: 'boolean',
+                write: true,
+                read: true
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmount', {
-        type: 'state',
-        common: {
-            name: 'Audyssey Low Frequency Containment Amount',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: 1,
-            max: 7
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.containmentAmount', {
+            type: 'state',
+            common: {
+                name: 'Audyssey Low Frequency Containment Amount',
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: 1,
+                max: 7
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountUp', {
-        type: 'state',
-        common: {
-            name: 'Containment Amount Up',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.containmentAmountUp', {
+            type: 'state',
+            common: {
+                name: 'Containment Amount Up',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
-    promises.push(adapter.setObjectNotExistsAsync('settings.containmentAmountDown', {
-        type: 'state',
-        common: {
-            name: 'Containment Amount Down',
-            role: 'button',
-            type: 'boolean',
-            write: true,
-            read: false
-        },
-        native: {}
-    }));
+    promises.push(
+        adapter.setObjectNotExistsAsync('settings.containmentAmountDown', {
+            type: 'state',
+            common: {
+                name: 'Containment Amount Down',
+                role: 'button',
+                type: 'boolean',
+                write: true,
+                read: false
+            },
+            native: {}
+        })
+    );
 
     try {
         await Promise.all(promises);
@@ -2265,14 +2506,14 @@ async function createPictureMode() {
             write: true,
             read: false,
             states: {
-                'OFF': 'Off',
-                'STD': 'Standard',
-                'MOV': 'Movie',
-                'VVD': 'Vivid',
-                'STM': 'Stream',
-                'CTM': 'Custom',
-                'DAY': 'ISF Day',
-                'NGT': 'ISF Night'
+                OFF: 'Off',
+                STD: 'Standard',
+                MOV: 'Movie',
+                VVD: 'Vivid',
+                STM: 'Stream',
+                CTM: 'Custom',
+                DAY: 'ISF Day',
+                NGT: 'ISF Night'
             }
         },
         native: {}
@@ -2316,7 +2557,7 @@ async function createStandardStates(type) {
         for (const obj of helper.commonCommands) {
             const id = obj._id;
             delete obj._id;
-            promises.push(adapter.extendObjectAsync(id, obj, {preserve: {common: ['name']}}));
+            promises.push(adapter.extendObjectAsync(id, obj, { preserve: { common: ['name'] } }));
         } // endFor
         try {
             await Promise.all(promises);
@@ -2328,26 +2569,31 @@ async function createStandardStates(type) {
         for (const obj of helper.usCommands) {
             const id = obj._id;
             delete obj._id;
-            promises.push(adapter.extendObjectAsync(id, obj, {preserve: {common: ['name']}}));
+            promises.push(adapter.extendObjectAsync(id, obj, { preserve: { common: ['name'] } }));
         } // endFor
 
-        for (let i = 1; i <= 6; i++) { // iterate over zones
+        for (let i = 1; i <= 6; i++) {
+            // iterate over zones
             const zoneNumber = i * 2;
-            promises.push(adapter.setObjectNotExistsAsync(`zone${zoneNumber}`, {
-                type: 'channel',
-                common: {
-                    name: 'Settings and device commands'
-                },
-                native: {}
-            }));
+            promises.push(
+                adapter.setObjectNotExistsAsync(`zone${zoneNumber}`, {
+                    type: 'channel',
+                    common: {
+                        name: 'Settings and device commands'
+                    },
+                    native: {}
+                })
+            );
 
             for (const obj of helper.usCommandsZone) {
                 const id = `zone${zoneNumber}.${obj._id}`;
-                promises.push(adapter.setObjectNotExistsAsync(id, {
-                    type: obj.type,
-                    common: obj.common,
-                    native: obj.native
-                }));
+                promises.push(
+                    adapter.setObjectNotExistsAsync(id, {
+                        type: obj.type,
+                        common: obj.common,
+                        native: obj.native
+                    })
+                );
             } // endFor
         } // endFor
         try {

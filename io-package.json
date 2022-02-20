@@ -132,7 +132,12 @@
     "loglevel": "info",
     "type": "multimedia",
     "connectionType": "local",
-    "dataSource": "push"
+    "dataSource": "push",
+    "dependencies": [
+      {
+        "js-controller": ">=3.3.0"
+      }
+    ]
   },
   "native": {
     "ip": "",
