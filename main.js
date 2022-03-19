@@ -18,15 +18,18 @@ let pollInterval;
 let verboseConnection = true;
 let previousError;
 
+// holds a true value for already created capabilities
+const capabilities = {
+    display: false,
+    multiMonitor: false,
+    subTwo: false,
+    audysseyLfc: false,
+    pictureMode: false,
+    speakerPreset: false
+};
 const zonesCreated = {};
-let displayAbility = false;
-let multiMonitor = false;
 let pollingVar = null;
 let connectingVar = null;
-// let intervalPollVar = null;
-let subTwo = false;
-let audysseyLfc = false;
-let pictureModeAbility = false;
 let receiverType;
 
 function startAdapter(options) {
@@ -621,6 +624,9 @@ function startAdapter(options) {
             case 'settings.dialogLevelAdjust':
                 await sendRequest(`PSDIL ${state ? 'ON' : 'OFF'}`);
                 break;
+            case 'settings.speakerPreset':
+                await sendRequest(`SPPR ${state}`);
+                break;
             default:
                 adapter.log.error(`[COMMAND] ${id} is not a valid state`);
         } // endSwitch
@@ -883,7 +889,8 @@ const updateCommands = [
     'PSDIL ?',
     'PSDIC ?',
     'TFAN?',
-    'TFANNAME?'
+    'TFANNAME?',
+    'SPPR ?'
 ];
 
 /**
@@ -892,7 +899,6 @@ const updateCommands = [
 async function updateStates() {
     for (const command of updateCommands) {
         await sendRequest(command);
-        //await helper.wait(requestInterval);
     }
 } // endUpdateStates
 
@@ -916,7 +922,6 @@ async function pollStates() {
     pollingVar = null;
     for (const command of pollCommands) {
         await sendRequest(command);
-        //await helper.wait(requestInterval);
     }
 } // endPollStates
 
@@ -1407,7 +1412,7 @@ async function handleResponse(data) {
 
         const displayCont = data.substring(4).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
         const dispContNr = data.slice(3, 4);
-        if (!displayAbility) {
+        if (!capabilities.display) {
             await createDisplayAndHttp();
         }
         adapter.setState(`display.displayContent${dispContNr}`, displayCont, true);
@@ -1433,7 +1438,7 @@ async function handleResponse(data) {
     } else if (command.startsWith('VSMONI')) {
         const state = data.substring(6);
 
-        if (!multiMonitor) {
+        if (!capabilities.multiMonitor) {
             // make sure that state exists
             await createMonitorState();
         }
@@ -1446,7 +1451,7 @@ async function handleResponse(data) {
     } else if (command.startsWith('VSVPM')) {
         const processingMode = data.substring(4);
 
-        if (!multiMonitor) {
+        if (!capabilities.multiMonitor) {
             // make sure that state exists
             await createMonitorState();
         }
@@ -1456,7 +1461,7 @@ async function handleResponse(data) {
     } else if (command.startsWith('PV') && command.length > 2) {
         const pictureMode = data.substring(1);
 
-        if (!pictureModeAbility) {
+        if (!capabilities.pictureMode) {
             await createPictureMode();
         }
         const obj = await adapter.getObjectAsync('settings.pictureMode');
@@ -1608,7 +1613,7 @@ async function handleResponse(data) {
                 // Check if PSSWL or PSSWL2
                 adapter.setState('settings.subwooferLevel', parseFloat(state), true);
             } else {
-                if (!subTwo) {
+                if (!capabilities.subTwo) {
                     // make sure sub two state exists
                     await createSubTwo();
                 }
@@ -1617,20 +1622,20 @@ async function handleResponse(data) {
             break;
         }
         case 'PSLFCON':
-            if (!audysseyLfc) {
+            if (!capabilities.audysseyLfc) {
                 await createLfcAudyssey();
             }
             adapter.setState('settings.audysseyLfc', true, true);
             break;
         case 'PSLFCOFF':
-            if (!audysseyLfc) {
+            if (!capabilities.audysseyLfc) {
                 await createLfcAudyssey();
             }
             adapter.setState('settings.audysseyLfc', false, true);
             break;
         case 'PSCNTAMT': {
             const state = data.split(' ')[1];
-            if (!audysseyLfc) {
+            if (!capabilities.audysseyLfc) {
                 await createLfcAudyssey();
             }
             adapter.setState('settings.containmentAmount', parseFloat(state), true);
@@ -1803,6 +1808,14 @@ async function handleResponse(data) {
         case 'PSDIC': {
             const level = parseInt(data.split(' ')[1]);
             adapter.setState('settings.dialogControl', level, true);
+            break;
+        }
+        case 'SPPR': {
+            if (!capabilities.speakerPreset) {
+                await createSpeakerPreset();
+            }
+            const preset = parseInt(data.split(' ')[1]);
+            adapter.setState('settings.speakerPreset', preset, true);
             break;
         }
         default:
@@ -2280,11 +2293,11 @@ async function createDisplayAndHttp() {
 
     try {
         await Promise.all(promises);
-        if (!displayAbility) {
+        if (!capabilities.display) {
             adapter.setState('zoneMain.iconURL', `http://${host}/NetAudio/art.asp-jpg`, true);
             adapter.log.debug('[INFO] <== Display Content created');
         } // endIf
-        displayAbility = true;
+        capabilities.display = true;
     } catch (e) {
         adapter.log.error(`Could not create Display Content states: ${e.message}`);
     }
@@ -2341,10 +2354,10 @@ async function createMonitorState() {
     );
     try {
         await Promise.all(promises);
-        if (!multiMonitor) {
+        if (!capabilities.multiMonitor) {
             adapter.log.debug('[INFO] <== Created monitor states');
         }
-        multiMonitor = true;
+        capabilities.multiMonitor = true;
     } catch (e) {
         adapter.log.error(`Could not create monitor states: ${e.message}`);
     }
@@ -2405,10 +2418,10 @@ async function createSubTwo() {
 
     try {
         await Promise.all(promises);
-        if (!subTwo) {
+        if (!capabilities.subTwo) {
             adapter.log.debug('[INFO] <== Created subwoofer two states');
         }
-        subTwo = true;
+        capabilities.subTwo = true;
     } catch (e) {
         adapter.log.error(`Could not create subwoofer two states: ${e.message}`);
     }
@@ -2482,10 +2495,10 @@ async function createLfcAudyssey() {
 
     try {
         await Promise.all(promises);
-        if (!audysseyLfc) {
+        if (!capabilities.audysseyLfc) {
             adapter.log.debug('[INFO] <== Created Audyssey LFC states');
         }
-        audysseyLfc = true;
+        capabilities.audysseyLfc = true;
     } catch (e) {
         adapter.log.error(`Could not create Audyssey LFC states: ${e.message}`);
     }
@@ -2518,8 +2531,27 @@ async function createPictureMode() {
         },
         native: {}
     });
-    pictureModeAbility = true;
+    capabilities.pictureMode = true;
 } // endCreatePictureMode
+
+/**
+ * Creates the Speaker Preset Object
+ * @return {Promise<void>}
+ */
+async function createSpeakerPreset() {
+    await adapter.setObjectNotExistsAsync('settings.speakerPreset', {
+        type: 'state',
+        common: {
+            name: 'Speaker Preset',
+            type: 'number',
+            role: 'value',
+            states: [1, 2]
+        },
+        native: {}
+    });
+
+    capabilities.speakerPreset = true;
+}
 
 /**
  * Ensures that the val is part of the state list of given object id

@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.12.1",
+    "version": "1.13.0",
     "news": {
+      "1.13.0": {
+        "en": "added `settings.speakerPreset`",
+        "de": "`settings.speakerPreset` hinzugefügt",
+        "ru": "добавлен `settings.speakerPreset`",
+        "pt": "adicionado `settings.speakerPreset`",
+        "nl": "`settings.speakerPreset` toegevoegd",
+        "fr": "ajout de `settings.speakerPreset`",
+        "it": "aggiunto `settings.speakerPreset`",
+        "es": "añadido `settings.speakerPreset`",
+        "pl": "dodano `settings.speakerPreset`",
+        "zh-cn": "添加了`settings.speakerPreset`"
+      },
       "1.12.1": {
         "en": "fixed missing digits in `tuner.stationName`",
         "de": "Fehlende Ziffern in `tuner.stationName` behoben",
@@ -74,18 +86,6 @@
         "es": "corrige la conversión faltante a db en los estados del ecualizador para zonas adicionales (arreglos # 137)",
         "pl": "napraw brakującą konwersję do db w stanach korektora dla dodatkowych stref (poprawki # 137)",
         "zh-cn": "修复了其他区域的均衡器状态下缺少到db的转换（修复＃137）"
-      },
-      "1.10.6": {
-        "en": "we fixed some more types",
-        "de": "Wir haben einige weitere Typen behoben",
-        "ru": "мы исправили еще несколько типов",
-        "pt": "nós consertamos mais alguns tipos",
-        "nl": "we hebben nog wat meer soorten gerepareerd",
-        "fr": "nous avons corrigé d'autres types",
-        "it": "abbiamo corretto altri tipi",
-        "es": "arreglamos algunos tipos más",
-        "pl": "naprawiliśmy kilka innych typów",
-        "zh-cn": "我们修复了更多类型"
       }
     },
     "title": "DENON AVR",

@@ -852,6 +852,15 @@ Die folgenden States werden vom Adapter angelegt:
    *Number Wert, welcher auf eine in info.onlinePresets enthaltene Id gesetzt werden kann.
    Hierdurch wird der entsprechende Favoriten-Sender wiedergegeben.
    Dieser State erhält kein acknowledge, selbst dann nicht, wenn er erfolgreich durchgeführt wurde.*
+
+* settings.speakerPreset
+
+  |Datentyp|Berechtigung|
+  |:---:|:---:|
+  |number|R/W|
+
+  *Stellen Sie die Lautsprechervoreinstellung ein, sofern dies vom AVR unterstützt wird. 
+  Die Lautsprechervoreinstellung kann den Wert `1` oder `2` annehmen.*
    
  ### Weitere States
 Da manche AV-Receiver, wie z. B. der DENON POA-3012CI eine andere Logik nutzen, gibt es für diese unterschiedliche States.
