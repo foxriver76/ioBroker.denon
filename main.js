@@ -2545,7 +2545,10 @@ async function createSpeakerPreset() {
             name: 'Speaker Preset',
             type: 'number',
             role: 'value',
-            states: [1, 2]
+            states: {
+                1: '1',
+                2: '2'
+            }
         },
         native: {}
     });

@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.13.0",
+    "version": "1.13.1",
     "news": {
+      "1.13.1": {
+        "en": "added `settings.speakerPreset`",
+        "de": "`settings.speakerPreset` hinzugefügt",
+        "ru": "добавлен `settings.speakerPreset`",
+        "pt": "adicionado `settings.speakerPreset`",
+        "nl": "`settings.speakerPreset` toegevoegd",
+        "fr": "ajout de `settings.speakerPreset`",
+        "it": "aggiunto `settings.speakerPreset`",
+        "es": "añadido `settings.speakerPreset`",
+        "pl": "dodano `settings.speakerPreset`",
+        "zh-cn": "添加了`settings.speakerPreset`"
+      },
       "1.13.0": {
         "en": "added `settings.speakerPreset`",
         "de": "`settings.speakerPreset` hinzugefügt",
@@ -74,18 +86,6 @@
         "es": "ajuste de nivel de diálogo implementado para contenido DTS (cierra # 143)\nlos nuevos puntos de datos son `settings.dialogLevelAdjust`,` settings.dialogLevel`, `settings.dialogControl`",
         "pl": "zaimplementowana regulacja poziomu dialogów dla zawartości DTS (zamyka #143)\nnowe punkty danych to `settings.dialogLevelAdjust`, `settings.dialogLevel`, `settings.dialogControl`",
         "zh-cn": "实现了 DTS 内容的对话级别调整（关闭 #143）\n新数据点是`settings.dialogLevelAdjust`、`settings.dialogLevel`、`settings.dialogControl`"
-      },
-      "1.10.7": {
-        "en": "fix missing conversion to db on equalizer states for additional zones (fixes #137)",
-        "de": "Behebung der fehlenden Konvertierung in db bei Equalizer-Zuständen für zusätzliche Zonen (Fixes # 137)",
-        "ru": "исправить отсутствующее преобразование в db в состояниях эквалайзера для дополнительных зон (исправления # 137)",
-        "pt": "corrigir a falta de conversão para db nos estados do equalizador para zonas adicionais (correções # 137)",
-        "nl": "ontbrekende conversie naar db op equalizer-statussen voor extra zones repareren (fix # 137)",
-        "fr": "correction de la conversion manquante en db sur les états de l'égaliseur pour des zones supplémentaires (corrections # 137)",
-        "it": "corretta la conversione mancante in db negli stati dell'equalizzatore per zone aggiuntive (correzioni # 137)",
-        "es": "corrige la conversión faltante a db en los estados del ecualizador para zonas adicionales (arreglos # 137)",
-        "pl": "napraw brakującą konwersję do db w stanach korektora dla dodatkowych stref (poprawki # 137)",
-        "zh-cn": "修复了其他区域的均衡器状态下缺少到db的转换（修复＃137）"
       }
     },
     "title": "DENON AVR",
