@@ -15,6 +15,7 @@ const client = new net.Socket();
 let adapter;
 let host;
 let pollInterval;
+let requestInterval;
 let verboseConnection = true;
 let previousError;
 
@@ -107,7 +108,7 @@ function startAdapter(options) {
             adapter.log.info('[START] Starting DENON AVR adapter');
             host = adapter.config.ip;
             pollInterval = adapter.config.pollInterval || 7000;
-            // requestInterval = adapter.config.requestInterval || 100;
+            requestInterval = adapter.config.requestInterval || 100;
 
             const obj = await adapter.getForeignObjectAsync(adapter.namespace);
             // create device namespace
@@ -899,6 +900,7 @@ const updateCommands = [
 async function updateStates() {
     for (const command of updateCommands) {
         await sendRequest(command);
+        await helper.wait(requestInterval);
     }
 } // endUpdateStates
 
@@ -922,6 +924,7 @@ async function pollStates() {
     pollingVar = null;
     for (const command of pollCommands) {
         await sendRequest(command);
+        await helper.wait(requestInterval);
     }
 } // endPollStates
 
