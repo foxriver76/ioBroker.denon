@@ -744,8 +744,6 @@ client.on('data', data => {
  */
 function connect() {
     client.setEncoding('utf8');
-    // given the connection a timeout after being idle for 35 seconds
-    client.setTimeout(35000);
     if (verboseConnection) {
         adapter.log.info(`[CONNECT] Trying to connect to ${host}:23`);
     } else {
@@ -753,6 +751,9 @@ function connect() {
     }
     connectingVar = null;
     client.connect({ port: 23, host: host });
+
+    // give the connection a timeout after being idle for 35 seconds
+    client.setTimeout(35000);
 } // endConnect
 
 const updateCommands = [
