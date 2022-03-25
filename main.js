@@ -752,7 +752,7 @@ function connect() {
     connectingVar = null;
     client.connect({ port: 23, host: host });
 
-    // give the connection a timeout after being idle for 35 seconds
+    // give the connection a timeout after being idle for 35 seconds (needed after connect call)
     client.setTimeout(35000);
 } // endConnect
 

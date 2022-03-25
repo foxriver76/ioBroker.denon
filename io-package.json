@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.13.2",
+    "version": "1.13.3",
     "news": {
+      "1.13.3": {
+        "en": "fixed timeout beeing only applied on first reconnect (fixes #232)",
+        "de": "Behobenes Timeout, das nur beim ersten Reconnect angewendet wird (Fixes Nr. 232)",
+        "ru": "фиксированный тайм-аут применяется только при первом повторном подключении (исправления № 232)",
+        "pt": "tempo limite fixo sendo aplicado apenas na primeira reconexão (correções #232)",
+        "nl": "vaste time-out wordt alleen toegepast bij de eerste keer opnieuw verbinden (fixt #232)",
+        "fr": "le délai d'attente fixe n'est appliqué qu'à la première reconnexion (corrections #232)",
+        "it": "timeout fisso applicato solo alla prima riconnessione (correzioni n. 232)",
+        "es": "el tiempo de espera fijo solo se aplica en la primera reconexión (correcciones # 232)",
+        "pl": "naprawiony limit czasu stosowany tylko przy pierwszym ponownym połączeniu (poprawki #232)",
+        "zh-cn": "固定超时蜂鸣仅适用于第一次重新连接（修复＃232）"
+      },
       "1.13.2": {
         "en": "fixed requesting interval",
         "de": "festes Abfrageintervall",
@@ -74,18 +86,6 @@
         "es": "arreglamos la conversión faltante a db en el estado de agudos del ecualizador para zonas adicionales (arreglos # 162)",
         "pl": "naprawiliśmy brakującą konwersję do db na stanie sopranów korektora dla dodatkowych stref (poprawki #162)",
         "zh-cn": "我们修复了额外区域的均衡器高音状态上缺少的 db 转换（修复 #162）"
-      },
-      "1.11.1": {
-        "en": "fixes for silent reconnection - if ETIMEDOUT occurs repeately switch to debug, like for other errors (closes #149)",
-        "de": "Korrekturen für stille Wiederverbindung - wenn ETIMEDOUT wiederholt auftritt, wechseln Sie zum Debug, wie bei anderen Fehlern (schließt #149)",
-        "ru": "исправления для тихого переподключения - если ETIMEDOUT происходит повторно, переключитесь на отладку, как и для других ошибок (закрывает # 149)",
-        "pt": "correções para reconexão silenciosa - se ETIMEDOUT ocorrer repetidamente, alterne para depuração, como para outros erros (fecha # 149)",
-        "nl": "oplossingen voor stille herverbinding - als ETIMEDOUT herhaaldelijk optreedt, schakelt u over naar debuggen, zoals voor andere fouten (sluit #149)",
-        "fr": "correctifs pour la reconnexion silencieuse - si ETIMEDOUT se produit à plusieurs reprises, passez au débogage, comme pour d'autres erreurs (ferme #149)",
-        "it": "correzioni per la riconnessione silenziosa - se ETIMEDOUT si verifica ripetutamente passare al debug, come per altri errori (chiude il #149)",
-        "es": "Correcciones para la reconexión silenciosa: si ETIMEDOUT ocurre repetidamente, cambie a depuración, como para otros errores (cierra # 149)",
-        "pl": "poprawki dla cichego ponownego połączenia - jeśli wystąpi ETIMEDOUT, ponownie przełącz się na debugowanie, tak jak w przypadku innych błędów (zamyka #149)",
-        "zh-cn": "修复静默重新连接 - 如果重复发生 ETIMEDOUT 切换到调试，就像其他错误一样（关闭＃149）"
       }
     },
     "title": "DENON AVR",
