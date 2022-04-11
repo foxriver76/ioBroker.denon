@@ -237,8 +237,7 @@ function startAdapter(options) {
                 break;
             }
             case 'zoneMain.quickSelect':
-                await sendRequest(`MSQUICK${state}`);
-                await sendRequest(`MSSMART${state}`);
+                await sendRequests([`MSQUICK${state}`, `MSSMART${state}`]);
                 break;
             case 'zoneMain.equalizerBassUp':
                 await sendRequest('PSBAS UP');
@@ -584,8 +583,7 @@ function startAdapter(options) {
                 break;
             }
             case 'zone.quickSelect':
-                await sendRequest(`Z${zoneNumber}QUICK${state}`);
-                await sendRequest(`Z${zoneNumber}SMART${state}`);
+                await sendRequests([`Z${zoneNumber}QUICK${state}`, `Z${zoneNumber}SMART${state}`]);
                 break;
             case 'zone.equalizerBassUp':
                 await sendRequest(`Z${zoneNumber}PSBAS UP`);
@@ -717,10 +715,7 @@ client.on('connect', async () => {
     adapter.log.info(`[CONNECT] Adapter connected to DENON-AVR: ${host}:23`);
     if (!receiverType) {
         adapter.log.debug('[CONNECT] Connected --> Check receiver type');
-        await sendRequest('SV?');
-        await sendRequest('SV01?');
-        await sendRequest('BDSTATUS?');
-        await sendRequest('MV?');
+        await sendRequests(['SV?', 'SV01?', 'BDSTATUS?', 'MV?']);
     } else {
         adapter.log.debug('[CONNECT] Connected --> updating states on start');
         updateStates(); // Update states when connected
@@ -899,10 +894,7 @@ const updateCommands = [
  * Update all states by sending the defined updateCommands
  */
 async function updateStates() {
-    for (const command of updateCommands) {
-        await sendRequest(command);
-        await helper.wait(requestInterval);
-    }
+    await sendRequests(updateCommands);
 } // endUpdateStates
 
 const pollCommands = [
@@ -923,11 +915,21 @@ const pollCommands = [
 async function pollStates() {
     // Polls states
     pollingVar = null;
-    for (const command of pollCommands) {
-        await sendRequest(command);
+    await sendRequests(pollCommands);
+} // endPollStates
+
+/**
+ * Send data array to socket respecting request interval
+ *
+ * @param {string[]} requests array of requests
+ * @return {Promise<void>}
+ */
+async function sendRequests(requests) {
+    for (const req of requests) {
+        await sendRequest(req);
         await helper.wait(requestInterval);
     }
-} // endPollStates
+}
 
 /**
  * Send data to socket

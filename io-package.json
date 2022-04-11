@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.13.3",
+    "version": "1.13.4",
     "news": {
+      "1.13.4": {
+        "en": "we now respect `requestInterval` on determining the AVR model too",
+        "de": "Wir berücksichtigen jetzt auch `requestInterval` bei der Bestimmung des AVR-Modells",
+        "ru": "теперь мы учитываем `requestInterval` и при определении модели AVR.",
+        "pt": "agora respeitamos `requestInterval` na determinação do modelo AVR também",
+        "nl": "we respecteren nu ook `requestInterval` bij het bepalen van het AVR-model",
+        "fr": "nous respectons maintenant `requestInterval` lors de la détermination du modèle AVR également",
+        "it": "ora rispettiamo anche `requestInterval` nel determinare il modello AVR",
+        "es": "ahora respetamos `requestInterval` al determinar el modelo AVR también",
+        "pl": "teraz szanujemy również „requestInterval” przy określaniu modelu AVR",
+        "zh-cn": "我们现在在确定 AVR 模型时也尊重`requestInterval`"
+      },
       "1.13.3": {
         "en": "fixed timeout beeing only applied on first reconnect (fixes #232)",
         "de": "Behobenes Timeout, das nur beim ersten Reconnect angewendet wird (Fixes Nr. 232)",
@@ -74,18 +86,6 @@
         "es": "introducimos estados de sintonizador\noptimizaciones de rendimiento",
         "pl": "wprowadzamy stany tunera\noptymalizacje wydajności",
         "zh-cn": "我们介绍调谐器状态\n性能优化"
-      },
-      "1.11.2": {
-        "en": "we fixed missing conversion to db on equalizer treble state for additional zones (fixes #162)",
-        "de": "wir haben die fehlende Konvertierung in db im Equalizer-Höhenzustand für zusätzliche Zonen behoben (Fixes Nr. 162)",
-        "ru": "мы исправили отсутствующее преобразование в db на высоких частотах эквалайзера для дополнительных зон (исправления # 162)",
-        "pt": "corrigimos a falta de conversão para db no estado de agudos do equalizador para zonas adicionais (correções # 162)",
-        "nl": "we hebben de ontbrekende conversie naar db opgelost in de treble-status van de equalizer voor extra zones (fixes #162)",
-        "fr": "nous avons corrigé la conversion manquante en db sur l'état des aigus de l'égaliseur pour les zones supplémentaires (corrections #162)",
-        "it": "abbiamo corretto la conversione mancante in db sullo stato degli alti dell'equalizzatore per zone aggiuntive (correzioni #162)",
-        "es": "arreglamos la conversión faltante a db en el estado de agudos del ecualizador para zonas adicionales (arreglos # 162)",
-        "pl": "naprawiliśmy brakującą konwersję do db na stanie sopranów korektora dla dodatkowych stref (poprawki #162)",
-        "zh-cn": "我们修复了额外区域的均衡器高音状态上缺少的 db 转换（修复 #162）"
       }
     },
     "title": "DENON AVR",
