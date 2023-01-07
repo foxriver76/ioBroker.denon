@@ -62,9 +62,9 @@ function startAdapter(options) {
             client.destroy(); // kill connection
             client.unref(); // kill connection
             callback();
-        } catch (e) {
+        } catch {
             callback();
-        } // endTryCatch
+        }
     });
 
     adapter.on('message', obj => {
@@ -149,8 +149,6 @@ function startAdapter(options) {
             return handleUsStateChange(id, state);
         }
 
-        let leadingZero;
-
         switch (id) {
             case 'zoneMain.powerZone':
                 if (state === true) {
@@ -159,38 +157,19 @@ function startAdapter(options) {
                     await sendRequest('ZMOFF');
                 }
                 break;
-            case 'zoneMain.volume':
-                if (state < 0) {
-                    state = 0;
-                }
-                if (state % 0.5 !== 0) {
-                    state = Math.round(state * 2) / 2;
-                }
-                if (state < 10) {
-                    leadingZero = '0';
-                } else {
-                    leadingZero = '';
-                }
-                state = state.toString().replace('.', ''); // remove dot
-                await sendRequest(`MV${leadingZero}${state}`);
-                adapter.log.debug(`[INFO] <== Changed mainVolume to ${state}`);
+            case 'zoneMain.volume': {
+                const vol = helper.inputToVol(state);
+                await sendRequest(`MV${vol}`);
+                adapter.log.debug(`[INFO] <== Changed mainVolume to ${vol}`);
                 break;
-            case 'zoneMain.volumeDB':
+            }
+            case 'zoneMain.volumeDB': {
                 state += 80; // convert to Vol
-                if (state < 0) {
-                    state = 0;
-                }
-                if (state % 0.5 !== 0) {
-                    state = Math.round(state * 2) / 2;
-                }
-                if (state < 10) {
-                    leadingZero = '0';
-                } else {
-                    leadingZero = '';
-                }
-                state = state.toString().replace('.', ''); // remove dot
-                await sendRequest(`MV${leadingZero}${state}`);
+                const vol = helper.inputToVol(state);
+                await sendRequest(`MV${vol}`);
+                adapter.log.debug(`[INFO] <== Changed mainVolume to ${vol}`);
                 break;
+            }
             case 'zoneMain.sleepTimer':
                 if (!state) {
                     // state === 0
@@ -201,7 +180,7 @@ function startAdapter(options) {
                     await sendRequest(`SLP0${state}`);
                 } else if (state <= 120) {
                     await sendRequest(`SLP${state}`);
-                } // endElseIf
+                }
                 break;
             case 'zoneMain.volumeUp':
                 await sendRequest('MVUP');
@@ -214,7 +193,7 @@ function startAdapter(options) {
                     await sendRequest('MUON');
                 } else {
                     await sendRequest('MUOFF');
-                } // endElseIf
+                }
                 break;
             case 'zoneMain.playPause':
                 await sendRequest('NS94');
@@ -547,35 +526,11 @@ function startAdapter(options) {
                 await sendRequest(`Z${zoneNumber}DOWN`);
                 break;
             case 'zone.volume':
-                if (state < 0) {
-                    state = 0;
-                }
-                if (state % 0.5 !== 0) {
-                    state = Math.round(state * 2) / 2;
-                }
-                if (state < 10) {
-                    leadingZero = '0';
-                } else {
-                    leadingZero = '';
-                }
-                state = state.toString().replace('.', ''); // remove dot
-                await sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
+                await sendRequest(`Z${zoneNumber}${helper.inputToVol(state)}`);
                 break;
             case 'zone.volumeDB':
                 state += 80; // Convert to Vol
-                if (state < 0) {
-                    state = 0;
-                }
-                if (state % 0.5 !== 0) {
-                    state = Math.round(state * 2) / 2;
-                }
-                if (state < 10) {
-                    leadingZero = '0';
-                } else {
-                    leadingZero = '';
-                }
-                state = state.toString().replace('.', ''); // remove dot
-                await sendRequest(`Z${zoneNumber}${leadingZero}${state}`);
+                await sendRequest(`Z${zoneNumber}${helper.inputToVol(state)}`);
                 break;
             case 'zone.selectInput': {
                 const obj = await adapter.getObjectAsync(`zone${zoneNumber}.selectInput`);
@@ -1206,43 +1161,20 @@ async function handleUsStateChange(id, stateVal) {
             break;
         case 'speakerOneVolume': {
             const state = await adapter.getStateAsync(`zone${parseInt(zoneNumber)}.operationMode`);
-            let leadingZero;
             if (state.val.toString() === '0' || state.val === 'NORMAL') {
                 zoneNumber = parseInt(zoneNumber) % 2 ? parseInt(zoneNumber) : parseInt(zoneNumber) - 1;
                 zoneNumber = parseInt(zoneNumber) < 10 ? `0${zoneNumber}` : zoneNumber;
-            } // endIf
-            if (stateVal < 0) {
-                stateVal = 0;
             }
-            if (stateVal % 0.5 !== 0) {
-                stateVal = Math.round(stateVal * 2) / 2;
-            }
-            if (stateVal < 10) {
-                leadingZero = '0';
-            } else {
-                leadingZero = '';
-            }
-            stateVal = stateVal.toString().replace('.', ''); // remove dot
-            await sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
-            adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
+
+            const vol = helper.inputToVol(stateVal);
+            await sendRequest(`SV${zoneNumber}${vol}`);
+            adapter.log.debug(`[INFO] <== Changed speakerOneVolume to ${vol}`);
             break;
         }
         case 'speakerTwoVolume': {
-            let leadingZero;
-            if (stateVal < 0) {
-                stateVal = 0;
-            }
-            if (stateVal % 0.5 !== 0) {
-                stateVal = Math.round(stateVal * 2) / 2;
-            }
-            if (stateVal < 10) {
-                leadingZero = '0';
-            } else {
-                leadingZero = '';
-            }
-            stateVal = stateVal.toString().replace('.', ''); // remove dot
-            await sendRequest(`SV${zoneNumber}${leadingZero}${stateVal}`);
-            adapter.log.debug(`[INFO] <== Changed mainVolume to ${stateVal}`);
+            const vol = helper.inputToVol(stateVal);
+            await sendRequest(`SV${zoneNumber}${vol}`);
+            adapter.log.debug(`[INFO] <== Changed speakerTwoVolume to ${vol}`);
             break;
         }
         case 'triggerInput':

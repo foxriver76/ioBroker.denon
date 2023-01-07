@@ -36,6 +36,8 @@
     "@alcalzone/release-script": "^3.5.6",
     "@alcalzone/release-script-plugin-iobroker": "^3.5.7",
     "@iobroker/testing": "^2.5.6",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
     "axios": "^0.26.1",
     "chai": "^4.3.6",
     "eslint": "^8.13.0",
@@ -43,10 +45,14 @@
     "eslint-plugin-prettier": "^4.0.0",
     "gulp": "^4.0.2",
     "mocha": "^9.2.2",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "typescript": "^4.9.4"
   },
-  "main": "main.js",
+  "main": "build/main.js",
   "scripts": {
+    "prebuild": "rimraf ./build",
+    "build:ts": "tsc -p tsconfig.build.json",
+    "build": "npm run build:ts",
     "test:package": "mocha test/packageFiles --exit",
     "test:integration": "mocha test/integrationAdapter --exit",
     "test": "mocha --exit",
@@ -56,10 +62,11 @@
     "url": "https://github.com/foxriver76/ioBroker.denon/issues"
   },
   "files": [
-    "main.js",
-    "lib/",
-    "admin/",
+    "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
+    "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
     "io-package.json",
+    "build/main.js",
+    "build/lib",
     "LICENSE"
   ],
   "readmeFilename": "README.md"

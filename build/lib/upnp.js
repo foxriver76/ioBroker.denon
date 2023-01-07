@@ -1,46 +1,42 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ssdpScan = exports.httpGet = void 0;
+const http_1 = __importDefault(require("http"));
+const dgram_1 = __importDefault(require("dgram"));
+const os_1 = require("os");
 /**
  * Tries to read HTML page.
  *
- * @alias httpGet
- * @memberof tools
- * @param {string} link http link, like http://192.168.1.2:80/abc/de.xml
- * @param {number} timeout timeout in ms (default 500)
- * @param {function} callback return result
- *        <pre><code>function (error, resultAsString, link) {}</code></pre>
+ * @param link http link, like http://192.168.1.2:80/abc/de.xml
+ * @param timeout timeout in ms (default 500)
+ * @param callback return result
  */
 function httpGet(link, timeout, callback) {
-    const http = require('http');
-
-    if (typeof timeout === 'function') {
-        callback = timeout;
-        timeout = 500;
-    }
-    timeout = parseInt(timeout, 10) || 500;
-
-    const req = http
+    const req = http_1.default
         .get(link, res => {
-            const statusCode = res.statusCode;
-
-            if (statusCode !== 200) {
-                // consume response data to free up memory
-                res.resume();
-                callback(statusCode, null, link);
-            }
-
-            res.setEncoding('utf8');
-            let rawData = '';
-            res.on('data', chunk => (rawData += chunk));
-            res.on('end', () => callback && callback(null, rawData ? rawData.toString() : null));
-        })
+        const statusCode = res.statusCode;
+        if (statusCode !== 200) {
+            // consume response data to free up memory
+            res.resume();
+            callback(statusCode, null, link);
+        }
+        res.setEncoding('utf8');
+        let rawData = '';
+        res.on('data', chunk => (rawData += chunk));
+        res.on('end', () => callback && callback(null, rawData ? rawData.toString() : null));
+    })
         .on('error', e => callback && callback(e.message, null));
-
     req.setTimeout(timeout, () => {
-        this.abort();
+        req.destroy();
         callback && callback('timeout', null);
+        // @ts-expect-error change signature or remove it
         callback = null;
     });
 }
-
+exports.httpGet = httpGet;
 /**
  * Helper function scan UPnP devices.
  *
@@ -72,42 +68,24 @@ function httpGet(link, timeout, callback) {
  *
  * @alias ssdpScan
  * @memberof tools
- * @param {string} text filter string like "urn:dial-multiscreen-org:service:dial:1"
- * @param {boolean} readXml if LOCATION xml should be read
- * @param {number} timeout timeout in ms (default 1000)
- * @param {function} callback return result
- *        <pre><code>function (error, result, ip, xmlData) {}</code></pre>
+ * @param text filter string like "urn:dial-multiscreen-org:service:dial:1"
+ * @param readXml if LOCATION xml should be read
+ * @param timeout timeout in ms (default 1000)
+ * @param callback return result
  */
 function ssdpScan(text, readXml, timeout, callback) {
-    if (typeof readXml === 'function') {
-        callback = readXml;
-        readXml = false;
-    }
-    if (typeof readXml === 'number') {
-        timeout = readXml;
-        readXml = false;
-    }
-    if (typeof timeout === 'function') {
-        callback = timeout;
-        timeout = 1000;
-    }
     timeout = timeout || 1000;
-
-    const dgram = require('dgram');
     let timer;
-
-    const interfaces = require('os').networkInterfaces();
+    const interfaces = (0, os_1.networkInterfaces)();
     const sockets = [];
     const result = [];
     Object.keys(interfaces).forEach(iName => {
         interfaces[iName].forEach(ipInfo => {
             if (!ipInfo.internal && ipInfo.family === 'IPv4') {
                 (ip => {
-                    const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true });
-
+                    const socket = dgram_1.default.createSocket({ type: 'udp4', reuseAddr: true });
                     if (socket) {
                         socket.unref();
-
                         // Send to port 1900 UDP request
                         socket.on('error', err => {
                             if (timer) {
@@ -116,14 +94,14 @@ function ssdpScan(text, readXml, timeout, callback) {
                             }
                             if (callback) {
                                 callback(err, result);
+                                // @ts-expect-error fix it
                                 callback = null;
                             }
                             if (socket) {
                                 socket.close();
                             }
                         });
-
-                        socket.on('message', (msg, rinfo) => {
+                        socket.on('message', (_msg, rinfo) => {
                             /* expected:
                              HTTP/1.1 200 OK
                              CACHE-CONTROL: max-age = 1800
@@ -137,8 +115,7 @@ function ssdpScan(text, readXml, timeout, callback) {
                              X-RINCON-WIFIMODE: 0
                              X-RINCON-VARIANT: 0
                              */
-                            msg = msg ? msg.toString() : '';
-
+                            let msg = _msg ? _msg.toString() : '';
                             msg = msg.replace(/\r\n/g, '\n');
                             const device = { ip: rinfo.address };
                             if (!result.find(dev => dev.ip === device.ip)) {
@@ -148,7 +125,8 @@ function ssdpScan(text, readXml, timeout, callback) {
                                     const pos = lines[i].indexOf(':');
                                     if (pos !== -1) {
                                         obj[lines[i].substring(0, pos)] = lines[i].substring(pos + 1).trim();
-                                    } else {
+                                    }
+                                    else {
                                         obj[lines[i]] = '';
                                     }
                                 }
@@ -159,9 +137,10 @@ function ssdpScan(text, readXml, timeout, callback) {
                                     httpGet(obj.LOCATION, timeout, (err, data) => {
                                         if (err) {
                                             console.error(`No answer from ${device.ip}: ${JSON.stringify(err)}`);
-                                        } else if (data) {
+                                        }
+                                        else if (data) {
                                             device.xml = data.split('\n');
-                                            device.xml.forEach(line => {
+                                            device.xml.forEach((line) => {
                                                 let m = line.match('<manufacturer>(.+)</manufacturer>');
                                                 if (m) {
                                                     device.manufacturer = m[1];
@@ -171,25 +150,24 @@ function ssdpScan(text, readXml, timeout, callback) {
                                                     device.name = m[1];
                                                 }
                                             });
-                                        } else {
+                                        }
+                                        else {
                                             console.log(`No answer from ${device.ip}`);
                                         }
                                     });
                                 }
                             }
                         });
-
                         socket.on('listening', () => {
                             socket.addMembership('239.255.255.250', ip);
                             socket.setMulticastTTL(4);
                             let msg;
-
                             if (parseInt(process.version.substring(1), 10) < 6) {
                                 msg = new Buffer(text);
-                            } else {
+                            }
+                            else {
                                 msg = Buffer.from(text);
                             }
-
                             socket.send(msg, 0, msg.length, 1900, '239.255.255.250');
                         });
                         socket.bind(19001, ip);
@@ -198,20 +176,15 @@ function ssdpScan(text, readXml, timeout, callback) {
             }
         });
     });
-
     timer = setTimeout(() => {
         timer = null;
-
         sockets.forEach(socket => socket.close());
-
         if (callback) {
             callback(null, result);
+            // @ts-expect-error fix it
             callback = null;
         }
     }, timeout || 1000);
 }
-
-module.exports = {
-    ssdpScan,
-    httpGet
-};
+exports.ssdpScan = ssdpScan;
+//# sourceMappingURL=upnp.js.map

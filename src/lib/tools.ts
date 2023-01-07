@@ -1,11 +1,10 @@
-const axios = require('axios');
+import axios from 'axios';
 
 /**
  * Tests whether the given variable is a real object and not an Array
- * @param {any} it The variable to test
- * @returns {it is Record<string, any>}
+ * @param it The variable to test
  */
-function isObject(it) {
+export function isObject(it: any): it is Record<string, any> {
     // This is necessary because:
     // typeof null === 'object'
     // typeof [] === 'object'
@@ -15,10 +14,9 @@ function isObject(it) {
 
 /**
  * Tests whether the given variable is really an Array
- * @param {any} it The variable to test
- * @returns {it is any[]}
+ * @param it The variable to test
  */
-function isArray(it) {
+export function isArray(it: any): it is any[] {
     if (Array.isArray) {
         return Array.isArray(it);
     }
@@ -27,12 +25,11 @@ function isArray(it) {
 
 /**
  * Translates text using the Google Translate API
- * @param {string} text The text to translate
- * @param {string} targetLang The target languate
- * @param {string} yandex api key
- * @returns {Promise<string>}
+ * @param text The text to translate
+ * @param targetLang The target languate
+ * @param yandex api key
  */
-async function translateText(text, targetLang, yandex) {
+export async function translateText(text: string, targetLang: string, yandex: string): Promise<void | string> {
     if (targetLang === 'en') {
         return text;
     }
@@ -43,7 +40,7 @@ async function translateText(text, targetLang, yandex) {
     }
 }
 
-async function translateYandex(text, targetLang, yandex) {
+export async function translateYandex(text: string, targetLang: string, yandex: string): Promise<string> {
     if (targetLang === 'zh-cn') {
         targetLang = 'zh';
     }
@@ -52,16 +49,16 @@ async function translateYandex(text, targetLang, yandex) {
             text
         )}&lang=en-${targetLang}`;
         const response = await axios({ url, timeout: 15000 });
-        if (response.data && response.data['text']) {
-            return response.data['text'][0];
+        if (response.data && response.data.text) {
+            return response.data.text[0];
         }
         throw new Error('Invalid response for translate request');
-    } catch (e) {
-        throw new Error(`Could not translate to "${targetLang}": ${e}`);
+    } catch (e: any) {
+        throw new Error(`Could not translate to "${targetLang}": ${e.message}`);
     }
 }
 
-async function translateGoogle(text, targetLang) {
+export async function translateGoogle(text: string, targetLang: string): Promise<string> {
     try {
         const url = `http://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(
             text
@@ -72,13 +69,7 @@ async function translateGoogle(text, targetLang) {
             return response.data[0][0][0];
         }
         throw new Error('Invalid response for translate request');
-    } catch (e) {
-        throw new Error(`Could not translate to "${targetLang}": ${e}`);
+    } catch (e: any) {
+        throw new Error(`Could not translate to "${targetLang}": ${e.message}`);
     }
 }
-
-module.exports = {
-    isArray,
-    isObject,
-    translateText
-};

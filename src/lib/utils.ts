@@ -2,41 +2,65 @@
  * Decode state e.g. for selectInput by searching for state in key and value of the states
  *
  * @alias decodeState
- * @param {Object} stateNames key value pair of states
- * @param {string|number} state state key or value which will be matched
+ * @param stateRecord key value pair of states
+ * @param state state key or value which will be matched
  */
-function decodeState(stateNames, state) {
-    // decoding for e. g. selectInput --> Input: Key (when ascending integer) or Value Output: Value
-    const stateArray = Object.keys(stateNames).map(key => stateNames[key]); // returns stateNames[key]
-    for (const i in stateArray) {
-        if (state.toString().toUpperCase() === stateArray[i].toUpperCase() || i.toString() === state.toString()) {
-            return stateArray[i];
+export function decodeState(stateRecord: Record<string, string>, state: string | number): string {
+    for (const [id, name] of Object.entries(stateRecord)) {
+        if (state.toString().toUpperCase() === name.toUpperCase() || id === state.toString()) {
+            return name;
         }
-    } // endFor
+    }
     return '';
-} // endDecodeState
+}
+
+/**
+ * Converts user input into sendable volume command
+ * @param input
+ */
+export function inputToVol(input: number): string {
+    let leadingZero: string;
+
+    if (input < 0) {
+        input = 0;
+    }
+    if (input % 0.5 !== 0) {
+        input = Math.round(input * 2) / 2;
+    }
+    if (input < 10) {
+        leadingZero = '0';
+    } else {
+        leadingZero = '';
+    }
+
+    return leadingZero + input.toString().replace('.', '');
+}
 
 /**
  * Convert volume to dB
  *
  * @alias volToDb
- * @param {string} vol volume e. g. '50.5'
- * @returns {number} dB
+ * @param vol volume e. g. '50.5'
+ * @returns dB
  */
-function volToDb(vol) {
-    if (vol.length === 3) {
-        vol = vol / 10; // "305" -> 30.5
+export function volToDb(volStr: string): number {
+    let vol: number;
+    if (volStr.length === 3) {
+        vol = parseInt(volStr) / 10; // "305" -> 30.5
+    } else {
+        vol = parseInt(volStr);
     }
+
     vol -= 50; // Vol to dB
     return vol;
-} // endVolToDb
+}
 
 /**
  * Waits given ms
- * @param {number} ms
- * @return {Promise<void>}
+ *
+ * @param ms
  */
-function wait(ms) {
+export function wait(ms: number): Promise<void> {
     return new Promise(resolve => {
         setTimeout(() => {
             resolve();
@@ -47,17 +71,15 @@ function wait(ms) {
 /**
  * Convert dB to volume
  *
- * @alias dbToVol
- * @param {string} vol volume in dB e. g. '10.5'
- * @returns {string} volume
+ * @param vol volume in dB e. g. '10.5'
  */
-function dbToVol(vol) {
+export function dbToVol(vol: string): string {
     vol += 50; // dB to vol
     vol = vol.toString().replace('.', '');
     return vol;
-} // endDbToVol
+}
 
-const commonCommands = [
+export const commonCommands: ioBroker.AnyObject[] = [
     {
         _id: 'info.friendlyName',
         type: 'state',
@@ -1079,7 +1101,7 @@ const commonCommands = [
     }
 ];
 
-const usCommandsZone = [
+export const usCommandsZone: ioBroker.StateObject[] = [
     {
         _id: 'speakerOneVolume',
         type: 'state',
@@ -1228,7 +1250,7 @@ const usCommandsZone = [
     }
 ];
 
-const usCommands = [
+export const usCommands: ioBroker.StateObject[] = [
     {
         _id: 'settings.powerConfigurationChange',
         type: 'state',
@@ -1262,24 +1284,12 @@ const usCommands = [
 
 /**
  * Tests whether the given variable is a real object and not an Array
- * @param {any} it The variable to test
- * @returns {it is Record<string, any>}
+ * @param it The variable to test
  */
-function isObject(it) {
+export function isObject(it: any): it is Record<string, any> {
     // This is necessary because:
     // typeof null === 'object'
     // typeof [] === 'object'
     // [] instanceof Object === true
     return Object.prototype.toString.call(it) === '[object Object]'; // this code is 25% faster then below one
 }
-
-module.exports = {
-    decodeState,
-    volToDb,
-    dbToVol,
-    isObject,
-    commonCommands,
-    usCommandsZone,
-    usCommands,
-    wait
-};
