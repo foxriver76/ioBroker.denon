@@ -67,7 +67,6 @@ exports.httpGet = httpGet;
  * </code></pre>
  *
  * @alias ssdpScan
- * @memberof tools
  * @param text filter string like "urn:dial-multiscreen-org:service:dial:1"
  * @param readXml if LOCATION xml should be read
  * @param timeout timeout in ms (default 1000)

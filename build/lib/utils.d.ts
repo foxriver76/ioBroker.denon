@@ -1,4 +1,3 @@
-/// <reference types="iobroker" />
 /**
  * Decode state e.g. for selectInput by searching for state in key and value of the states
  *
@@ -16,7 +15,7 @@ export declare function inputToVol(input: number): string;
  * Convert volume to dB
  *
  * @alias volToDb
- * @param vol volume e. g. '50.5'
+ * @param volStr volume e. g. '50.5'
  * @returns dB
  */
 export declare function volToDb(volStr: string): number;
@@ -32,9 +31,6 @@ export declare function wait(ms: number): Promise<void>;
  * @param vol volume in dB e. g. '10.5'
  */
 export declare function dbToVol(vol: string): string;
-export declare const commonCommands: ioBroker.AnyObject[];
-export declare const usCommandsZone: ioBroker.StateObject[];
-export declare const usCommands: ioBroker.StateObject[];
 /**
  * Tests whether the given variable is a real object and not an Array
  * @param it The variable to test

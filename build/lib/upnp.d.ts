@@ -1,3 +1,9 @@
+interface SSDPResultEntry {
+    ip: string;
+    data?: any;
+    name: string;
+    manufacturer?: string;
+}
 /**
  * Tries to read HTML page.
  *
@@ -36,10 +42,10 @@ export declare function httpGet(link: string, timeout: number, callback: (err: a
  * </code></pre>
  *
  * @alias ssdpScan
- * @memberof tools
  * @param text filter string like "urn:dial-multiscreen-org:service:dial:1"
  * @param readXml if LOCATION xml should be read
  * @param timeout timeout in ms (default 1000)
  * @param callback return result
  */
-export declare function ssdpScan(text: string, readXml: boolean, timeout: number, callback: (err: any, res: any, ip?: string, xmlData?: any) => void): void;
+export declare function ssdpScan(text: string, readXml: boolean, timeout: number, callback: (err: Error | null, res: SSDPResultEntry[]) => void): void;
+export {};

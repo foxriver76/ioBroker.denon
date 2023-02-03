@@ -908,6 +908,11 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+
+### __WORK IN PROGRESS__
+* (foxriver76) typescript port
+* (foxriver76) fixed issues with decoding of input state
+
 ### 1.13.4 (2022-04-11)
 * (foxriver76) we now respect `requestInterval` on determining the AVR model too
 

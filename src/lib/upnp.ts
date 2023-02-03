@@ -2,6 +2,13 @@ import http from 'http';
 import dgram from 'dgram';
 import { networkInterfaces } from 'os';
 
+interface SSDPResultEntry {
+    ip: string;
+    data?: any;
+    name: string;
+    manufacturer?: string;
+}
+
 /**
  * Tries to read HTML page.
  *
@@ -13,7 +20,7 @@ export function httpGet(
     link: string,
     timeout: number,
     callback: (err: any, result: string | null, link?: string) => void
-) {
+): void {
     const req = http
         .get(link, res => {
             const statusCode = res.statusCode;
@@ -69,7 +76,6 @@ export function httpGet(
  * </code></pre>
  *
  * @alias ssdpScan
- * @memberof tools
  * @param text filter string like "urn:dial-multiscreen-org:service:dial:1"
  * @param readXml if LOCATION xml should be read
  * @param timeout timeout in ms (default 1000)
@@ -79,9 +85,9 @@ export function ssdpScan(
     text: string,
     readXml: boolean,
     timeout: number,
-    callback: (err: any, res: any, ip?: string, xmlData?: any) => void
-) {
-    timeout = timeout || 1000;
+    callback: (err: Error | null, res: SSDPResultEntry[]) => void
+): void {
+    timeout = timeout || 1_000;
 
     let timer: NodeJS.Timeout | undefined | null;
 
@@ -199,5 +205,5 @@ export function ssdpScan(
             // @ts-expect-error fix it
             callback = null;
         }
-    }, timeout || 1000);
+    }, timeout || 1_000);
 }

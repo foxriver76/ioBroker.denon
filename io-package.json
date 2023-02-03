@@ -147,6 +147,14 @@
   "objects": [],
   "instanceObjects": [
     {
+      "_id": "",
+      "type": "device",
+      "common": {
+        "name": "DENON device"
+      },
+      "native": ""
+    },
+    {
       "_id": "info",
       "type": "channel",
       "common": {
