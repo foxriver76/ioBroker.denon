@@ -42,7 +42,8 @@
   "include": [
     "src/**/*.ts",
     "admin/**/*.ts",
-    "admin/**/*.tsx"
+    "admin/**/*.tsx",
+    "test/**/*.ts"
   ],
   "exclude": [
     "build/**",

@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const adapter_core_1 = __importDefault(require("@iobroker/adapter-core"));
+const utils = __importStar(require("@iobroker/adapter-core"));
 const net_1 = __importDefault(require("net"));
 const helper = __importStar(require("./lib/utils"));
 const states = __importStar(require("./lib/states"));
@@ -52,7 +52,7 @@ let pollTimer = null;
 let connectTimer = null;
 let receiverType;
 function startAdapter(options = {}) {
-    adapter = new adapter_core_1.default.Adapter({ ...options, name: 'denon' });
+    adapter = new utils.Adapter({ ...options, name: 'denon' });
     adapter.on('unload', callback => {
         try {
             if (connectTimer) {
@@ -61,11 +61,6 @@ function startAdapter(options = {}) {
             if (pollTimer) {
                 clearTimeout(pollTimer);
             }
-            /*
-            if (intervalPollVar) {
-                clearInterval(intervalPollVar);
-            }
-             */
             adapter.log.info('[END] Stopping Denon AVR adapter...');
             adapter.setState('info.connection', false, true);
             client.destroy(); // kill connection

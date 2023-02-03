@@ -1,4 +1,4 @@
-import utils from '@iobroker/adapter-core';
+import * as utils from '@iobroker/adapter-core';
 import net from 'net';
 import * as helper from './lib/utils';
 import * as states from './lib/states';
@@ -41,12 +41,6 @@ function startAdapter(options: Partial<utils.AdapterOptions> = {}): utils.Adapte
             if (pollTimer) {
                 clearTimeout(pollTimer);
             }
-
-            /*
-            if (intervalPollVar) {
-                clearInterval(intervalPollVar);
-            }
-             */
 
             adapter.log.info('[END] Stopping Denon AVR adapter...');
             adapter.setState('info.connection', false, true);
