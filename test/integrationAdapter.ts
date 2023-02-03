@@ -1,14 +1,12 @@
-'use strict';
-
-const path = require('path');
-const { tests } = require('@iobroker/testing');
+import path from 'path';
+import { tests } from '@iobroker/testing';
 
 // Run tests
 tests.integration(path.join(__dirname, '..'), {
-    defineAdditionalTests(getHarness) {
-        describe('Test sendTo()', () => {
-            it('Should work', () => {
-                return new Promise(resolve => {
+    defineAdditionalTests: ({ suite }) => {
+        suite('Test sendTo()', getHarness => {
+            it('Should answer to browse', () => {
+                return new Promise<void>(resolve => {
                     // Create a fresh harness instance each test!
                     const harness = getHarness();
                     // Start the adapter and wait until it has started
@@ -19,7 +17,7 @@ tests.integration(path.join(__dirname, '..'), {
                         });
                     });
                 });
-            }).timeout(6000);
+            }).timeout(6_000);
         });
     }
 });
