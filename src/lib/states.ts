@@ -1401,3 +1401,273 @@ export const displayHttpStates: Record<string, ioBroker.SettableStateObject> = {
         native: {}
     }
 };
+
+/**
+ * Retrive zone objects for given zone
+ * @param zone number of the zone
+ */
+export function getZoneObjects(zone: number): Record<string, ioBroker.SettableObject> {
+    const res: Record<string, ioBroker.SettableObject> = {};
+
+    res[`zone${zone}`] = {
+        type: 'channel',
+        common: {
+            name: `Zone ${zone}`
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.powerZone`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Power State`,
+            role: 'switch.power.zone',
+            type: 'boolean',
+            write: true,
+            read: true
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.volume`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Volume`,
+            role: 'level.volume.zone',
+            type: 'number',
+            read: true,
+            write: true,
+            min: 0,
+            max: 98
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.volumeDB`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} VolumeDB`,
+            role: 'level.volume',
+            type: 'number',
+            unit: 'dB',
+            read: true,
+            write: true,
+            min: -80,
+            max: 18
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.volumeUp`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Volume Up`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.volumeDown`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Volume Down`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.selectInput`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Select input`,
+            role: 'media.input',
+            type: 'string',
+            write: true,
+            read: true,
+            states: {
+                0: 'PHONO',
+                1: 'CD',
+                2: 'TUNER',
+                3: 'DVD',
+                4: 'BD',
+                5: 'TV',
+                6: 'SAT/CBL',
+                7: 'MPLAY',
+                8: 'GAME',
+                9: 'NET',
+                10: 'SPOTIFY',
+                11: 'LASTFM',
+                12: 'IRADIO',
+                13: 'SERVER',
+                14: 'FAVORITES',
+                15: 'AUX1',
+                16: 'AUX2',
+                17: 'AUX3',
+                18: 'AUX4',
+                19: 'AUX5',
+                20: 'AUX6',
+                21: 'AUX7',
+                22: 'BT',
+                23: 'USB'
+            }
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.muteIndicator`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Muted`,
+            role: 'media.mute',
+            type: 'boolean',
+            write: true,
+            read: true
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.quickSelect`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Quick select`,
+            role: 'media.quickSelect',
+            type: 'number',
+            write: true,
+            read: true,
+            min: 1,
+            max: 5
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.sleepTimer`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Sleep Timer`,
+            role: 'media.timer.sleep',
+            unit: 'min',
+            type: 'number',
+            write: true,
+            read: true,
+            min: 0,
+            max: 120
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.equalizerBass`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Bass Level`,
+            role: 'level.bass',
+            type: 'number',
+            write: true,
+            read: true,
+            unit: 'dB',
+            min: -6,
+            max: 6
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.equalizerBassUp`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Bass Up`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.equalizerBassDown`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Bass Down`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.equalizerTreble`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Treble`,
+            role: 'level.treble',
+            type: 'number',
+            write: true,
+            read: true,
+            unit: 'dB',
+            min: -6,
+            max: 6
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.equalizerTrebleUp`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Treble Up`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.equalizerTrebleDown`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Treble Down`,
+            role: 'button',
+            type: 'boolean',
+            write: true,
+            read: false
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.channelVolumeFrontRight`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Channel Volume Front Right`,
+            role: 'level',
+            type: 'number',
+            write: true,
+            read: true,
+            min: -12,
+            max: 12,
+            unit: 'dB'
+        },
+        native: {}
+    };
+
+    res[`zone${zone}.channelVolumeFrontLeft`] = {
+        type: 'state',
+        common: {
+            name: `Zone ${zone} Channel Volume Front Left`,
+            role: 'level',
+            type: 'number',
+            write: true,
+            read: true,
+            unit: 'dB',
+            min: -12,
+            max: 12
+        },
+        native: {}
+    };
+
+    return res;
+}
