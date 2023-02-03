@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.13.4",
+    "version": "1.14.0",
     "news": {
+      "1.14.0": {
+        "en": "typescript port\nfixed issues with decoding of input state",
+        "de": "typscript port\nfeste probleme mit der decodierung des eingangszustands",
+        "ru": "типскрипт порт\nфиксированные вопросы с расшифровкой входного государства",
+        "pt": "porta do tipo\nproblemas fixos com decodificação do estado de entrada",
+        "nl": "type\nvertaling:",
+        "fr": "typescript port\nproblèmes fixes avec le décodage de l'état d'entrée",
+        "it": "porta del tipo\nproblemi fissi con decodifica dello stato di input",
+        "es": "port tiposcript\ncuestiones fijas con decodificación del estado de entrada",
+        "pl": "port\nrzeczywiste problemy z dekodowaniem stanów wejściowych",
+        "uk": "портфоліо\nвиправлені питання з декодуванням вхідного стану",
+        "zh-cn": "港口\na. 固定问题,有投入的国家"
+      },
       "1.13.4": {
         "en": "we now respect `requestInterval` on determining the AVR model too",
         "de": "Wir berücksichtigen jetzt auch `requestInterval` bei der Bestimmung des AVR-Modells",
@@ -74,18 +87,6 @@
         "es": "Se corrigieron los dígitos faltantes en `tuner.stationName`",
         "pl": "naprawiono brakujące cyfry w `tuner.stationName`",
         "zh-cn": "修复了“tuner.stationName”中丢失的数字"
-      },
-      "1.12.0": {
-        "en": "we introduce tuner states\nperformance optimizations",
-        "de": "Wir führen Tuner-Zustände ein\nLeistungsoptimierungen",
-        "ru": "мы вводим состояния тюнера\nоптимизация производительности",
-        "pt": "nós introduzimos estados do sintonizador\notimizações de desempenho",
-        "nl": "we introduceren tunerstatussen\nprestatie-optimalisaties",
-        "fr": "nous introduisons les états du tuner\noptimisations de performances",
-        "it": "introduciamo gli stati del sintonizzatore\nottimizzazioni delle prestazioni",
-        "es": "introducimos estados de sintonizador\noptimizaciones de rendimiento",
-        "pl": "wprowadzamy stany tunera\noptymalizacje wydajności",
-        "zh-cn": "我们介绍调谐器状态\n性能优化"
       }
     },
     "title": "DENON AVR",
