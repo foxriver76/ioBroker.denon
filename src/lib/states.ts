@@ -355,261 +355,6 @@ export const commonCommands: ioBroker.AnyObject[] = [
         native: {}
     },
     {
-        _id: 'zoneMain.channelVolumeFrontLeft',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Front Left',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            unit: 'dB',
-            min: -12,
-            max: 12
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeFrontRight',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Front Right',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeCenter',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Center',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSurroundRight',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Surround Right',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSurroundLeft',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Surround Left',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSurroundDolbyRight',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Surround Dolby Right',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSurroundDolbyLeft',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Surround Dolby Left',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeFrontDolbyLeft',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Front Dolby Left',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeFrontDolbyRight',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Front Dolby Right',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeFrontHeightLeft',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Front Height Left',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeFrontHeightRight',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Front Height Right',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeRearHeightLeft',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Rear Height Left',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeRearHeightRight',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Rear Height Right',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSurroundHeightRight',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Surround Height Right',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSurroundHeightLeft',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Surround Height Left',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSubwoofer',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Subwoofer',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
-        _id: 'zoneMain.channelVolumeSubwooferTwo',
-        type: 'state',
-        common: {
-            name: 'Channel Volume Subwoofer Two',
-            role: 'level',
-            type: 'number',
-            write: true,
-            read: true,
-            min: -12,
-            max: 12,
-            unit: 'dB'
-        },
-        native: {}
-    },
-    {
         _id: 'zoneMain.volumeDB',
         type: 'state',
         common: {
@@ -1017,7 +762,8 @@ export const commonCommands: ioBroker.AnyObject[] = [
             max: 6
         },
         native: {}
-    }
+    },
+    ...getChannelVolumeObjects()
 ];
 
 export const usCommandsZone: ioBroker.StateObject[] = [
@@ -1670,4 +1416,69 @@ export function getZoneObjects(zone: number): Record<string, ioBroker.SettableOb
     };
 
     return res;
+}
+
+/**
+ * Get all channel volume objects
+ */
+function getChannelVolumeObjects(): ioBroker.StateObject[] {
+    const channels = [
+        'Front Left',
+        'Front Right',
+        'Center',
+        'Surround Right',
+        'Surround Left',
+        'Surround Dolby Right',
+        'Surround Dolby Left',
+        'Front Dolby Left',
+        'Front Dolby Right',
+        'Front Height Left',
+        'Front Height Right',
+        'Rear Height Left',
+        'Rear Height Right',
+        'Surround Height Right',
+        'Surround Height Left',
+        'Subwoofer',
+        'Subwoofer Two',
+        'Subwoofer Three',
+        'Subwoofer Four',
+        'Surround Back Left',
+        'Surround Back Right',
+        'Surround Back',
+        'Front Wide Left',
+        'Front Wide Right',
+        'Top Front Left',
+        'Top Front Right',
+        'Top Middle Left',
+        'Top Middle Right',
+        'Top Rear Left',
+        'Top Rear Right',
+        'Back Dolby Left',
+        'Back Dolby Right',
+        'Top Surround',
+        'Center Height',
+        'Tactile Transducer'
+    ];
+
+    const objs: ioBroker.StateObject[] = [];
+
+    for (const channel of channels) {
+        objs.push({
+            _id: `zoneMain.channelVolume${channel.replace(/\s/g, '')}`,
+            type: 'state',
+            common: {
+                name: `Channel Volume ${channel}`,
+                role: 'level',
+                type: 'number',
+                write: true,
+                read: true,
+                min: -12,
+                max: 12,
+                unit: 'dB'
+            },
+            native: {}
+        });
+    }
+
+    return objs;
 }
