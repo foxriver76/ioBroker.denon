@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.14.0",
+    "version": "1.15.0",
     "news": {
+      "1.15.0": {
+        "en": "implemented missing channel volumes for main zone (closes #307)",
+        "de": "implementierte fehlende kanalvolumina für die hauptzone (schließt #307)",
+        "ru": "реализованы недостающие объемы каналов для основной зоны (закрыты #307)",
+        "pt": "volumes de canal em falta implementados para a zona principal (fecha #307)",
+        "nl": "vertaling:",
+        "fr": "volumes de canal manquants pour la zone principale (ferme #307)",
+        "it": "implementato i volumi dei canali mancanti per la zona principale (chiudi #307)",
+        "es": "implementados volúmenes de canales perdidos para la zona principal (closes #307)",
+        "pl": "brak danych dotyczących strefy głównej (okrążeń #307)",
+        "uk": "впроваджено відсутні обсяги каналів для основної зони (закривається no307)",
+        "zh-cn": "各主要区(编号:第307号)执行的缺失渠道"
+      },
       "1.14.0": {
         "en": "typescript port\nfixed issues with decoding of input state",
         "de": "typscript port\nfeste probleme mit der decodierung des eingangszustands",
@@ -75,18 +88,6 @@
         "es": "añadido `settings.speakerPreset`",
         "pl": "dodano `settings.speakerPreset`",
         "zh-cn": "添加了`settings.speakerPreset`"
-      },
-      "1.12.1": {
-        "en": "fixed missing digits in `tuner.stationName`",
-        "de": "Fehlende Ziffern in `tuner.stationName` behoben",
-        "ru": "исправлены пропущенные цифры в `tuner.stationName`",
-        "pt": "corrigiu dígitos ausentes em `tuner.stationName`",
-        "nl": "opgeloste ontbrekende cijfers in `tuner.stationName`",
-        "fr": "correction des chiffres manquants dans `tuner.stationName`",
-        "it": "corrette cifre mancanti in `tuner.stationName`",
-        "es": "Se corrigieron los dígitos faltantes en `tuner.stationName`",
-        "pl": "naprawiono brakujące cyfry w `tuner.stationName`",
-        "zh-cn": "修复了“tuner.stationName”中丢失的数字"
       }
     },
     "title": "DENON AVR",
