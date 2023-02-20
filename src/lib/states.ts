@@ -1422,7 +1422,9 @@ export function getZoneObjects(zone: number): Record<string, ioBroker.SettableOb
  * Get all channel volume objects
  */
 function getChannelVolumeObjects(): ioBroker.StateObject[] {
-    const channels = [
+    const objs: ioBroker.StateObject[] = [];
+
+    const channelVolumes = [
         'Front Left',
         'Front Right',
         'Center',
@@ -1458,11 +1460,9 @@ function getChannelVolumeObjects(): ioBroker.StateObject[] {
         'Top Surround',
         'Center Height',
         'Tactile Transducer'
-    ];
+    ] as const;
 
-    const objs: ioBroker.StateObject[] = [];
-
-    for (const channel of channels) {
+    for (const channel of channelVolumes) {
         objs.push({
             _id: `zoneMain.channelVolume${channel.replace(/\s/g, '')}`,
             type: 'state',

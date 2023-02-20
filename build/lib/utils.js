@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isObject = exports.dbToVol = exports.wait = exports.volToDb = exports.inputToVol = exports.decodeState = void 0;
+exports.reverseObject = exports.isObject = exports.dbToVol = exports.wait = exports.volToDb = exports.inputToVol = exports.decodeState = void 0;
 /**
  * Decode state e.g. for selectInput by searching for state in key and value of the states
  *
@@ -93,4 +93,12 @@ function isObject(it) {
     return Object.prototype.toString.call(it) === '[object Object]'; // this code is 25% faster then below one
 }
 exports.isObject = isObject;
+/**
+ * Reverses an object, making the keys the new values and vice-versa
+ * @param obj The object to reverse
+ */
+function reverseObject(obj) {
+    return Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]));
+}
+exports.reverseObject = reverseObject;
 //# sourceMappingURL=utils.js.map

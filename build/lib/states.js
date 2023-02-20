@@ -1400,7 +1400,8 @@ exports.getZoneObjects = getZoneObjects;
  * Get all channel volume objects
  */
 function getChannelVolumeObjects() {
-    const channels = [
+    const objs = [];
+    const channelVolumes = [
         'Front Left',
         'Front Right',
         'Center',
@@ -1437,8 +1438,7 @@ function getChannelVolumeObjects() {
         'Center Height',
         'Tactile Transducer'
     ];
-    const objs = [];
-    for (const channel of channels) {
+    for (const channel of channelVolumes) {
         objs.push({
             _id: `zoneMain.channelVolume${channel.replace(/\s/g, '')}`,
             type: 'state',

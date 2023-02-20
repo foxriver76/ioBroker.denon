@@ -36,3 +36,8 @@ export declare function dbToVol(vol: string): string;
  * @param it The variable to test
  */
 export declare function isObject(it: any): it is Record<string, any>;
+/**
+ * Reverses an object, making the keys the new values and vice-versa
+ * @param obj The object to reverse
+ */
+export declare function reverseObject<T extends string, A extends string>(obj: Record<T, A>): Record<A, T>;

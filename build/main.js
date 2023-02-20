@@ -48,6 +48,50 @@ const capabilities = {
     pictureMode: false,
     speakerPreset: false
 };
+/**
+ * Mapping id to command
+ */
+const CHANNEL_VOLUME_MAPPINGS = {
+    FrontLeft: 'FL',
+    FrontRight: 'FR',
+    Center: 'C',
+    SurroundRight: 'SR',
+    SurroundLeft: 'SL',
+    SurroundDolbyRight: 'SDR',
+    SurroundDolbyLeft: 'SDL',
+    FrontDolbyLeft: 'FDL',
+    FrontDolbyRight: 'FDR',
+    FrontHeightLeft: 'FHL',
+    FrontHeightRight: 'FHR',
+    RearHeightLeft: 'RHL',
+    RearHeightRight: 'RHR',
+    SurroundHeightRight: 'SHR',
+    SurroundHeightLeft: 'SHL',
+    Subwoofer: 'SW',
+    SubwooferTwo: 'SW2',
+    SubwooferThree: 'SW3',
+    SubwooferFour: 'SW4',
+    SurroundBackLeft: 'SBL',
+    SurroundBackRight: 'SBR',
+    SurroundBack: 'SB',
+    FrontWideLeft: 'FWL',
+    FrontWideRight: 'FWR',
+    TopFrontLeft: 'TFL',
+    TopFrontRight: 'TFR',
+    TopMiddleLeft: 'TML',
+    TopMiddleRight: 'TMR',
+    TopRearLeft: 'TRL',
+    TopRearRight: 'TRR',
+    BackDolbyLeft: 'BDL',
+    BackDolbyRight: 'BDR',
+    TopSurround: 'TS',
+    CenterHeight: 'CH',
+    TactileTransducer: 'TTR'
+};
+/**
+ * Maps the channel volume command to last part of state id
+ */
+const CHANNEL_VOLUME_REMAPPING = helper.reverseObject(CHANNEL_VOLUME_MAPPINGS);
 const zonesCreated = {};
 let pollTimer = null;
 let connectTimer = null;
@@ -128,6 +172,12 @@ function startAdapter(options = {}) {
         adapter.log.debug(`[COMMAND] State Change - ID: ${id}; State: ${stateVal}`);
         if (receiverType === 'US') {
             return handleUsStateChange(id, stateVal);
+        }
+        const channelVolStartsWith = 'zoneMain.channelVolume';
+        if (id.startsWith(channelVolStartsWith)) {
+            const channel = id.substring(channelVolStartsWith.length);
+            const command = CHANNEL_VOLUME_MAPPINGS[channel];
+            await sendRequest(`CV${command} ${helper.dbToVol(stateVal)}`);
         }
         switch (id) {
             case 'zoneMain.powerZone':
@@ -222,57 +272,6 @@ function startAdapter(options = {}) {
             case 'zoneMain.equalizerTreble':
                 stateVal = helper.dbToVol(stateVal);
                 await sendRequest(`PSTRE ${stateVal}`);
-                break;
-            case 'zoneMain.channelVolumeFrontLeft':
-                await sendRequest(`CVFL ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeFrontRight':
-                await sendRequest(`CVFR ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeCenter':
-                await sendRequest(`CVC ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSurroundRight':
-                await sendRequest(`CVSR ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSurroundLeft':
-                await sendRequest(`CVSL ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSurroundDolbyLeft':
-                await sendRequest(`CVSDL ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSurroundDolbyRight':
-                await sendRequest(`CVSDR ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeFrontDolbyLeft':
-                await sendRequest(`CVFDL ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeFrontDolbyRight':
-                await sendRequest(`CVFDR ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeFrontHeightLeft':
-                await sendRequest(`CVFHL ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeFrontHeightRight':
-                await sendRequest(`CVFHR ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeRearHeightLeft':
-                await sendRequest(`CVRHL ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeRearHeightRight':
-                await sendRequest(`CVRHR ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSurroundHeightRight':
-                await sendRequest(`CVSHR ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSurroundHeightLeft':
-                await sendRequest(`CVSHL ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSubwoofer':
-                await sendRequest(`CVSW ${helper.dbToVol(stateVal)}`);
-                break;
-            case 'zoneMain.channelVolumeSubwooferTwo':
-                await sendRequest(`CVSW2 ${helper.dbToVol(stateVal)}`);
                 break;
             case 'settings.powerSystem':
                 if (stateVal === true) {
@@ -1198,7 +1197,7 @@ async function handleResponse(data) {
     // independent from receiver we handle the expert pattern
     const expertPattern = await adapter.getStateAsync('settings.expertReadingPattern');
     // if ack is false, it was not a valid regex
-    if ((expertPattern === null || expertPattern === void 0 ? void 0 : expertPattern.val) && expertPattern.ack === true) {
+    if ((expertPattern === null || expertPattern === void 0 ? void 0 : expertPattern.val) && expertPattern.ack) {
         const expertRegex = new RegExp(expertPattern.val);
         if (expertRegex.test(data)) {
             adapter.setState('settings.expertReadingResult', data, true);
@@ -1425,6 +1424,16 @@ async function handleResponse(data) {
         adapter.setState('tuner.frequency', freq, true);
         return;
     }
+    else if (command.startsWith('CV')) {
+        const cvCmd = command.split(' ')[0].substring(2);
+        const channel = CHANNEL_VOLUME_REMAPPING[cvCmd];
+        if (!channel) {
+            adapter.log.debug(`Unknown channel volume received: ${channel}`);
+            return;
+        }
+        const channelVolume = data.split(' ')[1];
+        adapter.setState(`zoneMain.channelVolume${channel}`, helper.volToDb(channelVolume), true);
+    }
     let zoneNumber = '';
     if (/Z\d.+/g.test(command)) {
         // remove zone number from command and save it
@@ -1602,94 +1611,6 @@ async function handleResponse(data) {
             // LFE --> amount of subwoofer signal additional directed to speakers
             const lfeAmount = parseInt(data.split(' ')[1]);
             adapter.setState('settings.lfeAmount', lfeAmount, true);
-            break;
-        }
-        case 'CVFL': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontLeft', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVFR': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontRight', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVC': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeCenter', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSR': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundRight', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSL': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundLeft', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSDL': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundDolbyLeft', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSDR': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundDolbyRight', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVFDL': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontDolbyLeft', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVFDR': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontDolbyRight', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSHL': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundHeightLeft', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSHR': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeSurroundHeightRight', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVFHR': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontHeightRight', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVFHL': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeFrontHeightLeft', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVRHR': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeRearHeightRight', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVRHL': {
-            const channelVolume = data.split(' ')[1];
-            adapter.setState('zoneMain.channelVolumeRearHeightLeft', helper.volToDb(channelVolume), true);
-            break;
-        }
-        case 'CVSW': {
-            // can be subwoofer or subwooferTwo
-            const channelVolume = data.split(' ')[1];
-            command = data.split(' ')[0];
-            if (command === 'CVSW') {
-                // Check if CVSW or CVSW2
-                adapter.setState('zoneMain.channelVolumeSubwoofer', helper.volToDb(channelVolume), true);
-            }
-            else {
-                adapter.setState('zoneMain.channelVolumeSubwooferTwo', helper.volToDb(channelVolume), true);
-            }
             break;
         }
         case 'PSDILON':

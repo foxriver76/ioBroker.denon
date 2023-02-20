@@ -90,3 +90,11 @@ export function isObject(it: any): it is Record<string, any> {
     // [] instanceof Object === true
     return Object.prototype.toString.call(it) === '[object Object]'; // this code is 25% faster then below one
 }
+
+/**
+ * Reverses an object, making the keys the new values and vice-versa
+ * @param obj The object to reverse
+ */
+export function reverseObject<T extends string, A extends string>(obj: Record<T, A>): Record<A, T> {
+    return Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]));
+}
