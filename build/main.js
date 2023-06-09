@@ -1539,7 +1539,7 @@ class Denon extends utils.Adapter {
                 // on older models it sometimes sends just NSE for unknown reasons - ignore it
                 return;
             }
-            const displayCont = data.substring(4).replace(/[\0\1\2]/g, ''); // Remove all STX, SOH, NULL
+            const displayCont = data.substring(4, data.indexOf('\0')).replace(/[\1\2]/g, ''); // Remove all STX, SOH, NULL
             const dispContNr = data.slice(3, 4);
             if (!this.capabilities.display) {
                 await this.createDisplayAndHttp();

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.0",
+    "version": "1.15.1",
     "news": {
+      "1.15.1": {
+        "en": "fix `displayContent` showing old information (closes #318)",
+        "de": "fix displayContent alte Informationen anzeigen (schließt #318)",
+        "ru": "fix displayСодержание, показывающее старую информацию (closes #318)",
+        "pt": "corrigir displayConteúdo mostrando informações antigas (fecha #318)",
+        "nl": "vertaling:",
+        "fr": "afficher le contenuAfficher les informations anciennes (ferme #318)",
+        "it": "fix displayContent che mostra vecchie informazioni (chiude #318)",
+        "es": "pantalla de fijaciónContent mostrando información vieja (cerca #318)",
+        "pl": "rezultaty pokazują stare informacje (zawiera #318)",
+        "uk": "фіксувати дисплейКонтент показати старі дані (закриває #318)",
+        "zh-cn": "fix 显示旧资料(编号:第318号)"
+      },
       "1.15.0": {
         "en": "implemented missing channel volumes for main zone (closes #307)",
         "de": "implementierte fehlende kanalvolumina für die hauptzone (schließt #307)",
@@ -66,18 +79,6 @@
         "zh-cn": "固定请求间隔"
       },
       "1.13.1": {
-        "en": "added `settings.speakerPreset`",
-        "de": "`settings.speakerPreset` hinzugefügt",
-        "ru": "добавлен `settings.speakerPreset`",
-        "pt": "adicionado `settings.speakerPreset`",
-        "nl": "`settings.speakerPreset` toegevoegd",
-        "fr": "ajout de `settings.speakerPreset`",
-        "it": "aggiunto `settings.speakerPreset`",
-        "es": "añadido `settings.speakerPreset`",
-        "pl": "dodano `settings.speakerPreset`",
-        "zh-cn": "添加了`settings.speakerPreset`"
-      },
-      "1.13.0": {
         "en": "added `settings.speakerPreset`",
         "de": "`settings.speakerPreset` hinzugefügt",
         "ru": "добавлен `settings.speakerPreset`",
