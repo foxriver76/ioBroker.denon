@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.1",
+    "version": "1.15.2",
     "news": {
+      "1.15.2": {
+        "en": "fixed crash case with controller v5",
+        "de": "fester crashfall mit controller v5",
+        "ru": "фиксированный случай аварии с контроллером v5",
+        "pt": "caso de acidente fixo com controlador v5",
+        "nl": "vertaling:",
+        "fr": "boîtier de crash fixe avec controller v5",
+        "it": "caso di crash fisso con controller v5",
+        "es": "caso de accidente fijo con controlador v5",
+        "pl": "sprawa rozruchowa kontrolera v5",
+        "uk": "фіксований випадок з контролером v5",
+        "zh-cn": "a. 固定事故案件"
+      },
       "1.15.1": {
         "en": "fix `displayContent` showing old information (closes #318)",
         "de": "fix displayContent alte Informationen anzeigen (schließt #318)",
@@ -77,18 +90,6 @@
         "es": "intervalo de solicitud fijo",
         "pl": "naprawiono interwał żądań",
         "zh-cn": "固定请求间隔"
-      },
-      "1.13.1": {
-        "en": "added `settings.speakerPreset`",
-        "de": "`settings.speakerPreset` hinzugefügt",
-        "ru": "добавлен `settings.speakerPreset`",
-        "pt": "adicionado `settings.speakerPreset`",
-        "nl": "`settings.speakerPreset` toegevoegd",
-        "fr": "ajout de `settings.speakerPreset`",
-        "it": "aggiunto `settings.speakerPreset`",
-        "es": "añadido `settings.speakerPreset`",
-        "pl": "dodano `settings.speakerPreset`",
-        "zh-cn": "添加了`settings.speakerPreset`"
       }
     },
     "title": "DENON AVR",
