@@ -1525,19 +1525,25 @@ class Denon extends utils.Adapter {
                 }
             }
             return;
-        } else if (command.startsWith('SI')) {
+        }
+
+        if (command.startsWith('SI')) {
             // Handle select input
             let siCommand = data.substring(2); // Get only source name
             siCommand = siCommand.replace(' ', ''); // Remove blanks
             this.ensureAttrInStates('zoneMain.selectInput', siCommand);
             this.setState('zoneMain.selectInput', siCommand, true);
             return;
-        } else if (command.startsWith('MS') && command !== 'MSQUICK' && command !== 'MSSMART') {
+        }
+
+        if (command.startsWith('MS') && command !== 'MSQUICK' && command !== 'MSSMART') {
             // Handle Surround mode
             const msCommand = data.substring(2); // use data because ms can have digits and spaces
             this.setState('settings.surroundMode', msCommand, true);
             return;
-        } else if (command === 'MSQUICK' || command === 'MSSMART') {
+        }
+
+        if (command === 'MSQUICK' || command === 'MSSMART') {
             const quickNr = parseInt(data.slice(-1));
             const state = await this.getStateAsync('zoneMain.quickSelect');
             if (state?.val === quickNr && state?.ack) {
@@ -1545,7 +1551,9 @@ class Denon extends utils.Adapter {
             }
             this.setState('zoneMain.quickSelect', quickNr, true);
             return;
-        } else if (command.startsWith('NSE') && !command.startsWith('NSET')) {
+        }
+
+        if (command.startsWith('NSE') && !command.startsWith('NSET')) {
             // Handle display content
             if (command === 'NSE') {
                 // on older models it sometimes sends just NSE for unknown reasons - ignore it
@@ -1559,25 +1567,37 @@ class Denon extends utils.Adapter {
             }
             this.setState(`display.displayContent${dispContNr}`, displayCont, true);
             return;
-        } else if (command.startsWith('NSET')) {
+        }
+
+        if (command.startsWith('NSET')) {
             // Network settings info
             return;
-        } else if (command.startsWith('SV')) {
+        }
+
+        if (command.startsWith('SV')) {
             // Select Video
             return;
-        } else if (command.startsWith('NSFRN')) {
+        }
+
+        if (command.startsWith('NSFRN')) {
             // Handle friendly name
             this.setState('info.friendlyName', data.substring(6), true);
             return;
-        } else if (command.startsWith('PSMULTEQ')) {
+        }
+
+        if (command.startsWith('PSMULTEQ')) {
             const state = data.split(':')[1];
             this.setState('settings.multEq', state, true);
             return;
-        } else if (command.startsWith('PSDYNVOL')) {
+        }
+
+        if (command.startsWith('PSDYNVOL')) {
             const state = data.split(' ')[1];
             this.setState('settings.dynamicVolume', state, true);
             return;
-        } else if (command.startsWith('VSMONI')) {
+        }
+
+        if (command.startsWith('VSMONI')) {
             const state = data.substring(6);
 
             if (!this.capabilities.multiMonitor) {
@@ -1590,7 +1610,9 @@ class Denon extends utils.Adapter {
                 this.setState('settings.outputMonitor', parseInt(state), true);
             }
             return;
-        } else if (command.startsWith('VSVPM')) {
+        }
+
+        if (command.startsWith('VSVPM')) {
             const processingMode = data.substring(4);
 
             if (!this.capabilities.multiMonitor) {
@@ -1600,7 +1622,9 @@ class Denon extends utils.Adapter {
 
             this.setState('settings.videoProcessingMode', processingMode, true);
             return;
-        } else if (command.startsWith('PV') && command.length > 2) {
+        }
+
+        if (command.startsWith('PV') && command.length > 2) {
             const pictureMode = data.substring(1);
 
             if (!this.capabilities.pictureMode) {
@@ -1614,7 +1638,9 @@ class Denon extends utils.Adapter {
                 this.log.debug(`Unknown picture mode: "${pictureMode}"`);
             }
             return;
-        } else if (command.startsWith('NSH')) {
+        }
+
+        if (command.startsWith('NSH')) {
             const presetNumber = parseInt(data.slice(3, 5));
             const state = await this.getStateAsync('info.onlinePresets');
             let knownPresets: Record<string, any>;
@@ -1636,17 +1662,23 @@ class Denon extends utils.Adapter {
                 .forEach(key => (sortedPresets[key] = knownPresets[key]));
             this.setState('info.onlinePresets', JSON.stringify(sortedPresets), true);
             return;
-        } else if (command.startsWith('TFANNAME')) {
+        }
+
+        if (command.startsWith('TFANNAME')) {
             // get name only
             const stationName = data.substring(8);
             this.setState('tuner.stationName', stationName, true);
             return;
-        } else if (command === 'TFAN') {
+        }
+
+        if (command === 'TFAN') {
             // example TFAN010690 -> 106.9 always 6 digits with 2 decimals
             const freq = parseFloat(`${data.substring(4, 8)}.${data.substring(8)}`);
             this.setState('tuner.frequency', freq, true);
             return;
-        } else if (command.startsWith('CV')) {
+        }
+
+        if (command.startsWith('CV')) {
             const cvCmd = command.split(' ')[0].substring(2);
             const channel = this.CHANNEL_VOLUME_REMAPPING[cvCmd];
 
@@ -1657,6 +1689,7 @@ class Denon extends utils.Adapter {
 
             const channelVolume = data.split(' ')[1];
             this.setState(`zoneMain.channelVolume${channel}`, helper.volToDb(channelVolume), true);
+            return;
         }
 
         let zoneNumber = '';
