@@ -1599,14 +1599,19 @@ class Denon extends utils.Adapter {
                 await this.createPictureMode();
             }
             const obj = await this.getObjectAsync('settings.pictureMode');
-            this.setState('settings.pictureMode', obj.common.states[pictureMode], true);
+            if ((obj === null || obj === void 0 ? void 0 : obj.common.states) && pictureMode in obj.common.states) {
+                this.setState('settings.pictureMode', obj.common.states[pictureMode], true);
+            }
+            else {
+                this.log.debug(`Unknown picture mode: "${pictureMode}"`);
+            }
             return;
         }
         else if (command.startsWith('NSH')) {
             const presetNumber = parseInt(data.slice(3, 5));
             const state = await this.getStateAsync('info.onlinePresets');
             let knownPresets;
-            if (!state || !state.val) {
+            if (!(state === null || state === void 0 ? void 0 : state.val)) {
                 knownPresets = {};
             }
             else {

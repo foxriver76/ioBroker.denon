@@ -1607,13 +1607,18 @@ class Denon extends utils.Adapter {
                 await this.createPictureMode();
             }
             const obj = await this.getObjectAsync('settings.pictureMode');
-            this.setState('settings.pictureMode', obj!.common.states[pictureMode], true);
+
+            if (obj?.common.states && pictureMode in obj.common.states) {
+                this.setState('settings.pictureMode', obj!.common.states[pictureMode], true);
+            } else {
+                this.log.debug(`Unknown picture mode: "${pictureMode}"`);
+            }
             return;
         } else if (command.startsWith('NSH')) {
             const presetNumber = parseInt(data.slice(3, 5));
             const state = await this.getStateAsync('info.onlinePresets');
             let knownPresets: Record<string, any>;
-            if (!state || !state.val) {
+            if (!state?.val) {
                 knownPresets = {};
             } else {
                 knownPresets = JSON.parse(state.val as string);
