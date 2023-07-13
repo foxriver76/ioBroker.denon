@@ -412,6 +412,7 @@ class Denon extends utils.Adapter {
             const channel = id.substring(channelVolStartsWith.length);
             const command = this.CHANNEL_VOLUME_MAPPINGS[channel];
             await this.sendRequest(`CV${command} ${helper.dbToVol(stateVal)}`);
+            return;
         }
         switch (id) {
             case 'zoneMain.powerZone':

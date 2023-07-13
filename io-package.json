@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.2",
+    "version": "1.15.3",
     "news": {
+      "1.15.3": {
+        "en": "fixed log entry when setting channel volume states (closes #321)",
+        "de": "fester log-eintrag beim einstellen von kanalvolumenzuständen (schließt #321)",
+        "ru": "фиксированный вход в систему при настройке состояния громкости канала (closes #321)",
+        "pt": "entrada de log fixo ao definir estados de volume de canal (fecha #321)",
+        "nl": "vertaling:",
+        "fr": "entrée en journal fixe lorsque le volume de canal indique (fermetures #321)",
+        "it": "voce di registro fissa quando si imposta il volume del canale stati (chiude #321)",
+        "es": "entrada de registro fijo cuando se establece el volumen del canal (cerca #321)",
+        "pl": "stworzona wersja logna, w której ustawione są stany kanałowe (zamknia #321)",
+        "uk": "фіксований запис журналу при встановленні об'ємних станів каналу (закривається #321)",
+        "zh-cn": "配量国时的固定标志(第321号)"
+      },
       "1.15.2": {
         "en": "fixed crash case with controller v5",
         "de": "fester crashfall mit controller v5",
@@ -78,18 +91,6 @@
         "es": "el tiempo de espera fijo solo se aplica en la primera reconexión (correcciones # 232)",
         "pl": "naprawiony limit czasu stosowany tylko przy pierwszym ponownym połączeniu (poprawki #232)",
         "zh-cn": "固定超时蜂鸣仅适用于第一次重新连接（修复＃232）"
-      },
-      "1.13.2": {
-        "en": "fixed requesting interval",
-        "de": "festes Abfrageintervall",
-        "ru": "фиксированный интервал запроса",
-        "pt": "intervalo de solicitação fixo",
-        "nl": "vast verzoekinterval",
-        "fr": "intervalle de demande fixe",
-        "it": "intervallo di richiesta fisso",
-        "es": "intervalo de solicitud fijo",
-        "pl": "naprawiono interwał żądań",
-        "zh-cn": "固定请求间隔"
       }
     },
     "title": "DENON AVR",
