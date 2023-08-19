@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.3",
+    "version": "1.15.4",
     "news": {
+      "1.15.4": {
+        "en": "fixed detection of display content if content does not contain `NULL` (closes #323)",
+        "de": "feste Erkennung von Anzeigeinhalten, wenn Inhalt NULL nicht enthält (schließt #323)",
+        "ru": "фиксированное обнаружение содержимого дисплея, если содержимое не содержит NULL (заметки #323)",
+        "pt": "detecção fixa de conteúdo de exibição se o conteúdo não contém NULL (fecha #323)",
+        "nl": "vertaling:",
+        "fr": "détection fixe de contenu d'affichage si le contenu ne contient pas de NULL (ferme #323)",
+        "it": "rilevamento fisso del contenuto di visualizzazione se il contenuto non contiene NULL (chiude #323)",
+        "es": "detección fija de contenido de pantalla si el contenido no contiene NULL (cerca #323)",
+        "pl": "ostateczne wykrywanie treści nie zawiera NULL (oznaczenie #323)",
+        "uk": "фіксоване виявлення вмісту дисплея, якщо вміст не містить NULL (закриває #323)",
+        "zh-cn": "如果内容不包含NULL(编号:第323号)的固定识别显示内容"
+      },
       "1.15.3": {
         "en": "fixed log entry when setting channel volume states (closes #321)",
         "de": "fester log-eintrag beim einstellen von kanalvolumenzuständen (schließt #321)",
@@ -79,18 +92,6 @@
         "es": "ahora respetamos `requestInterval` al determinar el modelo AVR también",
         "pl": "teraz szanujemy również „requestInterval” przy określaniu modelu AVR",
         "zh-cn": "我们现在在确定 AVR 模型时也尊重`requestInterval`"
-      },
-      "1.13.3": {
-        "en": "fixed timeout beeing only applied on first reconnect (fixes #232)",
-        "de": "Behobenes Timeout, das nur beim ersten Reconnect angewendet wird (Fixes Nr. 232)",
-        "ru": "фиксированный тайм-аут применяется только при первом повторном подключении (исправления № 232)",
-        "pt": "tempo limite fixo sendo aplicado apenas na primeira reconexão (correções #232)",
-        "nl": "vaste time-out wordt alleen toegepast bij de eerste keer opnieuw verbinden (fixt #232)",
-        "fr": "le délai d'attente fixe n'est appliqué qu'à la première reconnexion (corrections #232)",
-        "it": "timeout fisso applicato solo alla prima riconnessione (correzioni n. 232)",
-        "es": "el tiempo de espera fijo solo se aplica en la primera reconexión (correcciones # 232)",
-        "pl": "naprawiony limit czasu stosowany tylko przy pierwszym ponownym połączeniu (poprawki #232)",
-        "zh-cn": "固定超时蜂鸣仅适用于第一次重新连接（修复＃232）"
       }
     },
     "title": "DENON AVR",
