@@ -309,10 +309,9 @@ class Denon extends utils.Adapter {
         });
         this.client.on('data', data => {
             // split data by <cr>
-            const dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
+            const dataArr = data.toString().split(/[\r\n]+/);
             for (const data of dataArr) {
                 if (data) {
-                    // data not empty
                     this.log.debug(`[DATA] <== Incoming data: ${data}`);
                     this.handleResponse(data);
                 }
@@ -1400,7 +1399,7 @@ class Denon extends utils.Adapter {
     /**
      * Handle single response from AVR
      *
-     * @param data
+     * @param data single data line
      */
     async handleResponse(data) {
         if (!this.pollTimer) {
@@ -1418,33 +1417,10 @@ class Denon extends utils.Adapter {
         }
         // Detect receiver type --> first poll is SV? and SV00?
         if (!this.receiverType) {
-            if (data.startsWith('SV') || /^MV\d+/g.test(data)) {
-                if (/^SV[\d]+/g.test(data)) {
-                    this.receiverType = 'US';
-                    await this.createStandardStates('US');
-                    this.log.debug('[UPDATE] Updating states');
-                    return void this.updateStates(); // Update states when connected
-                }
-                else {
-                    this.receiverType = 'DE';
-                    await this.createStandardStates('DE');
-                    this.log.debug('[UPDATE] Updating states');
-                    return void this.updateStates();
-                }
-            }
-            else if (data.startsWith('BDSTATUS')) {
-                // DENON Ceol Piccolo protocol detected , but we handle it as DE
-                this.receiverType = 'DE';
-                await this.createStandardStates('DE');
-                this.log.debug('[UPDATE] Updating states');
-                return void this.updateStates();
-            }
-            else {
-                return;
-            } // return if remote command received before response to SV (receiverCheck)
+            return this.determineReceiverType(data);
         }
         else if (this.receiverType === 'US') {
-            return void this.handleUsResponse(data);
+            return this.handleUsResponse(data);
         }
         // get command out of String
         let command;
@@ -1540,7 +1516,8 @@ class Denon extends utils.Adapter {
                 // on older models it sometimes sends just NSE for unknown reasons - ignore it
                 return;
             }
-            const displayCont = data.substring(4, data.indexOf('\0')).replace(/[\1\2]/g, ''); // Remove all STX, SOH, NULL
+            // Remove all STX, SOH, NULL
+            const displayCont = (data.includes('\0') ? data.substring(4, data.indexOf('\0')) : data.substring(4)).replace(/[\1\2]/g, '');
             const dispContNr = data.slice(3, 4);
             if (!this.capabilities.display) {
                 await this.createDisplayAndHttp();
@@ -1858,6 +1835,38 @@ class Denon extends utils.Adapter {
             }
             default:
                 this.log.debug(`[INFO] <== Unhandled command ${command}`);
+        }
+    }
+    /**
+     * Handle single response from AVR
+     *
+     * @param data single data line
+     */
+    async determineReceiverType(data) {
+        if (data.startsWith('SV') || /^MV\d+/g.test(data)) {
+            if (/^SV[\d]+/g.test(data)) {
+                this.receiverType = 'US';
+                await this.createStandardStates('US');
+                this.log.debug('[UPDATE] Updating states');
+                return void this.updateStates(); // Update states when connected
+            }
+            else {
+                this.receiverType = 'DE';
+                await this.createStandardStates('DE');
+                this.log.debug('[UPDATE] Updating states');
+                return void this.updateStates();
+            }
+        }
+        else if (data.startsWith('BDSTATUS')) {
+            // DENON Ceol Piccolo protocol detected , but we handle it as DE
+            this.receiverType = 'DE';
+            await this.createStandardStates('DE');
+            this.log.debug('[UPDATE] Updating states');
+            return void this.updateStates();
+        }
+        else {
+            // return if remote command received before response to SV (receiverCheck)
+            return;
         }
     }
     /**
