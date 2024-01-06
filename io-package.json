@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.4",
+    "version": "1.15.5",
     "news": {
+      "1.15.5": {
+        "en": "fixed issue on setting tuner frequency (closes #328)",
+        "de": "feste ausgabe zur einstellung der thunfischfrequenz (geschlossen #328)",
+        "ru": "фиксированный вопрос о настройке частоты тюнеров (закрывает #328)",
+        "pt": "problema fixo na definição de frequência de sintonizador (fecha #328)",
+        "nl": "vast probleem bij het instellen van tunerfrequentie (sluit #328)",
+        "fr": "problème fixe sur la fréquence de réglage du tuner (ferme #328)",
+        "it": "problema fisso sulla regolazione della frequenza del sintonizzatore (chiude #328)",
+        "es": "edición fija en la frecuencia de ajuste (cerca #328)",
+        "pl": "stały problem przy ustawianiu częstotliwości tunera (zamyka # 328)",
+        "uk": "виправлено проблему на встановлення частоти тюнера (закривається no328)",
+        "zh-cn": "设定调制器频率的固定期( 关闭 # 328)"
+      },
       "1.15.4": {
         "en": "fixed detection of display content if content does not contain `NULL` (closes #323)",
         "de": "feste Erkennung von Anzeigeinhalten, wenn Inhalt NULL nicht enthält (schließt #323)",
@@ -80,18 +93,6 @@
         "pl": "port\nrzeczywiste problemy z dekodowaniem stanów wejściowych",
         "uk": "портфоліо\nвиправлені питання з декодуванням вхідного стану",
         "zh-cn": "港口\na. 固定问题,有投入的国家"
-      },
-      "1.13.4": {
-        "en": "we now respect `requestInterval` on determining the AVR model too",
-        "de": "Wir berücksichtigen jetzt auch `requestInterval` bei der Bestimmung des AVR-Modells",
-        "ru": "теперь мы учитываем `requestInterval` и при определении модели AVR.",
-        "pt": "agora respeitamos `requestInterval` na determinação do modelo AVR também",
-        "nl": "we respecteren nu ook `requestInterval` bij het bepalen van het AVR-model",
-        "fr": "nous respectons maintenant `requestInterval` lors de la détermination du modèle AVR également",
-        "it": "ora rispettiamo anche `requestInterval` nel determinare il modello AVR",
-        "es": "ahora respetamos `requestInterval` al determinar el modelo AVR también",
-        "pl": "teraz szanujemy również „requestInterval” przy określaniu modelu AVR",
-        "zh-cn": "我们现在在确定 AVR 模型时也尊重`requestInterval`"
       }
     },
     "title": "DENON AVR",
