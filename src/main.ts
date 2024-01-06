@@ -708,7 +708,7 @@ class Denon extends utils.Adapter {
                 break;
             case 'tuner.frequency': {
                 // remove the dot from 106.90
-                let strFreq = state.toString().replace('.', '');
+                let strFreq = stateVal.toString().replace('.', '');
                 if (strFreq.length < 6 && stateVal < 1_000) {
                     // below 1000 we need leading zero
                     strFreq = `0${strFreq}`;

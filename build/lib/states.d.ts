@@ -1,4 +1,3 @@
-/// <reference types="iobroker" />
 export declare const commonCommands: ioBroker.AnyObject[];
 export declare const usCommandsZone: ioBroker.StateObject[];
 export declare const usCommands: ioBroker.StateObject[];
