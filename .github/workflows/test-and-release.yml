@@ -47,9 +47,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           os: ${{ matrix.os }}
-          # Uncomment the following line if your adapter cannot be installed using 'npm ci'
-          # install-command: 'npm install'
-          build: true
+          build: false
 
   auto-merge:
     if: |
@@ -92,10 +90,6 @@ jobs:
       - name: Install dependencies
         if: steps.automerge.outputs.mergeResult == 'merged'
         run: npm ci --ignore-scripts # install typescript and @types do not `setup first`
-
-      - name: Build TS files
-        if: steps.automerge.outputs.mergeResult == 'merged'
-        run: npm run build
 
       - name: Publish npm
         if: steps.automerge.outputs.mergeResult == 'merged'
