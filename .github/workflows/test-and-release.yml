@@ -23,28 +23,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: ioBroker/testing-action-check@v1
         with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Test package files
-        run: npm run test:package
+          node-version: '18.x'
+          # Uncomment the following line if your adapter cannot be installed using 'npm ci'
+          # install-command: 'npm install'
+          type-checking: true
+          lint: true
 
   # Runs adapter tests on all supported node versions and OSes
   adapter-tests:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
-
-    needs: [check-and-lint]
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -53,22 +43,80 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: ioBroker/testing-action-adapter@v1
         with:
           node-version: ${{ matrix.node-version }}
+          os: ${{ matrix.os }}
+          # Uncomment the following line if your adapter cannot be installed using 'npm ci'
+          # install-command: 'npm install'
+          build: true
 
-      - name: Install Dependencies
-        run: npm ci
+  auto-merge:
+    if: |
+      always() &&
+      github.event_name == 'pull_request'
+    needs: [ adapter-tests ]
+    runs-on: ubuntu-latest
+    steps:
+      - id: automerge
+        name: automerge
+        uses: "pascalgn/automerge-action@v0.16.3"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "automated pr"
+          MERGE_FILTER_AUTHOR: "foxriver76"
+          MERGE_FORKS: "false"
+          MERGE_DELETE_BRANCH: "false"
+          UPDATE_LABELS: "automated pr"
+          MERGE_METHOD: "squash"
 
-      - name: Run integration tests (unix only)
-        if: startsWith(runner.OS, 'windows') == false
-        run: DEBUG=testing:* npm run test:integration
+      - name: Checkout repository
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        uses: actions/checkout@v4
 
-      - name: Run integration tests (windows only)
-        if: startsWith(runner.OS, 'windows')
-        run: set DEBUG=testing:* & npm run test:integration
+      - name: Use Node.js 18
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Determine version
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        id: version
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            return require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version;
+
+      - name: Install dependencies
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        run: npm ci --ignore-scripts # install typescript and @types do not `setup first`
+
+      - name: Build TS files
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        run: npm run build
+
+      - name: Publish npm
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        env:
+          PRERELEASE: ${{ contains(steps.version.outputs.result, '-') }}
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          npm whoami
+          npm publish
+
+      - name: Create Github Release
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: v${{ steps.version.outputs.result }}
+          name: Release v${{ steps.version.outputs.result }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.result, '-') }}
+          body: "${{ contains(steps.version.outputs.result, '-') && 'nightly release' || 'official release' }}"
 
   # Deploys the final package to NPM and Github Actions
   deploy:
@@ -125,13 +173,3 @@ jobs:
           prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
           body: ${{ steps.extract_release.outputs.BODY }}
 
-#      - name: Notify Sentry.io about the release
-#        run: |
-#          npm i -g @sentry/cli
-#          export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-#          export SENTRY_URL=https://sentry.iobroker.net
-#          export SENTRY_ORG=iobroker
-#          export SENTRY_PROJECT=iobroker-hm-rega
-#          export SENTRY_VERSION=iobroker.hm-rega@${{ env.VERSION }}
-#          sentry-cli releases new $SENTRY_VERSION
-#          sentry-cli releases finalize $SENTRY_VERSION
