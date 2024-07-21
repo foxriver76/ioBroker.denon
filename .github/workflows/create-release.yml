@@ -141,7 +141,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.PR_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "[OFFICIAL RELEASE] ${{ steps.version.outputs.result }}"
           committer: foxriver76 <moritz.heusinger@gmail.com>
           author: foxriver76 <moritz.heusinger@gmail.com>
