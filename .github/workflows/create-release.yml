@@ -108,7 +108,7 @@ jobs:
             
             const TEMP_PLACEHOLDER = '**TEMP_PLACEHOLDER_GH_ACTION**';
             const changelog = fs
-            .readFileSync(`${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`, { encoding: 'utf-8' })
+            .readFileSync(`${process.env.GITHUB_WORKSPACE}/README.md`, { encoding: 'utf-8' })
             .replace(WIP_MARKER, TEMP_PLACEHOLDER);
             
             if (!changelog.includes(WIP_MARKER)) {
@@ -120,7 +120,7 @@ jobs:
             const versionDateStr = `${process.env.VERSION} (${dateStr})`;
             
             fs.writeFileSync(
-              `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`,
+              `${process.env.GITHUB_WORKSPACE}/README.md`,
               changelog.replace(WIP_MARKER, versionDateStr).replace(TEMP_PLACEHOLDER, WIP_MARKER),
               {
                 encoding: 'utf-8'
