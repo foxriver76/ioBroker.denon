@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.5",
+    "version": "1.15.6",
     "news": {
-      "1.15.5": {
+      "1.15.6": {
         "en": "fixed issue on setting tuner frequency (closes #328)",
         "de": "feste ausgabe zur einstellung der thunfischfrequenz (geschlossen #328)",
         "ru": "фиксированный вопрос о настройке частоты тюнеров (закрывает #328)",
