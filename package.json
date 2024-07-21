@@ -56,6 +56,7 @@
     "prebuild": "rimraf ./build",
     "build:ts": "tsc -p tsconfig.build.json",
     "build": "npm run build:ts",
+    "check": "tsc --noEmit",
     "test:package": "mocha -r ts-node/register test/packageFiles.ts --exit",
     "test:integration": "mocha -r ts-node/register test/integrationAdapter.ts --exit",
     "test": "mocha -r ts-node/register test/*.ts --exit",
