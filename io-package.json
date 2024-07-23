@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.8",
+    "version": "1.15.9",
     "news": {
+      "1.15.9": {
+        "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
+        "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
+        "ru": "обновленные зависимости\nдобавленный уровень и лицензионная информация\nнедействительными",
+        "pt": "dependências atualizadas\nadicionada informação de nível e licença\nobjeto inválido fixo `denon.0`",
+        "nl": "bijgewerkte afhankelijkheden\ntoegevoegde niveau- en licentieinformatie\nvast ongeldig object ",
+        "fr": "dépendances actualisées\nles informations de niveau et de licence ajoutées\nobjet non valide corrigé `denon.0`",
+        "it": "dipendenze aggiornate\ninformazioni aggiuntive di livello e licenza\noggetto non valido fisso `denon.0`",
+        "es": "dependencias actualizadas\ninformación de nivel añadido y licencia\nobjeto no válido fijo `denon.0`",
+        "pl": "zaktualizowane zależności\ndodane informacje dotyczące poziomu dokładności i licencji\nustawiony niepoprawny obiekt 'denon.0'",
+        "uk": "оновлені залежності\nдодано ярус та ліцензія\n`denon.0`",
+        "zh-cn": "更新的依赖关系\n增加了分层和许可证信息\n固定无效对象`denon.0'"
+      },
       "1.15.8": {
         "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
         "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
@@ -80,19 +93,6 @@
         "pl": "stworzona wersja logna, w której ustawione są stany kanałowe (zamknia #321)",
         "uk": "фіксований запис журналу при встановленні об'ємних станів каналу (закривається #321)",
         "zh-cn": "配量国时的固定标志(第321号)"
-      },
-      "1.15.2": {
-        "en": "fixed crash case with controller v5",
-        "de": "fester crashfall mit controller v5",
-        "ru": "фиксированный случай аварии с контроллером v5",
-        "pt": "caso de acidente fixo com controlador v5",
-        "nl": "vertaling:",
-        "fr": "boîtier de crash fixe avec controller v5",
-        "it": "caso di crash fisso con controller v5",
-        "es": "caso de accidente fijo con controlador v5",
-        "pl": "sprawa rozruchowa kontrolera v5",
-        "uk": "фіксований випадок з контролером v5",
-        "zh-cn": "a. 固定事故案件"
       }
     },
     "title": "DENON AVR",
