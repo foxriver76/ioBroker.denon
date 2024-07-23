@@ -100,22 +100,18 @@ jobs:
           npm whoami
           npm publish
 
-      - name: Extract release notes
-        uses: actions/github-script@v7
-        id: changes
-        if: steps.automerge.outputs.mergeResult == 'merged'
-        with:
-          result-encoding: string
-          script: |
-            const fs = require('fs');
-            const changelogPlugin = require('@alcalzone/release-script-plugin-changelog');
-            const readme = fs.readFileSync('README.md', 'utf8');
-            
-            const newestEntry = changelogPlugin.parseChangelogFile(readme, '###').entries[0];
-            const changes = newestEntry.split('\n').slice(1).join('\n').trim();
-            
-            return changes;
-          
+      - name: Extract the version and commit body from the tag
+        id: extract_release
+        # The body may be multiline, therefore we need to escape some characters
+        run: |
+          VERSION="${{ github.ref }}"
+          VERSION=${VERSION##*/v}
+          echo "::set-output name=VERSION::$VERSION"
+          BODY=$(git show -s --format=%b)
+          BODY="${BODY//'%'/'%25'}"
+          BODY="${BODY//$'\n'/'%0A'}"
+          BODY="${BODY//$'\r'/'%0D'}"
+          echo "::set-output name=BODY::$BODY"
 
       - name: Create Github Release
         if: steps.automerge.outputs.mergeResult == 'merged'
@@ -127,4 +123,4 @@ jobs:
           name: Release v${{ steps.version.outputs.result }}
           draft: false
           prerelease: ${{ contains(steps.version.outputs.result, '-') }}
-          body: ${{ steps.changes.outputs.result }}
+          body: ${{ steps.extract_release.outputs.BODY }}

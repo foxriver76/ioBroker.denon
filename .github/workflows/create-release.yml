@@ -56,6 +56,19 @@ jobs:
             const package = require('./package.json');
             return package.version
 
+      - name: Extract the version and commit body from the tag
+        id: extract_release
+        # The body may be multiline, therefore we need to escape some characters
+        run: |
+          VERSION="${{ github.ref }}"
+          VERSION=${VERSION##*/v}
+          echo "::set-output name=VERSION::$VERSION"
+          BODY=$(git show -s --format=%b)
+          BODY="${BODY//'%'/'%25'}"
+          BODY="${BODY//$'\n'/'%0A'}"
+          BODY="${BODY//$'\r'/'%0D'}"
+          echo "::set-output name=BODY::$BODY"
+
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v6
@@ -69,7 +82,7 @@ jobs:
           delete-branch: true
           title: "[OFFICIAL RELEASE] ${{ steps.version.outputs.result }}"
           body: |
-            Update version by release action
+            ${{ steps.extract_release.outputs.BODY }}
           labels: |
             automated pr 🔧
           assignees: foxriver76
