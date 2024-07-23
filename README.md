@@ -908,6 +908,7 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+
 ### __WORK IN PROGRESS__
 * (foxriver76) updated dependencies
 * (foxriver76) added tier and license information
