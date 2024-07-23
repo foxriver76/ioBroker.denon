@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.5",
+    "version": "1.15.6",
     "news": {
+      "1.15.6": {
+        "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
+        "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
+        "ru": "обновленные зависимости\nдобавленный уровень и лицензионная информация\nнедействительными",
+        "pt": "dependências atualizadas\nadicionada informação de nível e licença\nobjeto inválido fixo `denon.0`",
+        "nl": "bijgewerkte afhankelijkheden\ntoegevoegde niveau- en licentieinformatie\nvast ongeldig object ",
+        "fr": "dépendances actualisées\nles informations de niveau et de licence ajoutées\nobjet non valide corrigé `denon.0`",
+        "it": "dipendenze aggiornate\ninformazioni aggiuntive di livello e licenza\noggetto non valido fisso `denon.0`",
+        "es": "dependencias actualizadas\ninformación de nivel añadido y licencia\nobjeto no válido fijo `denon.0`",
+        "pl": "zaktualizowane zależności\ndodane informacje dotyczące poziomu dokładności i licencji\nustawiony niepoprawny obiekt 'denon.0'",
+        "uk": "оновлені залежності\nдодано ярус та ліцензія\n`denon.0`",
+        "zh-cn": "更新的依赖关系\n增加了分层和许可证信息\n固定无效对象`denon.0'"
+      },
       "1.15.5": {
         "en": "fixed issue on setting tuner frequency (closes #328)",
         "de": "feste ausgabe zur einstellung der thunfischfrequenz (geschlossen #328)",
@@ -80,19 +93,6 @@
         "pl": "brak danych dotyczących strefy głównej (okrążeń #307)",
         "uk": "впроваджено відсутні обсяги каналів для основної зони (закривається no307)",
         "zh-cn": "各主要区(编号:第307号)执行的缺失渠道"
-      },
-      "1.14.0": {
-        "en": "typescript port\nfixed issues with decoding of input state",
-        "de": "typscript port\nfeste probleme mit der decodierung des eingangszustands",
-        "ru": "типскрипт порт\nфиксированные вопросы с расшифровкой входного государства",
-        "pt": "porta do tipo\nproblemas fixos com decodificação do estado de entrada",
-        "nl": "type\nvertaling:",
-        "fr": "typescript port\nproblèmes fixes avec le décodage de l'état d'entrée",
-        "it": "porta del tipo\nproblemi fissi con decodifica dello stato di input",
-        "es": "port tiposcript\ncuestiones fijas con decodificación del estado de entrada",
-        "pl": "port\nrzeczywiste problemy z dekodowaniem stanów wejściowych",
-        "uk": "портфоліо\nвиправлені питання з декодуванням вхідного стану",
-        "zh-cn": "港口\na. 固定问题,有投入的国家"
       }
     },
     "title": "DENON AVR",
