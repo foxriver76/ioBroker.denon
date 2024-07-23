@@ -72,6 +72,8 @@ jobs:
       - name: Checkout repository
         if: steps.automerge.outputs.mergeResult == 'merged'
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch the history, or this action won't work
 
       - name: Use Node.js 18
         if: steps.automerge.outputs.mergeResult == 'merged'
@@ -101,14 +103,11 @@ jobs:
           npm whoami
           npm publish
 
-      - name: Extract the version and commit body from the tag
+      - name: Extract the commit body
         if: steps.automerge.outputs.mergeResult == 'merged'
         id: extract_release
         # The body may be multiline, therefore we need to escape some characters
         run: |
-          VERSION="${{ github.ref }}"
-          VERSION=${VERSION##*/v}
-          echo "::set-output name=VERSION::$VERSION"
           BODY=$(git show -s --format=%b)
           BODY="${BODY//'%'/'%25'}"
           BODY="${BODY//$'\n'/'%0A'}"
