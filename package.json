@@ -32,6 +32,9 @@
   "dependencies": {
     "@iobroker/adapter-core": "^3.1.6"
   },
+  "overrides": {
+    "@alcalzone/release-script-plugin-git": "https://gitpkg.now.sh/foxriver76/release-script/packages/plugin-git?1434496b23f5c8b189a849328f07c33f3b3de04b"
+  },
   "devDependencies": {
     "@alcalzone/release-script": "^3.7.3",
     "@alcalzone/release-script-plugin-iobroker": "^3.7.2",
