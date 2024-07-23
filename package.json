@@ -1,6 +1,6 @@
 {
   "name": "iobroker.denon",
-  "version": "1.15.11",
+  "version": "1.15.12",
   "engines": {
     "node": ">=14.0.0"
   },
