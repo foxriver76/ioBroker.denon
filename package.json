@@ -36,7 +36,7 @@
     "@alcalzone/release-script-plugin-git": "https://gitpkg.now.sh/foxriver76/release-script/packages/plugin-git?1434496b23f5c8b189a849328f07c33f3b3de04b"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "^3.7.3",
+    "@alcalzone/release-script": "https://gitpkg.now.sh/foxriver76/release-script/packages/release-script?762f8069fdaaf25cf3802084cefc2a8375c34b8a",
     "@alcalzone/release-script-plugin-iobroker": "^3.7.2",
     "@iobroker/testing": "^4.1.3",
     "@iobroker/types": "^6.0.9",
