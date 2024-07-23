@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.10",
+    "version": "1.15.11",
     "news": {
+      "1.15.11": {
+        "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
+        "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
+        "ru": "обновленные зависимости\nдобавленный уровень и лицензионная информация\nнедействительными",
+        "pt": "dependências atualizadas\nadicionada informação de nível e licença\nobjeto inválido fixo `denon.0`",
+        "nl": "bijgewerkte afhankelijkheden\ntoegevoegde niveau- en licentieinformatie\nvast ongeldig object ",
+        "fr": "dépendances actualisées\nles informations de niveau et de licence ajoutées\nobjet non valide corrigé `denon.0`",
+        "it": "dipendenze aggiornate\ninformazioni aggiuntive di livello e licenza\noggetto non valido fisso `denon.0`",
+        "es": "dependencias actualizadas\ninformación de nivel añadido y licencia\nobjeto no válido fijo `denon.0`",
+        "pl": "zaktualizowane zależności\ndodane informacje dotyczące poziomu dokładności i licencji\nustawiony niepoprawny obiekt 'denon.0'",
+        "uk": "оновлені залежності\nдодано ярус та ліцензія\n`denon.0`",
+        "zh-cn": "更新的依赖关系\n增加了分层和许可证信息\n固定无效对象`denon.0'"
+      },
       "1.15.10": {
         "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
         "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
@@ -80,19 +93,6 @@
         "pl": "stały problem przy ustawianiu częstotliwości tunera (zamyka # 328)",
         "uk": "виправлено проблему на встановлення частоти тюнера (закривається no328)",
         "zh-cn": "设定调制器频率的固定期( 关闭 # 328)"
-      },
-      "1.15.4": {
-        "en": "fixed detection of display content if content does not contain `NULL` (closes #323)",
-        "de": "feste Erkennung von Anzeigeinhalten, wenn Inhalt NULL nicht enthält (schließt #323)",
-        "ru": "фиксированное обнаружение содержимого дисплея, если содержимое не содержит NULL (заметки #323)",
-        "pt": "detecção fixa de conteúdo de exibição se o conteúdo não contém NULL (fecha #323)",
-        "nl": "vertaling:",
-        "fr": "détection fixe de contenu d'affichage si le contenu ne contient pas de NULL (ferme #323)",
-        "it": "rilevamento fisso del contenuto di visualizzazione se il contenuto non contiene NULL (chiude #323)",
-        "es": "detección fija de contenido de pantalla si el contenido no contiene NULL (cerca #323)",
-        "pl": "ostateczne wykrywanie treści nie zawiera NULL (oznaczenie #323)",
-        "uk": "фіксоване виявлення вмісту дисплея, якщо вміст не містить NULL (закриває #323)",
-        "zh-cn": "如果内容不包含NULL(编号:第323号)的固定识别显示内容"
       }
     },
     "title": "DENON AVR",
