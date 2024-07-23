@@ -115,7 +115,11 @@
     "authors": [
       "Moritz Heusinger <moritz.heusinger@gmail.com>"
     ],
-    "license": "MIT",
+    "tier": 2,
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "denon.png",
@@ -142,7 +146,7 @@
     "dataSource": "push",
     "dependencies": [
       {
-        "js-controller": ">=3.3.0"
+        "js-controller": ">=5.0.0"
       }
     ]
   },
@@ -159,7 +163,7 @@
       "common": {
         "name": "DENON device"
       },
-      "native": ""
+      "native": {}
     },
     {
       "_id": "info",
