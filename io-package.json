@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.9",
+    "version": "1.15.10",
     "news": {
+      "1.15.10": {
+        "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
+        "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
+        "ru": "обновленные зависимости\nдобавленный уровень и лицензионная информация\nнедействительными",
+        "pt": "dependências atualizadas\nadicionada informação de nível e licença\nobjeto inválido fixo `denon.0`",
+        "nl": "bijgewerkte afhankelijkheden\ntoegevoegde niveau- en licentieinformatie\nvast ongeldig object ",
+        "fr": "dépendances actualisées\nles informations de niveau et de licence ajoutées\nobjet non valide corrigé `denon.0`",
+        "it": "dipendenze aggiornate\ninformazioni aggiuntive di livello e licenza\noggetto non valido fisso `denon.0`",
+        "es": "dependencias actualizadas\ninformación de nivel añadido y licencia\nobjeto no válido fijo `denon.0`",
+        "pl": "zaktualizowane zależności\ndodane informacje dotyczące poziomu dokładności i licencji\nustawiony niepoprawny obiekt 'denon.0'",
+        "uk": "оновлені залежності\nдодано ярус та ліцензія\n`denon.0`",
+        "zh-cn": "更新的依赖关系\n增加了分层和许可证信息\n固定无效对象`denon.0'"
+      },
       "1.15.9": {
         "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
         "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
@@ -80,19 +93,6 @@
         "pl": "ostateczne wykrywanie treści nie zawiera NULL (oznaczenie #323)",
         "uk": "фіксоване виявлення вмісту дисплея, якщо вміст не містить NULL (закриває #323)",
         "zh-cn": "如果内容不包含NULL(编号:第323号)的固定识别显示内容"
-      },
-      "1.15.3": {
-        "en": "fixed log entry when setting channel volume states (closes #321)",
-        "de": "fester log-eintrag beim einstellen von kanalvolumenzuständen (schließt #321)",
-        "ru": "фиксированный вход в систему при настройке состояния громкости канала (closes #321)",
-        "pt": "entrada de log fixo ao definir estados de volume de canal (fecha #321)",
-        "nl": "vertaling:",
-        "fr": "entrée en journal fixe lorsque le volume de canal indique (fermetures #321)",
-        "it": "voce di registro fissa quando si imposta il volume del canale stati (chiude #321)",
-        "es": "entrada de registro fijo cuando se establece el volumen del canal (cerca #321)",
-        "pl": "stworzona wersja logna, w której ustawione są stany kanałowe (zamknia #321)",
-        "uk": "фіксований запис журналу при встановленні об'ємних станів каналу (закривається #321)",
-        "zh-cn": "配量国时的固定标志(第321号)"
       }
     },
     "title": "DENON AVR",
