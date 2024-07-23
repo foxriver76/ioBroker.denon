@@ -124,3 +124,4 @@ jobs:
           draft: false
           prerelease: ${{ contains(steps.version.outputs.result, '-') }}
           body: ${{ steps.extract_release.outputs.BODY }}
+

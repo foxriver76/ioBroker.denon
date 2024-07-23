@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.7",
+    "version": "1.15.8",
     "news": {
+      "1.15.8": {
+        "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
+        "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
+        "ru": "обновленные зависимости\nдобавленный уровень и лицензионная информация\nнедействительными",
+        "pt": "dependências atualizadas\nadicionada informação de nível e licença\nobjeto inválido fixo `denon.0`",
+        "nl": "bijgewerkte afhankelijkheden\ntoegevoegde niveau- en licentieinformatie\nvast ongeldig object ",
+        "fr": "dépendances actualisées\nles informations de niveau et de licence ajoutées\nobjet non valide corrigé `denon.0`",
+        "it": "dipendenze aggiornate\ninformazioni aggiuntive di livello e licenza\noggetto non valido fisso `denon.0`",
+        "es": "dependencias actualizadas\ninformación de nivel añadido y licencia\nobjeto no válido fijo `denon.0`",
+        "pl": "zaktualizowane zależności\ndodane informacje dotyczące poziomu dokładności i licencji\nustawiony niepoprawny obiekt 'denon.0'",
+        "uk": "оновлені залежності\nдодано ярус та ліцензія\n`denon.0`",
+        "zh-cn": "更新的依赖关系\n增加了分层和许可证信息\n固定无效对象`denon.0'"
+      },
       "1.15.7": {
         "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
         "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
@@ -80,19 +93,6 @@
         "pl": "sprawa rozruchowa kontrolera v5",
         "uk": "фіксований випадок з контролером v5",
         "zh-cn": "a. 固定事故案件"
-      },
-      "1.15.1": {
-        "en": "fix `displayContent` showing old information (closes #318)",
-        "de": "fix displayContent alte Informationen anzeigen (schließt #318)",
-        "ru": "fix displayСодержание, показывающее старую информацию (closes #318)",
-        "pt": "corrigir displayConteúdo mostrando informações antigas (fecha #318)",
-        "nl": "vertaling:",
-        "fr": "afficher le contenuAfficher les informations anciennes (ferme #318)",
-        "it": "fix displayContent che mostra vecchie informazioni (chiude #318)",
-        "es": "pantalla de fijaciónContent mostrando información vieja (cerca #318)",
-        "pl": "rezultaty pokazują stare informacje (zawiera #318)",
-        "uk": "фіксувати дисплейКонтент показати старі дані (закриває #318)",
-        "zh-cn": "fix 显示旧资料(编号:第318号)"
       }
     },
     "title": "DENON AVR",
