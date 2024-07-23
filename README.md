@@ -911,6 +911,8 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 
 ### __WORK IN PROGRESS__
 * (foxriver76) updated dependencies
+* (foxriver76) added tier and license information
+* (foxriver76) fixed invalid object `denon.0`
 
 ### 1.15.5 (2024-01-06)
 * (foxriver76) fixed issue on setting tuner frequency (closes #328)

@@ -61,11 +61,11 @@ jobs:
         uses: "pascalgn/automerge-action@v0.16.3"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_LABELS: "automated pr"
+          MERGE_LABELS: "automated pr 🔧"
           MERGE_FILTER_AUTHOR: "foxriver76"
           MERGE_FORKS: "false"
           MERGE_DELETE_BRANCH: "false"
-          UPDATE_LABELS: "automated pr"
+          UPDATE_LABELS: "automated pr 🔧"
           MERGE_METHOD: "squash"
 
       - name: Checkout repository
