@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "denon",
-    "version": "1.15.11",
+    "version": "1.15.12",
     "news": {
+      "1.15.12": {
+        "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
+        "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
+        "ru": "обновленные зависимости\nдобавленный уровень и лицензионная информация\nнедействительными",
+        "pt": "dependências atualizadas\nadicionada informação de nível e licença\nobjeto inválido fixo `denon.0`",
+        "nl": "bijgewerkte afhankelijkheden\ntoegevoegde niveau- en licentieinformatie\nvast ongeldig object ",
+        "fr": "dépendances actualisées\nles informations de niveau et de licence ajoutées\nobjet non valide corrigé `denon.0`",
+        "it": "dipendenze aggiornate\ninformazioni aggiuntive di livello e licenza\noggetto non valido fisso `denon.0`",
+        "es": "dependencias actualizadas\ninformación de nivel añadido y licencia\nobjeto no válido fijo `denon.0`",
+        "pl": "zaktualizowane zależności\ndodane informacje dotyczące poziomu dokładności i licencji\nustawiony niepoprawny obiekt 'denon.0'",
+        "uk": "оновлені залежності\nдодано ярус та ліцензія\n`denon.0`",
+        "zh-cn": "更新的依赖关系\n增加了分层和许可证信息\n固定无效对象`denon.0'"
+      },
       "1.15.11": {
         "en": "updated dependencies\nadded tier and license information\nfixed invalid object `denon.0`",
         "de": "aktualisierte abhängigkeiten\nzusätzliche tier- und lizenzinformationen\nungültiges objekt `denon.0`",
@@ -80,19 +93,6 @@
         "pl": "zaktualizowane zależności\ndodane informacje dotyczące poziomu dokładności i licencji\nustawiony niepoprawny obiekt 'denon.0'",
         "uk": "оновлені залежності\nдодано ярус та ліцензія\n`denon.0`",
         "zh-cn": "更新的依赖关系\n增加了分层和许可证信息\n固定无效对象`denon.0'"
-      },
-      "1.15.5": {
-        "en": "fixed issue on setting tuner frequency (closes #328)",
-        "de": "feste ausgabe zur einstellung der thunfischfrequenz (geschlossen #328)",
-        "ru": "фиксированный вопрос о настройке частоты тюнеров (закрывает #328)",
-        "pt": "problema fixo na definição de frequência de sintonizador (fecha #328)",
-        "nl": "vast probleem bij het instellen van tunerfrequentie (sluit #328)",
-        "fr": "problème fixe sur la fréquence de réglage du tuner (ferme #328)",
-        "it": "problema fisso sulla regolazione della frequenza del sintonizzatore (chiude #328)",
-        "es": "edición fija en la frecuencia de ajuste (cerca #328)",
-        "pl": "stały problem przy ustawianiu częstotliwości tunera (zamyka # 328)",
-        "uk": "виправлено проблему на встановлення частоти тюнера (закривається no328)",
-        "zh-cn": "设定调制器频率的固定期( 关闭 # 328)"
       }
     },
     "title": "DENON AVR",
