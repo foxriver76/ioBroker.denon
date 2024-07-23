@@ -85,7 +85,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            return require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version;
+            return require('./package.json').version;
 
       - name: Install dependencies
         if: steps.automerge.outputs.mergeResult == 'merged'
@@ -110,60 +110,4 @@ jobs:
           name: Release v${{ steps.version.outputs.result }}
           draft: false
           prerelease: ${{ contains(steps.version.outputs.result, '-') }}
-          body: "${{ contains(steps.version.outputs.result, '-') && 'nightly release' || 'official release' }}"
-
-  # Deploys the final package to NPM and Github Actions
-  deploy:
-    # Trigger this step only when a commit on master is tagged with a version number
-    if: |
-      contains(github.event.head_commit.message, '[skip ci]') == false &&
-      github.event_name == 'push' &&
-      startsWith(github.ref, 'refs/tags/v')
-    needs: [adapter-tests]
-
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Extract the version and commit body from the tag
-        id: extract_release
-        # The body may be multiline, therefore we need to escape some characters
-        run: |
-          VERSION="${{ github.ref }}"
-          VERSION=${VERSION##*/v}
-          echo "::set-output name=VERSION::$VERSION"
-          BODY=$(git show -s --format=%b)
-          BODY="${BODY//'%'/'%25'}"
-          BODY="${BODY//$'\n'/'%0A'}"
-          BODY="${BODY//$'\r'/'%0D'}"
-          echo "::set-output name=BODY::$BODY"
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Publish package to npm
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-          npm whoami
-          npm publish
-      - name: Create Github Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release v${{ steps.extract_release.outputs.VERSION }}
-          draft: false
-          # Prerelease versions create prereleases on Github
-          prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
-          body: ${{ steps.extract_release.outputs.BODY }}
-
+          body: "${{ contains(steps.version.outputs.result, '-') && 'test release' || 'official release' }}"
