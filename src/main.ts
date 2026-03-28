@@ -1,5 +1,5 @@
 import * as utils from '@iobroker/adapter-core';
-import net from 'net';
+import net from 'node:net';
 import * as helper from './lib/utils';
 import * as states from './lib/states';
 import { ssdpScan } from './lib/upnp';
