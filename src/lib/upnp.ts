@@ -1,6 +1,6 @@
-import http from 'http';
-import dgram from 'dgram';
-import { networkInterfaces } from 'os';
+import http from 'node:http';
+import dgram from 'node:dgram';
+import { networkInterfaces } from 'node:os';
 
 interface SSDPResultEntry {
     ip: string;
