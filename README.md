@@ -1212,6 +1212,8 @@ The adapter is tested with an DENON AVR-X1200W and a Marantz SR5009.
 ### 0.0.1
 * (foxriver76) initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 The MIT License (MIT)
 
