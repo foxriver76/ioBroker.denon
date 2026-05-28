@@ -71,7 +71,6 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "denon.png",
-    "materialize": true,
     "enabled": true,
     "compact": true,
     "messagebox": true,
@@ -96,7 +95,10 @@
       {
         "js-controller": ">=5.0.0"
       }
-    ]
+    ],
+    "adminUI": {
+      "config": "materialize"
+    }
   },
   "native": {
     "ip": "",
